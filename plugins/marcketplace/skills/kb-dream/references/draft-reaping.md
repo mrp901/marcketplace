@@ -17,8 +17,7 @@ main curation passes are).
   every draft) names an event - the reply being sent, the ticket being filed - and real
   state shows that event happened (the sent-mail check, the tracker key existing). Reap
   it.
-- **Stale.** The draft has sat untouched past the knowledge base's own stale bound
-  (`profile.kb`'s conventions file, if it states one; otherwise 30 days as a conservative
+- **Stale.** The draft has sat untouched past `profile.kb.draft_stale_days` (default 30, a conservative
   default - flagged in `HISTORY.md` as the value this port assumed where the schema and
   the source contract are both silent on a number). Reap it even if `supersedes_on`'s
   event hasn't happened - a draft nobody acted on for a month is not still pending, it's
