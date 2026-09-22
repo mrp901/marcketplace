@@ -1,0 +1,26 @@
+name: validate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  scrub-and-budget:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Scrub check (organisation literals)
+        run: python3 plugins/marcketplace/scripts/scrub_check.py plugins/
+
+      - name: Line budget check (SKILL.md 150-line cap)
+        run: python3 plugins/marcketplace/scripts/line_budget.py --all
+      - run: python3 plugins/marcketplace/scripts/check_refs.py
+
+      # `claude plugin validate` is not run here: the Claude Code CLI is not
+      # available on this runner. The orchestrator runs it locally as part
+      # of each wave's QA gate (see PORTING.md step 11).
