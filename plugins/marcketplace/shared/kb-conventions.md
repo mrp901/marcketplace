@@ -56,3 +56,21 @@ Any note anchored to a specific date or run - a session note, a dream note, an a
 ## `.utility/` is tooling space, not content
 
 `kb.paths.utility` (or a top-level `.utility/` folder) holds machinery the kb needs to function but that is never itself a note: session transcript archives, pending-processing markers, skill-health logs, dream recycle bins. It is **never indexed** (no `index.md` entry, ever) and **never curated** by any pass that walks the kb's content (conformance checks, link passes, the type registry, staleness flags) - a curation pass reads a count from it at most (e.g. "N sessions await processing") and never treats its contents as notes to fix, link, or supersede. A skill writing to `.utility/` does so directly, with no maintenance-contract obligations beyond whatever that specific mechanism requires (e.g. moving a processed transcript from `pending/` to `archive/`).
+
+## Transient drafts
+
+`profile.kb.paths.drafts` holds working artefacts that exist to be acted on and then
+discarded: a drafted reply, a drafted ticket body. They are knowledge-base files and carry
+the same frontmatter as anything else, but they are not curated knowledge and they are not
+indexed into the knowledge base's topic structure. Two rules follow:
+
+- A draft carries `status: draft` and a `supersedes_on` note naming what event makes it
+  obsolete (the reply being sent, the ticket being filed).
+- `kb-dream` reaps them. A draft whose superseding event has happened, or that has sat
+  untouched for longer than the knowledge base's own stale bound, is moved out on the next
+  pass under the dreaming contract's never-destroy-an-input rule - moved to the recycle
+  location, never deleted outright.
+
+Without the reaping pass, drafts accumulate indefinitely, which is exactly the failure the
+inbox curation rules exist to prevent. A port of `kb-dream` that does not implement this is
+incomplete.

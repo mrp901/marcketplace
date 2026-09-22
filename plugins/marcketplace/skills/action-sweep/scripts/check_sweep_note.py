@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+"""Mechanical check for one action-sweep note's frontmatter and section shape.
+
+  check_sweep_note.py <path/to/YYYY-MM-DD-action-sweep.md>
+
+Exits 0 and prints PASS if the note carries every required frontmatter key and its
+section headings are a subset of the documented set, in a sane order. Exits 1 and prints
+one FAIL line per problem otherwise. This checks shape only, never content - whether a
+draft is any good is still a human/model judgement call.
+
+stdlib only, no third-party dependencies.
+"""
+
+import re
+import sys
+
+REQUIRED_FRONTMATTER_KEYS = [
+    "type",
+    "title",
+    "description",
+    "tags",
+    "status",
+    "generated",
+    "scanned_through",
+]
+
+KNOWN_SECTIONS = [
+    "From chat canvases",
+    "Needs your reply",
+    "From recent meetings",
+    "New tickets and amendments",
+    "Currently assigned to you",
+    "Unclear routing",
+]
+
+
+def check(path):
+    with open(path, encoding="utf-8") as f:
+        text = f.read()
+
+    problems = []
+
+    fm_match = re.match(r"^---\n(.*?)\n---\n", text, re.DOTALL)
+    if not fm_match:
+        problems.append("no frontmatter block found (expected --- ... --- at file start)")
+        fm_text = ""
+    else:
+        fm_text = fm_match.group(1)
+
+    for key in REQUIRED_FRONTMATTER_KEYS:
+        if not re.search(rf"^{re.escape(key)}\s*:", fm_text, re.MULTILINE):
+            problems.append(f"missing frontmatter key: {key}")
+
+    if not re.search(r"^type:\s*Action Sweep\s*$", fm_text, re.MULTILINE):
+        problems.append("frontmatter 'type' is not 'Action Sweep'")
+
+    headings = re.findall(r"^##\s+(.+?)\s*$", text, re.MULTILINE)
+    for h in headings:
+        if h not in KNOWN_SECTIONS:
+            problems.append(f"unrecognised section heading: {h!r} (not in the documented set)")
+
+    if not re.search(r"^#\s+Action Sweep", text, re.MULTILINE):
+        problems.append("missing top-level '# Action Sweep' title line")
+
+    return problems
+
+
+def main():
+    if len(sys.argv) != 2:
+        print("usage: check_sweep_note.py <path/to/YYYY-MM-DD-action-sweep.md>")
+        return 2
+
+    problems = check(sys.argv[1])
+    if problems:
+        for p in problems:
+            print(f"FAIL: {p}")
+        return 1
+
+    print(f"PASS: {sys.argv[1]}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

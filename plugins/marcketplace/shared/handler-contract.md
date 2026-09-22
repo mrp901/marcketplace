@@ -67,12 +67,14 @@ item:
   text_as_ticked: <current surface text, post-edit if edited>
   original_text: <text as first written, if different>
   ref: <link>
-  idea_key: <tracker key, if ticket-bound>
+  idea_key: <tracker key, if the item already has one; see below>
   ticked_at: <ISO 8601>
 mode: <handler mode, e.g. draft | push | targeted | meeting | capture>
 output_location: <where the handler's artefact should land; see below>
 budget: {tool_calls: 25, minutes: 10}
 ```
+
+**`item.idea_key`** holds a tracker key only when the item already refers to one. An item that proposes creating something has no key yet, so the field is absent on the first-pass mode and a handler must not treat its absence as an error. On a confirming mode (`file`, `push`) it carries the key of whatever the first pass produced, when the first pass produced one; where the first pass produced only a draft, the confirming mode finds that draft through `artefacts` on the item's own sub-line instead.
 
 **Resolving the `tools` block.** The hub cannot enumerate in its own `## Needs` every tool category that every handler might need - that would duplicate the whole skill roster into one skill's requirements. Instead it resolves on demand: when it is about to dispatch, it reads the target handler's `## Needs`, resolves any category not already cached in `state.machines[<machine_id>]` per `onboarding.md` step 4, caches the result there, and passes only those categories in the payload. A category the hub cannot resolve is not a hub fast-fail: the dispatch is skipped, the sub-line says which category could not be resolved, and the item stays ticked for the next run. Resolving a category on a handler's behalf never grants the hub itself access to it; the prefix is passed through, not used.
 
@@ -80,7 +82,8 @@ budget: {tool_calls: 25, minutes: 10}
 
 - A handler that writes into the knowledge base takes a folder path under `profile.kb.paths`. Absent or empty, it defaults to `profile.kb.paths.inbox`.
 - A handler that creates tracker work takes a project key or a parent item key. Absent, it defaults to the routing rule in that handler's own skill.
-- A handler that produces only a draft for the user to read takes nothing; the draft's location is the handler's own business and is reported in `artefacts`.
+- A handler that produces a draft too long for the 200-character report line writes it under `profile.kb.paths.drafts` and reports the path in `artefacts`. Drafts are transient by nature: they are superseded the moment the user acts on them, so they live apart from curated knowledge and `kb-dream` reaps stale ones on its pass. Do not put them in the inbox, which is an input queue for knowledge worth keeping.
+- A handler that produces only a short result the report line can carry takes nothing.
 
 A handler never treats `output_location` as permission to write somewhere it would not otherwise be allowed to write. It narrows a destination; it never widens one.
 
