@@ -15,7 +15,7 @@ Other surface kinds may exist (`profile.surface.kind`, served by whatever `profi
 | Calendar, Tracker | briefing | snapshot |
 | To-do | user (briefing closes) | acknowledge |
 | Running behind | briefing writes, hub dispatches | delegate |
-| Terms to learn | briefing | acknowledge (tick promotes to glossary) |
+| Terms to learn | briefing | acknowledge (tick promotes to glossary; never logged to Closed) |
 | Proactive opportunities | proactive-router | delegate |
 | Ideas: decisions for you | idea-scout, idea-deep-dive (append only) | acknowledge at v1 |
 | Wireframes to review | idea-wireframe | acknowledge |
@@ -32,6 +32,8 @@ Two rows list an owner pair (Running behind; Ideas). In each case the two named 
 Every section is either **acknowledge** or **delegate**. The type governs what a tick means, and getting it wrong means the surface lies about what a tick does.
 
 - **Acknowledge.** A tick means "done / seen / confirmed" - a fact about the world the user is reporting, not an instruction to act. The reporter (briefing) is the one that notices the tick and moves the line to Closed. No handler is dispatched. To-do, Terms to learn, Ideas: decisions for you, Wireframes to review and Skill health are acknowledge sections.
+
+  **One exception, in Terms to learn only.** A ticked term is promoted into `state.glossary` and its line is removed from the section. It is **not** written to Closed. A confirmed term is a vocabulary fact the system has absorbed, not a task anyone completed, and logging it as closed work pads the log with entries the user never asked for. This is deliberate, inherited from the reference implementation; do not "fix" it into consistency with the other acknowledge sections.
 - **Delegate.** A tick means "you do it" - an instruction the hub (proactive-router) picks up, classifies if needed, and dispatches to a handler. The reporter only closes the line once a handler report sub-line exists underneath it - closing on the tick alone would claim work happened that didn't. Running behind, Proactive opportunities, Actions and Dream log/actions are delegate sections.
 
 The distinction exists because the same UI gesture (a checkbox) has to carry two different kinds of commitment, and conflating them is exactly how a stray tick on an FYI line ends up filing a ticket, or a real delegated task sits forever because the reporter thought ticking it was the whole job.
