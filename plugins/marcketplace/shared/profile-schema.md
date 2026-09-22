@@ -90,6 +90,8 @@ kb:
   types_registry:                # where the type vocabulary lives
   people_file:                    # where the name/role/nickname registry lives
   link_style: relative_markdown | wikilink
+  link_pass: surface | auto          # default surface: propose additions, never add them unattended
+  draft_stale_days: 30               # a transient draft untouched this long is reaped
   frontmatter_required: [type, title, description, tags, status, generated]
   tag_hints: []
   paths:
@@ -146,7 +148,7 @@ budgets:
   idea-scout: {web_searches: 4, kb_notes: 3, note_words: 800}
   idea-deep-dive: {loop_budget: 8, circle_caps: {kb: 2, people: 2, code: 3, web: 4}, depth_cap: 3}
   idea-wireframe: {pngs: 5, competitor_pngs: 2, md_reads: 5, html_lines: 300, critic_rounds: 1}
-  kb-dream: {incremental_reads: 25, sessions_incremental: 5, sessions_full: 10}
+  kb-dream: {incremental_reads: 25, sessions_incremental: 5, sessions_full: 10, reviews: monthly}
   models: {worker: sonnet, search: haiku, critic: opus}
 ```
 
@@ -215,7 +217,7 @@ budgets:
 | `notify.proof_of_life` | kb-dream | default | |
 | `people[]` | briefing, session-log, kb-dream, idea-scout, idea-wireframe, action-sweep | ask | |
 | `people_confusions` | kb-dream, session-log | optional, starts empty | |
-| `known_fact_errors` | kb-dream | optional, starts empty | |
+| `known_fact_errors` | kb-dream, session-log | optional, starts empty | |
 | `voice.guide_path` | reply-draft, kb-note, idea-ticket, kb-dream | default | |
 | `voice.registers` | reply-draft, kb-note, idea-ticket, kb-dream | default | |
 | `voice.calibrated_at` | reply-draft, kb-note, idea-ticket, kb-dream | default (empty until first calibration) | never asked, never defaulted to a fake date |

@@ -87,6 +87,8 @@ kb:
   types_registry: References/okf-conventions.md
   people_file: Org/people-and-org.md
   link_style: relative_markdown
+  link_pass: surface
+  draft_stale_days: 30
   frontmatter_required: [type, title, description, tags, status, generated]
   tag_hints: [freight, ops, discovery]
   paths:
@@ -155,7 +157,7 @@ budgets:
   idea-scout: {web_searches: 4, kb_notes: 3, note_words: 800}
   idea-deep-dive: {loop_budget: 8, circle_caps: {kb: 2, people: 2, code: 3, web: 4}, depth_cap: 3}
   idea-wireframe: {pngs: 5, competitor_pngs: 2, md_reads: 5, html_lines: 300, critic_rounds: 1}
-  kb-dream: {incremental_reads: 25, sessions_incremental: 5, sessions_full: 10}
+  kb-dream: {incremental_reads: 25, sessions_incremental: 5, sessions_full: 10, reviews: monthly}
   models: {worker: sonnet, search: haiku, critic: opus}
 ```
 

@@ -63,7 +63,7 @@ registry:
 tally:
   <category>: {proposed, ticked, deleted, edited, unmapped_ticks, last_ticked_at}
 
-proposals: [{id, kind: mapping | suppression_lift, category, candidate, opened_at, status}]
+proposals: [{id, kind: mapping | suppression_lift | skill_fold | skill_eval, category, candidate, opened_at, status}]
 suppressions: [{source_id, category, pattern: "<channel_id>:<category>", added_at}]
 patterns_blocked: []
 
@@ -165,3 +165,19 @@ An unrecognised key found during a migration is left exactly as it is - a future
 that does understand it will pick it up unmodified. This mirrors the "never rewrite a
 block you cannot parse" rule above: migrations extend the schema forward, they do not
 clean up anything they were not written to touch.
+
+## Proposal kinds
+
+`proposals[].kind` takes one of four values, and the distinction is about who acts on an
+accepted proposal:
+
+| Kind | Raised by | A tick means |
+|---|---|---|
+| `mapping` | proactive-router | Map this category to this handler from now on |
+| `suppression_lift` | kb-dream | Stop blocking this source-and-category pattern |
+| `skill_fold` | kb-dream | A settled correction should become a rule in the named skill |
+| `skill_eval` | kb-dream | A handler's output keeps being edited; run skill-eval over it |
+
+The last two are **proposals about behaviour, and a tick is the user accepting the
+proposal, never the system applying it.** kb-dream drafts the edit; a human makes it. This
+is the propose-only half of that skill's safety split and no tick collapses it.
