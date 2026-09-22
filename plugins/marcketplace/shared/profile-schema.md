@@ -288,6 +288,27 @@ not hold what it said:
   vault-dream L69 known-errors sentence above, since that is where the source install's actual
   corrected-fact list lives.
 
+## Naming inside the `kb` block, and why it trips people
+
+Two groups of keys live under `kb` and the difference is easy to mis-cite from memory:
+
+- **Top level (`kb.<name>`)**: `kb.name`, `kb.kind`, `kb.local_root`, `kb.remote`,
+  `kb.conventions_file`, `kb.types_registry`, `kb.people_file`, `kb.link_style`,
+  `kb.frontmatter_required`, `kb.tag_hints`, `kb.log_size_cap_kb`, `kb.sweep_queries`.
+  These describe the knowledge base itself: what it is, how to reach it, and the rules it
+  keeps. There is one of each.
+- **Under `kb.paths.<name>`**: `inbox`, `drafts`, `research`, `prototypes`, `screenshots`,
+  `sessions`, `dreams`, `decisions`, `memory`, `voice`, `log`, `product_index`,
+  `service_map`, `utility`. These are locations inside it: where a given kind of thing is
+  written or found.
+
+The trap is that `kb.paths` holds a few single files (`log`, `product_index`,
+`service_map`) as well as folders, so "is it a file?" does not decide the group. The rule
+that does: **`kb.paths` answers "where does this go?", everything else answers "what is
+this knowledge base like?"** `kb.people_file` is a property of the knowledge base, so it
+is top level; `kb.paths.sessions` is a destination, so it is not. When in doubt, check
+this list rather than reasoning by analogy with a neighbouring key.
+
 ## Discovery procedures
 
 - **`user.email`, `user.chat_user_id`** - chat auth test with no user id argument; the
