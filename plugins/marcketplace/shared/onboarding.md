@@ -113,6 +113,30 @@ A skill whose surface cannot be resolved (no `surface.id`, or the surface itself
 unreachable) has nowhere to write that notice line. In that case it writes to
 `state.runs[<skill>]` and to its own session output only, and stops the same way.
 
+## Pointer files for bare scripts
+
+Step 1 resolves the profile document through an argument, then an environment variable,
+then a pointer file. That same three-step chain is the plugin's general pattern for any
+value a **bare script** needs, and bare scripts are the reason it exists: a hook script or
+a helper invoked outside a session has no tools, no connectors and no way to discover
+anything, so it cannot resolve a location the way a skill can.
+
+The pattern, for any such value:
+
+1. A named environment variable, which a user or a hook definition can set explicitly.
+2. A pointer file under `~/.claude/marcketplace/<name>.ref`, one line, written by the
+   owning skill the first time it resolves the value with tools available.
+3. A quiet local default that lets the script run without either, rather than failing.
+
+Rules: the pointer file is written by the skill, never by the script; it holds a plain
+local path, never a connector reference a script cannot dereference; and the script treats
+all three steps as best-effort, degrading to the default rather than erroring, because a
+hook that fails loudly on a machine that has never run the skill is worse than one that
+quietly writes somewhere harmless.
+
+Name the file after what it points at, scoped to the skill that owns it, so two skills
+never contend for one pointer.
+
 ## For skill authors
 
 Every `SKILL.md`'s `## Needs` heading lists:
