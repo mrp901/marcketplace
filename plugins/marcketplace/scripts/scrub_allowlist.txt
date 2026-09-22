@@ -10,3 +10,6 @@
 # eval mock token re-fictionalised from a real one. Nothing is seeded yet;
 # wave 0B (shared/, profiles/example.md) adds entries here if its
 # fictional org's tokens turn out to collide with a WARN-class shape.
+
+# The example organisation's fictional chat workspace URL, used in worked examples.
+https://northwindlogistics.slack.com
