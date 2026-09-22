@@ -1,0 +1,12 @@
+# scrub_allowlist.txt
+#
+# One literal per line, exactly as it would appear in a scrub_check.py match
+# (the full matched text, not a regex). Lines starting with # are comments
+# and blank lines are ignored. A hit whose matched text appears here is
+# skipped in both scan and --report modes.
+#
+# Used for fictional tokens that legitimately trip a pattern, e.g. an
+# example.md placeholder that happens to look like a real ID shape, or an
+# eval mock token re-fictionalised from a real one. Nothing is seeded yet;
+# wave 0B (shared/, profiles/example.md) adds entries here if its
+# fictional org's tokens turn out to collide with a WARN-class shape.

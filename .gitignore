@@ -1,0 +1,8 @@
+source/
+profiles/bluewater.local.md
+profiles/extract/
+profiles/*.local.md
+**/evals/**/results/
+__pycache__/
+.DS_Store
+PLAN.md
