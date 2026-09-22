@@ -11,6 +11,7 @@ The starting set below is not exhaustive on its own; it is extended with every v
 | `chat: read canvas` | Read the surface's current content and section addressing | `slack_read_canvas` | briefing, proactive-router, idea-scout, idea-deep-dive, idea-wireframe, kb-dream, action-sweep, skill-health-check |
 | `chat: update canvas` | Write one batch of operations against a surface addressing snapshot | `slack_update_canvas` | briefing, proactive-router, idea-scout, idea-deep-dive, idea-wireframe, kb-dream, action-sweep, skill-health-check |
 | `chat: search messages` | Search reactions, saved items, DMs and channel history | `slack_search_public_and_private` | briefing, proactive-router, action-sweep |
+| `chat: read thread` | Fetch one specific thread or message by its permalink, when a reference already names it | `slack_read_thread`, `slack_get_permalink` | reply-draft, kb-note, action-sweep |
 | `chat: search users` | Resolve a name to a user id when not already known | `slack_search_users` | briefing |
 | `chat: send message` | Post directly to a channel - the `chat_message` notify fallback | `slack_send_message` | briefing, kb-dream, notify fallback (any skill) |
 | `tracker: search issues (JQL)` | Query the issue tracker for a candidate set | `searchJiraIssuesUsingJql` | briefing, action-sweep, idea-ticket |

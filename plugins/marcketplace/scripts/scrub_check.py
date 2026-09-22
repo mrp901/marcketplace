@@ -48,7 +48,7 @@ PATTERNS = [
     ),
     ("slack-webhook-trigger", r"hooks\.slack\.com/triggers/", "FAIL", False),
     ("bw-onedrive-path", r"OneDrive - BLUEWATER|MarcPizzinato", "FAIL", True),
-    ("bw-ticket-keys", r"ENG-\d+|IG-\d+", "FAIL", False),
+    ("bw-ticket-keys", r"\bENG-\d+\b|\bIG-\d+\b", "FAIL", False),
     ("bw-custom-fields", r"cf\[110(54|67)\]|\b(10372|11067|11054)\b", "FAIL", False),
     ("em-dash", re.escape(EM_DASH), "FAIL", False),
     (

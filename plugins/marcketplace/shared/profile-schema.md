@@ -94,6 +94,7 @@ kb:
   tag_hints: []
   paths:
     inbox:
+    drafts:
     research:
     prototypes:
     screenshots:
@@ -133,6 +134,7 @@ known_fact_errors: []      # facts that have been wrong before and must not sile
 voice:
   guide_path: Voice/
   registers: [teammate_chat, exec_update, customer_facing, ticket_prose]
+  calibration_refs: []
   calibrated_at:
   sample_counts: {}
 
@@ -140,6 +142,7 @@ budgets:
   briefing: {connector_calls: 3, notetaker_calls: 1, surface_reads: 1, surface_writes: 1}
   proactive-router: {searches: 5, thread_reads: 6, dispatches: 3}
   action-sweep: {canvas_guard: 5, cold_start_days: 7, targeted_search_per_todo: 1}
+  idea-ticket:    {investigation_calls: 4, web_searches: 1, audit_rounds: 2}
   idea-scout: {web_searches: 4, kb_notes: 3, note_words: 800}
   idea-deep-dive: {loop_budget: 8, circle_caps: {kb: 2, people: 2, code: 3, web: 4}, depth_cap: 3}
   idea-wireframe: {pngs: 5, competitor_pngs: 2, md_reads: 5, html_lines: 300, critic_rounds: 1}
@@ -216,6 +219,7 @@ budgets:
 | `voice.guide_path` | reply-draft, kb-note, idea-ticket, kb-dream | default | |
 | `voice.registers` | reply-draft, kb-note, idea-ticket, kb-dream | default | |
 | `voice.calibrated_at` | reply-draft, kb-note, idea-ticket, kb-dream | default (empty until first calibration) | never asked, never defaulted to a fake date |
+| `voice.calibration_refs` | idea-ticket | optional | Tracker keys whose prose is the strongest reference for the `ticket_prose` register. Weighted above general samples during calibration |
 | `voice.sample_counts` | kb-dream | default | |
 | `budgets.<skill>` | that skill only | default | a skill only ever reads its own subtree |
 | `budgets.models` | idea-ticket, idea-wireframe, idea-deep-dive, skill-eval | default | see `model-tiers.md` |

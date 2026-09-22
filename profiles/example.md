@@ -144,6 +144,7 @@ known_fact_errors:
 voice:
   guide_path: Voice/
   registers: [teammate_chat, exec_update, customer_facing, ticket_prose]
+  calibration_refs: [FIG-118, FIG-131]
   calibrated_at: ""
   sample_counts: {}
 
