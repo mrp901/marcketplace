@@ -68,11 +68,26 @@ item:
   original_text: <text as first written, if different>
   ref: <link>
   idea_key: <tracker key, if the item already has one; see below>
+  proposal_id: <state.proposals entry id, on a proposal-driven dispatch only>
   ticked_at: <ISO 8601>
 mode: <handler mode, e.g. draft | push | targeted | meeting | capture>
 output_location: <where the handler's artefact should land; see below>
 budget: {tool_calls: 25, minutes: 10}
 ```
+
+**Proposal-driven dispatch.** Most dispatches begin with the router classifying a message
+into a category. One does not: a ticked line that represents an accepted entry in
+`state.proposals` (see `state-schema.md`'s proposal kinds). The tick means the user accepted
+the proposal, and the hub dispatches whatever acts on it: `skill_eval` dispatches
+`skill-eval`, `skill_fold` dispatches nothing because a fold is a human's edit to make, and
+`mapping` and `suppression_lift` are settled by the hub itself writing to `state.registry`
+or `state.suppressions` rather than by dispatching anyone.
+
+For such a dispatch the payload carries `proposal_id` alongside the usual fields, set to the
+accepted entry's `id`, so the handler can mark that specific proposal settled rather than
+guessing which one it was acting on. `item.text_as_ticked` carries the proposal line as the
+user left it, and `item.category` carries the proposal's `kind` rather than a taxonomy
+category. A handler dispatched this way returns the same JSON as any other.
 
 **`item.idea_key`** holds a tracker key only when the item already refers to one. An item that proposes creating something has no key yet, so the field is absent on the first-pass mode and a handler must not treat its absence as an error. On a confirming mode (`file`, `push`) it carries the key of whatever the first pass produced, when the first pass produced one; where the first pass produced only a draft, the confirming mode finds that draft through `artefacts` on the item's own sub-line instead.
 

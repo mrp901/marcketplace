@@ -31,7 +31,7 @@ nothing and skips the canvas call entirely - but still notifies (below).
 
 ## Then notify
 
-Per `../../shared/notify.md`, `notify.proof_of_life.kb-dream: true` by default - fires
+Per `../../../shared/notify.md`, `notify.proof_of_life.kb-dream: true` by default - fires
 every run including a quiet one, as proof of life. Opens with the markdown-link mention
 form, never a raw mention token. Body shape, per `notify.md`'s table:
 

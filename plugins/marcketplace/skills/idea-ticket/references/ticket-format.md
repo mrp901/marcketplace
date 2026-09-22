@@ -75,7 +75,7 @@ crept into scouting-skill territory - cut back to the pointer, not the finding.
 ## Cut the AI tells
 
 The draft has to read like the user wrote it in five minutes, not like a model produced it.
-Specific things to strip, on top of `../../shared/voice.md`'s shared avoid-list:
+Specific things to strip, on top of `../../../shared/voice.md`'s shared avoid-list:
 
 - **Abstraction where a fact belongs.** "We can do better" -> say what better is. "Users
   may be confused" -> say who, looking at what, and what they'd conclude.

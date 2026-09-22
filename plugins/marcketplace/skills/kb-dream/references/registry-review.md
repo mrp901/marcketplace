@@ -31,10 +31,22 @@ more evidence exists - a longer list stops being worth reading:
    that handler's `SKILL.md`, not performing the eval itself.
 
 Each proposal is one line in the dream note's Surfaced section and, if it's actionable in
-one tick, one Dream log/actions checklist line. This skill does not itself write into
-`state.proposals` for these three shapes - that array's `kind` enum
-(`mapping | suppression_lift`) is `proactive-router`'s own mechanism and has no shape for
-"skill-eval pass"; see this skill's `HISTORY.md` for the open question this leaves.
+one tick, one Dream log/actions checklist line.
+
+**A proposal is also written into `state.proposals`,** with `kind` set to the matching
+value: `suppression_lift` for a block that now looks wrong, `skill_fold` for a settled
+correction that should become a rule in a named skill, `skill_eval` for a handler whose
+output the user keeps editing. `mapping` stays `proactive-router`'s to raise, not this
+skill's.
+
+Writing the record is what makes the checklist line mean anything: a tick on it is the
+user accepting the proposal, and the hub finds the accepted proposal by its `id` in order
+to dispatch whatever acts on it. A proposal that exists only as prose in the dream note
+can be read but never acted on, which would leave `skill-eval`'s unattended path with
+nothing to trigger it.
+
+Writing the record is not applying the proposal. The propose-only rule is unchanged: this
+skill writes a record that a change has been proposed, never the change itself.
 
 ## Sixty-day dismissal
 

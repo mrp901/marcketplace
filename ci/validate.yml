@@ -19,6 +19,7 @@ jobs:
 
       - name: Line budget check (SKILL.md 150-line cap)
         run: python3 plugins/marcketplace/scripts/line_budget.py --all
+      - run: python3 plugins/marcketplace/scripts/check_refs.py
 
       # `claude plugin validate` is not run here: the Claude Code CLI is not
       # available on this runner. The orchestrator runs it locally as part

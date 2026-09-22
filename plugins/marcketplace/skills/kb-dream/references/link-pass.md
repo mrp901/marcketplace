@@ -9,7 +9,7 @@ A systematic missing-and-broken cross-reference pass over every note changed thi
 
 Write every link in whichever style `profile.kb.link_style` names -
 `relative_markdown` (`[label](../path.md)`) or `wikilink` (`[[Note Title]]`) - never mix
-styles within one note. `scripts/link_resolver.py` implements the mechanical half of both
+styles within one note. `../scripts/link_resolver.py` implements the mechanical half of both
 checks below; it degrades to "resolve manually, connector has no bulk listing" when the
 knowledge base is a remote connector with no directory-listing call, rather than failing.
 

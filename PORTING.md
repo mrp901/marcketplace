@@ -119,6 +119,7 @@ wave 1).
     claude plugin validate .
     python3 plugins/marcketplace/scripts/scrub_check.py plugins/
     python3 plugins/marcketplace/scripts/line_budget.py --all
+    python3 plugins/marcketplace/scripts/check_refs.py
     grep -rn "$(python3 -c 'print(chr(0x2014))')" plugins/marcketplace/skills/<new-name>
     ```
     `scrub_check.py` must report zero FAIL, and every WARN must be reviewed by hand (a WARN
@@ -156,6 +157,10 @@ genuinely fictional token that happens to match a WARN-class shape.
 - [ ] `claude plugin validate .` passes.
 - [ ] `scrub_check.py plugins/` reports zero FAIL, and every WARN on this skill's files has
       been reviewed (not just passed through).
+- [ ] `check_refs.py` exits 0: every `references/`, `scripts/` and `../../../shared/` path you
+      wrote actually resolves from the file it is written in. A path that is correct from
+      `SKILL.md` is wrong by one level inside `references/`; this is the single most common
+      mistake in the whole port.
 - [ ] `line_budget.py --all` exits 0 (this skill's `SKILL.md` is <= 150 lines).
 - [ ] `## Needs` lists every profile key, state key, and tool category the body actually uses,
       and nothing else.

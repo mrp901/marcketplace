@@ -158,6 +158,7 @@ budgets:
   idea-deep-dive: {loop_budget: 8, circle_caps: {kb: 2, people: 2, code: 3, web: 4}, depth_cap: 3}
   idea-wireframe: {pngs: 5, competitor_pngs: 2, md_reads: 5, html_lines: 300, critic_rounds: 1}
   kb-dream: {incremental_reads: 25, sessions_incremental: 5, sessions_full: 10, reviews: monthly}
+  skill-health-check: {kb_reads: 15}
   models: {worker: sonnet, search: haiku, critic: opus}
 ```
 
