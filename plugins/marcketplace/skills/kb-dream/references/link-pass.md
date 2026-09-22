@@ -40,7 +40,9 @@ auto-linked even when a note for them exists - only concrete named entities are.
 (pass 4's act column) and this skill does it directly. A missing-link *addition* is a
 content judgement, not a mechanical repair - it changes what a note points at, not just
 fixes what it already claimed - so it is surfaced as a proposed addition rather than made,
-by default. No profile key currently exists to configure this the other way; see this
+whenever `profile.kb.link_pass` is `surface` (the default). Set it to `auto` and an
+unambiguous missing link is added directly, on the same mechanical-and-reversible reasoning
+that already applies to repointing a broken one; an ambiguous one is still surfaced. See this
 skill's `HISTORY.md` port entry for the open question this leaves for the orchestrator.
 
 ## Where results land
