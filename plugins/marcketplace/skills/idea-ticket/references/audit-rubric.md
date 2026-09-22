@@ -12,7 +12,7 @@ judge the ticket cold, the way a teammate opening it fresh would.
 2. **Voice match.** Present tense, plain English, first-person plural, short declaratives.
    No framework jargon, no hedging, no boilerplate headers. Reads like the user wrote it,
    not like a research brief. Check it against `ticket-format.md`'s "Cut the AI tells" list
-   and `../../shared/voice.md`'s shared avoid-list; name any specific tell found.
+   and `../../../shared/voice.md`'s shared avoid-list; name any specific tell found.
 3. **Zero-context clarity.** Someone who has never seen the screen can read Context alone
    and know exactly what's wrong, because it names the actual modules, screens, tiles,
    labels and numbers. "A percentage is misleading" fails. "In TEM and Mobile we don't have

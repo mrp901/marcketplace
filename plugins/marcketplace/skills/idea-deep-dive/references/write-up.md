@@ -64,7 +64,7 @@ Fired once per run, after the note is saved and the surface step (if any) comple
 
 This skill appends to the same surface section `idea-scout` writes to, and both revisit it.
 Before appending this run's items, settle this skill's own existing lines in that section
-per "Settle before you append" in `../../shared/surface-protocol.md`: confirm what a tick
+per "Settle before you append" in `../../../shared/surface-protocol.md`: confirm what a tick
 claims against real state, leave an edited line's wording alone, never re-add a deleted
 line, and never re-post an item still sitting there untouched. Settle only lines this skill
 wrote; `idea-scout`'s lines are its own to settle.

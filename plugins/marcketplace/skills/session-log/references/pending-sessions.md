@@ -42,7 +42,7 @@ resolve their working directory in this order:
 
 This skill is what writes that pointer file, once, the first time it successfully
 resolves the kb's local root (step 1 of the main flow) - the same env-var-then-pointer-
-file pattern `../../shared/onboarding.md` uses to locate the profile document, applied
+file pattern `../../../shared/onboarding.md` uses to locate the profile document, applied
 here to a path a bare hook script can reach without any tool access at all. A user who
 would rather transcripts never touch a synced folder sets `SESSION_LOG_DIR` explicitly
 instead, which always wins over the pointer file.

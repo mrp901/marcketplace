@@ -170,3 +170,19 @@ On the fourth kind: `skill_fold` and `skill_eval` are proposals **about behaviou
 tick on one means the user accepted the proposal, not that the system applied it. That
 distinction is the propose-only half of this skill's safety split, and the state schema now
 says so at the point where a future reader would otherwise have to infer it.
+
+## 2026-09-22 orchestrator: the proposal loop was open at both ends
+
+This skill raised behaviour proposals as prose in the dream note and a checklist line, but
+wrote no record into `state.proposals`, because at build time that array's kind enum had no
+value for them. The wave 4 gate added `skill_fold` and `skill_eval`, and `skill-eval`'s own
+port then noticed the consequence: its unattended path is triggered by an accepted
+`skill_eval` proposal, and nothing was ever writing one, so that path could never fire.
+
+Both ends are now closed. This skill writes the record when it raises the proposal, and
+`handler-contract.md` documents proposal-driven dispatch, including the `proposal_id` a
+handler needs to mark the right proposal settled.
+
+Writing the record is not applying the proposal, and the propose-only split is untouched.
+The record says a change has been proposed; a tick says the user accepted it; a human still
+makes a `skill_fold` edit. What changed is only that an accepted proposal is now findable.

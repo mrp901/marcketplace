@@ -11,7 +11,7 @@ Every `kb.paths.sessions` note written since `state.cursors.kb-dream.last_dream_
 `.sessions_full`. Read each note's `## Decisions`, `## Facts and corrections` and
 `## Open threads` sections - these are session-log's own distillation, already filtered
 for signal, so this pass reads them rather than re-deriving signal from source material a
-second time. `scripts/signal_grep.py` runs a deterministic first pass over the same notes
+second time. `../scripts/signal_grep.py` runs a deterministic first pass over the same notes
 for the four signal shapes below and hands back match context only (never full notes) to
 narrow what needs a close read; it degrades to "no local read available, work from the
 connector read alone" when the knowledge base is remote-only.

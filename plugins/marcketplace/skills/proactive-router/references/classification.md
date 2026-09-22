@@ -25,7 +25,7 @@ emoji touched it.
 ## The `summarise` / `fyi` split
 
 Both wear the star emoji's family but they are different categories with different
-handlers (`references/categories.md`). `summarise` is for "I've been handed something and
+handlers (`categories.md`). `summarise` is for "I've been handed something and
 need the gist" - a ticket reassignment, a long thread the user was pulled into. `fyi` is
 for "there is genuinely nothing here" - no reply needed, no reading required beyond what
 already happened. Don't default to `fyi` because writing a summary feels like more work;

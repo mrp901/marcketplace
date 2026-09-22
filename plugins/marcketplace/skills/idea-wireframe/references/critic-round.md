@@ -11,7 +11,7 @@ clipped, the side rail stays aligned. Fix anything wrong before moving on.
 ## The critic round
 
 The build itself runs on whatever model the current session is on. The critic round always
-escalates to `profile.budgets.models.critic` (per `../../shared/model-tiers.md`), spawned
+escalates to `profile.budgets.models.critic` (per `../../../shared/model-tiers.md`), spawned
 as a **genuinely fresh subagent** - the screenshot, screenshots of the last two or three
 prior wireframes from `profile.kb.paths.prototypes`, and the idea's one-line problem
 statement. Never the HTML source, never this run's build reasoning, never earlier
