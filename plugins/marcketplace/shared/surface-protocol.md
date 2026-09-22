@@ -106,6 +106,31 @@ A read of the surface returns a `section_id_mapping` (or equivalent addressing s
 - If anything else has written to the surface between the read and the write (another skill's run overlapped, the user edited live), re-read before writing. Never reuse a stale mapping, and never invent a section id when one isn't found - fall back to the documented degradation for that skill (create the section conservatively, say so in the run's report) rather than guessing an id.
 - **Critical invariant: handlers never write to the surface.** A dispatched handler subagent returns its result to the hub (`handler-contract.md`'s return JSON); it never calls the surface-update tool itself. This is what makes the hub the single writer of its own run - every operation against this run's `section_id_mapping` originates from one caller, so the mapping-validity rule above can't be violated by a handler racing the hub's own write. If a skill is not the hub and not the section's owning writer, it does not hold write access to the surface at all in its `## Needs`.
 
+## Settle before you append
+
+Any skill that writes items into a section it will revisit on a later run settles that
+section's existing lines before adding new ones. The order matters and it is always the
+same: read, settle what is already there, then append this run's items.
+
+Settling means checking each of its own prior lines against what is now true:
+
+- A **ticked** line: confirm against real state what the tick claims, then act on it per the
+  section's type, and leave it for the reporter to close. Do not re-post an item that has
+  been dealt with.
+- An **edited** line: the user's wording is authoritative and stands. Never rewrite it back.
+- A **deleted** line: it is gone deliberately. Never re-add it, in this run or any later one.
+- An **untouched** line: leave it exactly as written, and do not post a duplicate of it just
+  because this run rediscovered the same underlying thing.
+
+Never tick or delete one of your own lines except as the outcome of settling it this way.
+A writer that appends without settling produces a section that grows monotonically and
+repeats items the user has already handled, which is the fastest way to make the surface
+not worth reading.
+
+This applies to every owning writer, and it applies per section rather than per skill: two
+skills that append to the same section each settle their own lines and leave the other's
+alone.
+
 ## The one carve-out: the hub's sub-lines
 
 Delegate sections are owned by the skill that writes their items (Running behind by briefing, Actions by action-sweep, Dream log/actions by kb-dream), but the skill that dispatches their ticked items is the hub. So the hub must be able to write into sections it does not own, and the ownership rule above has exactly one carve-out:

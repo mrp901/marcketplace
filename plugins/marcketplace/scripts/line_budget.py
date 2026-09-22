@@ -197,4 +197,12 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))
+    try:
+        sys.exit(main(sys.argv[1:]))
+    except BrokenPipeError:
+        # output was piped into something that closed early (head, less); not an error
+        try:
+            sys.stdout.close()
+        except Exception:
+            pass
+        sys.exit(0)
