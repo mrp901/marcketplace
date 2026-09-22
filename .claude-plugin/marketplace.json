@@ -1,0 +1,14 @@
+{
+  "name": "marcketplace",
+  "owner": {
+    "name": "mrp901"
+  },
+  "description": "Private, profile-driven product-management skills: a daily briefing and router, drafting handlers, an idea pipeline and knowledge-base curation.",
+  "plugins": [
+    {
+      "name": "marcketplace",
+      "source": "./plugins/marcketplace",
+      "description": "Private product-management operating system: a profile-driven daily loop, handlers, idea pipeline and knowledge-base curation skills."
+    }
+  ]
+}
