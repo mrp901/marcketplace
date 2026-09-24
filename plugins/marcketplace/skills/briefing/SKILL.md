@@ -71,7 +71,7 @@ Fires more than once a day on a changing schedule; never assume a time of day.
 6. **Update the surface, one batch.** Calendar and Tracker: replace the one dated block each
    per `surface-protocol.md`'s snapshot rule, in the same write as everything else below,
    written every run even when unchanged. Terms to learn: append up to 2 new unticked lines.
-   Closed: append this run's closes (newest first), then trim to 14 days or 40 lines,
+   Closed: append this run's closes (newest first), then trim to 7 days or 40 lines,
    whichever bound is hit first - mechanically, every run this step fires, whether or not
    anything new closed (`scripts/trim_closed.py` implements the trim). Touch nothing else;
    the To-do, Running behind and every other section's own wording stays exactly as its
