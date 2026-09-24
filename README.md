@@ -85,6 +85,9 @@ draft, that difference feeds back on the next review.
 
 Contributors: see `PORTING.md`. Scheduling is yours to set up; skills never self-schedule.
 
+For a top-to-bottom picture of how the skills hand off to each other over a day, see
+`docs/skill-flow.md`.
+
 ## Repository layout
 
 ```
