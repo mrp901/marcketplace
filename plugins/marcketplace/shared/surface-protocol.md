@@ -23,7 +23,7 @@ Other surface kinds may exist (`profile.surface.kind`, served by whatever `profi
 | Dream log / actions | kb-dream | delegate |
 | Skill health | skill-health-check | acknowledge |
 | Plugin notices | any skill, fast-fails only | info |
-| Closed | briefing | log, 14 days or 40 lines |
+| Closed | briefing | log, 7 days or 40 lines |
 
 Two rows list an owner pair (Running behind; Ideas). In each case the two named skills have distinct jobs on the same heading - a writer that produces the content, and either the hub that dispatches it or a second appender that only adds lines and never rewrites the first writer's lines. Nothing else touches those headings.
 
@@ -173,7 +173,7 @@ Format, one line per closed item, newest first:
 
 `<outcome>` is a short past-tense phrase (`done`, `filed PRJ-172`, `acknowledged, no handler`). `<original text, 120 chars>` is the item as it stood when closed (post-edit if the user edited it), truncated. `<by you | by <handler>>` records who actually did the work - the user themself (acknowledge sections, or a delegate item the user ticked and then did manually) or the handler that reported `done`.
 
-**Retention: 14 days or 40 lines, whichever comes first.** The reporter (briefing) trims the oldest lines past either bound on every run it writes Closed - this is a mechanical trim, not a judgement call, and it happens whether or not anything new closed this run.
+**Retention: 7 days or 40 lines, whichever comes first.** The reporter (briefing) trims the oldest lines past either bound on every run it writes Closed - this is a mechanical trim, not a judgement call, and it happens whether or not anything new closed this run.
 
 ## Never
 
