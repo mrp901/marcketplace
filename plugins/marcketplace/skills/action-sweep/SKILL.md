@@ -36,7 +36,8 @@ per-issue comment scans, one assigned-tickets JQL call, one notetaker list call 
 transcript fetch per meeting within `notetaker.lookback_days`, at most
 `budgets.action-sweep.targeted_search_per_todo` chase-search per chat to-do, one kb write
 batch for the note, one surface write batch for the Actions delegate lines. Per handler
-dispatch (any mode): one note read, and for `push` only, one tracker write call.
+dispatch (any mode): one note read; `targeted`/`meeting` add one note write only when
+dispatched with no existing anchor (see Handler mode); `push` adds one tracker write call.
 
 ## Flow (sweep mode - the scheduled/invoked run, not a handler dispatch)
 
@@ -65,13 +66,24 @@ dispatch (any mode): one note read, and for `push` only, one tracker write call.
 Handler, three modes - see `handler-contract.md` for the dispatch/return contract this
 section assumes.
 
-- **`targeted`** - dispatched for one ticked `ticket-reply` or `ticket-minor` item. Reads
-  only that item's anchor in the note (never re-runs the sweep), confirms the draft still
-  stands, and returns `needs_confirmation` naming the specific push action in
-  `next_action` (category `sweep-push`). Never calls `tracker: create issue` or
-  `tracker: add comment`.
+- **`targeted`** - dispatched for one ticked `ticket-reply` or `ticket-minor` item.
+  `item.ref` names either an anchor this skill's own sweep already drafted, or a chat
+  permalink from a `proactive-router` classification that never passed through a sweep -
+  branch on which:
+  - **Anchor exists** - read only that anchor in the note (never re-run the sweep),
+    confirm the draft still stands.
+  - **No anchor** - apply `references/sizing-and-routing.md` and
+    `references/ticket-draft-formats.md` to `item.text_as_ticked` directly, and append
+    the resulting draft into today's note per `references/note-structure.md` (creating it
+    if none exists yet). This is drafting one item, not re-running the sweep's
+    four-source gather, so the never-re-run-the-sweep rule still holds.
+  Either way, return `needs_confirmation` naming the specific push action in
+  `next_action` (category `sweep-push`), pointing at the anchor now on record - freshly
+  created in the no-anchor case, so `push`'s own re-read finds it. Never calls
+  `tracker: create issue` or `tracker: add comment`.
 - **`meeting`** - same, scoped to one ticked `meeting-followup` item from the "From
-  recent meetings" section. Same restrictions as `targeted`.
+  recent meetings" section. Same restrictions and same anchor-or-draft branch as
+  `targeted`.
 - **`push`** - the confirming second tick, dispatched only for category `sweep-push`.
   **This is the only mode permitted to write to the tracker.** Re-reads the note fresh
   (picking up any edit made since drafting) before writing, per

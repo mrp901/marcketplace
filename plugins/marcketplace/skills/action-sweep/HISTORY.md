@@ -119,3 +119,31 @@ bookkeeping every skill keeps in one shared place, and the note may be unreachab
 where the knowledge base connector is down, which is exactly when the cursor still needs to
 be correct. The note continues to print `scanned_through` for a human reader; that printed
 value is an echo, not the source of truth.
+
+## 2026-09-24 `targeted`/`meeting` draft directly when dispatched with no anchor
+
+`proactive-router`'s shared category table (`categories.md`/`handler-contract.md`) routes
+`ticket-reply` and `ticket-minor` items to `action-sweep`'s `targeted` mode regardless of
+where they were classified - including items the hub itself classified straight from a
+Slack reaction or saved message, which never passed through this skill's own sweep and so
+never got a note anchor. `targeted`'s contract only documented the anchor-read path,
+leaving that case undefined; a real run hit it with five backlog items on the surface,
+four of which had no anchor to read.
+
+Considered four alternatives (full write-up and diagrams in the session that found this):
+a new `targeted-adhoc` mode; the hub synthesising the anchor itself before dispatch; and a
+new `ticket-direct` category with its own handler. Rejected the hub option outright - it
+would have the hub writing into a kb note, which only handlers are supposed to do (see
+`../../shared/handler-contract.md`'s inline-vs-dispatch boundary: the hub's only writable
+store is the surface). Rejected the new-category option as the most correct in isolation
+but the most new surface for two categories that don't need a whole second handler. Landed
+on extending `targeted`/`meeting` in place: branch on whether `item.ref` already resolves
+to a note anchor, and if not, draft into today's note directly (same sizing and
+draft-format logic, same note this skill already owns and writes in sweep mode) before
+continuing exactly as the anchor-found path. `push`'s existing re-read-the-note-fresh step
+needed no change - it already re-reads whatever is on record when it fires, whether that
+draft was written during a sweep or during this dispatch.
+
+The "never re-runs the sweep" hard stop stays intact: drafting one item is not gathering
+all four sources again, so this doesn't reopen the sweep, it just gives `targeted` a
+second way to produce the same anchor a sweep would have.
