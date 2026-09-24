@@ -61,3 +61,9 @@ Every candidate that becomes a delegate line on the surface (see `SKILL.md`'s
 `## Surface`) needs a stable anchor back into this note - a heading or an ticket-draft
 block's own `### Draft - <short title>` line is sufficient; the delegate line's `ref`
 points at `<note path>#<anchor>`.
+
+An anchor doesn't only come from the sweep flow's own step 3. `targeted`/`meeting`
+handler dispatch creates one the same way, mid-run, for an item that arrived with no
+anchor at all (a `proactive-router` classification, not one of this skill's own
+candidates) - see `SKILL.md`'s Handler mode. Same note, same day, same "New tickets and
+amendments" section; the only difference is when the draft got appended.
