@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Trim the Closed log to 14 days or 40 lines, whichever bound is hit first.
+"""Trim the Closed log to 7 days or 40 lines, whichever bound is hit first.
 
 Implements surface-protocol.md's "The Closed log" retention rule and SKILL.md step 6's
 "mechanically, every run this step fires" clause. Deterministic - no model judgement.
@@ -27,7 +27,7 @@ import re
 import sys
 from datetime import date, datetime, timedelta
 
-DEFAULT_MAX_DAYS = 14
+DEFAULT_MAX_DAYS = 7
 DEFAULT_MAX_LINES = 40
 
 DATE_RE = re.compile(

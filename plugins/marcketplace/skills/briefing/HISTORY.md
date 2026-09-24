@@ -106,3 +106,12 @@ not work anyone finished, and logging it crowds out real closed items inside the
 bound. `shared/surface-protocol.md` now states the exception explicitly, so a later port
 cannot rediscover the same ambiguity. The port entry above flagged this as an open question
 rather than deciding it silently, which is what made the catch cheap.
+
+## 2026-09-24 Closed log retention shortened to 7 days
+
+Retention was 14 days or 40 lines, whichever bound hit first. Marc asked for the day bound to
+drop to 7 (the 40-line bound is unchanged). Updated `shared/surface-protocol.md`'s section
+table and Closed log rule, `SKILL.md` step 6, `references/closed-and-outcomes.md`, and
+`scripts/trim_closed.py`'s `DEFAULT_MAX_DAYS` and docstring. The bullet in the port entry
+above ("Mechanically trimming Closed to 14 days or 40 lines...") is left as written - it's a
+historical record of what the port shipped with, not a restatement of current behaviour.
