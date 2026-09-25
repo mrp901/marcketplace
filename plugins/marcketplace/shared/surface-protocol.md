@@ -223,7 +223,7 @@ Format, one line per closed item, newest first:
 
 ## Migration
 
-The first `briefing` run under a plugin version newer than `state.installed_version` migrates a board laid out under the old section table before doing anything else. The procedure lives in `skills/briefing/references/migration.md`; in short: create the five sections and the header, move every open line into For you or an idea block by its tag prefix keeping its `state.items` hash, convert old idea and wireframe lines into blocks, delete the old headings, and log one `board migrated` line to Closed. The Router does not run until briefing has migrated; a Router run that finds old headings records `runs.proactive-router.status: quiet` with the note `awaiting migration` and stops.
+The first `briefing` run that finds any pre-1.1.0 heading on the board migrates it before doing anything else, whatever `state.installed_version` says. The procedure lives in `skills/briefing/references/migration.md`; in short: create the five sections and the header, move every open line into For you or an idea block by its tag prefix keeping its `state.items` hash, convert old idea and wireframe lines into blocks, delete the old headings, and log one `board migrated` line to Closed. The Router does not run until briefing has migrated; a Router run that finds old headings records `runs.proactive-router.status: quiet` with the note `awaiting migration` and stops.
 
 ## Never
 

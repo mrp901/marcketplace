@@ -1,7 +1,8 @@
 # Migrating the board to the five-section layout
 
-Runs once, on the first `briefing` run whose `state.installed_version` is older than
-1.1.0 and whose board still carries any of the old headings (Running behind, Terms to
+Runs once, on the first `briefing` run that finds any of the old headings on the board,
+whatever `state.installed_version` says (the headings are the trigger, so a version bumped
+early by mistake can never strand an old board) (Running behind, Terms to
 learn, Proactive opportunities, Ideas: decisions for you, Wireframes to review, Actions,
 Dream log / actions, Skill health, Plugin notices). It is the only write of that run:
 briefing composes no message and refreshes no snapshot until the board is in the new

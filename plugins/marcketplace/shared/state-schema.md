@@ -88,7 +88,7 @@ requeue flag set by one tick, cleared by the skill that acts on it, never a labe
 | Key | Written by | Read by | Retention |
 |---|---|---|---|
 | `state_version` | onboarding, on bootstrap | every skill (compatibility check) | permanent |
-| `installed_version` | onboarding, on every run (refresh from plugin.json) | every skill (migration check) | permanent, overwritten each run |
+| `installed_version` | onboarding on bootstrap; afterwards only the skill that completes a migration (for 1.0.0 to 1.1.0, `briefing`) | every skill (migration check) | permanent; never bumped by a skill that skipped a pending migration |
 | `profile_ref` | onboarding, on bootstrap | every skill | permanent |
 | `runs.<skill>` | that skill, at the end of its own run | briefing (the Runs report), skill-health-check | permanent, one entry per skill, overwritten each run |
 | `runs.proactive-router.fyi` | proactive-router | briefing | overwritten each run |
@@ -160,7 +160,8 @@ requeue flag set by one tick, cleared by the skill that acts on it, never a labe
 compares it against the plugin's own `plugin.json` version at run start; a skill running
 under a newer plugin version than `installed_version` records runs the migrations listed
 below for the versions between the two, in order, before doing anything else, then writes
-the new `installed_version`.
+the new `installed_version`. A skill that stops with `awaiting migration` never writes
+it: that is what keeps the pending migration visible to the skill that owns it.
 
 | From version | To version | Migration |
 |---|---|---|
