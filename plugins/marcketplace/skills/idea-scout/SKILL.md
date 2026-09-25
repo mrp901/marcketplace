@@ -19,7 +19,8 @@ else.
 
 - Profile: `org.product_tag`, `org.modules_context`, `tracker.cloud_id` (optional),
   `ideas.project_key`, `ideas.issue_type`, `ideas.area_field`, `ideas.area_value`,
-  `ideas.roadmap_field`, `ideas.parked_roadmap_values`, `ideas.qualifiers`,
+  `ideas.roadmap_field`, `ideas.parked_roadmap_values` (optional; absent means the roadmap
+  watch only stores slots and posts no lines), `ideas.qualifiers`,
   `ideas.labels.investigated`, `user.name`, `kb.name`, `kb.paths.research`,
   `kb.people_file` (optional), `kb.link_style`, `kb.frontmatter_required`,
   `kb.log_size_cap_kb`, `surface.id`, `surface.url`, `budgets.idea-scout`.

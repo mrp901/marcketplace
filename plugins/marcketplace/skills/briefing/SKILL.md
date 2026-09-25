@@ -15,7 +15,8 @@ closes and reports. The first run under a new plugin version migrates the board.
 - Profile: `org.timezone`, `user.name`, `user.chat_user_id`, `tracker.my_work_jql`,
   `notetaker.lookback_days`, `notetaker.prep_lines` (optional), `surface.id`, `surface.url`,
   `surface.home_channel_id`, `notify.mode`, `notify.fallback_channel_id`,
-  `notify.webhooks.briefing`, `notify.mention_form`, `briefing.expected_runs`, `people`,
+  `notify.webhooks.briefing`, `notify.mention_form`, `briefing.expected_runs` (optional;
+  absent means no skill is ever called overdue), `people`,
   `budgets.briefing`.
 - Tools: `chat` (read canvas, update canvas, search messages, search users, send message),
   `calendar` (list today), `tracker` (search issues by JQL), `notetaker` (list meetings,
@@ -47,8 +48,7 @@ Fires more than once a day on a changing schedule; never assume a time of day.
 1. **Read state and the board.** Read the state document for `last_run_ts`, `last_seen`,
    `nicknames`, `glossary`, `outcomes`, `runs`, `installed_version`. Read the board once
    (`chat: read canvas`) for every section; hold the `section_id_mapping` for step 6's one
-   write. Reading is silent. If `installed_version` is older than this plugin's version and
-   the board still carries the old headings, run `references/migration.md` first, as the
+   write. Reading is silent. If the board still carries any pre-1.1.0 heading, run `references/migration.md` first, as the
    only write of this run, and stop after writing state.
 2. **Close.** For every line on the board, apply the closing rule in
    `../../shared/surface-protocol.md`'s "Closing": a `done` sub-line closes the line; a

@@ -22,7 +22,8 @@ it never sends anything. Resolve profile, state and tools per
   `ideas.area_value`, `kb.name`, `kb.kind`, `kb.conventions_file`, `kb.types_registry`,
   `kb.link_style`, `kb.frontmatter_required`, `kb.paths.drafts`, `kb.paths.log`,
   `notetaker.lookback_days`, `surface.id`, `surface.url`, `budgets.action-sweep`
-  (`canvas_guard`, `cold_start_days`, `targeted_search_per_todo`, `thread_reads`),
+  (`canvas_guard`, `cold_start_days`, `targeted_search_per_todo`, and `thread_reads`,
+  optional, default 6),
   `budgets.models.search`.
 - Tools: `chat` (search messages, read thread; `read canvas`/`update canvas` in sweep
   mode only, never from a handler mode), `tracker` (search issues by JQL, get issue,
