@@ -4,7 +4,14 @@ Full detail for `SKILL.md` Steps 1 and 2.
 
 ## Step 1 - Select
 
-`ideas: search issues (JQL)` against `profile.ideas.project_key`, fields
+**Requeued first.** Any idea with `state.ideas.<key>.requeue_wireframe.feedback` set is
+this run's pick before the query below is even made, oldest `requested_at` first, one per
+run. Its feedback text is the brief: the thing to change, in the user's words. The old
+wireframe and wrapper note are read as the starting point, the `wireframed` label is
+already present and stays, and the flag is cleared in the final state write. No tracker
+write is needed to requeue, which is why one tick is enough.
+
+Otherwise, `ideas: search issues (JQL)` against `profile.ideas.project_key`, fields
 `summary, labels, status, updated, <profile.ideas.area_field>, <profile.ideas.roadmap_field>`:
 
 ```
@@ -21,7 +28,8 @@ a candidate still in early discovery beats one already marked ready for delivery
 candidate with no linked design beats one that already has one. Name whoever was passed
 over, both in the run's own output and in the surface item's second line.
 
-No results -> exit quietly. No file, label, surface item, or notification.
+No results and nothing requeued -> exit quietly: `runs.idea-wireframe.status: quiet`, no
+file, label or board line.
 
 ## Step 2 - Read, in order
 
@@ -53,13 +61,17 @@ the sweep and the captures must land before the standing view is trusted:
    plainly, in the wireframe itself.
 
 4. **Taste.** A log of one line per past wireframe naming what the user actually did with
-   it, under `profile.kb.paths.prototypes`. It outranks every default in this skill; a move
-   the user has ignored twice is a move to stop making. Skim the prototypes index only to
-   avoid repeating a subject - never for shape or style. Copying the look of the last
-   wireframe is the failure this rule exists to prevent.
+   it (`reaction: keep | drop | rework: <text> | unknown`), under
+   `profile.kb.paths.prototypes`, filled in by the `react` handler mode from the user's
+   ticks. It outranks every default in this skill: a frame the user dropped twice is a
+   frame to stop using; a rework's text is the sharpest brief available. Skim the
+   prototypes index only to avoid repeating a subject - never for shape or style. Copying
+   the look of the last wireframe is the failure this rule exists to prevent.
 
 5. **Standing list.** The matching note under `profile.kb.paths.research` is the brief - its
-   position, its named risks, and its open decisions say what needs to become visible.
+   position, its named risks, and its open decisions say what needs to become visible; its
+   Decisions section (answers the user ticked on the board) outranks the note's own
+   earlier hedges, so a decided fork is drawn as decided, not as a choice.
    Missing entirely -> build from the tracker fields and whatever context is in hand, and
    flag the missing note both in an annotation and in the surface item (the scouting skill
    itself may be failing). Product-area overview and discovery-brief notes, if any, read as

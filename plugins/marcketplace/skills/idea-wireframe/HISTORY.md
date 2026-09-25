@@ -109,3 +109,13 @@ enforceable rather than advisory):**
   directly with the sibling porting `idea-scout` beyond skimming its source `SKILL.md` for
   the note shape, per the task brief. Worth a cross-check at the wave gate that both ports
   describe the scout note's frontmatter and folder identically.
+
+## 2026-09-25 canvas redesign (1.1.0): every tick means yes, do it
+
+The taste log always said `reaction: unknown` because nothing recorded what the user did
+with a wireframe. Now each wireframe puts a three-option reaction group under the idea's
+block (keep, rework, drop), and the `react` handler mode rewrites the taste-log line from
+the tick. A rework sets `state.ideas.<key>.requeue_wireframe.feedback`, and selection takes
+requeued ideas first with the feedback as the brief; no label change is needed, so one
+tick suffices. The critic round now ranks against wireframes chosen by their real
+reaction, labelled as kept, reworked (with the feedback) or dropped. The webhook is gone.

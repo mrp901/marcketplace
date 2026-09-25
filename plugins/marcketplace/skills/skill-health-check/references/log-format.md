@@ -24,16 +24,31 @@ written: a `## YYYY-MM-DD - <tag>` heading, an `Evidence window:` line, 2 to 4 e
 bullets, and one `Evidence sources available:` line. It exits non-zero on a shape mismatch
 rather than letting a malformed entry land in the log.
 
-## Surface line, amber and red only
+## Board line, red only
 
-Per `surface-protocol.md`'s line grammar, tag form `shc:<YYMMDD>-<n>`:
+Per `surface-protocol.md`'s line grammar, tag form `shc:<YYMMDD>-<n>`, category
+`skill-eval`, reading as the action a tick causes:
 
 ```
-- [ ] (shc:260910-1) :large_yellow_circle: `idea-deep-dive` - superseded once, one stale tracker edit - `.utility/skill-health/idea-deep-dive.md`
+- [ ] (shc:260910-1) 🔴 idea-deep-dive scored red: two notes superseded by your own corrections this fortnight. Run skill-eval on it? · .utility/skill-health/idea-deep-dive.md
 ```
 
-`:large_yellow_circle:` for amber, `:red_circle:` for red. The one or two things that drove
-the tag, not the full evidence list - the log file is the detail, the surface line is the
-pointer. Where the diagnosis is obvious, the line may end with "- run `skill-eval` next" in
-place of the file pointer's lead-in text, never both crowding a 200-character-equivalent
-line.
+The one or two things that drove the tag, not the full evidence list; the log file is the
+detail, the line is the pointer. A tick means "yes, queue it": the hub writes
+`↳ router: queued for your next skill-eval run` and nothing runs until the user runs
+`skill-eval`, which lists queued lines as candidates.
+
+## Amber and green
+
+No board line. Every score, whatever its colour, is written to
+`state.runs.skill-health-check.scores.<skill>`:
+
+```yaml
+scores:
+  idea-deep-dive: {tag: red, why: "two notes superseded by your corrections", ref: ".utility/skill-health/idea-deep-dive.md", checked_at: 2026-09-10T03:00:00+10:00}
+  reply-draft: {tag: amber, why: "2 of 3 drafts edited before sending", ref: ".utility/skill-health/reply-draft.md", checked_at: 2026-09-10T03:00:00+10:00}
+  kb-note: {tag: green, why: "3 notes verified as written", ref: ".utility/skill-health/kb-note.md", checked_at: 2026-09-10T03:00:00+10:00}
+```
+
+The briefing's Runs block reports amber and green from here in one `health:` line; red is
+on the board and not repeated in the message.

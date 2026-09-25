@@ -11,7 +11,7 @@ wave 1).
 1. This file, end to end.
 2. Every file under `plugins/marcketplace/shared/` (profile-schema.md, state-schema.md,
    onboarding.md, surface-protocol.md, handler-contract.md, notify.md, tool-capabilities.md,
-   kb-conventions.md, voice.md, model-tiers.md).
+   kb-conventions.md, voice.md, model-tiers.md, token-discipline.md).
 3. `profiles/example.md`.
 4. `source/<old-name>/SKILL.md` and any `HISTORY.md`, `references/`, `scripts/`, `evals/`
    alongside it.

@@ -40,18 +40,18 @@ as the eval fixture.
 
 | Skill | What it does | How it runs |
 |---|---|---|
-| `briefing` | Calendar, chat and tracker snapshot; the reporter that closes ticked items and reports what the handlers did | Schedule |
-| `proactive-router` | The hub. Sweeps reactions and saved items, classifies them, dispatches handlers | Schedule |
+| `briefing` | Calendar, chat and tracker snapshot; the reporter that closes finished lines, reports what every skill did, and posts the one message | Schedule |
+| `proactive-router` | The hub. Sweeps reactions and saved items, classifies them, and acts on every tick on the board | Schedule |
 | `reply-draft` | Drafts an email or chat reply in your voice. Never sends | Handler |
 | `kb-note` | Captures one decision or reference note into the knowledge base | Handler |
-| `action-sweep` | Sweeps canvases, mentions, assigned tickets and meeting actions into one dated note | Schedule, and a handler |
+| `action-sweep` | Sweeps canvases, mentions, assigned tickets, meeting actions and your own chat commitments into one line each | Schedule, and a handler |
 | `idea-ticket` | Writes an ideas-board ticket in your voice, audited before you see it | Direct, and a handler |
-| `idea-scout` | First-pass discovery on one qualifying idea | Schedule |
+| `idea-scout` | First-pass discovery on one qualifying idea; records your decisions; watches the roadmap | Schedule, and a handler |
 | `idea-deep-dive` | Resolves an idea's open questions across four sources | Schedule |
-| `idea-wireframe` | One annotated wireframe for an investigated idea | Schedule |
+| `idea-wireframe` | One annotated wireframe for an investigated idea; reworks it on your say-so | Schedule, and a handler |
 | `session-log` | Writes a working session up as a durable note | Direct, plus hooks |
 | `kb-dream` | Curates the knowledge base, consolidates memory, reviews the learning loop | Schedule, and a handler |
-| `skill-eval` | Turns feedback on one run into an amended skill | Direct |
+| `skill-eval` | Turns feedback on one run into an amended skill | Direct only |
 | `skill-health-check` | Scores recent skill output against real evidence | Direct or schedule |
 
 Every skill takes `profile=<ref>` and, when scheduled, `unattended`:
@@ -62,18 +62,23 @@ Run /marcketplace:briefing profile=confluence:<cloudId>/<pageId> unattended
 
 ## How the parts fit together
 
-**The surface** is one shared board, a chat canvas by default. Each section has exactly
-one owning writer. A tick on a line is how you direct the system, and it means one of two
-things depending on the section: "I have done this or seen it", or "you do this".
+**The board** is one shared canvas with five sections: Today, To-do, For you, Ideas and
+Closed. It holds only things that need you. **Every tick means "yes, do it."** Edit a line
+and then tick it to have it done your way. Edit without ticking and nothing happens yet.
+Delete a line and it is never proposed again. Add a line anywhere and it is a new request.
+To-do is the one exception: it is your own list, and a tick there means done. A choice is
+a question with one checkbox per option; tick one.
 
-**The hub** reads every section, works out what you ticked, edited or deleted, and
-dispatches a handler for anything delegated. Handlers run in their own context and report
-back; they never write to the surface themselves. The hub writes to exactly one store, the
-surface, so a misclassification cannot corrupt anything else.
+**The hub** reads every line, works out what you ticked, edited, deleted or added, and
+acts on it: dispatching a handler, performing a small inline action, or resolving a
+choice. Handlers run in their own context and report back; they never write to the board
+themselves. The briefing closes what has finished and reports what every skill did, so
+the same news never reaches you twice.
 
-**Nothing irreversible happens without a tick.** A handler that reaches an external write
-stops and asks for a second, specific tick on a fresh line. A prior tick on a different
-item is never authorisation for this one.
+**Nothing irreversible happens without a tick, and nothing ever sends a message on your
+behalf.** A handler that reaches an external write stops and asks for a second, specific
+tick on a fresh line. A prior tick on a different item is never authorisation for this
+one. A drafted reply is always yours to paste and send.
 
 **The loop learns.** Ticks, edits and deletions accumulate into a tally. Three ticks on a
 category with no handler proposes one. Three deletions of the same pattern stops it being
@@ -95,7 +100,7 @@ plugins/marcketplace/
   skills/<skill>/SKILL.md     the procedure, under 150 lines, always loaded
   skills/<skill>/references/  the detail, loaded on demand
   skills/<skill>/HISTORY.md   why it is the way it is; never loaded at runtime
-  shared/                     the ten contracts every skill depends on
+  shared/                     the eleven contracts every skill depends on
   scripts/                    the checks that gate every change
 profiles/example.md           the template and eval fixture
 ci/validate.yml               copy into .github/workflows/ to enable, see ci/README.md

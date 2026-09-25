@@ -9,8 +9,8 @@ a later attempt.
   a pattern. Log both in Flags; don't manufacture an insight from them. The user would
   have noticed on the next run if the same thing failed again.
 - The same target's same write rejected on a retry (this run versus a previous run's
-  `log.md`) **is** repetition. That earns a Surfaced item and its own canvas checklist
-  line, because a human would want to know the second time, not the first.
+  `log.md`) **is** repetition. That earns a Surfaced item and its own `dream:` line on the
+  board, because a human would want to know the second time, not the first.
 
 Same bar applies to any recurring mechanical failure: repetition means the same target
 twice, not two targets once. This rule is specific to `kb-dream`'s own writes during a

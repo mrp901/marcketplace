@@ -57,6 +57,15 @@ chat:
 calendar:
   day_window: "00:00-23:59 local"
 
+briefing:
+  expected_runs:             # skill -> max days between runs before the Runs report calls it overdue
+    proactive-router: 2
+    action-sweep: 8
+    idea-scout: 8
+    idea-wireframe: 8
+    kb-dream: 8
+    skill-health-check: 8
+
 tracker:
   cloud_id:                 # tracker's cloud/site id
   site_url:                 # tracker's base URL
@@ -76,6 +85,7 @@ ideas:
   roadmap_field:                 # custom field that carries roadmap slot (reported, never qualifying)
   labels: {investigated, wireframed}
   qualifiers: [summary_has_product_tag, area_field_has_area_value, assignee_is_me]  # first-match gate
+  parked_roadmap_values: ["Someday"]   # roadmap slots that mean parked; an idea leaving one gets a refresh question
 
 notetaker:
   lookback_days: 7
@@ -126,8 +136,8 @@ notify:
   mode: webhook | chat_message | none
   fallback_channel_id:
   mention_form: markdown_link
-  webhooks: {briefing, idea-scout, idea-deep-dive, idea-wireframe, kb-dream, skill-health-check}
-  proof_of_life: {kb-dream: true}
+  webhooks: {briefing}       # the only webhook since 1.1.0; any other per-skill key here is unused and ignored
+  proof_of_life: {}          # unused since 1.1.0: briefing.expected_runs is the proof of life
 
 people: [{name, nickname, chat_id, email, role, decision_maker}]
 people_confusions: []      # known mis-merges, transcription errors
@@ -143,7 +153,7 @@ voice:
 budgets:
   briefing: {connector_calls: 3, notetaker_calls: 1, surface_reads: 1, surface_writes: 1}
   proactive-router: {searches: 5, thread_reads: 6, dispatches: 3}
-  action-sweep: {canvas_guard: 5, cold_start_days: 7, targeted_search_per_todo: 1}
+  action-sweep: {canvas_guard: 5, cold_start_days: 7, targeted_search_per_todo: 1, thread_reads: 6}
   idea-ticket:    {investigation_calls: 4, web_searches: 1, audit_rounds: 2}
   idea-scout: {web_searches: 4, kb_notes: 3, note_words: 800}
   idea-deep-dive: {loop_budget: 8, circle_caps: {kb: 2, people: 2, code: 3, web: 4}, depth_cap: 3}
@@ -174,6 +184,7 @@ budgets:
 | `chat.starter_emoji` | proactive-router | default | |
 | `chat.include_saved_items` | proactive-router | default | |
 | `calendar.day_window` | briefing | default | |
+| `briefing.expected_runs` | briefing | default | one entry per scheduled skill; a skill missing from the map is never called overdue |
 | `tracker.cloud_id` | briefing, action-sweep, idea-scout, idea-deep-dive, idea-wireframe, idea-ticket, skill-health-check | discover (accessible-resources) | |
 | `tracker.site_url` | same as `tracker.cloud_id` | discover (accessible-resources) | |
 | `tracker.project_key` | action-sweep, idea-ticket | ask | |
@@ -190,6 +201,7 @@ budgets:
 | `ideas.roadmap_field` | idea-scout, idea-wireframe | discover (create-metadata) | reported, never a qualifier |
 | `ideas.labels` | idea-scout, idea-wireframe | default | |
 | `ideas.qualifiers` | idea-scout, idea-ticket | default | first-match gate, generalised from the source's single hardcoded gate |
+| `ideas.parked_roadmap_values` | idea-scout (roadmap watch) | default | the slots that mean parked; leaving one is the only roadmap change that produces a board line |
 | `notetaker.lookback_days` | action-sweep, idea-deep-dive, briefing | default | |
 | `notetaker.prep_lines` | briefing | default | |
 | `kb.name` | kb-note, session-log, kb-dream, idea-scout, idea-deep-dive, idea-wireframe, action-sweep | ask | |
@@ -211,11 +223,11 @@ budgets:
 | `surface.id` | proactive-router, briefing, idea-scout, idea-deep-dive, idea-wireframe, action-sweep, kb-dream, skill-health-check | ask | every surface-owning skill needs it |
 | `surface.url` | same as `surface.id` | ask | |
 | `surface.home_channel_id` | briefing, kb-dream (webhook fallback) | ask | |
-| `notify.mode` | briefing, idea-scout, idea-deep-dive, idea-wireframe, kb-dream, skill-health-check | ask | |
-| `notify.fallback_channel_id` | same as `notify.mode` | ask | |
-| `notify.mention_form` | briefing, kb-dream | default | |
-| `notify.webhooks.*` | briefing, idea-scout, idea-wireframe, kb-dream, skill-health-check | optional | only the skills actually installed need an entry |
-| `notify.proof_of_life` | kb-dream | default | |
+| `notify.mode` | briefing | ask | briefing is the only skill that posts |
+| `notify.fallback_channel_id` | briefing | ask | |
+| `notify.mention_form` | briefing | default | |
+| `notify.webhooks.briefing` | briefing | optional | the only webhook key read; per-skill keys left over from 1.0.0 are ignored |
+| `notify.proof_of_life` | none | unused | kept in the shape so an old profile still parses; `briefing.expected_runs` replaced it |
 | `people[]` | briefing, session-log, kb-dream, idea-scout, idea-wireframe, action-sweep | ask | |
 | `people_confusions` | kb-dream, session-log | optional, starts empty | |
 | `known_fact_errors` | kb-dream, session-log | optional, starts empty | |

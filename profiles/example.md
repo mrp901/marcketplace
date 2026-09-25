@@ -54,6 +54,15 @@ chat:
 calendar:
   day_window: "00:00-23:59 local"
 
+briefing:
+  expected_runs:
+    proactive-router: 2
+    action-sweep: 8
+    idea-scout: 8
+    idea-wireframe: 8
+    kb-dream: 8
+    skill-health-check: 8
+
 tracker:
   cloud_id: 8f2e4a91-3c7d-4b2e-9a11-example000fc
   site_url: https://northwindlogistics.atlassian.net
@@ -73,6 +82,7 @@ ideas:
   roadmap_field: "cf[20054]"
   labels: {investigated: investigated, wireframed: wireframed}
   qualifiers: [summary_has_product_tag, area_field_has_area_value, assignee_is_me]
+  parked_roadmap_values: ["Someday", "Parking lot"]
 
 notetaker:
   lookback_days: 7
@@ -124,12 +134,7 @@ notify:
   mention_form: markdown_link
   webhooks:
     briefing: https://hooks.example-chat.invalid/triggers/TEXAMPLE001/00000001/briefingexample
-    idea-scout: https://hooks.example-chat.invalid/triggers/TEXAMPLE001/00000002/scoutexample
-    idea-deep-dive: https://hooks.example-chat.invalid/triggers/TEXAMPLE001/00000003/deepdiveexample
-    idea-wireframe: https://hooks.example-chat.invalid/triggers/TEXAMPLE001/00000004/wireframeexample
-    kb-dream: https://hooks.example-chat.invalid/triggers/TEXAMPLE001/00000005/dreamexample
-    skill-health-check: https://hooks.example-chat.invalid/triggers/TEXAMPLE001/00000006/healthexample
-  proof_of_life: {kb-dream: true}
+  proof_of_life: {}
 
 people:
   - {name: Priya Kanth, nickname: Priya, chat_id: W1EXAMPLEUSR1, email: priya.kanth@northwindlogistics.example, role: Product Manager, decision_maker: true}
@@ -153,7 +158,7 @@ voice:
 budgets:
   briefing: {connector_calls: 3, notetaker_calls: 1, surface_reads: 1, surface_writes: 1}
   proactive-router: {searches: 5, thread_reads: 6, dispatches: 3}
-  action-sweep: {canvas_guard: 5, cold_start_days: 7, targeted_search_per_todo: 1}
+  action-sweep: {canvas_guard: 5, cold_start_days: 7, targeted_search_per_todo: 1, thread_reads: 6}
   idea-scout: {web_searches: 4, kb_notes: 3, note_words: 800}
   idea-deep-dive: {loop_budget: 8, circle_caps: {kb: 2, people: 2, code: 3, web: 4}, depth_cap: 3}
   idea-wireframe: {pngs: 5, competitor_pngs: 2, md_reads: 5, html_lines: 300, critic_rounds: 1}

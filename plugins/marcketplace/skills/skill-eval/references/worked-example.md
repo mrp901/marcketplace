@@ -94,32 +94,29 @@ file-sending capability, name unchanged, for her to review and save herself.
 
 ---
 
-# Worked example - unattended, proposal-driven path
+# Worked example - run with no target
 
-kb-dream's monthly registry review raises `state.proposals: [{kind: skill_eval, category:
-kb-doc, candidate: kb-note, opened_at: 2026-09-01, status: open}]` - `tally.kb-doc.edited`
-has climbed to 6 against 9 ticked. Priya ticks the Dream log/actions line accepting it; the
-hub dispatches `skill-eval` mode `eval`.
+Sunday's `skill-health-check` scored `kb-note` red (`tally.kb-doc.edited` at 6 against 9
+ticked, three voice-ledger entries all in the `teammate_chat` register) and put one line
+on the board: `(shc:260921-2) 🔴 kb-note scored red: 6 of 9 notes edited before you kept
+them. Run skill-eval on it? · .utility/skill-health/kb-note.md`. Priya ticked it; the
+Router wrote `↳ router: queued for your next skill-eval run`.
 
-**Tally read:** 6 of 9 `kb-doc` dispatches were edited before being kept. **Voice-edits
-sample:** three reachable entries, all against `kb-note`'s `teammate_chat` register,
-diffing to the same shape - each kept version drops the note's closing restatement
-sentence.
+On Tuesday Priya runs `/marcketplace:skill-eval` with no target. The skill reads the board
+once and lists one candidate: `kb-note · 6 of 9 notes edited before kept ·
+.utility/skill-health/kb-note.md`. Priya picks it.
 
-**Pattern converges** (2 of 3 is enough to name, not enough to call universal): synthesis
-runs with feedback composed as "3 of 3 sampled edits to `kb-note` drafts removed the note's
-final summarising sentence; too small a sample to be certain it is universal." Revision
-sharpens `kb-note`'s existing "what this records" guidance rather than adding a new rule,
-and the change summary names the small sample size explicitly.
+**Starting feedback** is the health log entry plus the three ledger entries it cites, all
+diffing to the same shape: each kept version drops the note's closing restatement
+sentence. Step 2 reflects that back; Priya confirms and adds "and it keeps opening with
+'This note records…', which I always cut." Two patterns, both grounded.
 
-**Draft written** to `profile.kb.paths.drafts`, `status: draft`, `supersedes_on: proposal
-accepted or rejected`. Return JSON:
+**Synthesis** sharpens `kb-note`'s existing "what this records" guidance rather than adding
+a new rule, adds the opener as a good/bad pair, and names the sample size. Priya confirms
+the change summary; the revised `SKILL.md` is handed back as a file.
 
-```json
-{
-  "status": "done",
-  "report_line": "drafted a kb-note revision from 3 sampled edits · dropped closing sentence pattern · <draft link>",
-  "artefacts": [{"kind": "skill_eval_draft", "ref": "Drafts/2026-09-22-kb-note-eval-proposal.md"}],
-  "next_action": null
-}
-```
+**Closing the loop:** one `state.outcomes` entry, `{tag: shc:260921-2, handler:
+skill-eval, status: done, report_line: "skill-eval run on kb-note: dropped the closing
+restatement and the stock opener", recorded_at: 2026-09-23T10:40:00+10:00}`. The next
+briefing closes the `shc:` line as done by skill-eval. Nothing was installed by this
+skill.

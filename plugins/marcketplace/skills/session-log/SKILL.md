@@ -31,7 +31,7 @@ One `kb: search` for a same-day duplicate-slug check, one `kb: read` of the live
 `kb.conventions_file` and `kb.types_registry` (every run - never cached, see below), one
 `kb: write` batch covering the note plus its index and log lines together. Processing the
 pending queue adds one local digest per transcript (no `kb` call); no extra writes beyond
-one note per session covered.
+one note per session covered. Guidelines in `../../shared/token-discipline.md`.
 
 ## Before anything: is this worth a note?
 Not every session earns one. A session that only answered a factual question, ran a

@@ -35,7 +35,10 @@ Ref formats: `confluence:<cloudId>/<pageId>`, `sharepoint:<drive>/<path>`,
    every other key empty or its documented default).
 4. Write the pointer file at `~/.claude/marcketplace/profile.ref` with the new profile's
    ref.
-5. Print exactly this line so the user can paste it into a routine prompt, with the real
+5. If the surface at `surface.id` carries none of the five section headings in
+   `surface-protocol.md`'s section table, write the board header and the five headings
+   (Today, To-do, For you, Ideas, Closed), empty, in one `chat: update canvas` call.
+6. Print exactly this line so the user can paste it into a routine prompt, with the real
    ref substituted:
 
    ```
@@ -96,22 +99,24 @@ else changed.
 
 When a required key or category is still missing after discovery, in unattended mode:
 
-1. Write one line under `# Plugin notices` on the surface:
+1. Set `state.runs[<skill>].status = fast-fail` and
+   `state.runs[<skill>].note = "missing <keys> · run /marcketplace:<skill> interactively once"`.
+2. Stop. Do nothing else this run.
 
-   ```
-   - <date> <skill>: fast-fail · missing <keys> · run /marcketplace:<skill> interactively once
-   ```
+There is no notices section on the board. The next `briefing` run reads `state.runs` and
+names the fast-fail in its message's Runs block, which is the only place the user needs
+to look. `briefing`'s own fast-fail has no later briefing to carry it, so it posts the
+same one line to `profile.notify.fallback_channel_id` itself (see `notify.md`).
 
-2. Set `state.runs[<skill>].status = fast-fail`.
-3. Stop. Do nothing else this run.
+Check preconditions before any expensive read, per `token-discipline.md`: a run that
+sweeps five channels and then fast-fails on a missing key has spent the sweep for nothing.
 
 **Never guess an identity key.** A missing `user.*`, `org.name` or similar identity value
 is always a fast-fail or an interactive ask - it is never inferred, defaulted or left
 blank and proceeded past.
 
-A skill whose surface cannot be resolved (no `surface.id`, or the surface itself is
-unreachable) has nowhere to write that notice line. In that case it writes to
-`state.runs[<skill>]` and to its own session output only, and stops the same way.
+A skill whose state document cannot be resolved has nowhere to record the fast-fail. In
+that case it writes to its own session output only, and stops the same way.
 
 ## Pointer files for bare scripts
 

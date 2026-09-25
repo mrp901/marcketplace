@@ -1,122 +1,157 @@
 # Skill ecosystem flow
 
-A high-level picture of how the marcketplace skills are designed to run, read top to
-bottom by cadence: the overnight scheduled run, then your working day, then the weekly
-jobs, then the feedback loops that tune the system. Skill names below are the repo
-skills in `plugins/marcketplace/skills/`.
+A high-level picture of how the marcketplace skills run, read top to bottom by cadence:
+the overnight scheduled runs, then the board and your ticks, then the handlers the hub
+dispatches on those ticks, then the things you run yourself, then the weekly jobs, then
+the feedback loops. Skill names below are the repo skills in
+`plugins/marcketplace/skills/`.
 
-Solid arrows are a write or a direct hand-off. Dotted arrows mean the hand-off isn't
-immediate — a tick on the surface reaching the hub, or something one run leaves for a
-later one to pick up. Red dashed arrows mark a link that's designed but not actually
-wired up yet; see **Known gaps** below.
+Since 1.1.0 there is one tick rule on the whole board: **a tick means "yes, do it"**. The
+Router acts on every tick; the Briefing only closes lines and reports. Nothing on the
+board is an FYI, and nothing ever sends a message on your behalf.
 
-Three hand-offs wrap from a later band back to an earlier one, and aren't drawn as
-arrows — drawing them would turn the whole diagram into a cycle and wreck the
-top-to-bottom reading. Take the `Canvas` and `You tick` nodes as feeding the top of the
-next overnight run:
+Solid arrows are a write or a direct hand-off. Dotted arrows mean the hand-off waits for
+a later run: a tick reaching the hub on its next scheduled run, or something one run
+leaves for another to pick up. The overnight skills are separate scheduled routines, not
+a chain; the order shown is the conventional one, and each runs on whatever cron you gave
+it.
 
-- **Your tick → `proactive-router`.** The hub reads the canvas fresh on its next
-  scheduled run, including whatever you ticked.
+Three hand-offs wrap from a later band back to an earlier one and aren't drawn as
+arrows, to keep the diagram acyclic:
+
+- **Your tick → `proactive-router`.** The hub reads the board fresh on its next run,
+  including whatever you ticked, edited, deleted or added.
 - **`idea-scout`'s label → `idea-wireframe`.** Scout sets `investigated`; wireframe finds
-  it by JQL on its own next run, not that same night.
+  it by JQL on its own next run.
 - **`session-log`'s notes → `kb-dream`.** Dream reads recent `Sessions/` notes as one of
   its inputs on its next run.
 
 ```mermaid
 flowchart TB
-    subgraph overnight["Overnight, scheduled"]
+    subgraph overnight["Overnight, each on its own schedule"]
         direction TB
-        router["proactive-router\n(the hub)"]
+        router["proactive-router\n(the hub: sweep, then act on every tick)"]
         dream["kb-dream"]
         wireframe["idea-wireframe"]
         sweep["action-sweep"]
-        briefing["briefing\n(the reporter)"]
-        router --> dream --> wireframe --> sweep --> briefing
+        briefing["briefing\n(close, report, post)"]
     end
 
-    canvas(["Canvas (surface)"])
-    tick(["You tick a line"])
+    board(["The board: Today · To-do · For you · Ideas · Closed"])
+    tick(["You tick, edit, delete or add a line"])
+    message(["The briefing message\n(Runs block, FYIs, health)"])
 
-    briefing --> canvas
-    dream --> canvas
-    wireframe --> canvas
-    sweep --> canvas
-    canvas --> tick
+    router --> board
+    dream --> board
+    wireframe --> board
+    sweep --> board
+    briefing --> board
+    briefing --> message
+    board --> tick
 
     subgraph handlers["Dispatched by the hub, on a tick"]
         direction TB
-        replydraft["reply-draft"]
+        replydraft["reply-draft\n(email, chat-reply)"]
         kbnote["kb-note"]
         ideaticket["idea-ticket\n(draft → file)"]
-        sweeptargeted["action-sweep\n(targeted / meeting / push)"]
-        dreamsettle["kb-dream\n(settle mode)"]
+        sweeptargeted["action-sweep\n(targeted / meeting → push)"]
+        scoutdecide["idea-scout\n(decide)"]
+        wireframereact["idea-wireframe\n(react)"]
+        dreamsettle["kb-dream\n(settle)"]
+        inline["inline: investigate,\npromote, requeue, to-do"]
     end
 
     router -.-> replydraft
     router -.-> kbnote
     router -.-> ideaticket
     router -.-> sweeptargeted
+    router -.-> scoutdecide
+    router -.-> wireframereact
     router -.-> dreamsettle
+    router -.-> inline
 
     subgraph manual["Your day, direct or hook-driven"]
         direction TB
         sessionlog["session-log"]
         ideaticketdirect["idea-ticket\n(direct)"]
-        skilleval["skill-eval\n(direct)"]
+        skilleval["skill-eval\n(manual only)"]
     end
 
     sessionhook(["SessionEnd / SessionStart hooks"])
     sessionhook --> sessionlog
 
-    subgraph weekly["Weekly band"]
+    subgraph weekly["Weekly band, each on its own schedule"]
         direction TB
-        scout["idea-scout\n(weekend)"]
-        deepdive["idea-deep-dive\n(Monday)"]
-        healthcheck["skill-health-check\n(Sunday)"]
+        scout["idea-scout\n(scout, refresh, roadmap watch)"]
+        deepdive["idea-deep-dive\n(no selector: key given by the caller)"]
+        healthcheck["skill-health-check"]
     end
 
     ideaticketdirect -->|"unlabelled idea"| scout
     sweep -->|"'Larger' item,\nunlabelled idea"| scout
-    scout -.->|"reads scout note,\nno selector, no label"| deepdive
-    healthcheck --> canvas
+    scout -.->|"reads scout note"| deepdive
+    scout --> board
+    deepdive --> board
+    healthcheck -->|"red score only"| board
+    healthcheck -.->|"amber, green"| message
 
     subgraph feedback["Feedback loops"]
         direction TB
-        proposal(["skill_eval proposal"])
+        requeue(["state.ideas requeue flags"])
+        tastelog(["taste log reactions"])
+        outcomes(["state.outcomes"])
     end
 
-    dream --> proposal --> canvas
-    canvas -.-> skilleval
-    healthcheck -->|"red score"| skilleval
-
-    linkStyle 17 stroke:#c0392b,stroke-dasharray: 5 5
+    inline -.->|"requeue"| requeue
+    wireframereact -.-> tastelog
+    requeue -.-> scout
+    requeue -.-> wireframe
+    tastelog -.-> wireframe
+    tick -.->|"ticked shc: line,\nqueued"| skilleval
+    skilleval -.-> outcomes
+    outcomes -.-> briefing
 ```
 
 ## Legend
 
-- **Bands, top to bottom**: overnight schedule → the surface and your tick → handlers the
-  hub dispatches → things you run yourself or that a hook kicks off → the weekly jobs →
-  the loops that feed back into the system.
+- **Bands, top to bottom**: the overnight schedules → the board, your tick and the one
+  message → handlers the hub dispatches → things you run yourself or that a hook kicks
+  off → the weekly jobs → the loops that feed back into the system.
 - **Solid arrow**: a write, or a hand-off within the same run.
 - **Dotted arrow**: a hand-off picked up on a later scheduled run rather than acted on
   immediately.
-- **Red dashed arrow**: designed but not actually wired up — see below.
-- Three hand-offs wrap from a later band back to an earlier one and aren't drawn as
-  arrows at all, to keep the diagram acyclic — see the note above the diagram.
-- The **Canvas** and **You tick** nodes stand in for the shared surface (one chat canvas
-  by default). Jira, the vault and the shared state document aren't drawn as nodes; every
-  skill that touches them is described in `README.md` and each skill's own `SKILL.md`.
+- The **board** node stands in for the shared surface (one chat canvas by default) and
+  its five sections. The **message** node is the one post the plugin sends; every other
+  skill's run lands in its Runs block from `state.runs`. The tracker, the knowledge base
+  and the state document aren't drawn as nodes; every skill that touches them is
+  described in `README.md` and each skill's own `SKILL.md`.
+
+## What a tick does, by line
+
+| Line | Tag | On tick |
+|---|---|---|
+| A swept candidate (email, ticket, note, summary, to-do) | `pr:` | dispatched to its handler, or an inline action |
+| A find from the action sweep | `sweep:` | drafted (first tick), then pushed (second tick on the fresh line) |
+| An overdue item | `rb:` | `inline:investigate` |
+| A term to add to the glossary | `term:` | `inline:promote`; the line is removed, never logged |
+| A curation task | `dream:` | `kb-dream` `settle` |
+| A red health score | `shc:` | queued; you run `skill-eval` |
+| An option under an idea's decision | `<key>/d…`, `<key>/q…` | `idea-scout` `decide` records it in the note |
+| Keep, rework or drop a wireframe | `<key>/w-…` | `idea-wireframe` `react`; a rework requeues the idea |
+| Refresh a parked idea that moved | `<key>/r` | `inline:requeue` |
+| Your own To-do | (none) | done; briefing closes it |
 
 ## Known gaps
 
-- **`idea-deep-dive` has no selector and writes no label.** It runs on its own schedule
-  but nothing in the code picks which idea it works on, and it never sets a label that
-  something else could wait on. It reads the note `idea-scout` wrote, but nothing gates
-  `idea-wireframe` on it finishing. Drawn here as a side branch off `idea-scout`, not a
-  step between scout and wireframe. See `plugins/marcketplace/skills/idea-deep-dive/SKILL.md`.
-- **The "Ideas: decisions for you" section has two owners.**
-  `plugins/marcketplace/shared/surface-protocol.md` has `briefing` closing a ticked line
-  in that section, but `idea-scout`'s own `SKILL.md` has it settling ticked lines itself
-  on its next run. Both can't be right.
-- **Version mismatch.** `plugins/marcketplace/plugin.json` reports `0.1.0`; `CHANGELOG.md`
-  reports `1.0.0`. Doesn't affect the flow, but worth fixing alongside this.
+- **`idea-deep-dive` still has no selector.** It runs on its own schedule but nothing in
+  the code picks which idea it works on; the key comes from the caller. Deliberately left
+  as is in this release (the redesign plan's constraints). Its forks now reach the board
+  as option groups, so a decision on its output does land in the note.
+- **The migration is one-way and runs once.** The first `briefing` run under 1.1.0
+  rewrites the board into the five-section layout; every other skill waits for it. A
+  board that can't be read as either layout stops briefing with a fallback post rather
+  than a guess (`skills/briefing/references/migration.md`).
+- **The eval cases for dispatching handlers grade the hub's payload, not the handler.**
+  The new `proactive-router` cases accept either a completed dispatch or a documented
+  "could not resolve a tool category" sub-line, because the mock servers cover chat and
+  the state document only.

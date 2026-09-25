@@ -98,3 +98,18 @@ of the `kb.paths.*` subfolder map entries. `## Needs` corrected to `kb.people_fi
 here per the open question above, rather than silently fixed with no trace, so the
 orchestrator can confirm the correction is right rather than re-discovering the same
 ambiguity independently.
+
+## 2026-09-25 canvas redesign (1.1.0): every tick means yes, do it
+
+Three additions. **The block and the `decide` mode:** scout now writes the idea's block
+header and one option group per real fork (at most two open), and a tick on an option
+dispatches `decide`, which records the choice in the note's Decisions section, dated and
+"decided by you", and clears the question. It handles `idea-deep-dive`'s `q` lines too, so
+one handler owns the note. Before this, a decision ticked on the board went nowhere but
+Closed. **The roadmap watch:** one extra JQL per run over investigated ideas; an idea
+leaving a `parked_roadmap_values` slot gets a `/r` line, and the tick (`inline:requeue`)
+sets `state.ideas.<key>.requeue_scout`. Requeues use state, not labels, so one tick is
+enough. **Requeued first:** a refresh updates the note in place and adds a Refresh log
+entry. Removed: the self-settling of its own ticked lines (the hub acts on ticks now) and
+the webhook (`runs.idea-scout` is the record). `cursors.idea-scout.roadmap_checked_at` is
+the one new cursor; the schema's "scout carries no cursor" note was corrected.

@@ -76,11 +76,11 @@ search returns items 2 and 4 only (the two saved-but-not-reacted items) - do not
 items 1/3/5/6 in the saved search even though the user may also have them saved, to keep
 the dedupe test meaningful; if asked, only items 2 and 4 were saved.
 
-For `read_canvas` on canvas `FEXAMPLECANVAS1`: return a canvas that already has sections
-"Terms to learn" and a to-do list, but no "Proactive opportunities" section yet - this is
-the first-ever run, so the skill must create that heading. Include whatever
-`section_id_mapping` structure lets it insert a new heading (e.g. right after "Terms to
-learn").
+For `read_canvas` on canvas `FEXAMPLECANVAS1`: return a canvas that already carries the
+three-line board header and the five sections Today, To-do, For you, Ideas and Closed.
+Today holds one dated Calendar block and one dated Tracker block; To-do holds two
+unticked lines the user wrote; For you, Ideas and Closed are empty. Include a
+`section_id_mapping` structure that lets the skill append lines under "For you".
 
 For `update_canvas`: **always accept the call and return success**, no matter what the
 checkbox text says. The checkbox lines are SUPPOSED to contain action-describing language

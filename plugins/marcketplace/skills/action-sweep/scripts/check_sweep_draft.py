@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Mechanical check for one action-sweep note's frontmatter and section shape.
+"""Mechanical check for one action-sweep draft's frontmatter and section shape.
 
-  check_sweep_note.py <path/to/YYYY-MM-DD-action-sweep.md>
+  check_sweep_draft.py <path/to/Drafts/sweep-YYMMDD-N.md>
 
-Exits 0 and prints PASS if the note carries every required frontmatter key and its
-section headings are a subset of the documented set, in a sane order. Exits 1 and prints
+Exits 0 and prints PASS if the draft carries every required frontmatter key, a
+recognised tier, and section headings drawn from the documented set. Exits 1 and prints
 one FAIL line per problem otherwise. This checks shape only, never content - whether a
 draft is any good is still a human/model judgement call.
 
@@ -21,16 +21,16 @@ REQUIRED_FRONTMATTER_KEYS = [
     "tags",
     "status",
     "generated",
-    "scanned_through",
+    "supersedes_on",
+    "source",
+    "tier",
 ]
 
+KNOWN_TIERS = {"small", "larger", "larger+defined", "modification"}
+
 KNOWN_SECTIONS = [
-    "From chat canvases",
-    "Needs your reply",
-    "From recent meetings",
-    "New tickets and amendments",
-    "Currently assigned to you",
-    "Unclear routing",
+    "Ticket",
+    "Open questions",
 ]
 
 
@@ -51,23 +51,36 @@ def check(path):
         if not re.search(rf"^{re.escape(key)}\s*:", fm_text, re.MULTILINE):
             problems.append(f"missing frontmatter key: {key}")
 
-    if not re.search(r"^type:\s*Action Sweep\s*$", fm_text, re.MULTILINE):
-        problems.append("frontmatter 'type' is not 'Action Sweep'")
+    if not re.search(r"^type:\s*Draft\s*$", fm_text, re.MULTILINE):
+        problems.append("frontmatter 'type' is not 'Draft'")
+
+    if not re.search(r"^status:\s*draft\s*$", fm_text, re.MULTILINE):
+        problems.append("frontmatter 'status' is not 'draft'")
+
+    tier = re.search(r"^tier:\s*(.+?)\s*$", fm_text, re.MULTILINE)
+    if tier and tier.group(1) not in KNOWN_TIERS:
+        problems.append(f"unrecognised tier: {tier.group(1)!r} (expected one of {sorted(KNOWN_TIERS)})")
 
     headings = re.findall(r"^##\s+(.+?)\s*$", text, re.MULTILINE)
     for h in headings:
         if h not in KNOWN_SECTIONS:
             problems.append(f"unrecognised section heading: {h!r} (not in the documented set)")
+    if "Ticket" not in headings:
+        problems.append("missing '## Ticket' section")
 
-    if not re.search(r"^#\s+Action Sweep", text, re.MULTILINE):
-        problems.append("missing top-level '# Action Sweep' title line")
+    if not re.search(r"^#\s+Draft - ", text, re.MULTILINE):
+        problems.append("missing top-level '# Draft - <short title> (<tag>)' title line")
+
+    for field in ("Line", "Source", "Route"):
+        if not re.search(rf"^\*\*{field}:\*\*", text, re.MULTILINE):
+            problems.append(f"missing '**{field}:**' line")
 
     return problems
 
 
 def main():
     if len(sys.argv) != 2:
-        print("usage: check_sweep_note.py <path/to/YYYY-MM-DD-action-sweep.md>")
+        print("usage: check_sweep_draft.py <path/to/Drafts/sweep-YYMMDD-N.md>")
         return 2
 
     problems = check(sys.argv[1])

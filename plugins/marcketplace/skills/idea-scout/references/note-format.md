@@ -35,10 +35,12 @@ Qualified by: {product tag | area field | assigned to <user.name>}. Linked idea:
 ## Where I landed
 ## The four product risks
 ## Decisions for you to make
+## Decisions
 ## Research leads
 ## Hills to climb
 ## Open questions
 ## Sources & context used
+## Refresh log
 ```
 
 - **Where I landed** - 2 to 4 sentences. A position, not a hedge. State what this skill
@@ -50,13 +52,20 @@ Qualified by: {product tag | area field | assigned to <user.name>}. Linked idea:
 - **Decisions for you to make** - real forks with options, never "consider X". Each
   decision names the actual choice on the table and the concrete options, written so the
   reader can see the trade-off without opening anything else. This section is the reason
-  the note exists; a note whose decisions are all hedges has wasted the read.
+  the note exists; a note whose decisions are all hedges has wasted the read. Each fork
+  here becomes one option group on the board (at most 2 forks, 2 to 4 options each; a
+  third fork stays in the note until one of the first two is decided).
+- **Decisions** - one line per decision the user has made on the board, appended by the
+  `decide` handler mode (`decide-mode.md`): date, question, chosen option in bold,
+  `decided by you`. Empty until the first tick; omit the heading until then.
 - **Research leads** - named competitors, sources, docs, people worth chasing next.
   Cross-check any person named against `profile.kb.people_file` before writing them
   in.
 - **Hills to climb** - the hard parts: dependencies, data gaps, upstream constraints.
 - **Open questions** - owner and whether it's currently blocking.
 - **Sources & context used** - what was actually read and searched this run, named plainly.
+- **Refresh log** - one dated line per refresh run (an idea requeued from the roadmap
+  watch), naming what changed since the first pass. Omit the heading on a first pass.
 
 ## Worked example (fictional, against `profiles/example.md`)
 

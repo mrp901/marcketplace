@@ -16,34 +16,34 @@ catches a pattern the router's own per-run threshold hasn't yet crossed.
 
 ## At most three proposals
 
-Pick from these three shapes, most evidence-backed first, and stop at three even where
+Pick from these two shapes, most evidence-backed first, and stop at three even where
 more evidence exists - a longer list stops being worth reading:
 
-1. **A mapping** for a category the user keeps ticking with no handler, or whose current
-   handler the user consistently edits before acting on. Names the category and a
-   candidate handler, evidenced by the tally counts that support it.
+1. **A mapping** for a category the user keeps ticking with no handler. Names the
+   category and a candidate handler, evidenced by the tally counts that support it.
 2. **A lift** for a suppression pattern (`state.suppressions`) that now looks wrong - the
    same `channel:category` pattern the user is starting to tick again despite the
    suppression, or a pattern whose deletions were long enough ago that it may no longer
    apply.
-3. **A skill-eval pass** on a handler whose output the user keeps editing (`tally.<cat>
-   .edited` climbing relative to `.ticked`) - proposing that a `skill-eval` run look at
-   that handler's `SKILL.md`, not performing the eval itself.
+
+A handler whose output the user keeps editing is no longer this review's to raise:
+`skill-health-check` reads the same tally and voice ledger, scores the handler amber or
+red, and a red puts the "run skill-eval on it?" question on the board. One path to
+`skill-eval`, not two.
 
 Each proposal is one line in the dream note's Surfaced section and, if it's actionable in
-one tick, one Dream log/actions checklist line.
+one tick, one `dream:` line in For you.
 
 **A proposal is also written into `state.proposals`,** with `kind` set to the matching
 value: `suppression_lift` for a block that now looks wrong, `skill_fold` for a settled
-correction that should become a rule in a named skill, `skill_eval` for a handler whose
-output the user keeps editing. `mapping` stays `proactive-router`'s to raise, not this
-skill's.
+correction that should become a rule in a named skill. `mapping` stays
+`proactive-router`'s to raise, not this skill's.
 
-Writing the record is what makes the checklist line mean anything: a tick on it is the
-user accepting the proposal, and the hub finds the accepted proposal by its `id` in order
-to dispatch whatever acts on it. A proposal that exists only as prose in the dream note
-can be read but never acted on, which would leave `skill-eval`'s unattended path with
-nothing to trigger it.
+Writing the record is what makes the board line mean anything: a tick on it dispatches
+`settle`, which finds the proposal by its `id` and marks it accepted (a lift is applied to
+`state.suppressions` there; a fold is never applied, only marked accepted for a human to
+make). A proposal that exists only as prose in the dream note can be read but never acted
+on.
 
 Writing the record is not applying the proposal. The propose-only rule is unchanged: this
 skill writes a record that a change has been proposed, never the change itself.

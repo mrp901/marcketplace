@@ -12,8 +12,10 @@ clipped, the side rail stays aligned. Fix anything wrong before moving on.
 
 The build itself runs on whatever model the current session is on. The critic round always
 escalates to `profile.budgets.models.critic` (per `../../../shared/model-tiers.md`), spawned
-as a **genuinely fresh subagent** - the screenshot, screenshots of the last two or three
-prior wireframes from `profile.kb.paths.prototypes`, and the idea's one-line problem
+as a **genuinely fresh subagent** - the screenshot, screenshots of two or three prior
+wireframes from `profile.kb.paths.prototypes` chosen by their taste-log reaction (one the
+user kept, one they reworked with its feedback text, one they dropped, falling back to the
+most recent only where no reactions exist yet), and the idea's one-line problem
 statement. Never the HTML source, never this run's build reasoning, never earlier
 iterations. Judgement is the one place worth paying for the stronger tier, and it stays
 cheap because the critic only ever sees images and a one-line problem, never raw source.
@@ -21,11 +23,13 @@ Inheriting the build's own reasoning would hand the critic the exact anchoring e
 exists to escape. If the critic tier is unavailable, fall back to the strongest available
 model and say so plainly on the surface line rather than silently downgrading.
 
-**Label the prior shots as previous attempts, not exemplars.** If every one of them shares
-the same shape (the same frame, the same artboard count), an unlabelled comparison
-penalises this run for diverging from that shape, which is the opposite of the point. Once
-the taste log carries real reactions to specific wireframes, rank against the ones the user
-actually argued with instead of an arbitrary recent set.
+**Label each prior shot with its real reaction** (`kept`, `reworked: <feedback>`,
+`dropped`, or `no reaction yet`), never as an exemplar. If every one of them shares the
+same shape (the same frame, the same artboard count), an unlabelled comparison penalises
+this run for diverging from that shape, which is the opposite of the point. The reactions
+are what make the ranking mean something: the critic is asked whether this run's wireframe
+is closer to what the user kept than to what they dropped, and whether it repeats a
+mistake a rework named.
 
 Ask the critic to **rank**, not to score against a stated bar: which of the shown
 wireframes would the user argue with hardest, which reads as filler, and why. Don't tell it
