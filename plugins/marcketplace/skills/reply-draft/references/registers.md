@@ -1,8 +1,8 @@
 # Register selection
 
 Picked once per dispatch, from the thread's audience and channel - never from the
-`email` category alone, since a teammate DM and a customer email arrive through the same
-category.
+`email` or `chat-reply` category alone, since a teammate DM and a customer email can
+arrive through either.
 
 | Thread looks like | Register |
 |---|---|

@@ -31,40 +31,38 @@ maintenance).
   four), any spawned-question lineage ("Q4 - spawned by Q2, blocking; resolved via code, 2
   searches"), and status this run ended on.
 
-## The surface
+## The board
 
-Append-only, to `surface.id`, section "Ideas: decisions for you" (`chat: read canvas` first
-for current section addressing; create the section if it is somehow missing, and say so).
-Only an actionable end state gets an item; a clean **complete** run with nothing in Decisions
-for you writes nothing here. One checklist line per item, same tagging convention `idea-scout`
-uses so the two skills' items sit in one list:
+Write only inside the idea's block under Ideas (`../../../shared/surface-protocol.md`'s
+Ideas block grammar). `chat: read canvas` first for current addressing; write the block
+header `- <key> · <title> · note` if no block exists yet. Settle this skill's own existing
+`<key>/q…` lines first per "Settle before you append" (never act on a tick; the hub
+dispatches it), then append this run's lines in the same write. Only an actionable end
+state gets lines; a clean **complete** run with nothing in Decisions for you writes nothing.
 
-- **complete**, with items in Decisions for you -> one line per decision:
-  `- [ ] (<idea-key>) {the fork, options implied}`.
-- **stuck** -> one line per stuck item (a depth-cap cascade gets one line per item in the
-  chain, root to leaf): `- [ ] (<idea-key> - stuck) {the question, what was checked, what's
-  needed from the user}`.
-- **loop-limit reached** -> `- [ ] (<idea-key> - paused) {how many questions remain; a re-run
-  continues from the note, no separate tracking file}`.
+- **complete**, with items in Decisions for you: one option group per fork, at most two
+  open groups per idea across this skill and `idea-scout` combined (a third waits in the
+  note until one is decided):
+  ```
+  - <the fork, as a question>
+    - [ ] (<key>/q1a) <option>
+    - [ ] (<key>/q1b) <option>
+  ```
+- **stuck**: one line per stuck item (a depth-cap cascade gets one line per item in the
+  chain, root to leaf):
+  `- [ ] (<key>/q<n>) <the question, what was checked> · edit this line with your answer and tick`
+- **loop-limit reached**: one line:
+  `- [ ] (<key>/q-paused) <how many questions remain> · edit this line with a steer, or tick to continue from the note next run`
 
-Never tick or delete an item written by another run (this skill's own earlier pass, or
-`idea-scout`) - ticking or closing those out is the user's call or that other run's, not this
-write-up's.
+Every line carries category `idea-decision`. A tick dispatches `idea-scout`'s `decide`
+mode, which appends the answer to this note's Decisions section and clears the question
+from Open questions and Run state, so the next resume does not re-ask it.
 
-## Notify
+Never tick or delete a line written by another run (this skill's own earlier pass,
+`idea-scout` or `idea-wireframe`); closing is briefing's and acting is the hub's.
 
-Fired once per run, after the note is saved and the surface step (if any) completes, per
-`../../../shared/notify.md`. Body shape (`notify.md`'s per-skill table):
+## Run record
 
-```json
-{"ticket": "<idea-key>", "outputUrl": "<path to the note>"}
-```
-
-## Settling the shared section
-
-This skill appends to the same surface section `idea-scout` writes to, and both revisit it.
-Before appending this run's items, settle this skill's own existing lines in that section
-per "Settle before you append" in `../../../shared/surface-protocol.md`: confirm what a tick
-claims against real state, leave an edited line's wording alone, never re-add a deleted
-line, and never re-post an item still sitting there untouched. Settle only lines this skill
-wrote; `idea-scout`'s lines are its own to settle.
+No webhook and no post. Write `state.runs.idea-deep-dive`: `status` (`ok` for complete,
+`partial` for stuck or loop-limit), `note` one line (`<key>: 3 resolved, 1 stuck on
+<what>`), `ref` the note path. The briefing's Runs block carries it to the user.

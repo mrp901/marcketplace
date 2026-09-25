@@ -139,3 +139,13 @@ happened, and the count logging was extended to four so the run stays auditable.
 The acceptance criteria were also right to keep. No source evals existed, so that section is
 the only executable statement of what a correct run looks like; dropping it for lacking an
 evals directory would have removed the skill's own self-check.
+
+## 2026-09-25 canvas redesign (1.1.0): every tick means yes, do it
+
+Forks now reach the board as option groups (`<key>/q1a`, `q1b`, …) inside the idea's
+block, and a stuck or paused question is one line the user edits with an answer and
+ticks. Both dispatch `idea-scout`'s `decide` mode, which writes into this skill's note and
+clears Run state, so a resume never re-asks a decided question. The webhook is gone;
+`runs.idea-deep-dive` carries the run to the briefing. No selector was added, per the
+redesign's constraints; the key still comes from the caller, and a run with no key
+records `quiet`.

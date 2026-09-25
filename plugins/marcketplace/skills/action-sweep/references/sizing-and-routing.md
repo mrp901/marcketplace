@@ -8,7 +8,7 @@ worth a pause over. This refusal to guess is one of this skill's two hard stops;
 
 - **Small** -> routes to `tracker.default_parent_epic` as a `tracker.issue_types.story`.
   A scoped tweak to existing behaviour (a naming fix, a colour change, a truncation
-  rule). Doesn't need an ideas-board entry first. Tagged `ticket-minor` on the surface.
+  rule). Doesn't need an ideas-board entry first. Category `ticket-minor` on the board.
 - **Larger** -> routes to `ideas.project_key` as `ideas.issue_type`, with
   `ideas.area_field` set to `ideas.area_value`. A real feature idea that hasn't been
   scoped or validated - still has open questions that need discovery before it's
@@ -19,13 +19,25 @@ worth a pause over. This refusal to guess is one of this skill's two hard stops;
   need its own epic with child stories under it. This skill creates the epic shell only;
   breaking it into child stories is a separate, later step, not automated here.
 
-**If a candidate doesn't clearly fit one tier**, write it into the note under an
-"Unclear routing" callout naming what's ambiguous, and do **not** post a delegate line
-for it on the surface - an item with no delegate line can never be ticked into a push, so
-this is the structural way "ask rather than guess" survives an unattended run with no one
-to ask. It resolves only when the user edits the note directly to state a tier, or an
-interactive run asks and gets an answer, at which point the next sweep picks it up as a
-now-routable candidate.
+**If a candidate doesn't clearly fit one tier**, post it as a question with one option
+per tier (see `output-format.md`), each option carrying the category that tier maps to
+(`ticket-minor` for small, `ticket-reply` for the two larger tiers) and the tier named in
+its text. Nothing is drafted until the user ticks one; the hub then dispatches `targeted`
+with the chosen option as `item.text_as_ticked`, and the tier is read from it. This is the
+structural way "ask rather than guess" survives an unattended run with no one to ask: an
+option group can only ever resolve to one tier, chosen by the user.
+
+## Where the action lands
+
+| Find | Category | Handler on tick |
+|---|---|---|
+| A ticket to raise or a comment owed on an existing one | `ticket-reply` / `ticket-minor` | this skill, `targeted` |
+| A commitment from a recorded meeting | `meeting-followup` | this skill, `meeting` |
+| A chat thread or mention waiting on the user's reply | `chat-reply` | `reply-draft`, which drafts and never sends |
+| Something only the user can do, with no artefact to draft | `to-do` | the hub's `inline:to-do`: one line on the user's own list |
+
+One find, one action. A find that could be two things (a reply owed that also needs a
+ticket) is posted as the more concrete one, and the draft names the other.
 
 ## Modifications (shape B) never route through this table
 

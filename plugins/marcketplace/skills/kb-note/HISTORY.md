@@ -78,3 +78,9 @@ kb-conventions.md), reported per the task brief:
   either has an explicit two-tick note (`ticket-idea`, `ticket-minor`) or is plainly a
   single-shot inline action. `kb-note`'s single-mode status had to be inferred from that
   absence plus the irreversible-write rule's own wording, rather than stated outright.
+
+## 2026-09-25 canvas redesign (1.1.0): every tick means yes, do it
+
+No behaviour change. It reads `item.category` (`kb-doc` or `summarise`) explicitly, since
+`summarise` dropped the star from its emoji when FYIs left the board, and its Budget links
+the shared token discipline.

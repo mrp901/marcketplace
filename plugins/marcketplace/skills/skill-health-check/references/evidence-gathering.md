@@ -25,8 +25,8 @@ name, or the folder/naming pattern that skill's own `SKILL.md` documents - e.g. 
 - **Is it cross-linked *to* by anything later?** A note nothing downstream ever references is
   a weaker outcome than one a later note or ticket cites.
 - **Was the surface item it came from ticked and cleared within a reasonable time**, or does
-  it still sit open untouched? Read the relevant acknowledge/delegate section (`chat: read
-  canvas`) the note's skill owns. A long-stale item is a weaker outcome than one closed out
+  it still sit open untouched? Read the line the note's skill owns on the board (`chat: read
+  canvas`). A long-stale item is a weaker outcome than one closed out
   quickly.
 
 ## Tracker-writing skills
@@ -54,7 +54,10 @@ source in this skill and should never be skipped for a handler that has one.
   this skill just counts how often.
 - **A category whose lines the user keeps editing** (`tally.<category>.edited`, rising faster
   than `.ticked`) says the classification or drafting for that category keeps missing the
-  mark, even when individual dispatches report `done`.
+  mark, even when individual dispatches report `done`. This signal is this skill's to
+  raise: an edit rate above half over at least three ticks is an amber on the handler for
+  that category, and above two thirds over at least five is a red. `kb-dream`'s registry
+  review no longer raises a separate proposal for it.
 
 ## The voice ledger
 

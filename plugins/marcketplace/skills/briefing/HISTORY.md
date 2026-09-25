@@ -115,3 +115,16 @@ table and Closed log rule, `SKILL.md` step 6, `references/closed-and-outcomes.md
 `scripts/trim_closed.py`'s `DEFAULT_MAX_DAYS` and docstring. The bullet in the port entry
 above ("Mechanically trimming Closed to 14 days or 40 lines...") is left as written - it's a
 historical record of what the port shipped with, not a restatement of current behaviour.
+
+## 2026-09-25 canvas redesign (1.1.0): every tick means yes, do it
+
+Briefing now writes the five-section board and its header, closes a line only once a
+`done` sub-line exists (To-do ticks aside), and reports what every skill did in a Runs
+block built from `state.runs`: notes, links, fast-fails, amber and green health, the
+Router's FYIs, and any skill overdue against `briefing.expected_runs`. That block replaces
+every per-skill webhook and the old proof-of-life post, so the same news goes out once.
+Terms are no longer promoted here; the Router does it inline on the tick, and briefing
+removes the line (still never to Closed, the deliberate exception from the 2026-09-22
+correction above). `references/migration.md` is the one-time conversion of an old board on
+the first run under 1.1.0; every other skill waits for it. The stray ` - ` separators in
+`closed-and-outcomes.md` became ` · ` to match the protocol.

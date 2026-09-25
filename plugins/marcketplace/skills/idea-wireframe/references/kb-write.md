@@ -37,14 +37,18 @@ rule; it is added only by a human review.
 
 A link to the HTML file, two to three sentences on what it shows, the frame used and the
 shape that was rejected in Step 3, annotations keyed back to the four product risks and
-decisions, and every source actually read in Step 2.
+decisions, and every source actually read in Step 2. A rework keeps the same two files,
+overwrites them, and adds a **Rework log** section: one dated line per rework quoting the
+user's feedback and naming what changed.
 
 ## Index, taste log and root log
 
 1. One line in the prototypes folder's `index.md`: `* [<title>](<file>.md) - <description>`.
-2. One line appended to the prototypes folder's taste log:
+2. One line appended to the prototypes folder's taste log (`taste-log.md`):
    `<idea key> | <frame used> | <fork resolved> | reaction: unknown` (create the file
-   without frontmatter if it does not exist yet - it is a running log, not a note).
+   without frontmatter if it does not exist yet - it is a running log, not a note). The
+   `react` handler mode (`react-mode.md`) rewrites `reaction:` from the user's tick; a
+   rework appends a fresh line for the new version rather than reusing the old one.
 3. A line under the product area's own index pointing at the prototypes folder, if one does
    not already exist there.
 4. A dated entry in the root log (`profile.kb.paths.log`), ISO date heading, leading bold

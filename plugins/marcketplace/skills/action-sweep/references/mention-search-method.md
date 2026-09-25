@@ -25,7 +25,7 @@ Use this method instead, every run:
    one bucket: an addressed commitment on an issue can produce a draft ticket while a
    separate unaddressed mention on the *same* issue still needs to surface - either as
    its own "needs your reply" line (if nothing else is in motion for that issue) or as an
-   open-question note on the draft the addressed commitment already produced (if
+   open-questions bullet on the draft the addressed commitment already produced (if
    something is).
 
 **Known limitation, stated plainly, not silently worked around:** this only catches

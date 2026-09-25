@@ -92,3 +92,15 @@ worked log entry) all moved to `profile.*`/fictionalised examples - see
    "was this materially edited" evidence?
 3. `profile.budgets.skill-health-check` needs a real home in `profile-schema.md` and
    `profiles/example.md` - it does not exist yet and this port only placeholders it.
+
+## 2026-09-25 canvas redesign (1.1.0): every tick means yes, do it
+
+Only a red score reaches the board now, as a `(shc:…) 🔴 <skill> scored red: <why>. Run
+skill-eval on it?` line; amber and green go to `runs.skill-health-check.scores` and the
+briefing's Runs block. A tick on a red line is queued by the Router, never dispatched:
+`skill-eval` stays manual and lists queued lines as candidates. This skill took over the
+"output keeps getting edited" signal from `kb-dream`'s registry review (it already read
+the tally and the voice ledger), with stated thresholds in
+`references/evidence-gathering.md`. The per-skill webhook is gone. Of the port's open
+questions, the roster one stands as decided then; `budgets.skill-health-check` has had
+its schema row since the 1.0.0 orchestrator pass.

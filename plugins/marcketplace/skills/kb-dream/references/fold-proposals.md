@@ -32,8 +32,8 @@ leave `fold_status: none` and surface the correction itself as a cross-session i
 The proposal is the exact edit, not a description of one: a diff-shaped block naming the
 target file, the line or section it touches, and the replacement text - written so a human
 (or a later `skill-eval` pass) could apply it verbatim. It goes in the dream note's
-Surfaced section and, if it is actionable in one tick, a matching Dream log/actions
-checklist line.
+Surfaced section and, if it is actionable in one tick, a matching `dream:` line in For
+you.
 
 ```markdown
 - [ ] **Fold: `<skill>/SKILL.md` <section>.** <one clause of what's wrong now>.
@@ -46,7 +46,7 @@ checklist line.
 
 This skill never edits another skill's `SKILL.md`, `references/`, or any profile/state key
 that changes behaviour, under any circumstance, including an unattended run and including
-a ticked canvas item - the `settle` handler mode (see `SKILL.md`'s `## Handler mode`)
+a ticked board line - the `settle` handler mode (see `SKILL.md`'s `## Handler mode`)
 checks whether the edit has already landed by other means and updates the memory entry's
 `fold_status` to `applied` if so, but it does not perform the edit itself. Tick the fold
 proposal only tells `kb-dream` to check again next pass, never to write the change.

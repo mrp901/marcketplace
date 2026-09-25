@@ -26,7 +26,14 @@ PROSE_OK = {
     "shared/onboarding.md": {"../../shared/onboarding.md"},
     "shared/handler-contract.md": {"references/categories.md"},
     "skills/session-log/HISTORY.md": {"references/vault-conventions.md"},
-    "skills/skill-eval/HISTORY.md": {"references/registry-review.md"},
+    "skills/skill-eval/HISTORY.md": {
+        "references/registry-review.md",
+        "references/proposal-driven-eval.md",  # removed in 1.1.0; the entry records why
+    },
+    "skills/action-sweep/HISTORY.md": {
+        "references/note-structure.md",  # renamed to draft-format.md in 1.1.0
+        "scripts/check_sweep_note.py",  # renamed to check_sweep_draft.py in 1.1.0
+    },
     "skills/proactive-router/evals/04-saved-minor-followup/graders/allowlist-principle.md": {
         "references/categories.md"
     },

@@ -90,3 +90,9 @@ how the two share one confirmation gate.
   `draft` and reads it only on `file`, where the hub's confirming line would carry the
   draft's own reference as the effective idea_key equivalent - not stated anywhere in the
   contract, inferred here.
+
+## 2026-09-25 canvas redesign (1.1.0): every tick means yes, do it
+
+No behaviour change. The line it is dispatched from now sits in For you rather than
+Proactive opportunities, and its Budget links the shared token discipline with the audit
+step named as never skipped.

@@ -126,3 +126,9 @@ worth keeping, which a superseded reply draft is not.
 
 `handler-contract.md` now carries the fourth `output_location` shape this needed, so the
 next handler producing a long draft does not re-derive the answer.
+
+## 2026-09-25 canvas redesign (1.1.0): every tick means yes, do it
+
+Accepts `chat-reply` alongside `email`: a chat thread or mention waiting on the user, found
+by the Router's sweep or by `action-sweep`'s new chat sources. Same `draft` mode, same
+register selection from the audience, and still never a `send` mode.

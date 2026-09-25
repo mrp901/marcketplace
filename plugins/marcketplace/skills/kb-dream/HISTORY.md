@@ -186,3 +186,17 @@ handler needs to mark the right proposal settled.
 Writing the record is not applying the proposal, and the propose-only split is untouched.
 The record says a change has been proposed; a tick says the user accepted it; a human still
 makes a `skill_fold` edit. What changed is only that an accepted proposal is now findable.
+
+## 2026-09-25 canvas redesign (1.1.0): every tick means yes, do it
+
+This skill's lines moved to For you as `dream:` lines in the protocol grammar (the old
+"tick to have me take this on next pass" form was the one line shape on the board that
+broke the grammar), and every one of them is category `kb-maintenance`, so a tick reaches
+this skill through the Router's `settle` dispatch. Step 10's self-settling is gone: one
+flow, the hub acts on every tick. The webhook and proof-of-life post are gone;
+`runs.kb-dream` with a two-line note is the record, and `briefing.expected_runs` is the
+proof of life. The registry review no longer raises a `skill_eval` proposal;
+`skill-health-check` owns the "output keeps getting edited" signal, which closes the gap
+the 2026-09-22 port entry left open by removing the need for the write path rather than
+adding it. The monthly pass also prunes `state.ideas` entries for ideas that no longer
+exist anywhere.

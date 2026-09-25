@@ -1,8 +1,7 @@
 # Posted message format
 
-The one nudge briefing sends via `../../../shared/notify.md`. No footer, no "Sent using" tag,
-no acknowledgement text beyond this shape - the notify transport handles delivery, this shape
-handles everything the user reads.
+The one message the plugin sends, via `../../../shared/notify.md`. No footer, no "Sent
+using" tag, no acknowledgement text beyond this shape.
 
 ```
 [@{user.name}]({deep link to user}) here's your briefing for {Day date, HH:MMam/pm}
@@ -26,16 +25,22 @@ handles everything the user reads.
 
 Since last briefing
 
-* {handler} {outcome}: {one sentence} - {link}
+* {handler} {outcome}: {one sentence} · {link}
 * {n} ticked item(s) queued, waiting on the next dispatch run
-(or "Nothing to report" if state.outcomes has no entries since last_run_ts and nothing is queued)
+Runs
+* {skill} {status}: {note} · {link}
+* health: {skill} green · {skill} amber ({why})
+* fyi: {one line} · {permalink}
+* overdue: {skill} last ran {n} days ago (expected every {max_gap_days})
+(or "Nothing to report" if there are no outcomes, nothing queued and no runs in the window)
 
 {link emoji} [Full briefing & to-dos]({surface.url})
 ```
 
 Full sentences, no padding, one blank line between sections. Emoji per section are the
-plugin's own house set (calendar, chat, tracker, link - not the category emoji from
-`handler-contract.md`, which only appear inside surface lines, never in the posted message).
+plugin's own house set (calendar, chat, tracker, link), not the category emoji from
+`handler-contract.md`, which only appear inside board lines, never in the posted message.
+See `closed-and-outcomes.md` for how each line of "Since last briefing" is built.
 
 ## Worked example
 
@@ -63,8 +68,15 @@ Fictionalised against `profiles/example.md` (Northwind Logistics / Freight Ops),
 
 Since last briefing
 
-* reply-draft drafted a reply to Ana's dashboard question - needs a tick to send
+* reply-draft done: drafted a reply to Ana's dashboard question · teammate-chat · Drafts/pr-260910-02.md
 * 1 ticked item queued, waiting on the next dispatch run
+Runs
+* proactive-router ok: 2 new lines, 1 dispatched · https://northwindlogistics.slack.com/docs/TEXAMPLE001/FEXAMPLECANVAS1
+* idea-scout ok: first pass on FIG-204, 2 decisions on the board · Product/FreightOps/Research/fig-204-load-plan-variance-alerts.md
+* kb-dream quiet: nothing new since the last dream
+* health: idea-scout green · reply-draft amber (2 of 3 drafts edited before sending)
+* fyi: batch-overnight recalculation agreed in #platform-eng · https://northwindlogistics.slack.com/archives/CEXAMPLEAPPRCH1/p1758510005000500
+* overdue: action-sweep last ran 11 days ago (expected every 8)
 
 :point_right: [Full briefing & to-dos](https://northwindlogistics.slack.com/docs/TEXAMPLE001/FEXAMPLECANVAS1)
 ```
@@ -73,9 +85,8 @@ Since last briefing
 
 Before writing an unfamiliar acronym, project codename or internal term into any section
 above, check it against `state.glossary` and `state.nicknames` per
-`glossary-and-terms.md`. A confirmed glossary entry may be used inline with its short gloss,
-e.g. "LoadBalance (the Freight Ops yard-allocation flow)" - a fictional stand-in for the kind
-of internal shorthand a real glossary entry would carry. Never invent or guess a definition in
-the posted text; an unrecognised term is used verbatim and left for the user to interpret -
-capturing it is step 5's Terms to learn job, never an editorial aside inside the briefing
-itself.
+`glossary-and-terms.md`. A confirmed glossary entry may be used inline with its short
+gloss, e.g. "LoadBalance (the Freight Ops yard-allocation flow)". Never invent or guess a
+definition in the posted text; an unrecognised term is used verbatim and left for the
+user to interpret. Capturing it is step 5's `term:` line job, never an editorial aside
+inside the briefing itself.

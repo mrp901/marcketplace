@@ -135,3 +135,7 @@ knowledge base should inherit.
   a shared kb-local-root cache) is a judgement call with no precedent in `shared/` to check
   it against - worth a second look once more than one skill needs local-path caching for a
   standalone script.
+
+## 2026-09-25 canvas redesign (1.1.0): every tick means yes, do it
+
+No behaviour change beyond linking the shared token discipline from its Budget.

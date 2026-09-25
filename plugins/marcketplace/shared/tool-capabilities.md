@@ -10,7 +10,7 @@ The starting set below is not exhaustive on its own; it is extended with every v
 |---|---|---|---|
 | `chat: read canvas` | Read the surface's current content and section addressing | `slack_read_canvas` | briefing, proactive-router, idea-scout, idea-deep-dive, idea-wireframe, kb-dream, action-sweep, skill-health-check |
 | `chat: update canvas` | Write one batch of operations against a surface addressing snapshot | `slack_update_canvas` | briefing, proactive-router, idea-scout, idea-deep-dive, idea-wireframe, kb-dream, action-sweep, skill-health-check |
-| `chat: search messages` | Search reactions, saved items, DMs and channel history | `slack_search_public_and_private` | briefing, proactive-router, action-sweep |
+| `chat: search messages` | Search reactions, saved items, DMs and channel history; see the search forms below | `slack_search_public_and_private` | briefing, proactive-router, action-sweep |
 | `chat: read thread` | Fetch one specific thread or message by its permalink, when a reference already names it | `slack_read_thread`, `slack_get_permalink` | reply-draft, kb-note, action-sweep |
 | `chat: search users` | Resolve a name to a user id when not already known | `slack_search_users` | briefing |
 | `chat: send message` | Post directly to a channel - the `chat_message` notify fallback | `slack_send_message` | briefing, kb-dream, notify fallback (any skill) |
@@ -39,6 +39,20 @@ The starting set below is not exhaustive on its own; it is extended with every v
 
 A category a skill doesn't use is simply absent from its `## Needs` - this table is the full catalogue across all thirteen skills, not a per-skill checklist.
 
+## Chat search forms
+
+`chat: search messages` takes a free-text query plus filters. The forms the plugin relies on, in the reference (Slack-shaped) syntax; another chat service's connector maps them to its own equivalents at resolution time, and a form the connector cannot express degrades to "not searched" for that source, never to a guess:
+
+| Form | Returns | Used by |
+|---|---|---|
+| `hasmy::<emoji>: after:<date>` | Messages the user reacted to with that emoji since the date | proactive-router |
+| `is:saved after:<date>` | Messages the user saved since the date | proactive-router |
+| `from:me after:<date>` | The user's own messages since the date; action-sweep reads these for first-person commitments ("I'll send", "I'll check", "leave it with me") | action-sweep |
+| `with:me is:thread after:<date>` | Threads the user is a participant in; action-sweep keeps only those where someone else spoke last | action-sweep |
+| `@<user> after:<date>` (the user's own mention) | Messages that mention the user; action-sweep keeps only those with no reply or reaction from the user | action-sweep |
+
+Every form is bounded by a cursor date and returns permalinks, which is what `state.items` dedupes on. Thread bodies are never pulled into the calling skill's context; a `search`-tier subagent reads them and returns a short structured answer, per `token-discipline.md`.
+
 ## Resolution rule
 
 Every category resolves to a concrete tool prefix through `state.machines[<machine_id>].tools.<category>`, populated once by onboarding step 4 (`onboarding.md`) via `ToolSearch` and cached there. **Prefixes never appear hardcoded in a skill.** A skill names the category and verb; the runtime looks up that machine's cached prefix and calls the resolved tool. When the cache is stale (a tool renamed, a connector swapped) onboarding's one re-resolution on failure refreshes it before any skill proceeds.
@@ -47,7 +61,7 @@ Every category resolves to a concrete tool prefix through `state.machines[<machi
 
 A category that cannot be resolved (no service configured, `ToolSearch` finds nothing, the resolved tool errors on first call) makes the section of the surface that depends on it read `Signed out` - per the snapshot rule in `surface-protocol.md` - and **the run continues**. Losing `calendar` doesn't stop `tracker` from being read; losing `web` doesn't stop a note from being written with what's already in hand.
 
-The one exception is an **identity-critical category** - one the run cannot proceed at all without (chiefly `chat` for surface access, since every skill's dispatch and reporting model depends on it, and whichever category resolves the profile/state documents themselves). Losing one of those fast-fails per `onboarding.md`'s fast-fail procedure: one line under Plugin notices, `runs[skill].status = fast-fail`, stop - rather than limping through a run that can't record what it did.
+The one exception is an **identity-critical category** - one the run cannot proceed at all without (chiefly `chat` for surface access, since every skill's dispatch and reporting model depends on it, and whichever category resolves the profile/state documents themselves). Losing one of those fast-fails per `onboarding.md`'s fast-fail procedure: `runs[skill].status = fast-fail` with the note, stop - rather than limping through a run that can't record what it did.
 
 ## Tool names are hints only
 

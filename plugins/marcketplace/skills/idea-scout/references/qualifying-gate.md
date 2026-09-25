@@ -31,6 +31,13 @@ no surface line, no notification, and no comment recorded anywhere. Move to the 
 candidate. This applies even when the skipped candidate looks interesting or well-formed -
 looking interesting is not a qualifier.
 
+## Requeued ideas come first
+
+Before the gate is evaluated at all, `state.ideas.<key>.requeue_scout: true` names an
+idea the user asked to refresh (a tick on its `/r` line). That idea is this run's pick
+regardless of labels or qualifiers; the note is refreshed in place and the flag cleared.
+Two or more requeued: oldest requeue first, one per run.
+
 ## Roadmap is reported, never a qualifier
 
 `profile.ideas.roadmap_field` (a scheduling slot - "when", not "what") is read and may be
@@ -43,6 +50,11 @@ scope. The lesson: a roadmap slot says an idea is *scheduled*, not that it is *t
 product's*, and conflating the two wastes a run on the wrong thing. Never reintroduce
 roadmap as a qualifying test, however tempting it looks as a proxy for "worth investigating
 next."
+
+The roadmap watch (`SKILL.md` step 1) is not a qualifier either. It only ever looks at
+ideas already labelled investigated, and its only output is a `/r` question on the board:
+"this idea left a parked slot, refresh the research?" The user's tick, not the slot,
+requeues the idea.
 
 ## No flag-and-proceed for a non-qualifying candidate
 

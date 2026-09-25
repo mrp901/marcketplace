@@ -101,3 +101,21 @@ and reports.
 The single-tick question was never the problem. A knowledge-base write is additive and
 reversible, so it does not need the two-tick flow, exactly as `kb-note` argues for its own
 `capture` mode. What mattered was which component held the write access.
+
+## 2026-09-25 canvas redesign (1.1.0): every tick means yes, do it
+
+The board moved to five sections and one tick rule, and this skill became the only thing
+that acts on a tick. Why: under the old acknowledge/delegate split, five sections closed
+on a tick without anything happening, idea decisions and wireframe reactions were never
+recorded, and edits were only read in two sections. Now every line in To-do, For you and
+Ideas is read against `state.items`, and a tick anywhere is dispatched, performed inline,
+or resolved as an option pick. Inline actions gained `promote` (terms), `requeue` (a parked
+idea that moved) and `to-do`, all writing only to the surface and the state document.
+`shc:` ticks are queued rather than dispatched, because `skill-eval` stays manual. `fyi`
+left the board: it is recorded in `runs.proactive-router.fyi` for the briefing message,
+since a line with nothing to do had no business asking for a tick. Option groups: one
+tick proceeds, two get `blocked · pick one`, an edited option is a variation of that
+option. A line the user adds inside an idea block takes the idea as context. Six eval
+cases were added for these paths; their dispatch graders accept a documented
+"could not resolve a tool category" sub-line because the mocks cover chat and state only.
+The sweep sources are unchanged.

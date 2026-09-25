@@ -96,3 +96,15 @@ literals.
   draft is written - the contract as written gives no field to carry that id through. Not
   invented here; flagged as a gap the orchestrator may want to close if proposal
   lifecycle tracking (open -> dispatched -> settled) is meant to be end to end.
+
+## 2026-09-25 canvas redesign (1.1.0): every tick means yes, do it
+
+The unattended, proposal-driven entry point and its `## Handler mode` are gone, with
+`references/proposal-driven-eval.md`. The path to this skill is now one thing: a red
+`skill-health-check` score the user ticks, which the Router queues, and this skill run with
+no target lists those queued lines as candidates. When a run started from a queued line
+finishes, it appends a `state.outcomes` entry so the briefing can close the line. This
+settles the port's two open questions above (no taxonomy row was needed because there is
+no dispatch, and no proposal id needs carrying because there is no proposal) by removing
+the mechanism rather than completing it. Synthesis on the critic tier is unchanged and is
+never traded away under the new token discipline.

@@ -147,3 +147,22 @@ draft was written during a sweep or during this dispatch.
 The "never re-runs the sweep" hard stop stays intact: drafting one item is not gathering
 all four sources again, so this doesn't reopen the sweep, it just gives `targeted` a
 second way to produce the same anchor a sweep would have.
+
+## 2026-09-25 canvas redesign (1.1.0): every tick means yes, do it
+
+**Three new chat sources** since `cursors.action-sweep.chat_since`: commitments the user
+made (`from:me`), threads waiting on the user (`with:me is:thread`, someone else spoke
+last), and unanswered mentions. Slack replies and mentions were the one source of actions
+the plugin never swept. Thread bodies go to `search`-tier subagents, capped by
+`budgets.action-sweep.thread_reads`. **One concrete action per find:** `chat-reply` to
+`reply-draft`, `to-do` to the user's own list, the ticket tiers to this skill.
+**The dated Inbox note is gone.** The For you line is the record of a find; a draft exists
+only once the user ticks, written by `targeted`/`meeting` to `kb.paths.drafts/<tag>.md`
+per the transient-drafts contract, and `push` re-reads that draft. This resolves the
+2026-09-24 anchor problem outright: there is no anchor, only a draft path.
+`references/note-structure.md` became `references/draft-format.md` and
+`scripts/check_sweep_note.py` became `scripts/check_sweep_draft.py`. **Unclear routing**
+is now a question with one option per tier, which answers the port's open question about
+how an unrouted item ever gets seen: the user picks, the hub dispatches `targeted` with
+the chosen tier. The "never guess a tier" and "never push outside `push`" hard stops are
+unchanged; "never send anything" joined them.

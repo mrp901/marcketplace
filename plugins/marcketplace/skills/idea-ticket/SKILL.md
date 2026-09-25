@@ -1,6 +1,6 @@
 ---
 name: idea-ticket
-description: Use when the hub dispatches a ticked delegate item classified ticket-idea, or when the user directly hands over a rough, half-formed problem to turn into an ideas-board ticket.
+description: Use when the hub dispatches a ticked line classified ticket-idea, or when the user directly hands over a rough, half-formed problem to turn into an ideas-board ticket.
 ---
 
 # Idea ticket
@@ -35,7 +35,8 @@ optional `kb: search` for a vault check, skipped entirely if nothing turns up qu
 mandatory `web: search` - vendor anchors come from existing knowledge, one line each; at
 most one confirming call if a named vendor fact is genuinely in doubt. Up to two revision
 cycles through Step 6, each a fresh critic-tier subagent call. One `ideas: create issue`
-call, only in `file` mode.
+call, only in `file` mode. Guidelines in `../../shared/token-discipline.md`; the audit is
+never skipped to save tokens.
 
 ## What the ideas board actually is
 
@@ -103,7 +104,7 @@ confirmation gate.
   files. Returns `status: needs_confirmation`, `artefacts: [{kind: "idea_ticket_draft", ref:
   <where the audited draft text is returned}]`, and `next_action: {category: "ticket-idea",
   text: "file the ticket: <approved title>", ref: <draft ref>}` so the hub writes the
-  confirming delegate line per `../../shared/handler-contract.md`'s two-tick flow. Never
+  confirming line per `../../shared/handler-contract.md`'s two-tick flow. Never
   performs the irreversible write itself.
 - **`file`** - the only mode permitted to create the ticket. The confirming second tick,
   dispatched once the user ticks the hub's confirming line. Reads the approved title and
@@ -114,7 +115,7 @@ confirmation gate.
 **Direct invocation** (outside the hub, the way this skill is used today) runs the same
 Steps 1 to 7 in one continuous conversation: it produces the audited draft, shows it to the
 user in place of a `needs_confirmation` JSON, and waits for their explicit approval before
-running Step 7 itself - there is no hub to write a second delegate line, so the
+running Step 7 itself - there is no hub to write a second line, so the
 confirmation happens directly in conversation instead. Both paths converge on the same
 rule: Step 7 never runs without an explicit yes from the user, gathered one way or the
 other.
