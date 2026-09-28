@@ -16,6 +16,7 @@ Other surface kinds may exist (`profile.surface.kind`, served by whatever `profi
 | To-do | user (briefing closes) | acknowledge |
 | Running behind | briefing writes, hub dispatches | delegate |
 | Terms to learn | briefing | acknowledge (tick promotes to glossary; never logged to Closed) |
+| Feed mismatches | briefing | acknowledge |
 | Proactive opportunities | proactive-router | delegate |
 | Ideas: decisions for you | idea-scout, idea-deep-dive (append only) | acknowledge at v1 |
 | Wireframes to review | idea-wireframe | acknowledge |
@@ -31,7 +32,7 @@ Two rows list an owner pair (Running behind; Ideas). In each case the two named 
 
 Every section is either **acknowledge** or **delegate**. The type governs what a tick means, and getting it wrong means the surface lies about what a tick does.
 
-- **Acknowledge.** A tick means "done / seen / confirmed" - a fact about the world the user is reporting, not an instruction to act. The reporter (briefing) is the one that notices the tick and moves the line to Closed. No handler is dispatched. To-do, Terms to learn, Ideas: decisions for you, Wireframes to review and Skill health are acknowledge sections.
+- **Acknowledge.** A tick means "done / seen / confirmed" - a fact about the world the user is reporting, not an instruction to act. The reporter (briefing) is the one that notices the tick and moves the line to Closed. No handler is dispatched. To-do, Terms to learn, Feed mismatches, Ideas: decisions for you, Wireframes to review and Skill health are acknowledge sections.
 
   **One exception, in Terms to learn only.** A ticked term is promoted into `state.glossary` and its line is removed from the section. It is **not** written to Closed. A confirmed term is a vocabulary fact the system has absorbed, not a task anyone completed, and logging it as closed work pads the log with entries the user never asked for. This is deliberate, inherited from the reference implementation; do not "fix" it into consistency with the other acknowledge sections.
 - **Delegate.** A tick means "you do it" - an instruction the hub (proactive-router) picks up, classifies if needed, and dispatches to a handler. The reporter only closes the line once a handler report sub-line exists underneath it - closing on the tick alone would claim work happened that didn't. Running behind, Proactive opportunities, Actions and Dream log/actions are delegate sections.
@@ -48,7 +49,7 @@ Every checkbox line on the surface follows one grammar:
 
 - The line must stand alone - readable and actionable without opening the source. No "see thread" as the whole line.
 - Separator between the sentence and the reference is ` · ` (middot), never a dash or a pipe.
-- The emoji is the category signal (`handler-contract.md` has the full table); acknowledge sections that carry no category (To-do, Terms to learn, Skill health) may omit it.
+- The emoji is the category signal (`handler-contract.md` has the full table); acknowledge sections that carry no category (To-do, Terms to learn, Feed mismatches, Skill health) may omit it.
 
 **Tag forms**, worked:
 
@@ -57,6 +58,7 @@ Every checkbox line on the surface follows one grammar:
 | Ticket-bound | `(PRJ-164)` | The line is about a specific tracker item; reuse its key verbatim, no prefix |
 | Skill-abbreviation + date + sequence | `(pr:260922-03)` | proactive-router's third item logged on 22 Sep 2026 |
 | Same, other skills | `(dream:260922-1)`, `(sweep:260922-2)`, `(rb:260922-1)` | kb-dream, action-sweep, running-behind respectively - one skill-abbreviation per writer, agreed once, never reused for a different writer |
+| Same, about a tracker item | `(feed:260922-1)` | briefing's tracker-feed cross-check: the line names a tracker item but is not ticket-bound, so a later mismatch on the same key, or another skill's line about it, never shares its `state.items` tag |
 
 A tag is the item's identity across runs. `state.items.<tag>` holds what was written and its text hash, which is how a writer tells "still exactly as I left it" from "the user touched this" on its next read. Never invent a tag form ad hoc; if a new writer needs one, pick a short lowercase abbreviation and record it in that skill's `references/` so it's stable.
 

@@ -47,7 +47,7 @@ runs:
   <skill>: {last_run_at, status: ok | quiet | fast-fail | error, machine, note}
 
 cursors:
-  briefing: {last_run_ts, last_seen: {<channel_id>: <ts>}}
+  briefing: {last_run_ts, last_seen: {<channel_id>: <ts>}}   # every channel briefing reads, feed channels included
   proactive-router: {last_scanned}
   action-sweep: {scanned_through}
   kb-dream: {last_dream_at, last_full_dream_at, last_registry_review_at, last_voice_review_at,

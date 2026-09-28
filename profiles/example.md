@@ -50,6 +50,9 @@ chat:
   team_url: https://northwindlogistics.slack.com
   starter_emoji: [envelope, ticket, book, star]
   include_saved_items: true
+  tracker_feed_channels:
+    work_started: CEXAMPLEFEED01
+    fix_version: CEXAMPLEFEED02
 
 calendar:
   day_window: "00:00-23:59 local"
@@ -151,7 +154,7 @@ voice:
   sample_counts: {}
 
 budgets:
-  briefing: {connector_calls: 3, notetaker_calls: 1, surface_reads: 1, surface_writes: 1}
+  briefing: {connector_calls: 3, notetaker_calls: 1, surface_reads: 1, surface_writes: 1, feed_issue_keys: 20}
   proactive-router: {searches: 5, thread_reads: 6, dispatches: 3}
   action-sweep: {canvas_guard: 5, cold_start_days: 7, targeted_search_per_todo: 1}
   idea-scout: {web_searches: 4, kb_notes: 3, note_words: 800}
@@ -175,6 +178,8 @@ and that a real first run will actually prompt for:
 - `ideas.project_key`, `ideas.area_value`
 - `kb.name`, `kb.kind`, `kb.people_file`, `kb.link_style`
 - `surface.id` (and its URL)
+- `chat.tracker_feed_channels.work_started`, `chat.tracker_feed_channels.fix_version` (a
+  channel each, or `none`)
 - `notify.mode` (and `notify.fallback_channel_id` if webhook delivery is ever unreachable)
 - `people` (at least the decision-makers)
 

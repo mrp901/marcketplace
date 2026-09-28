@@ -106,3 +106,26 @@ not work anyone finished, and logging it crowds out real closed items inside the
 bound. `shared/surface-protocol.md` now states the exception explicitly, so a later port
 cannot rediscover the same ambiguity. The port entry above flagged this as an open question
 rather than deciding it silently, which is what made the catch cheap.
+
+## 2026-09-28 tracker feed cross-check
+
+The user asked for briefing to check two automation-fed channels (work started, fix version
+changed) against the live tracker and flag where they disagree. See
+`references/feed-cross-check.md`.
+
+- **Profile keys.** `chat.tracker_feed_channels.{work_started, fix_version}`. They sit under
+  `chat` because they are channel ids, and like every channel id they are identity-shaped:
+  asked, never defaulted. `none` is an explicit answer for an install without the feed, so
+  the keys can be required in `## Needs` without forcing the feature on everyone.
+- **Cursors.** The existing `cursors.briefing.last_seen` map, keyed by channel id. The feed
+  channels are excluded from the Unread search, so exactly one reader moves each cursor.
+- **One batched tracker call, not a lookup per issue.** A single `key in (...)` search
+  returns status and fix versions for every claimed key. `budgets.briefing.feed_issue_keys`
+  caps the batch, and anything over the cap waits for the next run behind a cursor that
+  stops where the batch did. A per-message `get issue` would have tied briefing's cost to
+  channel traffic.
+- **New section and tag, not `rb:` or Terms to learn.** A contradicted claim isn't overdue
+  work, and it isn't vocabulary. It is a fact for the user to acknowledge once they've fixed
+  the issue or the automation. So it gets its own acknowledge section, Feed mismatches, and
+  its own `feed:` prefix. A bare issue key was also rejected as the tag: it would collide in
+  `state.items` with any other skill's line about the same issue.
