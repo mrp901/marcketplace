@@ -133,6 +133,7 @@ flowchart TB
 | A swept candidate (email, ticket, note, summary, to-do) | `pr:` | dispatched to its handler, or an inline action |
 | A find from the action sweep | `sweep:` | drafted (first tick), then pushed (second tick on the fresh line) |
 | An overdue item | `rb:` | `inline:investigate` |
+| A tracker-feed claim the live issue contradicts | `feed:` | `inline:investigate` |
 | A term to add to the glossary | `term:` | `inline:promote`; the line is removed, never logged |
 | A curation task | `dream:` | `kb-dream` `settle` |
 | A red health score | `shc:` | queued; you run `skill-eval` |

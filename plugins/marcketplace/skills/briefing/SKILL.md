@@ -13,18 +13,20 @@ closes and reports. The first run under a new plugin version migrates the board.
 
 ## Needs
 - Profile: `org.timezone`, `user.name`, `user.chat_user_id`, `tracker.my_work_jql`,
+  `chat.tracker_feed_channels.work_started`, `chat.tracker_feed_channels.fix_version`,
   `notetaker.lookback_days`, `notetaker.prep_lines` (optional), `surface.id`, `surface.url`,
   `surface.home_channel_id`, `notify.mode`, `notify.fallback_channel_id`,
   `notify.webhooks.briefing`, `notify.mention_form`, `briefing.expected_runs` (optional;
   absent means no skill is ever called overdue), `people`,
   `budgets.briefing`.
 - Tools: `chat` (read canvas, update canvas, search messages, search users, send message),
-  `calendar` (list today), `tracker` (search issues by JQL), `notetaker` (list meetings,
-  transcript), optional, only called when `notetaker.prep_lines` is true.
+  `calendar` (list today), `tracker` (search issues by JQL, also for the feed
+  cross-check), `notetaker` (list meetings, transcript), optional, only called when
+  `notetaker.prep_lines` is true.
 - State: `cursors.briefing`, `glossary`, `nicknames`, `items`, `outcomes`, `runs` (every
   skill's), `installed_version`.
-- Writes: the board header, the Today snapshots, lines tagged `rb:` and `term:` in For
-  you, Closed, and the migration.
+- Writes: the board header, the Today snapshots, lines tagged `rb:`, `term:` and `feed:`
+  in For you, Closed, and the migration.
 
 Resolve profile, state and tools per `../../shared/onboarding.md` before doing anything else.
 
@@ -33,8 +35,13 @@ Per run: 1 state read, 1 canvas read, `budgets.briefing.connector_calls` (defaul
 connector calls, at most `budgets.briefing.notetaker_calls` (default 1) notetaker call, 1
 notify send, 1 canvas update batch, 1 state write. No retries, no speculative extra
 searches. The reporter work adds zero connector calls: it runs off the canvas read and the
-state read already budgeted. Guidelines in `../../shared/token-discipline.md`. Briefing
-never exits quiet: the refreshed snapshots and the report are the point of every run.
+state read already budgeted. The feed cross-check adds at most one `chat: search
+messages` per configured feed channel and at most one `tracker: search issues (JQL)` batch
+of at most `budgets.briefing.feed_issue_keys` (default 20) keys. It never looks issues up
+one by one, and it makes no tracker call when neither feed has a new parseable claim. Its
+lines ride the one canvas batch, and its cursors ride the one state write. Guidelines in
+`../../shared/token-discipline.md`. Briefing never exits quiet: the refreshed snapshots and
+the report are the point of every run.
 
 ## Time rules
 Fires more than once a day on a changing schedule; never assume a time of day.
@@ -62,10 +69,14 @@ Fires more than once a day on a changing schedule; never assume a time of day.
    `state.items.<tag>` entry.
 4. **Connector calls, together.** Calendar (`calendar: list today`, `org.timezone` window).
    Chat (`chat: search messages`, since each channel's `last_seen`, excluding this skill's own
-   past posts). Tracker (`tracker: search issues (JQL)`, `tracker.my_work_jql`,
-   `updated >= last_run_ts`). Any auth/scope failure leaves that snapshot `Signed out` and the
+   past posts and the feed channels). Tracker (`tracker: search issues (JQL)`,
+   `tracker.my_work_jql`, `updated >= last_run_ts`). Any auth/scope failure leaves that snapshot `Signed out` and the
    run continues. If `notetaker.prep_lines` is true, spend the one notetaker call on prep
-   lines for today's events; see `references/notetaker-prep.md`.
+   lines for today's events; see `references/notetaker-prep.md`. Then the **feed
+   cross-check**: read each configured `chat.tracker_feed_channels` channel since its own
+   `last_seen`, check the claimed changes against the live issues in one batched tracker
+   call, and stage one `feed:` line per contradicted claim; see
+   `references/feed-cross-check.md`.
 5. **Compose the report and the message.** The "Since last briefing" block: handler
    outcomes from `state.outcomes` in the window, the count of ticked lines with no sub-line
    (queued behind the hub's cap), then the Runs block from `state.runs`: what each scheduled
@@ -77,23 +88,24 @@ Fires more than once a day on a changing schedule; never assume a time of day.
    `references/message-format.md`, then send it per `../../shared/notify.md`.
 6. **Update the board, one batch.** Rewrite the header only if it differs from the protocol
    text. Today: replace the Calendar and Tracker blocks per the snapshot rule, written every
-   run even when unchanged. For you: append up to 2 new `term:` lines and any new `rb:`
-   running-behind lines, after settling this skill's own existing `rb:` and `term:` lines
-   per "Settle before you append". Closed: prepend this run's closes (newest first), then
+   run even when unchanged. For you: append up to 2 new `term:` lines, any new `rb:`
+   running-behind lines and this run's `feed:` lines, after settling this skill's own
+   existing `rb:`, `term:` and `feed:` lines per "Settle before you append". Closed: prepend this run's closes (newest first), then
    trim to 7 days or 40 lines, whichever bound is hit first, mechanically, every run
    (`scripts/trim_closed.py`). Remove the lines and empty idea blocks closed in step 2.
    Touch nothing else: every other line's wording stays exactly as its owner or the user
    left it.
-7. **Write state back.** `last_run_ts` = now, `last_seen` per channel touched, `nicknames`
-   carried and added to, `items` with this run's prunes applied, `installed_version`,
+7. **Write state back.** `last_run_ts` = now, `last_seen` per channel touched (a feed
+   channel's cursor moves only as far as the cross-check processed it), `nicknames` carried
+   and added to, `items` with this run's prunes and new lines applied, `installed_version`,
    `runs.briefing` (`note` = one line on what closed and what was reported, `ref` =
    `surface.url`).
 
 ## Surface
-Writes the board header, the Today snapshots, its own `rb:` and `term:` lines in For you,
-and Closed. Reads every line on the board, every run, to close what is finished and to
-report; it never acts on a tick itself (a ticked `rb:` line is the hub's to investigate,
-and a ticked `term:` line is the hub's to promote). Ownership is by tag prefix per
+Writes the board header, the Today snapshots, its own `rb:`, `term:` and `feed:` lines in
+For you, and Closed. Reads every line on the board, every run, to close what is finished and to
+report; it never acts on a tick itself (a ticked `rb:` or `feed:` line is the hub's to
+investigate, and a ticked `term:` line is the hub's to promote). Ownership is by tag prefix per
 `../../shared/surface-protocol.md`.
 
 ## Ground rules

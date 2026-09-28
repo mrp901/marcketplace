@@ -18,6 +18,7 @@ The dispatch contract between `proactive-router` (the hub) and every skill that 
 | to-do | ☑️ | `inline:to-do` |
 | kb-maintenance | 🧹 | kb-dream `settle` (single-shot) |
 | running-behind | ⏰ | `inline:investigate` |
+| feed-mismatch | 🔎 | `inline:investigate` |
 | term | 📘 | `inline:promote` |
 | idea-decision | 🔀 | idea-scout `decide` (single-shot; writes the research note only) |
 | wireframe-reaction | 🖼️ | idea-wireframe `react` (single-shot; writes the taste log and state only) |
@@ -38,7 +39,7 @@ Every row names whether its mode is **single-shot** (runs once on the tick and i
 
 | Action | On tick |
 |---|---|
-| `inline:investigate` | Chases what a `running-behind` line points at, reads only, and reports what it found in the sub-line |
+| `inline:investigate` | Chases what a `running-behind` or `feed-mismatch` line points at, reads only, and reports what it found in the sub-line |
 | `inline:promote` | Writes the `term:` line's text as the user left it into `state.glossary`, keyed by the term, and adds a `done` sub-line; briefing then removes the line (never to Closed) |
 | `inline:requeue` | Sets `state.ideas.<key>.requeue_scout: true` for an `<key>/r` line and adds a `done` sub-line; idea-scout picks the idea up first on its next run |
 | `inline:to-do` | Copies the line's text (post-edit) as a new unticked line at the top of To-do and adds a `done` sub-line |
