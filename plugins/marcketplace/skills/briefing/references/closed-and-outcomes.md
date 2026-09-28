@@ -31,7 +31,7 @@ Per `surface-protocol.md`'s "The Closed log":
 ```
 
 Briefing writes one such line per closed line, newest first, prepended above the existing
-Closed block, then runs `../scripts/trim_closed.py` (7 days or 40 lines, whichever bound
+Closed block, then runs `../scripts/trim_closed.py` (5 days or 20 lines, whichever bound
 is hit first) on the resulting list before the step 6 write. The trim runs every time this
 step fires, even when nothing new closed this run.
 

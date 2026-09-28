@@ -80,7 +80,7 @@ Fires more than once a day on a changing schedule; never assume a time of day.
    run even when unchanged. For you: append up to 2 new `term:` lines and any new `rb:`
    running-behind lines, after settling this skill's own existing `rb:` and `term:` lines
    per "Settle before you append". Closed: prepend this run's closes (newest first), then
-   trim to 7 days or 40 lines, whichever bound is hit first, mechanically, every run
+   trim to 5 days or 20 lines, whichever bound is hit first, mechanically, every run
    (`scripts/trim_closed.py`). Remove the lines and empty idea blocks closed in step 2.
    Touch nothing else: every other line's wording stays exactly as its owner or the user
    left it.
