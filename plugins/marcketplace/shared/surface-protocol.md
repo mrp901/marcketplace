@@ -28,7 +28,7 @@ Five sections, in this order, no others:
 | To-do | The user's own list | the user; briefing closes ticked lines |
 | For you | Every line that needs the user's tick, other than idea lines: tags `pr:` `rb:` `sweep:` `dream:` `term:` `shc:` | the skill that owns each tag prefix; the hub adds sub-lines |
 | Ideas | One block per idea with open decisions, wireframe reactions or a refresh question | idea-scout, idea-deep-dive, idea-wireframe, by tag prefix inside the block |
-| Closed | The log, 7 days or 40 lines | briefing |
+| Closed | The log, 5 days or 20 lines | briefing |
 
 There is no Plugin notices section. A fast-fail is recorded in `state.runs.<skill>` (see `onboarding.md`) and the briefing message reports it.
 
@@ -219,7 +219,7 @@ Format, one line per closed item, newest first:
 
 `<outcome>` is a short past-tense phrase (`done`, `filed PRJ-172`, `chosen`, `not chosen`, `acknowledged, no handler`). `<original text, 120 chars>` is the item as it stood when closed (post-edit if the user edited it), truncated. `<by you | by <handler>>` records who did the work.
 
-**Retention: 7 days or 40 lines, whichever comes first.** Briefing trims the oldest lines past either bound on every run it writes Closed. This is a mechanical trim, not a judgement call, and it happens whether or not anything new closed this run.
+**Retention: 5 days or 20 lines, whichever comes first.** Briefing trims the oldest lines past either bound on every run it writes Closed. This is a mechanical trim, not a judgement call, and it happens whether or not anything new closed this run.
 
 ## Migration
 
