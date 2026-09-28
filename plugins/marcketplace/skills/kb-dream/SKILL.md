@@ -38,11 +38,15 @@ batch, no posts. Full (monthly-first-fire or on request): `.sessions_full` (defa
 session notes, reads as needed for the whole knowledge base, same canvas budget. Whatever
 the mode: if a pass finds nothing, say so in one line; never read `kb.paths.utility`
 besides this skill's own recycle folder, and never read `.obsidian`-equivalent tooling
-folders. Guidelines in `../../shared/token-discipline.md`.
+folders. A log rotation adds one archive write and its read-back to either mode;
+follow-up escalation adds nothing (it rides the one canvas batch and the state write).
+Guidelines in `../../shared/token-discipline.md`.
 
 **Quiet exit:** nothing new in `kb.paths.inbox`, no `kb.paths.log` entry and no session
-note since `cursors.kb-dream.last_dream_at`, no draft past its stale date, and not a
-monthly run means `runs.kb-dream.status: quiet` and stop, before any curation read.
+note since `cursors.kb-dream.last_dream_at`, no draft past its stale date, `kb.paths.log`
+under `kb.log_size_cap_kb.writers`, and not a monthly run means `runs.kb-dream.status:
+quiet` and stop, before any curation read. The size check matters because a writer that
+defers its log line adds no entry, so an oversized log otherwise looks unchanged.
 
 ## Flow
 1. **Wake up.** Real timestamp from the system clock in `org.timezone`, never from memory.
@@ -53,10 +57,15 @@ monthly run means `runs.kb-dream.status: quiet` and stop, before any curation re
 2. **Read the recent past.** `kb.paths.log` newest first (what's already corrected, don't
    re-flag); session notes since the last dream, especially their Open threads and
    Proposed follow-ups; a count-only check of any pending-session backlog. Distinguish
-   discussed from done.
+   discussed from done. If `log.md` is over `kb.log_size_cap_kb.writers` (not only this
+   skill's own `dream` cap), rotate it this run, whatever the mode, per
+   `references/log-rotation.md`: writers defer their log lines above that cap, and waiting
+   for a full dream or for the `dream` cap leaves them deferring for weeks.
 3. **Curate**, per `references/curation-passes.md` (the eight passes, the five-rule
    contract, the supersession mechanic). This is the primary job and the base skill's
-   whole original scope.
+   whole original scope. Pass 5 carries open follow-ups across dreams on a ledger and
+   escalates one still open after three dreams to a `dream:` line, per
+   `references/followup-escalation.md`.
 4. **Extract signal** from the session notes read in step 2, per
    `references/signal-extraction.md` - dated single-fact memory entries under
    `kb.paths.memory`, absolute dates, source attribution, the contradiction rule.
@@ -73,7 +82,8 @@ monthly run means `runs.kb-dream.status: quiet` and stop, before any curation re
     `dream:` lines in For you, and write `runs.kb-dream` with a two-line note and the
     dream note as `ref`. No post, no webhook.
 11. **Write state back.** `cursors.kb-dream` (`last_dream_at`, `last_full_dream_at` if
-    full, `last_registry_review_at`/`last_voice_review_at` if run this pass), `items` with
+    full, `last_registry_review_at`/`last_voice_review_at` if run this pass,
+    `open_followups` every non-quiet run), `items` with
     this run's `dream:` tags, `voice.sample_counts` if the voice review ran, `proposals`
     for any 60-day dismissals, `ideas` pruned of ideas no longer anywhere (monthly only),
     `runs.kb-dream`.
