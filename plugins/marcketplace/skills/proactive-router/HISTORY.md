@@ -101,3 +101,21 @@ and reports.
 The single-tick question was never the problem. A knowledge-base write is additive and
 reversible, so it does not need the two-tick flow, exactly as `kb-note` argues for its own
 `capture` mode. What mattered was which component held the write access.
+
+## 2026-09-28 skill-health follow-up: blocked items are retried once their cause clears
+
+The first health check scored this skill amber: four legacy `pr:` items stayed blocked
+after the profile gap behind one of them had been fixed, because nothing ever re-checked
+a blocked item. Flow step 6 now does, as a state-only pass. An item blocked on a named
+profile key is re-dispatched in place once that key is filled in (`references/dispatch.md`,
+"Retrying blocked items"). `state.items` gains optional `status`/`blocked_*`/`retried_for`
+fields to carry this (`state-schema.md`).
+
+- **Re-dispatch in place, not re-post.** A fresh line would duplicate one the user already
+  ticked, which "settle before you append" forbids. The ticked parent stays as it is and the
+  retry's sub-line goes under the old `blocked` one.
+- **Own `pr:` items only.** Other delegate sections' `state.items` entries belong to their
+  writers. A blocked item there stays open with its `blocked` sub-line, as before.
+- **Blocks that don't name a profile key are not retried.** A missing action-sweep anchor
+  has no cheap state check. Guessing whether it has cleared would mean a connector call per
+  item, and this skill's budget has no room for that.

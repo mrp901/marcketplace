@@ -186,3 +186,23 @@ handler needs to mark the right proposal settled.
 Writing the record is not applying the proposal, and the propose-only split is untouched.
 The record says a change has been proposed; a tick says the user accepted it; a human still
 makes a `skill_fold` edit. What changed is only that an accepted proposal is now findable.
+
+## 2026-09-28 skill-health follow-up: two process gaps closed
+
+A skill-health-check run scored two skills amber for gaps that belonged to this skill.
+
+- **A writer could defer its log line indefinitely.** Writers stop adding log lines once
+  `log.md` passes `kb.log_size_cap_kb.writers`, and this skill is the only rotator, but
+  nothing said when it had to rotate. One writer was still deferring six dated sections
+  after the last rotation. Rotation now triggers on the *writers'* cap, on the next dream of
+  either mode, and backfills the deferred lines (`references/log-rotation.md`). The
+  alternative, having each writer count its own deferrals and escalate, was rejected: it
+  would put the same counter in five skills to report a problem only this one can fix,
+  while the incremental cadence already bounds the wait to one dream interval. A rotation
+  that fails twice escalates through the existing repetition bar.
+- **Chronic follow-ups never reached the user.** Pass 5 listed open follow-ups in Flags,
+  which nobody reliably reads, with no memory across dreams. They now live on a ledger in
+  `state.cursors.kb-dream.open_followups`, and one still open after three dreams becomes an
+  ordinary Surfaced item with a `dream:` line (`references/followup-escalation.md`). Three,
+  not two, so a single busy week doesn't escalate; deleting the line drops the follow-up for
+  good.

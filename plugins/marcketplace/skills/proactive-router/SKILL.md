@@ -20,6 +20,9 @@ and tools per `../../shared/onboarding.md` before doing anything else.
   store this skill writes to. It additionally resolves, but never itself uses, whatever
   tool categories a handler it is about to dispatch declares in that handler's `## Needs`;
   see `references/dispatch.md` and `handler-contract.md`'s "Resolving the `tools` block".
+- State: `cursors.proactive-router`, `registry`, `tally`, `proposals`, `suppressions`,
+  `patterns_blocked`, `items` (including its own `pr:` items' `status`/`blocked_*` fields),
+  `outcomes`, `machines`.
 
 ## Budget
 
@@ -28,7 +31,9 @@ Per run: one `chat: search messages` per `chat.starter_emoji` entry, plus one
 five in the reference profile). Thread-context reads capped at `.thread_reads`.
 Dispatches capped at `.dispatches`; anything ticked beyond the cap stays ticked and
 undispatched. One surface read and one surface write batch; one state read and one state
-write. No retries beyond the one re-resolution onboarding already allows.
+write. No retries beyond the one re-resolution onboarding already allows. The blocked-
+item retry (step 6) is state-only: it checks the profile already read at onboarding, makes
+no connector call, and a re-dispatch it releases counts against `.dispatches` like any other.
 
 ## Flow
 
@@ -49,7 +54,14 @@ write. No retries beyond the one re-resolution onboarding already allows.
    `../../shared/surface-protocol.md`'s table: untouched, ticked, edited, edited-and-
    ticked, deleted, user-added. An edited line's wording is authoritative and is never
    rewritten, in any section.
-6. **Dispatch ticked and edited-and-ticked items**, oldest first, up to
+6. **Retry blocked items.** A ticked item with a `blocked` sub-line is not re-dispatched
+   on its own; for this skill's own `pr:` items whose `state.items` entry is
+   `status: blocked` on a named profile key, check that key in the profile already in hand.
+   Now present and non-empty: clear the block and queue the item for step 7, where its new
+   sub-line lands under the old one. The line is settled in place, never re-posted. A
+   deleted line is never retried. Full rule: `references/dispatch.md`, "Retrying blocked
+   items". Without this, a block whose cause was fixed stays stuck forever.
+7. **Dispatch ticked and edited-and-ticked items**, oldest first, up to
    `budgets.proactive-router.dispatches`:
    - `fyi` closes with no dispatch and no sub-line - by design, not an unmapped case.
    - A category with `state.registry[category].handler` set (seeded from
@@ -62,16 +74,16 @@ write. No retries beyond the one re-resolution onboarding already allows.
      increment `tally.<category>.unmapped_ticks`.
    Items beyond the cap stay ticked, undispatched; note the queued count so briefing can
    report it.
-7. **Deletions.** Add `state.suppressions` `{source_id, category, pattern, added_at}` and
+8. **Deletions.** Add `state.suppressions` `{source_id, category, pattern, added_at}` and
    `tally.<category>.deleted += 1`. Three deletions of the same `<channel>:<category>`
    pattern add it to `state.patterns_blocked`.
-8. **Proposals.** `tally.<category>.unmapped_ticks >= 3` with no open proposal for that
+9. **Proposals.** `tally.<category>.unmapped_ticks >= 3` with no open proposal for that
    category writes the propose line, candidate from `references/categories.md`'s fixed
    table - never invented at run time.
-9. **One write.** Batch every staged surface change (step 3, 6, 8) into the single
-   `chat: update canvas` call this run makes. Then write state: cursor, tally, items,
-   registry, outcomes, suppressions, patterns_blocked, proposals, `runs[proactive-router]`,
-   `machines`.
+10. **One write.** Batch every staged surface change (step 3, 7, 9) into the single
+    `chat: update canvas` call this run makes. Then write state: cursor, tally, items,
+    registry, outcomes, suppressions, patterns_blocked, proposals, `runs[proactive-router]`,
+    `machines`.
 
 ## Surface
 

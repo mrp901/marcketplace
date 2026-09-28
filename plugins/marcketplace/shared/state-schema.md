@@ -50,7 +50,8 @@ cursors:
   briefing: {last_run_ts, last_seen: {<channel_id>: <ts>}}
   proactive-router: {last_scanned}
   action-sweep: {scanned_through}
-  kb-dream: {last_dream_at, last_full_dream_at, last_registry_review_at, last_voice_review_at}
+  kb-dream: {last_dream_at, last_full_dream_at, last_registry_review_at, last_voice_review_at,
+             open_followups: {<note path>#<slug>: {text, first_flagged_at, dreams_open, escalated_tag}}}
   session-log: {last_pending_processed}
   skill-health-check: {last_checked: {<skill>: <date>}}
 
@@ -68,7 +69,8 @@ suppressions: [{source_id, category, pattern: "<channel_id>:<category>", added_a
 patterns_blocked: []
 
 items:
-  <tag>: {section, written_by, written_at, text_hash, ref, category}    # pruned when the item's line reaches Closed
+  <tag>: {section, written_by, written_at, text_hash, ref, category,    # pruned when the item's line reaches Closed
+          status: open | blocked, blocked_reason, blocked_on, blocked_at, retried_for}   # status fields optional; absent = open
 
 outcomes: []                 # ring buffer, max 50, newest first
 voice_edits: []              # ring buffer, max 30: {tag, register, draft_hash, sent_ref, recorded_at}
@@ -92,7 +94,7 @@ between runs beyond what the tracker itself already holds.
 | `cursors.briefing` | briefing | briefing | permanent, overwritten each run |
 | `cursors.proactive-router` | proactive-router | proactive-router | permanent, overwritten each run |
 | `cursors.action-sweep` | action-sweep | action-sweep | permanent, overwritten each run |
-| `cursors.kb-dream` | kb-dream | kb-dream | permanent, overwritten each run |
+| `cursors.kb-dream` | kb-dream | kb-dream | permanent, overwritten each run; `open_followups` drops an entry once it resolves or its escalated line is deleted |
 | `cursors.session-log` | session-log | session-log | permanent, overwritten each run |
 | `cursors.skill-health-check` | skill-health-check | skill-health-check | permanent, one entry per skill checked |
 | `glossary` | briefing (promotes a ticked "Terms to learn" line) | briefing | permanent, additive |
@@ -103,6 +105,7 @@ between runs beyond what the tracker itself already holds.
 | `suppressions` | proactive-router (on delete) | proactive-router | permanent until lifted |
 | `patterns_blocked` | proactive-router (after 3 deletions of the same channel+category pattern) | proactive-router | permanent until lifted |
 | `items.<tag>` | whichever skill wrote the surface line (via the hub for delegate items) | proactive-router, briefing | pruned when the item's line reaches Closed |
+| `items.<tag>.status`, `.blocked_reason`, `.blocked_on`, `.blocked_at`, `.retried_for` | proactive-router, on its own `pr:` items only, when a dispatch returns `blocked` | proactive-router (blocked-item retry) | cleared on retry; pruned with the item |
 | `outcomes` | proactive-router, after each dispatch | briefing (handler outcome summary) | ring buffer, max 50, newest first |
 | `voice_edits` | reply-draft, kb-note | kb-dream (monthly voice review) | ring buffer, max 30 |
 | `machines.<machine_id>` | onboarding, on tool discovery | every skill (reads its own machine's prefixes) | permanent, one entry per machine, re-resolved on failure |

@@ -36,7 +36,9 @@ Incremental (default): `budgets.kb-dream.incremental_reads` (default 25) knowled
 reads, `.sessions_incremental` (default 5) session notes, 1 canvas read, 1 canvas update
 batch, 1 notify send. Full (monthly-first-fire or on request):
 `.sessions_full` (default 10) session notes, reads as needed for the whole knowledge base,
-same canvas/notify budget. Whatever the mode: if a pass finds nothing, say so in one line;
+same canvas/notify budget. A log rotation adds one archive write and its read-back to
+either mode; follow-up escalation adds nothing (it rides the one canvas batch and the state
+write). Whatever the mode: if a pass finds nothing, say so in one line;
 never read `kb.paths.utility` besides this skill's own recycle folder, and never read
 `.obsidian`-equivalent tooling folders.
 
@@ -49,10 +51,15 @@ never read `kb.paths.utility` besides this skill's own recycle folder, and never
 2. **Read the recent past.** `kb.paths.log` newest first (what's already corrected, don't
    re-flag); session notes since the last dream, especially their Open threads and
    Proposed follow-ups; a count-only check of any pending-session backlog. Distinguish
-   discussed from done.
+   discussed from done. If `log.md` is over `kb.log_size_cap_kb.writers` (not only this
+   skill's own `dream` cap), rotate it this run, whatever the mode, per
+   `references/log-rotation.md`: writers defer their log lines above that cap, and waiting
+   for a full dream or for the `dream` cap leaves them deferring for weeks.
 3. **Curate**, per `references/curation-passes.md` (the eight passes, the five-rule
    contract, the supersession mechanic). This is the primary job and the base skill's
-   whole original scope.
+   whole original scope. Pass 5 carries open follow-ups across dreams on a ledger and
+   escalates one still open after three dreams to the board, per
+   `references/followup-escalation.md`.
 4. **Extract signal** from the session notes read in step 2, per
    `references/signal-extraction.md` - dated single-fact memory entries under
    `kb.paths.memory`, absolute dates, source attribution, the contradiction rule.
@@ -66,7 +73,8 @@ never read `kb.paths.utility` besides this skill's own recycle folder, and never
    contract (index/log lines) it describes.
 10. **Settle the canvas and notify**, per `references/notification-shape.md`.
 11. **Write state back.** `cursors.kb-dream` (`last_dream_at`, `last_full_dream_at` if
-    full, `last_registry_review_at`/`last_voice_review_at` if run this pass), `items` with
+    full, `last_registry_review_at`/`last_voice_review_at` if run this pass,
+    `open_followups` every run), `items` with
     this run's Dream log/actions tags, `voice.sample_counts` if the voice review ran,
     `proposals` for any 60-day dismissals, `runs.kb-dream`.
 
