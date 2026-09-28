@@ -22,6 +22,7 @@ category genuinely isn't here, the proposal names it `needs a new skill`.
 | `to-do` | ☑️ | Something only the user can do, worth putting on their own list | `inline:to-do` |
 | `kb-maintenance` | 🧹 | A kb curation task (conformance, supersession, link repair) | kb-dream `settle` |
 | `running-behind` | ⏰ | An overdue item worth a closer look before flagging further | `inline:investigate` |
+| `feed-mismatch` | 🔎 | A tracker-feed claim the live issue contradicts; look into who changed what | `inline:investigate` |
 | `term` | 📘 | A word or acronym worth adding to the glossary | `inline:promote` |
 | `idea-decision` | 🔀 | One option of a decision on an idea | idea-scout `decide` |
 | `wireframe-reaction` | 🖼️ | Keep, rework or drop a wireframe | idea-wireframe `react` |

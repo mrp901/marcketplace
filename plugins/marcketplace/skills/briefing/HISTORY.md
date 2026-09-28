@@ -128,3 +128,27 @@ removes the line (still never to Closed, the deliberate exception from the 2026-
 correction above). `references/migration.md` is the one-time conversion of an old board on
 the first run under 1.1.0; every other skill waits for it. The stray ` - ` separators in
 `closed-and-outcomes.md` became ` · ` to match the protocol.
+
+## 2026-09-28 tracker feed cross-check
+
+The user asked for briefing to check two automation-fed channels (work started, fix version
+changed) against the live tracker and to flag where they disagree. See
+`references/feed-cross-check.md`.
+
+- **Profile keys.** `chat.tracker_feed_channels.{work_started, fix_version}`. They sit under
+  `chat` because they are channel ids, and like every channel id they are identity-shaped:
+  asked, never defaulted. `none` is an explicit answer for an install without the feed, so
+  the keys can be required in `## Needs` without forcing the feature on every install.
+- **Cursors.** The existing `cursors.briefing.last_seen` map, keyed by channel id. The feed
+  channels are excluded from the Unread search, so exactly one reader moves each cursor.
+- **One batched tracker call, not a lookup per issue.** A single `key in (...)` search
+  returns status and fix versions for every claimed key. `budgets.briefing.feed_issue_keys`
+  caps the batch. Anything over the cap waits for the next run, behind a cursor that stops
+  where the batch did. A per-message `get issue` would have tied briefing's cost to channel
+  traffic.
+- **A `feed:` line in For you, not an FYI and not `rb:`.** A contradicted claim is
+  something to act on, so it belongs on the board rather than in the message's FYIs. A tick
+  means "look into it", performed by the hub's read-only `inline:investigate` (category
+  `feed-mismatch`), so the 1.1.0 rule that every tick does something still holds. It is not
+  `rb:` because nothing is overdue. It uses its own prefix rather than the bare issue key,
+  which would collide in `state.items` with any other skill's line about the same issue.
