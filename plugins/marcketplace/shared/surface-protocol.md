@@ -26,7 +26,7 @@ Five sections, in this order, no others:
 |---|---|---|
 | Today | The Calendar and Tracker snapshots (one dated block each) | briefing |
 | To-do | The user's own list | the user; briefing closes ticked lines |
-| For you | Every line that needs the user's tick, other than idea lines: tags `pr:` `rb:` `sweep:` `dream:` `term:` `shc:` | the skill that owns each tag prefix; the hub adds sub-lines |
+| For you | Every line that needs the user's tick, other than idea lines: tags `pr:` `rb:` `sweep:` `dream:` `term:` `feed:` `shc:` | the skill that owns each tag prefix; the hub adds sub-lines |
 | Ideas | One block per idea with open decisions, wireframe reactions or a refresh question | idea-scout, idea-deep-dive, idea-wireframe, by tag prefix inside the block |
 | Closed | The log, 5 days or 20 lines | briefing |
 
@@ -43,6 +43,7 @@ A skill owns the lines it wrote, identified by their tag prefix, wherever they s
 | `sweep:` | action-sweep | ticket-reply, ticket-minor, meeting-followup, chat-reply, to-do, sweep-push |
 | `dream:` | kb-dream | kb-maintenance |
 | `term:` | briefing | term |
+| `feed:` | briefing | feed-mismatch |
 | `shc:` | skill-health-check | skill-eval |
 | `<idea key>/d…`, `<idea key>/r` | idea-scout | idea-decision, idea-refresh |
 | `<idea key>/q…` | idea-deep-dive | idea-decision |
@@ -68,7 +69,8 @@ Every checkbox line on the surface follows one grammar, and reads as the action 
 
 | Form | Example | When |
 |---|---|---|
-| Skill abbreviation, date, sequence | `(pr:260922-03)` | proactive-router's third item logged on 22 Sep 2026; likewise `dream:`, `sweep:`, `rb:`, `term:`, `shc:` |
+| Skill abbreviation, date, sequence | `(pr:260922-03)` | proactive-router's third item logged on 22 Sep 2026; likewise `dream:`, `sweep:`, `rb:`, `term:`, `feed:`, `shc:` |
+| Same, about a tracker item | `(feed:260910-1)` | briefing's first tracker-feed mismatch on 10 Sep 2026. The line names a tracker item but is not tagged with its key, so a later mismatch on the same key, or another skill's line about it, never shares its `state.items` tag |
 | Idea block line | `(PRJ-164/d1a)` | a line inside an idea block: the idea key, a slash, then the group and option (see the Ideas block grammar) |
 
 A tag is the item's identity across runs. `state.items.<tag>` holds what was written and its text hash, which is how a writer tells "still exactly as I left it" from "the user touched this" on its next read. Never invent a tag form ad hoc; if a new writer needs one, pick a short lowercase abbreviation, add it to the prefix table above, and record it in that skill's `references/`.
