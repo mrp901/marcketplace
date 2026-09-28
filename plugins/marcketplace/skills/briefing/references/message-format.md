@@ -21,7 +21,8 @@ using" tag, no acknowledgement text beyond this shape.
 {tracker emoji} Tracker
 
 * [KEY]({link}) {summary} - {status}, assigned {nickname/tag}
-(or "Signed out")
+* Feed check: {n} claim(s) the live tracker contradicts, on the board to look into
+(or "Signed out"; the feed-check line appears only when n is above zero)
 
 Since last briefing
 
@@ -65,6 +66,7 @@ Fictionalised against `profiles/example.md` (Northwind Logistics / Freight Ops),
 
 * [FLT-231](https://northwindlogistics.atlassian.net/browse/FLT-231) Dashboard: top cost increases table - In Review, assigned Tomasz
 * [FLT-166](https://northwindlogistics.atlassian.net/browse/FLT-166) Prior-month comparison should be like-for-like MTD - Parking lot, unassigned
+* Feed check: 1 claim the live tracker contradicts, on the board to look into
 
 Since last briefing
 

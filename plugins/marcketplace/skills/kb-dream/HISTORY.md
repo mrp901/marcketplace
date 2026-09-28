@@ -200,3 +200,25 @@ proof of life. The registry review no longer raises a `skill_eval` proposal;
 the 2026-09-22 port entry left open by removing the need for the write path rather than
 adding it. The monthly pass also prunes `state.ideas` entries for ideas that no longer
 exist anywhere.
+
+## 2026-09-28 skill-health follow-up: two process gaps closed
+
+A skill-health-check run scored two skills amber for gaps that belonged to this skill.
+
+- **A writer could defer its log line indefinitely.** Writers stop adding log lines once
+  `log.md` passes `kb.log_size_cap_kb.writers`, and this skill is the only rotator, but
+  nothing said when it had to rotate. The quiet exit made this worse: a deferring writer
+  adds no log entry, so an oversized log looked like nothing had happened. One writer was
+  still deferring six dated sections after the last rotation. Now the log's size is part of
+  the quiet-exit check, and rotation triggers on the *writers'* cap, on the next dream of
+  either mode, backfilling the deferred lines (`references/log-rotation.md`). The
+  alternative was for each writer to count its own deferrals and escalate. That was
+  rejected: it would put the same counter in five skills to report a problem only this
+  skill can fix, while the incremental cadence already bounds the wait to one dream
+  interval. A rotation that fails twice escalates through the existing repetition bar.
+- **Chronic follow-ups never reached the user.** Pass 5 listed open follow-ups in Flags,
+  which nobody reliably reads, and kept no memory across dreams. They now live on a ledger
+  in `state.cursors.kb-dream.open_followups`. One still open after three dreams becomes an
+  ordinary Surfaced item and a `dream:` line (`references/followup-escalation.md`), whose
+  tick reaches `settle` like any other. The threshold is three, not two, so a single busy
+  week doesn't escalate. Deleting the line drops the follow-up for good.

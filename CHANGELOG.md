@@ -4,6 +4,23 @@ All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Added
+- `briefing` cross-checks two tracker-feed chat channels (work started, fix version
+  changed) against the live tracker in one batched call and posts one `feed:` line in For
+  you per contradicted claim. A tick runs `inline:investigate` (new category
+  `feed-mismatch`). New profile keys: `chat.tracker_feed_channels.{work_started,
+  fix_version}` and `budgets.briefing.feed_issue_keys`.
+
+### Fixed
+- `kb-dream` rotates `log.md` on its next run once it passes the writers' size cap, and an
+  oversized log no longer counts as a quiet run, so a writer skill stops deferring its log
+  line for weeks.
+- `kb-dream` escalates a follow-up still open after three dreams to a `dream:` line.
+- `proactive-router` retries its own blocked `pr:` lines once the profile key a block names
+  is filled in.
+
 ## [1.1.0] - 2026-09-25
 
 The canvas redesign: every tick means "yes, do it".

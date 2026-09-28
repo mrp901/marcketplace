@@ -53,6 +53,9 @@ chat:
   team_url:                 # chat workspace URL, e.g. https://<org>.slack.com
   starter_emoji: [envelope, ticket, book, star]   # reaction set proactive-router polls for
   include_saved_items: true
+  tracker_feed_channels:    # channels where an automation posts tracker events; briefing cross-checks them
+    work_started:           # channel id, or none; claims that work started on an issue
+    fix_version:            # channel id, or none; claims that an issue's fix version was set or changed
 
 calendar:
   day_window: "00:00-23:59 local"
@@ -151,7 +154,7 @@ voice:
   sample_counts: {}
 
 budgets:
-  briefing: {connector_calls: 3, notetaker_calls: 1, surface_reads: 1, surface_writes: 1}
+  briefing: {connector_calls: 3, notetaker_calls: 1, surface_reads: 1, surface_writes: 1, feed_issue_keys: 20}
   proactive-router: {searches: 5, thread_reads: 6, dispatches: 3}
   action-sweep: {canvas_guard: 5, cold_start_days: 7, targeted_search_per_todo: 1, thread_reads: 6}
   idea-ticket:    {investigation_calls: 4, web_searches: 1, audit_rounds: 2}
@@ -183,6 +186,8 @@ budgets:
 | `chat.team_url` | briefing, kb-dream, idea-scout, idea-wireframe | discover (parsed from surface URL) | |
 | `chat.starter_emoji` | proactive-router | default | |
 | `chat.include_saved_items` | proactive-router | default | |
+| `chat.tracker_feed_channels.work_started` | briefing | ask | identity-shaped: never defaulted. A channel id, or `none` if the install has no such feed |
+| `chat.tracker_feed_channels.fix_version` | briefing | ask | same as `work_started` |
 | `calendar.day_window` | briefing | default | |
 | `briefing.expected_runs` | briefing | default | one entry per scheduled skill; a skill missing from the map is never called overdue |
 | `tracker.cloud_id` | briefing, action-sweep, idea-scout, idea-deep-dive, idea-wireframe, idea-ticket, skill-health-check | discover (accessible-resources) | |
@@ -336,6 +341,11 @@ this list rather than reasoning by analogy with a neighbouring key.
   off the response rather than asking the user to know them.
 - **`chat.team_id`, `chat.team_url`** - parsed out of the surface URL the user gave for
   `surface.url` (a chat canvas/doc URL carries the team id as a path segment).
+- **`chat.tracker_feed_channels.*`** - not discoverable. Ask which channel carries each
+  feed. A channel link the user pastes carries the id. A bare name is looked up with the
+  chat connector only if exactly one channel matches it, and is asked again otherwise. The
+  user can answer `none` for a feed the install doesn't have; that is recorded literally,
+  and a missing key is never turned into `none`.
 - **`org.timezone`** - the system clock's configured zone at onboarding time, confirmed
   once, not re-derived every run.
 - **tool prefixes** (not stored in the profile; land in `state.machines`) - `ToolSearch`
@@ -347,7 +357,8 @@ A key is added to this schema only when some skill's `## Needs` heading actually
 it - never speculatively, never "in case a future skill wants it". Every key ships with a
 default in this document (even if that default is an empty value) so a fresh profile is
 never missing a key outright, with one exception: **identity keys are never defaulted.**
-`user.*`, `org.name`, `state_ref`, `surface.id` and anything else that names a specific
-person, organisation or document must be asked or discovered - a plausible-looking default
-for an identity key is worse than a missing one, because a missing key fails loudly and a
-wrong default fails silently.
+`user.*`, `org.name`, `state_ref`, `surface.id`, `chat.team_id`, the channel ids
+(`surface.home_channel_id`, `notify.fallback_channel_id`, `chat.tracker_feed_channels.*`)
+and anything else that names a specific person, organisation, document or channel must be
+asked or discovered - a plausible-looking default for an identity key is worse than a
+missing one, because a missing key fails loudly and a wrong default fails silently.
