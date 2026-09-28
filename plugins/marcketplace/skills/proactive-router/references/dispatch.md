@@ -49,7 +49,10 @@ contract table for the field constraints. What the hub does with each `status`:
 - **`done`**: write the sub-line, `  - ↳ <handler> <date time>: done · <report_line> ·
   <link>`. The line is now eligible for briefing to close.
 - **`partial` / `blocked`**: same sub-line shape with that outcome word. The line stays
-  open for next run; nothing further to do this run.
+  open for next run; nothing further to do this run. On a `blocked` return for one of this
+  skill's own `pr:` lines, also record on its `state.items` entry `status: blocked`,
+  `blocked_reason` (the report line), `blocked_at`, and `blocked_on` when the reason names
+  a profile key (a dotted path such as `kb.paths.drafts`). See "Retrying blocked lines".
 - **`needs_confirmation`**: write the `needs your tick` sub-line, then a fresh line
   underneath naming the specific irreversible step ("file the ticket drafted above",
   "push the comment drafted above"). That fresh line's own tick, next run, dispatches the
@@ -60,6 +63,37 @@ contract table for the field constraints. What the hub does with each `status`:
 
 Every outcome, dispatched or inline, is appended to `state.outcomes` as
 `{tag, handler, status, report_line, recorded_at}`.
+
+## Retrying blocked lines
+
+A ticked line that already carries a sub-line is skipped by flow step 7, which is right
+for a `done` or a queued line. A `blocked` line is different when its cause can clear. A
+handler blocked on a missing profile key is unblocked as soon as the user fills that key
+in, and without this rule nothing would ever look at the line again. Step 7 checks, once
+per run, before acting:
+
+1. **Scope.** Only `state.items` entries whose tag starts `pr:` and whose `status` is
+   `blocked`. Other prefixes' entries belong to their owners and the hub never rewrites
+   them (`state-schema.md`'s write discipline). A blocked line there stays as it is.
+2. **Find the key.** Use `blocked_on`. If it is absent, as it is on lines blocked before
+   this field existed, take the first dotted profile path named in `blocked_reason`. If
+   the reason names no profile key (a missing file, an anchor another skill never wrote),
+   there is nothing cheap to check: leave the line blocked.
+3. **Check it** in the profile document read at onboarding. No connector call, no handler
+   read. Still missing or empty: leave the line blocked.
+4. **Settle before acting**, using the line's step 5 classification:
+   - *Deleted:* handle it as a deletion (step 8). Never retry it.
+   - *Unticked since:* the user withdrew the tick. Set `status: open`, clear the
+     `blocked_*` fields, and act on nothing.
+   - *Ticked, or edited and ticked:* set `status: open`, clear the `blocked_*` fields, set
+     `retried_for` to the key, and act on the line in step 7 with its original
+     `ticked_at`, so it takes its oldest-first place within
+     `budgets.proactive-router.dispatches`. If the user edited it, the edited text is the
+     instruction. The new sub-line is written under the old `blocked` one. The line itself
+     is never rewritten, re-ticked or posted a second time.
+5. **One retry per cause.** If the retried dispatch comes back `blocked` again, record the
+   new reason. If `blocked_on` is the same key as `retried_for`, the key was not the real
+   cause: leave the line blocked and never retry it on that key again.
 
 ## Option groups
 
@@ -83,7 +117,7 @@ handler name, and an `outcomes` entry.
 
 | Action | Category | What the hub does |
 |---|---|---|
-| `inline:investigate` | `running-behind` | Reads what the line points at (the meeting, the ticket) and reports in the sub-line what it found, what changed, or what input is missing. Reads only |
+| `inline:investigate` | `running-behind`, `feed-mismatch` | Reads what the line points at (the meeting, the ticket; for a `feed:` line, the issue's history and the feed message) and reports in the sub-line what it found, what changed, or what input is missing. Reads only |
 | `inline:promote` | `term` | Writes the line's text as the user left it into `state.glossary`, keyed by the term. Sub-line `done · added to glossary`. Briefing then removes the line without a Closed entry |
 | `inline:requeue` | `idea-refresh` | Sets `state.ideas.<idea_key>.requeue_scout: true`. Sub-line `done · queued for the next scout run` |
 | `inline:to-do` | `to-do` | Adds one unticked line at the top of To-do with the line's text (post-edit) and no tag. Sub-line `done · added to your To-do` |

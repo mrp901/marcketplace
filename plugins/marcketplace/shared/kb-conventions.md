@@ -47,7 +47,7 @@ Every new note, every time, without exception:
 
 **The log is append-only.** A line that goes stale within the same session - including one this same run wrote earlier today - is never rewritten in place. Add a `**Correction**` entry pointing at what's true now and linking whatever explains the full sequence (a session note, a dream note). This applies immediately, in the same turn the staleness is noticed, not as a separate cleanup pass later - the fix for the exact failure mode the source `session-log` skill once hit: an earlier log line went stale after a subsequent edit, and it should have been corrected in the same run rather than only mentioned elsewhere.
 
-Where the kb's connector is full-replace rather than append (a SharePoint/OneDrive markdown file rewritten whole on every write, rather than a true append API), and the log file has grown past `profile.kb.log_size_cap_kb.writers` (default 20 KB for ordinary writers, 40 KB for `kb-dream`'s own passes), a skill defers its log line - says so in its own output/surface item - rather than risking a large retype. `kb-dream` owns rotating an oversized log on its own pass.
+Where the kb's connector is full-replace rather than append (a SharePoint/OneDrive markdown file rewritten whole on every write, rather than a true append API), and the log file has grown past `profile.kb.log_size_cap_kb.writers` (default 20 KB for ordinary writers, 40 KB for `kb-dream`'s own passes), a skill defers its log line - says so in its own output/surface item - rather than risking a large retype. `kb-dream` owns rotating an oversized log, and does so on its next run of either mode once the log passes the `writers` cap, so a writer's deferral lasts at most one dream interval.
 
 ## Dated file naming
 

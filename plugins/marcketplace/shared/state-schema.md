@@ -44,11 +44,12 @@ runs:
   # skill-health-check adds scores: {<skill>: {tag: green | amber | red, why, ref, checked_at}}
 
 cursors:
-  briefing: {last_run_ts, last_seen: {<channel_id>: <ts>}}
+  briefing: {last_run_ts, last_seen: {<channel_id>: <ts>}}   # every channel briefing reads, feed channels included
   proactive-router: {last_scanned}
   action-sweep: {scanned_through, chat_since}
   idea-scout: {roadmap_checked_at}
-  kb-dream: {last_dream_at, last_full_dream_at, last_registry_review_at, last_voice_review_at}
+  kb-dream: {last_dream_at, last_full_dream_at, last_registry_review_at, last_voice_review_at,
+             open_followups: {<note path>#<slug>: {text, first_flagged_at, dreams_open, escalated_tag}}}
   session-log: {last_pending_processed}
   skill-health-check: {last_checked: {<skill>: <date>}}
 
@@ -69,8 +70,10 @@ suppressions: [{source_id, category, pattern: "<channel_id>:<category>", added_a
 patterns_blocked: []
 
 items:
-  <tag>: {section, written_by, written_at, text_hash, ref, category, group, idea_key}
+  <tag>: {section, written_by, written_at, text_hash, ref, category, group, idea_key,
+          status: open | blocked, blocked_reason, blocked_on, blocked_at, retried_for}
   # pruned when the line reaches Closed; group is the question's tag stem on an option line
+  # status and the blocked_* fields are optional (absent = open); only the hub sets them, on pr: lines
 
 outcomes: []                 # ring buffer, max 50, newest first: {tag, handler, status, report_line, recorded_at}
 voice_edits: []              # ring buffer, max 30: {tag, register, draft_hash, sent_ref, recorded_at}
@@ -97,7 +100,7 @@ requeue flag set by one tick, cleared by the skill that acts on it, never a labe
 | `cursors.proactive-router` | proactive-router | proactive-router | permanent, overwritten each run |
 | `cursors.action-sweep` | action-sweep | action-sweep | permanent, overwritten each run |
 | `cursors.idea-scout` | idea-scout | idea-scout | permanent, overwritten each run |
-| `cursors.kb-dream` | kb-dream | kb-dream | permanent, overwritten each run |
+| `cursors.kb-dream` | kb-dream | kb-dream | permanent, overwritten each run; `open_followups` drops an entry once it resolves or its escalated line is deleted |
 | `cursors.session-log` | session-log | session-log | permanent, overwritten each run |
 | `cursors.skill-health-check` | skill-health-check | skill-health-check | permanent, one entry per skill checked |
 | `ideas.<key>.roadmap_last_seen` | idea-scout (roadmap watch) | idea-scout | permanent, overwritten when the slot changes |
@@ -111,6 +114,7 @@ requeue flag set by one tick, cleared by the skill that acts on it, never a labe
 | `suppressions` | proactive-router (on delete) | proactive-router | permanent until lifted |
 | `patterns_blocked` | proactive-router (after 3 deletions of the same channel+category pattern) | proactive-router | permanent until lifted |
 | `items.<tag>` | whichever skill wrote the surface line | proactive-router, briefing, action-sweep (dedupe) | pruned when the line reaches Closed |
+| `items.<tag>.status`, `.blocked_reason`, `.blocked_on`, `.blocked_at`, `.retried_for` | proactive-router, on its own `pr:` lines only, when a dispatch returns `blocked` | proactive-router (blocked-line retry) | cleared on retry; pruned with the item |
 | `outcomes` | proactive-router, after each dispatch or inline action; skill-eval, when a manual run finishes | briefing (handler outcome summary and the manual close) | ring buffer, max 50, newest first |
 | `voice_edits` | reply-draft, kb-note | kb-dream (monthly voice review), skill-health-check | ring buffer, max 30 |
 | `machines.<machine_id>` | onboarding, on tool discovery | every skill (reads its own machine's prefixes) | permanent, one entry per machine, re-resolved on failure |
