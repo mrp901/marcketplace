@@ -129,6 +129,16 @@ correction above). `references/migration.md` is the one-time conversion of an ol
 the first run under 1.1.0; every other skill waits for it. The stray ` - ` separators in
 `closed-and-outcomes.md` became ` · ` to match the protocol.
 
+## 2026-09-28 Closed log retention tightened to 5 days / 20 lines
+
+Retention was 7 days or 40 lines, whichever bound hit first. The user asked for both bounds
+to tighten, to 5 days and 20 lines. Updated `shared/surface-protocol.md`'s section table and
+Closed log rule, `SKILL.md` step 6, `references/closed-and-outcomes.md`, and
+`scripts/trim_closed.py`'s `DEFAULT_MAX_DAYS`, `DEFAULT_MAX_LINES` and docstring. The bullet
+in the port entry above ("Mechanically trimming Closed to 14 days or 40 lines...") and the
+2026-09-24 entry's "14 days or 40 lines" are left as written - historical record of what the
+skill shipped with at each point, not a restatement of current behaviour.
+
 ## 2026-09-28 tracker feed cross-check
 
 The user asked for briefing to check two automation-fed channels (work started, fix version
