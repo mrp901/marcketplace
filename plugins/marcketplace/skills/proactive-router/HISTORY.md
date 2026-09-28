@@ -119,3 +119,25 @@ option. A line the user adds inside an idea block takes the idea as context. Six
 cases were added for these paths; their dispatch graders accept a documented
 "could not resolve a tool category" sub-line because the mocks cover chat and state only.
 The sweep sources are unchanged.
+
+## 2026-09-28 skill-health follow-up: blocked lines are retried once their cause clears
+
+The first health check scored this skill amber. Four legacy `pr:` lines stayed blocked after
+the profile gap behind one of them had been fixed, because step 7 skips any ticked line
+that already carries a sub-line, and nothing ever re-checked a blocked one. Step 7 now makes
+one state-only exception. A `pr:` line blocked on a named profile key is acted on again, in
+place, once that key is filled in (`references/dispatch.md`, "Retrying blocked lines").
+`state.items` gains optional `status`, `blocked_*` and `retried_for` fields to carry this
+(`state-schema.md`).
+
+- **Retry in place, never re-post.** A fresh line would duplicate one the user already
+  ticked, which "settle before you append" forbids. The retry's sub-line goes under the
+  old `blocked` one.
+- **Own `pr:` lines only.** Other prefixes' `state.items` entries belong to their owners.
+- **Blocks that don't name a profile key are not retried.** A missing anchor has no cheap
+  state check. Finding out whether one has cleared would take a connector call per line,
+  which this skill's budget has no room for.
+- `feed-mismatch` (briefing's new `feed:` lines) joins `running-behind` on
+  `inline:investigate`. It reads the issue's history and the feed message and reports who
+  changed what, so a tick on such a line does something useful without the hub writing to
+  the tracker.

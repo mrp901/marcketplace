@@ -33,7 +33,10 @@ Per run: one `chat: search messages` per `chat.starter_emoji` entry, plus one `i
 search when `chat.include_saved_items` (`budgets.proactive-router.searches`). Thread
 reads capped at `.thread_reads`, each a `search`-tier subagent. Dispatches capped at
 `.dispatches`; inline actions are free. One surface read and one surface write batch;
-one state read and one state write. Guidelines in `../../shared/token-discipline.md`.
+one state read and one state write. The blocked-line retry (step 7) is state-only: it
+checks the profile already read at onboarding and makes no connector call, and a
+re-dispatch it releases counts against `.dispatches`. Guidelines in
+`../../shared/token-discipline.md`.
 
 **Quiet exit:** if every sweep search returns nothing new since the cursor and no line on
 the board differs from its `state.items` hash, write the cursor and
@@ -66,7 +69,12 @@ the board differs from its `state.items` hash, write the cursor and
    or more get `  - ↳ router: blocked · pick one` under the question and nothing happens.
    See `references/dispatch.md`.
 7. **Act on ticked lines**, oldest first, skipping any that already carry a sub-line from
-   an earlier run:
+   an earlier run, with one exception. A `pr:` line whose `state.items` entry is
+   `status: blocked` on a named profile key is retried once that key is present and
+   non-empty in the profile already in hand. Its block clears, it is acted on again, and
+   the new sub-line lands under the old one. The line is settled in place and never
+   re-posted, and a deleted line is never retried. Full rule: `references/dispatch.md`,
+   "Retrying blocked lines". Without this, a block whose cause was fixed would stay forever.
    - Inline actions (`inline:investigate`, `inline:promote`, `inline:requeue`,
      `inline:to-do`) run here, in this run, uncapped, per `references/dispatch.md`.
    - A `shc:` line gets `  - ↳ router: queued for your next skill-eval run` and nothing
