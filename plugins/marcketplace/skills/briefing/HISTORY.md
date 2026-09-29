@@ -162,3 +162,36 @@ changed) against the live tracker and to flag where they disagree. See
   `feed-mismatch`), so the 1.1.0 rule that every tick does something still holds. It is not
   `rb:` because nothing is overdue. It uses its own prefix rather than the bare issue key,
   which would collide in `state.items` with any other skill's line about the same issue.
+
+## 2026-09-29 hard channel gate on the one notify send
+
+Onboarding this install surfaced the two feed channels this run: `work_started` is
+`C0BJVFV1T8E` (epic-start automation), `fix_version` is `C089X3K4CT0` (fix-version/sprint
+automation). The user's standing instruction: briefing must never post to either of
+these, or to any channel but the home channel (`profile.notify.fallback_channel_id`) - and
+that has to be a hard, deterministic block, not a documentation convention a run could
+read past.
+
+- **Why a script and not just prose.** Every other rule in this plugin is enforced by an
+  LLM reading `SKILL.md` and its references correctly, run after run. That's normally fine,
+  but "never post to X" is exactly the kind of rule where a single bad run has an
+  irreversible external effect (a message sent to the wrong channel can't be unsent), so
+  it gets the same treatment as `scripts/trim_closed.py`'s mechanical trim: a deterministic
+  check with no model judgement in the loop. `scripts/guard_notify_channel.py` takes the
+  send's target channel id and the allowed channel id, and exits non-zero on anything but an
+  exact match - `notify.md`'s "Hard channel gate" section requires running it before every
+  `chat: send message` this skill ever makes (chat_message mode, the egress-failure
+  fallback, and the fast-fail line alike) and treating a non-zero exit as an unconditional
+  block.
+- **Allowlist, plus a hardcoded deny-list, not just a deny-list.** The correct rule is
+  narrower than "don't post to these two channels" - it's "post only to the one home
+  channel, full stop" - so the script checks that first. The two feed-channel ids are
+  additionally hardcoded into the script as a standing deny-list, named explicitly, so the
+  block holds even in the scenario the user was actually worried about: a future profile
+  edit accidentally pointing `fallback_channel_id` at one of them, which the allowlist
+  check alone wouldn't catch.
+- **Lives with briefing, not in `shared/`.** Briefing is the only skill that ever sends
+  (`notify.md`'s "Who posts" table), so the guard has one caller and belongs next to
+  `trim_closed.py` in `skills/briefing/scripts/`, referenced by relative path from
+  `shared/notify.md` the same way `SKILL.md` already references `trim_closed.py` from
+  `shared/surface-protocol.md`'s neighbourhood.
