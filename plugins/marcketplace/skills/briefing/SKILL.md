@@ -118,3 +118,8 @@ investigate, and a ticked `term:` line is the hub's to promote). Ownership is by
   core briefing or gets argued with in the posted text. If in doubt, use the term verbatim.
 - Send nothing beyond the one message via `../../shared/notify.md`. No side messages, no
   thread replies, no calendar, tracker or ticket edits.
+- Every send is gated, no exceptions. `notify.md`'s "Hard channel gate" runs
+  `scripts/guard_notify_channel.py` before any `chat: send message` call and blocks it
+  unconditionally on a non-zero exit. The tracker-feed channels this skill reads
+  (`references/feed-cross-check.md`) are permanently hard-blocked send targets; briefing
+  posts to `profile.notify.fallback_channel_id` and nowhere else, ever.

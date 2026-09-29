@@ -4,7 +4,10 @@ Some installs have chat channels where an automation posts tracker events: work 
 an issue, an issue's fix version set or changed. People read those channels as fact. This
 check reads what they claimed since the last run, looks up the live issues in one batched
 tracker call, and puts one `feed:` line in For you for each claim the tracker contradicts.
-It reports only. It never edits an issue and never replies in the channel.
+It reports only. It never edits an issue and never replies in the channel: these channels
+are read-only sources, never a send target, hard-enforced by
+`../../../shared/notify.md`'s "Hard channel gate" (`../scripts/guard_notify_channel.py`
+hard-blocks both configured feed-channel ids from ever being a notify destination).
 
 ## Which channels
 
