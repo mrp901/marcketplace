@@ -6,3 +6,10 @@ profiles/*.local.md
 __pycache__/
 .DS_Store
 PLAN.md
+
+# hillclimb run artefacts
+.claude/hillclimb/**/traces/
+.claude/hillclimb/**/report.html
+.claude/hillclimb/**/state.json
+.claude/hillclimb/**/trajectory/
+.claude/hillclimb/**/runs/

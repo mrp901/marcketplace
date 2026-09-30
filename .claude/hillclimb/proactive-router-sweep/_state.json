@@ -1,0 +1,41 @@
+{
+  "flow": "proactive-router-sweep",
+  "metrics": [
+    {
+      "id": "correct",
+      "label": "Correct",
+      "kind": "binary"
+    },
+    {
+      "id": "line_present",
+      "label": "Line present",
+      "kind": "binary"
+    },
+    {
+      "id": "emoji_ok",
+      "label": "Emoji right",
+      "kind": "binary"
+    },
+    {
+      "id": "no_line",
+      "label": "FYI: no line",
+      "kind": "binary"
+    },
+    {
+      "id": "fyi_recorded",
+      "label": "FYI: logged",
+      "kind": "binary"
+    },
+    {
+      "id": "drafts_only",
+      "label": "Drafts only",
+      "kind": "binary"
+    }
+  ],
+  "perf_fields": [
+    {
+      "id": "tool_calls",
+      "label": "Mock calls"
+    }
+  ]
+}
