@@ -1,0 +1,282 @@
+[
+ {
+  "item": "A05",
+  "case": "21-sweep-real-w1",
+  "source": "saved",
+  "expected_category": "email",
+  "channel_id": "CEXAMPLELEADS1",
+  "target_ts": "1789941600.000100",
+  "expected_line": "✉️ draft an email to Wendy Lau (Kestrel Engineering) proposing a discovery call / demo",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "A02",
+  "case": "21-sweep-real-w1",
+  "source": "saved",
+  "expected_category": "ticket-reply",
+  "channel_id": "CEXAMPLEPRD001",
+  "target_ts": "1789942020.000100",
+  "expected_line": "🎫 raise a ticket: sort every dashboard pie chart descending and drop the $0 slices",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "B09",
+  "case": "21-sweep-real-w1",
+  "source": "reacted",
+  "expected_category": "fyi",
+  "channel_id": "CEXAMPLEPRD001",
+  "target_ts": "1789942440.000105",
+  "expected_line": "(no line) admin-rights question - you answered in thread",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "A12",
+  "case": "21-sweep-real-w1",
+  "source": "saved",
+  "expected_category": "summarise",
+  "channel_id": "CEXAMPLEPRD001",
+  "target_ts": "1789942860.000100",
+  "expected_line": "📝 summarise FLT-21026 (Driver Profile story, reassigned to you for Perth squad) for review",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "C01",
+  "case": "21-sweep-real-w1",
+  "source": "saved",
+  "expected_category": "chat-reply",
+  "channel_id": "DEXAMPLEANAQ01",
+  "target_ts": "1789943280.000101",
+  "expected_line": "💬 reply to Ana in DM: pick the empty-day copy on the Dock Schedule page ('No bookings' vs 'Nothing scheduled') before she hands off to Mateo tomorrow",
+  "provenance": "hand-made, modelled on A08 (designer's 'quick question' DM)"
+ },
+ {
+  "item": "B06",
+  "case": "21-sweep-real-w1",
+  "source": "reacted",
+  "expected_category": "to-do",
+  "channel_id": "CEXAMPLEPRD001",
+  "target_ts": "1789943700.000100",
+  "expected_line": "☑️ to-do: pull the latest skills before starting an area bootstrap",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "A03",
+  "case": "22-sweep-real-w2",
+  "source": "saved",
+  "expected_category": "ticket-reply",
+  "channel_id": "GEXAMPLEDEMO01",
+  "target_ts": "1789941600.000100",
+  "expected_line": "🎫 raise an epic: sync carrier feed data into Sales Demo, AI-generated dummy data per carrier connection",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "A07",
+  "case": "22-sweep-real-w2",
+  "source": "saved",
+  "expected_category": "ticket-idea",
+  "channel_id": "CEXAMPLEDESGN1",
+  "target_ts": "1789942020.000109",
+  "expected_line": "🎫 raise an idea: aggregated cost by charge type (fuel, tolls, detention), so users see which charge type drives spend",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "B03",
+  "case": "22-sweep-real-w2",
+  "source": "reacted",
+  "expected_category": "fyi",
+  "channel_id": "CEXAMPLEPRD001",
+  "target_ts": "1789942440.000102",
+  "expected_line": "(no line) release-note review - you already replied 'All good'",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "A09",
+  "case": "22-sweep-real-w2",
+  "source": "saved",
+  "expected_category": "fyi",
+  "channel_id": "DEXAMPLETOMA01",
+  "target_ts": "1789942860.000100",
+  "expected_line": "(no line) Tomasz's scaling concern on FLT-20951 - accepted as fine for now",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "A06",
+  "case": "22-sweep-real-w2",
+  "source": "saved",
+  "expected_category": "ticket-reply",
+  "channel_id": "DEXAMPLEJIRA01",
+  "target_ts": "1789943280.000100",
+  "expected_line": "🎫 check FIG-468 - Sione Latu asked whether AC4 only applies to AC1, and about back-dated cost-centre allocation",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "C03",
+  "case": "22-sweep-real-w2",
+  "source": "saved",
+  "expected_category": "chat-reply",
+  "channel_id": "DEXAMPLEHANA03",
+  "target_ts": "1789943700.000100",
+  "expected_line": "💬 reply to Hana in DM: confirm whether the carrier connections flow is ready to demo to Kestrel on Friday (she needs to know by Thursday)",
+  "provenance": "hand-made, modelled on a manager asking the user for a go/no-go with a deadline"
+ },
+ {
+  "item": "A10",
+  "case": "23-sweep-real-w3",
+  "source": "saved",
+  "expected_category": "ticket-reply",
+  "channel_id": "DEXAMPLEMATE01",
+  "target_ts": "1789941600.000100",
+  "expected_line": "🎫 raise a ticket: empty state with a deeplink to Carrier Connections for tenants with the module but no carrier connections",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "A11",
+  "case": "23-sweep-real-w3",
+  "source": "saved",
+  "expected_category": "ticket-minor",
+  "channel_id": "DEXAMPLEMATE01",
+  "target_ts": "1789942020.000100",
+  "expected_line": "🎫 [minor] raise a ticket: replace the em dashes on the demo Cost Insights page",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "A04",
+  "case": "23-sweep-real-w3",
+  "source": "saved",
+  "expected_category": "fyi",
+  "channel_id": "CEXAMPLELEADS1",
+  "target_ts": "1789942440.000100",
+  "expected_line": "(no line) Jonah Abboud lead - Hana already ran discovery; your 'good fit?' question is with Hana",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "B02",
+  "case": "23-sweep-real-w3",
+  "source": "reacted",
+  "expected_category": "to-do",
+  "channel_id": "CEXAMPLEPRD001",
+  "target_ts": "1789942860.000102",
+  "expected_line": "☑️ to-do: prepare a digest for Hana ahead of the Mon/Tue catch-up",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "A16",
+  "case": "23-sweep-real-w3",
+  "source": "saved",
+  "expected_category": "to-do",
+  "channel_id": "DEXAMPLETOMA01",
+  "target_ts": "1789943280.000103",
+  "expected_line": "☑️ to-do: check your chat with Tomasz",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "B10",
+  "case": "23-sweep-real-w3",
+  "source": "reacted",
+  "expected_category": "fyi",
+  "channel_id": "CEXAMPLEPRD001",
+  "target_ts": "1789943700.000100",
+  "expected_line": "(no line) leave-calendar forwarding test aimed at Luis Ortega",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "A14",
+  "case": "24-sweep-real-w4",
+  "source": "saved",
+  "expected_category": "kb-doc",
+  "channel_id": "CEXAMPLEPRD001",
+  "target_ts": "1789941600.000100",
+  "expected_line": "📖 kb note: ingestion design is ~30% product / 70% engineering - the team counter-proposes, the doc isn't a spec",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "B07",
+  "case": "24-sweep-real-w4",
+  "source": "reacted",
+  "expected_category": "kb-doc",
+  "channel_id": "CEXAMPLEDESGN1",
+  "target_ts": "1789942020.000108",
+  "expected_line": "📖 kb note: document the decision - Shipment sits one level up, charge lines below it (as in Show Details)",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "B05",
+  "case": "24-sweep-real-w4",
+  "source": "reacted",
+  "expected_category": "fyi",
+  "channel_id": "DEXAMPLEHANA01",
+  "target_ts": "1789942440.000104",
+  "expected_line": "(no line) carrier brand colours - sorted in thread (#ff9900 on #252F3E), handed to Ana",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "A15",
+  "case": "24-sweep-real-w4",
+  "source": "saved",
+  "expected_category": "fyi",
+  "channel_id": "DEXAMPLETOMA01",
+  "target_ts": "1789942860.000106",
+  "expected_line": "(no line) % in shipment mapping list - you decided: add it, handle presentation later",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "A13",
+  "case": "24-sweep-real-w4",
+  "source": "saved",
+  "expected_category": "fyi",
+  "channel_id": "GEXAMPLECFINT1",
+  "target_ts": "1789943280.000103",
+  "expected_line": "(no line) Mei posted the carrier-feed integration epic FLT-20965 and spike FLT-20961 links",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "A01",
+  "case": "25-sweep-real-w5",
+  "source": "saved",
+  "expected_category": "kb-doc",
+  "channel_id": "CEXAMPLEPRD001",
+  "target_ts": "1789941600.000100",
+  "expected_line": "📖 kb note: document the Lisbon squad ticket-pickup criteria (To Do Approved, Team = Lisbon squad, assignee not you, active sprint)",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "B04",
+  "case": "25-sweep-real-w5",
+  "source": "reacted",
+  "expected_category": "fyi",
+  "channel_id": "GEXAMPLEDEMO01",
+  "target_ts": "1789942020.000105",
+  "expected_line": "(no line) Hana's no-customer-data constraint - context for the A03 epic, not a second line",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "B08",
+  "case": "25-sweep-real-w5",
+  "source": "reacted",
+  "expected_category": "fyi",
+  "channel_id": "CEXAMPLELSBN01",
+  "target_ts": "1789942440.000103",
+  "expected_line": "(no line) Farid forwarded the catch-up invite - you thanked him",
+  "provenance": "real Slack, fictionalised"
+ },
+ {
+  "item": "C02",
+  "case": "25-sweep-real-w5",
+  "source": "reacted",
+  "expected_category": "chat-reply",
+  "channel_id": "CEXAMPLEFDSGN2",
+  "target_ts": "1789942860.000100",
+  "expected_line": "💬 reply to Mateo in #freight-design: decide whether the lane cost report includes or excludes cancelled loads before the query is locked tomorrow",
+  "provenance": "hand-made, modelled on a direct question in a busy thread where others comment but nobody answers for the user"
+ },
+ {
+  "item": "B01",
+  "case": "25-sweep-real-w5",
+  "source": "reacted",
+  "expected_category": "fyi",
+  "channel_id": "DEXAMPLEHANA01",
+  "target_ts": "1789943280.000100",
+  "expected_line": "(no line) you proposed closing the rate-API spike; waiting on Hana",
+  "provenance": "real Slack, fictionalised"
+ }
+]
