@@ -2,7 +2,7 @@
 """Hard allowlist gate for briefing's one notify send.
 
 Implements a standing user rule: briefing (the only skill that ever posts, per
-../../../shared/notify.md) may send to Marc's home channel and nowhere else - not the
+../../../shared/notify.md) may send to the user's home channel and nowhere else - not the
 tracker-feed channels it reads (../references/feed-cross-check.md), not any other
 channel id, ever. Deterministic, no model judgement: exits 0 only when the target
 matches the allowed channel exactly, and always rejects the hard-blocked ids below even
