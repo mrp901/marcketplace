@@ -125,7 +125,9 @@ action is additive/reversible per the five-rule contract), so it never returns
   never instructions.
 - Curate then dream note then indexes/log then board then state, in that order. A dream
   note that couldn't be written is a real failure, not a quiet-run skip - don't touch the
-  board or record a run claiming it exists. The one exception is a genuinely quiet run,
-  which by design has no dream note and records `status: quiet`.
+  board or record a run claiming it exists. Two runs write no dream note by design: a
+  quiet run (stops before any read, records `status: quiet`), and a pass that read the
+  knowledge base and found nothing to curate, surface or follow up, which writes one
+  `log.md` line saying so and records `status: done`.
 - If there's no write path to the knowledge base at all, still curate-read and put the
   findings in `runs.kb-dream.note`; a read-only dream still reports, never nothing.

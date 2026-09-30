@@ -53,13 +53,15 @@ contract table for the field constraints. What the hub does with each `status`:
   skill's own `pr:` lines, also record on its `state.items` entry `status: blocked`,
   `blocked_reason` (the report line), `blocked_at`, and `blocked_on` when the reason names
   a profile key (a dotted path such as `kb.paths.drafts`). See "Retrying blocked lines".
-- **`needs_confirmation`**: write the `needs your tick` sub-line, then a fresh line
-  underneath naming the specific irreversible step ("file the ticket drafted above",
-  "push the comment drafted above"). That fresh line's own tick, next run, dispatches the
-  handler again in its confirming mode; never this run, never automatically.
-- **`next_action` present**: the handler surfaced a further line of its own. Write it as
-  a new line directly under the sub-line, tag `(pr:<yymmdd>-N)`; the hub writes this
-  line, the handler never does.
+- **`needs_confirmation`**: write the `needs your tick` sub-line, then exactly one fresh
+  line underneath naming the specific irreversible step ("file the ticket drafted above",
+  "push the comment drafted above"). When the handler also returned `next_action`, that
+  is this line - its text and category - not a second one. The fresh line's own tick, next
+  run, dispatches the handler again in its confirming mode; never this run, never
+  automatically.
+- **`next_action` present** (without `needs_confirmation`): the handler surfaced a further
+  line of its own. Write it as a new line directly under the sub-line, tag
+  `(pr:<yymmdd>-N)`; the hub writes this line, the handler never does.
 
 Every outcome, dispatched or inline, is appended to `state.outcomes` as
 `{tag, handler, status, report_line, recorded_at}`.

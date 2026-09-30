@@ -57,8 +57,8 @@ the sentence that makes the ask legible.
 > | Index | `Dreams/index.md` | +1 row, newest first | today's dream note |
 
 No `verified`. Drop empty sections. A near-empty dream is fine - "quiet dream, nothing to
-curate; N follow-ups still open". A completely clean, insight-free pass may be a single
-`log.md` line and no note at all - see `SKILL.md`'s quiet-run rule.
+curate; N follow-ups still open". A completely clean, insight-free pass with no open
+follow-ups is a single `log.md` line and no note at all - see `SKILL.md`'s rules.
 
 ## Maintenance contract for this run's own writes
 

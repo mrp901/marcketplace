@@ -93,7 +93,7 @@ requeue flag set by one tick, cleared by the skill that acts on it, never a labe
 | Key | Written by | Read by | Retention |
 |---|---|---|---|
 | `state_version` | onboarding, on bootstrap | every skill (compatibility check) | permanent |
-| `installed_version` | onboarding on bootstrap; afterwards only the skill that completes a migration (for 1.0.0 to 1.1.0, `briefing`) | every skill (migration check) | permanent; never bumped by a skill that skipped a pending migration |
+| `installed_version` | onboarding on bootstrap; afterwards only the skill that completes a migration (for 1.0.0 to 1.1.0, `briefing`) | `briefing` (the migrating skill); other skills check the board's headings instead | permanent; never bumped by a skill that skipped a pending migration |
 | `profile_ref` | onboarding, on bootstrap | every skill | permanent |
 | `runs.<skill>` | that skill, at the end of its own run | briefing (the Runs report), skill-health-check | permanent, one entry per skill, overwritten each run |
 | `runs.proactive-router.fyi` | proactive-router | briefing | overwritten each run |
@@ -162,16 +162,19 @@ requeue flag set by one tick, cleared by the skill that acts on it, never a labe
 
 ## Migrations
 
-`installed_version` records the plugin version a skill last ran under. Every skill
-compares it against the plugin's own `plugin.json` version at run start; a skill running
-under a newer plugin version than `installed_version` records runs the migrations listed
-below for the versions between the two, in order, before doing anything else, then writes
-the new `installed_version`. A skill that stops with `awaiting migration` never writes
-it: that is what keeps the pending migration visible to the skill that owns it.
+`installed_version` records the plugin version the state and board were last migrated to.
+Only the skill that owns a migration runs it (for 1.0.0 to 1.1.0, `briefing`): it runs the
+steps listed below for the versions between `installed_version` and the plugin's own
+`plugin.json` version, in order, before doing anything else, then writes the new
+`installed_version`. The trigger for every other skill is the board, not the version: a
+skill that reads or writes the board and finds it still in the pre-migration shape (for
+1.1.0, any pre-1.1.0 heading) records `runs.<skill>.status: quiet`, note `awaiting
+migration`, and stops, and never writes `installed_version`. A skill that never touches
+the board has nothing to race and runs as normal.
 
 | From version | To version | Migration |
 |---|---|---|
-| 1.0.0 | 1.1.0 | Add `ideas: {}`, `cursors.action-sweep.chat_since`, `cursors.idea-scout`, and `ref` on every existing `runs.<skill>` entry (empty). Drop any `proposals` entry with `kind: skill_eval` (status `dismissed`, never deleted). The board itself is migrated by `briefing` alone, per `skills/briefing/references/migration.md`; every other skill that finds `installed_version` behind records `runs.<skill>.status: quiet`, note `awaiting migration`, and stops |
+| 1.0.0 | 1.1.0 | Add `ideas: {}`, `cursors.action-sweep.chat_since`, `cursors.idea-scout`, and `ref` on every existing `runs.<skill>` entry (empty). Drop any `proposals` entry with `kind: skill_eval` (status `dismissed`, never deleted). The board itself is migrated by `briefing` alone, per `skills/briefing/references/migration.md`; every other skill that reads or writes the board and finds any pre-1.1.0 heading records `runs.<skill>.status: quiet`, note `awaiting migration`, and stops |
 
 A migration is always **additive**: it may add a new key with its default value, or
 reshape a key it explicitly names, but it never deletes a key it does not understand.

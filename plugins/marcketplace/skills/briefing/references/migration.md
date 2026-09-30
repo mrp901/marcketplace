@@ -6,7 +6,7 @@ early by mistake can never strand an old board) (Running behind, Terms to
 learn, Proactive opportunities, Ideas: decisions for you, Wireframes to review, Actions,
 Dream log / actions, Skill health, Plugin notices). It is the only write of that run:
 briefing composes no message and refreshes no snapshot until the board is in the new
-shape, and every other skill that finds `installed_version` behind records
+shape, and every other skill that reads or writes the board and finds an old heading records
 `runs.<skill>.status: quiet`, note `awaiting migration`, and stops (see
 `../../../shared/state-schema.md`'s migrations table), so nothing races this write.
 
