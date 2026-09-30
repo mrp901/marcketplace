@@ -112,7 +112,7 @@ requeue flag set by one tick, cleared by the skill that acts on it, never a labe
 | `nicknames` | briefing (carried and added to) | briefing, kb-dream, session-log | permanent, additive |
 | `registry.<category>` | proactive-router (a tick sets `set_by: user_tick`; shipped defaults ship with `set_by: shipped`) | proactive-router | permanent until reassigned |
 | `tally.<category>` | proactive-router, per run outcome | proactive-router, kb-dream (monthly registry review), skill-health-check | permanent, counters only increment |
-| `proposals` | proactive-router (opens on `unmapped_ticks >= 3`), kb-dream (folds and lifts) | proactive-router, kb-dream (dismisses after 60 days untouched) | until resolved or dismissed |
+| `proposals` | proactive-router (opens a mapping on the first unmapped tick), kb-dream (folds and lifts) | proactive-router, kb-dream (dismisses after 60 days untouched) | until resolved or dismissed |
 | `suppressions` | proactive-router (on delete) | proactive-router | permanent until lifted |
 | `patterns_blocked` | proactive-router (after 3 deletions of the same channel+category pattern) | proactive-router | permanent until lifted |
 | `items.<tag>` | whichever skill wrote the surface line | proactive-router, briefing, action-sweep (dedupe) | pruned when the line reaches Closed |
