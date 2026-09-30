@@ -184,7 +184,7 @@ Two-space indent, `↳` arrow, handler name, timestamp, one of the four fixed ou
 
 Documented variants, the only ones:
 
-- No handler: `  - ↳ router: no handler for <category> yet · tick recorded (n of 3) · <link>`.
+- No handler: `  - ↳ router: no handler for <category> yet · mapping proposed in For you · <link>`.
 - Two options ticked: `  - ↳ router: blocked · pick one`.
 - A `shc:` tick: `  - ↳ router: queued for your next skill-eval run`.
 
@@ -208,6 +208,7 @@ Briefing is the only skill that moves lines to Closed, and it closes a line only
 - It is a To-do line and it is ticked.
 - It is an option whose sibling closed as `done`; it closes as `not chosen`.
 - A `state.outcomes` entry names its tag with `status: done` (the manual `skill-eval` path).
+- A `no handler` sub-line sits under it; it closes as `acknowledged, no handler` (the mapping proposal carries the request forward).
 
 A `partial` or `blocked` sub-line, or a `needs your tick` sub-line whose fresh line is still open, keeps the parent open. A `term:` line whose sub-line is `done` is removed rather than logged: a confirmed term is vocabulary the system absorbed, not work anyone finished. That exception is deliberate; do not "fix" it.
 

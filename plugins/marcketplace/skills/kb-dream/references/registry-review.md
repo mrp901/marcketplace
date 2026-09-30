@@ -8,20 +8,16 @@ of them by this skill - and produces a compact summary plus at most three propos
 ## Reading the tally
 
 For each `category` in `state.tally`: `proposed`, `ticked`, `deleted`, `edited`,
-`unmapped_ticks`. A category the user keeps ticking despite having no handler
-(`unmapped_ticks` climbing without a `state.registry[category]` entry) is the strongest
-signal for a mapping proposal below - `handler-contract.md`'s own three-unmapped-ticks
-proposal already fires at the router level; this review is the monthly, broader check that
-catches a pattern the router's own per-run threshold hasn't yet crossed.
+`unmapped_ticks`. Mapping proposals are `proactive-router`'s alone: it opens one on the
+first unmapped tick, so this review never raises one. It may name an open mapping
+proposal in the summary when the tally shows the user still ticking that category.
 
 ## At most three proposals
 
-Pick from these two shapes, most evidence-backed first, and stop at three even where
-more evidence exists - a longer list stops being worth reading:
+Raise only lifts, most evidence-backed first, and stop at three even where more evidence
+exists - a longer list stops being worth reading:
 
-1. **A mapping** for a category the user keeps ticking with no handler. Names the
-   category and a candidate handler, evidenced by the tally counts that support it.
-2. **A lift** for a suppression pattern (`state.suppressions`) that now looks wrong - the
+- **A lift** for a suppression pattern (`state.suppressions`) that now looks wrong - the
    same `channel:category` pattern the user is starting to tick again despite the
    suppression, or a pattern whose deletions were long enough ago that it may no longer
    apply.
@@ -35,9 +31,9 @@ Each proposal is one line in the dream note's Surfaced section and, if it's acti
 one tick, one `dream:` line in For you.
 
 **A proposal is also written into `state.proposals`,** with `kind` set to the matching
-value: `suppression_lift` for a block that now looks wrong, `skill_fold` for a settled
-correction that should become a rule in a named skill. `mapping` stays
-`proactive-router`'s to raise, not this skill's.
+value: `suppression_lift` for a block that now looks wrong. (`skill_fold` records are
+written when the fold is drafted, per `fold-proposals.md`; `mapping` is
+`proactive-router`'s.)
 
 Writing the record is what makes the board line mean anything: a tick on it dispatches
 `settle`, which finds the proposal by its `id` and marks it accepted (a lift is applied to

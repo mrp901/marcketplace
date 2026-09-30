@@ -54,9 +54,10 @@ Two consequences this skill gets wrong if forgotten:
 
 1. **Ground it.** If a screenshot or screen is referenced, read it for exact labels,
    numbers and field names - "the Cloud Spend tile's '+6.5% prior month' figure" beats "the
-   dashboard shows a misleading percentage". If which product area is ambiguous, ask one
-   quick clarifying question rather than guessing, defaulting to `profile.org.product_scope`
-   unless told otherwise.
+   dashboard shows a misleading percentage". If which product area is ambiguous and the user
+   invoked this directly, ask one quick clarifying question. Dispatched by the hub, no one
+   is there to answer: take `profile.org.product_scope` (or the likeliest area), draft, and
+   mark the assumption in the draft for the user to check at the confirm tick.
 2. **Capped investigation.** Duplicate/precedent check: one or two `ideas: search issues
    (JQL)` calls against `profile.ideas.project_key` on obvious keywords - has this already
    been raised (tell the user, don't create a duplicate), and is there a sibling idea worth

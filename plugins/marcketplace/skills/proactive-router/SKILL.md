@@ -85,16 +85,16 @@ the board differs from its `state.items` text, write the cursor and
      `report_line` as a sub-line; a `needs_confirmation` return instead gets a fresh line
      naming the specific irreversible step, per the two-tick flow.
    - Anything else, including `calendar`, is unmapped: write
-     `  - ↳ router: no handler for <category> yet · tick recorded (n of 3) · <link>` and
-     increment `tally.<category>.unmapped_ticks`.
+     `  - ↳ router: no handler for <category> yet · mapping proposed in For you · <link>`,
+     increment `tally.<category>.unmapped_ticks`, and stage the step 9 proposal.
    Ticked lines beyond the dispatch cap stay ticked, undispatched; note the queued count
    so briefing can report it.
 8. **Deletions.** Add `state.suppressions` `{source_id, category, pattern, added_at}` and
    `tally.<category>.deleted += 1`. Three deletions of the same `<channel>:<category>`
    pattern add it to `state.patterns_blocked`.
-9. **Proposals.** `tally.<category>.unmapped_ticks >= 3` with no open proposal for that
-   category writes the propose line to For you, candidate from
-   `references/categories.md`'s fixed table, never invented at run time.
+9. **Proposals.** Each category ticked unmapped this run with no open proposal gets the
+   propose line in For you and a `state.proposals` record (`kind: mapping`), candidate
+   from `references/categories.md`'s fixed table, never invented at run time.
 10. **One write.** Batch every staged surface change (steps 3, 6, 7, 9) into the single
     `chat: update canvas` call this run makes. Then write state: cursor, tally, items,
     registry, outcomes, suppressions, patterns_blocked, proposals, glossary, ideas,

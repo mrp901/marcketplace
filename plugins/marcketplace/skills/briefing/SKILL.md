@@ -9,7 +9,7 @@ Unattended, scheduled, cheap, and the plugin's reporter. Each run it refreshes t
 snapshots, closes lines the hub has finished with, prunes `state.items`, trims Closed,
 reports what every skill did since last time, and posts the one message the plugin ever
 sends. Briefing never dispatches and never acts on a tick: the Router acts, briefing
-closes and reports. The first run under a new plugin version migrates the board.
+closes and reports. A run that finds pre-1.1.0 headings on the board migrates it first.
 
 ## Needs
 - Profile: `org.timezone`, `user.name`, `user.chat_user_id`, `tracker.my_work_jql`,
@@ -61,7 +61,7 @@ Fires more than once a day on a changing schedule; never assume a time of day.
    `../../shared/surface-protocol.md`'s "Closing": a `done` sub-line closes the line; a
    ticked To-do line closes as done by you; an option whose sibling closed closes as `not
    chosen`; a `state.outcomes` entry with the tag and `status: done` closes the manual
-   `skill-eval` path. A `term:` line with a `done` sub-line is removed, never logged. A
+   `skill-eval` path; a `no handler` sub-line closes as `acknowledged, no handler`. A `term:` line with a `done` sub-line is removed, never logged. A
    `partial`, `blocked` or unresolved `needs your tick` sub-line leaves the line open. An
    idea block with no open lines left is removed. Closing is a move into Closed, never an
    edit of another skill's wording. See `references/closed-and-outcomes.md`.
