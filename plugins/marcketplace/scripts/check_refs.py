@@ -34,7 +34,7 @@ PROSE_OK = {
         "references/note-structure.md",  # renamed to draft-format.md in 1.1.0
         "scripts/check_sweep_note.py",  # renamed to check_sweep_draft.py in 1.1.0
     },
-    "skills/proactive-router/evals/04-saved-minor-followup/graders/allowlist-principle.md": {
+    "skills/proactive-router/evals/01-sweep-classification/graders/minor-allowlist.md": {
         "references/categories.md"
     },
 }
@@ -45,9 +45,9 @@ def main(argv):
     broken = []
     checked = 0
     for f in sorted(root.rglob("*.md")):
-        rel = str(f.relative_to(root))
+        rel = f.relative_to(root).as_posix()
         allowed = PROSE_OK.get(rel, set())
-        for ref in sorted(set(PAT.findall(f.read_text()))):
+        for ref in sorted(set(PAT.findall(f.read_text(encoding="utf-8")))):
             if ref in allowed:
                 continue
             checked += 1
