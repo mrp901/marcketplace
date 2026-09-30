@@ -1,6 +1,6 @@
 ---
 type: regex
-target: trace
+target: mock_calls
 match: not_contains
 weight: 0.5
 ---

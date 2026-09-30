@@ -1,6 +1,6 @@
 ---
 type: llm
-focus: trace
+focus: mock_calls
 weight: 1
 ---
 The fuel-card icon colour item (permalink containing `DEXAMPLEICONUX1`) was surfaced only via

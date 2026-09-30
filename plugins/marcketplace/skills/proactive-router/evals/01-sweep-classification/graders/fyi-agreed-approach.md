@@ -1,6 +1,6 @@
 ---
 type: llm
-focus: trace
+focus: mock_calls
 weight: 1
 ---
 The batch-vs-stream recalculation thread (permalink containing `CEXAMPLEAPPRCH1`) is a

@@ -1,6 +1,6 @@
 ---
 type: llm
-focus: trace
+focus: mock_calls
 weight: 1
 ---
 The run should have written a surface checkbox line for the Freight Ops lead message

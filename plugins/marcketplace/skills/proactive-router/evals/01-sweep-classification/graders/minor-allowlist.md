@@ -1,6 +1,6 @@
 ---
 type: llm
-focus: trace
+focus: mock_calls
 weight: 1
 ---
 This item is marked `[minor]` because the fix is small and non-urgent - that is not a

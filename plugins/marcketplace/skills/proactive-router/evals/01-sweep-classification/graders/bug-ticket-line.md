@@ -1,6 +1,6 @@
 ---
 type: llm
-focus: trace
+focus: mock_calls
 weight: 1
 ---
 The trip-cost dashboard bug thread (permalink containing `CEXAMPLEBUGTHR1`) has a bare bug
