@@ -15,7 +15,7 @@ shape, and every other skill that finds `installed_version` behind records
 1. **Create the new sections and the header.** The three header lines from
    `../../../shared/surface-protocol.md`, then Today, To-do, For you, Ideas, Closed, in
    that order. Calendar and Tracker's current dated blocks move under Today unchanged.
-2. **Move open lines by tag, keeping `state.items` hashes.** Every checkbox line whose
+2. **Move open lines by tag, keeping their `state.items` entries.** Every checkbox line whose
    tag is in `state.items` moves, with its sub-lines, wording and tick state untouched:
    - `pr:` (Proactive opportunities), `rb:` (Running behind), `sweep:` (Actions),
      `dream:` (Dream log / actions), `shc:` (Skill health) go to For you, in that order,
