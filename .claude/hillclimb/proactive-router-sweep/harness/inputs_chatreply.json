@@ -1,0 +1,44 @@
+[
+  {
+    "id": "C01",
+    "source": "saved",
+    "reaction": null,
+    "provenance": "hand-made, modelled on A08 (designer's 'quick question' DM)",
+    "expected_category": "chat-reply",
+    "expected_line_fictional": "💬 reply to Ana in DM: pick the empty-day copy on the Dock Schedule page ('No bookings' vs 'Nothing scheduled') before she hands off to Mateo tomorrow",
+    "channel": {"name": "DM with Ana Beltrao", "id": "DEXAMPLEANAQ01", "type": "dm"},
+    "target_offset_min": 0,
+    "messages": [
+      {"role": "context", "author": "Ana Beltrao", "author_id": "W3EXAMPLEUSR3", "is_user": false, "is_bot": false, "offset_min": -1, "text": "Hi Priya, quick question"},
+      {"role": "target", "author": "Ana Beltrao", "author_id": "W3EXAMPLEUSR3", "is_user": false, "is_bot": false, "offset_min": 0, "text": "On the Dock Schedule page, should the empty-day message say \"No bookings\" or \"Nothing scheduled\"? I want to lock the copy before I hand it to Mateo tomorrow"}
+    ]
+  },
+  {
+    "id": "C02",
+    "source": "reacted",
+    "reaction": ":star:",
+    "provenance": "hand-made, modelled on a direct question in a busy thread where others comment but nobody answers for the user",
+    "expected_category": "chat-reply",
+    "expected_line_fictional": "💬 reply to Mateo in #freight-design: decide whether the lane cost report includes or excludes cancelled loads before the query is locked tomorrow",
+    "channel": {"name": "#freight-design", "id": "CEXAMPLEFDSGN2", "type": "channel"},
+    "target_offset_min": 0,
+    "messages": [
+      {"role": "target", "author": "Mateo Ruiz", "author_id": "W9EXAMPLEMATE", "is_user": false, "is_bot": false, "offset_min": 0, "text": "<@W1EXAMPLEUSR1> before we lock the query tomorrow - should the lane cost report include cancelled loads, or exclude them?"},
+      {"role": "thread", "author": "Tomasz Wieckowski", "author_id": "W2EXAMPLEUSR2", "is_user": false, "is_bot": false, "offset_min": 12, "text": "excluding is simpler for us but it's a product call"},
+      {"role": "thread", "author": "Callum Reid", "author_id": "WCEXAMPLECALL", "is_user": false, "is_bot": false, "offset_min": 31, "text": "fwiw finance usually wants them out"}
+    ]
+  },
+  {
+    "id": "C03",
+    "source": "saved",
+    "reaction": null,
+    "provenance": "hand-made, modelled on a manager asking the user for a go/no-go with a deadline",
+    "expected_category": "chat-reply",
+    "expected_line_fictional": "💬 reply to Hana in DM: confirm whether the carrier connections flow is ready to demo to Kestrel on Friday (she needs to know by Thursday)",
+    "channel": {"name": "DM with Hana Mori", "id": "DEXAMPLEHANA03", "type": "dm"},
+    "target_offset_min": 0,
+    "messages": [
+      {"role": "target", "author": "Hana Mori", "author_id": "W5EXAMPLEHANA", "is_user": false, "is_bot": false, "offset_min": 0, "text": "Are we OK to demo the carrier connections flow to Kestrel on Friday, or is it still too rough? Need to know by Thursday so I can set expectations with them"}
+    ]
+  }
+]

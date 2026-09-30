@@ -1,0 +1,1610 @@
+[
+ {
+  "id": "A01",
+  "source": "saved",
+  "reaction": null,
+  "expected_category": "kb-doc",
+  "expected_line_fictional": "📖 kb note: document the Lisbon squad ticket-pickup criteria (To Do Approved, Team = Lisbon squad, assignee not you, active sprint)",
+  "channel": {
+   "name": "#product",
+   "id": "CEXAMPLEPRD001",
+   "type": "channel"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "target",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "<@W1EXAMPLEUSR1|Priya Kanth>, for your ticket to be picked up by Lisbon squad, you need:\n1. Status = To Do Approved\n2. Team = Lisbon squad\n3. Assignee not = yourself\n4. Sprint = the active sprint\nYou should check their board to make sure <https://northwindlogistics.atlassian.net/jira/software/c/projects/FLT/boards/12|northwindlogistics.atlassian.net/jira/…/12>"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 3,
+    "text": "Thanks Hana - have saved this so i'm across it"
+   }
+  ]
+ },
+ {
+  "id": "A02",
+  "source": "saved",
+  "reaction": null,
+  "expected_category": "ticket-reply",
+  "expected_line_fictional": "🎫 raise a ticket: sort every dashboard pie chart descending and drop the $0 slices",
+  "channel": {
+   "name": "#product",
+   "id": "CEXAMPLEPRD001",
+   "type": "channel"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "target",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "<@W1EXAMPLEUSR1|Priya Kanth> Please help with some findings around ALL dashboards\n1. All pie charts should be sorted in descending order (from GW)\n    a. All take away the $0 \n2. ~The Lane Adds & Drops looks off to me~\n    a. ~May be the right side 3,041 push the head to wrap to the next line that push everything down. Not sure how to fix it~\nDon't wait for the colors, please work on this first.\ncc <@W7EXAMPLELUIS|Luis Ortega> for sense checking"
+   },
+   {
+    "role": "thread",
+    "author": "Luis Ortega",
+    "author_id": "W7EXAMPLELUIS",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 15,
+    "text": "A ticket related to (2) <https://northwindlogistics.atlassian.net/browse/FLT-21039|northwindlogistics.atlassian.net/browse/FLT-21039>. Not sure if it can fix it."
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 15,
+    "text": "Thanks Luis!!"
+   },
+   {
+    "role": "thread",
+    "author": "Luis Ortega",
+    "author_id": "W7EXAMPLELUIS",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 19,
+    "text": "It is related but not yet solve the whole problem. The prior month will still wrap to next line if very big number."
+   }
+  ]
+ },
+ {
+  "id": "A03",
+  "source": "saved",
+  "reaction": null,
+  "expected_category": "ticket-reply",
+  "expected_line_fictional": "🎫 raise an epic: sync carrier feed data into Sales Demo, AI-generated dummy data per carrier connection",
+  "channel": {
+   "name": "Group DM (Tomasz Wieckowski, Rhys Morgan, Hana Mori, Graham Whitlock, Priya Kanth)",
+   "id": "GEXAMPLEDEMO01",
+   "type": "group_dm"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "target",
+    "author": "Graham Whitlock",
+    "author_id": "W6EXAMPLEGRAH",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "Guys, I know we discussed getting updated decent Cost Insights data and refreshing other data in Sales Demo, but as a start we need to sync our carrier feed data with Sales Demo otherwise Priya will not have a sales environment to demo to existing customers? or where you planning to use another one?"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 99,
+    "text": "I think regardless we probably need an epic to cover this - <@W5EXAMPLEHANA|Hana Mori> did you want me to make this a priority, or hold off for now?"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 100,
+    "text": "It is a priority, but not sure how to approach this. :slightly_smiling_face:"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 102,
+    "text": "I'm wondering if there's some AI-generation of data which might be possible here? I can feed in what we have currently, + our data model & codebase, and use that to define dummy data for each of the three carrier connections which we then refine. Thoughts?"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 103,
+    "text": "Either way - I can handle this and keep you in the loop once I have something ready. Let me know if you have any strong thoughts"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 104,
+    "text": "No strong idea. Just don't use customers' data. :slightly_smiling_face:"
+   },
+   {
+    "role": "thread",
+    "author": "Graham Whitlock",
+    "author_id": "W6EXAMPLEGRAH",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 108,
+    "text": "Yep, go for it. Chat with Tomasz as he seemed to have some thoughts the other day as well."
+   }
+  ]
+ },
+ {
+  "id": "A04",
+  "source": "saved",
+  "reaction": null,
+  "expected_category": "fyi",
+  "expected_line_fictional": "(no line) Jonah Abboud lead - Hana already ran discovery; your 'good fit?' question is with Hana",
+  "channel": {
+   "name": "#freight-leads",
+   "id": "CEXAMPLELEADS1",
+   "type": "channel"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "target",
+    "author": "Freight Ops Leads (bot)",
+    "author_id": "WLEXAMPLELEAD",
+    "is_user": false,
+    "is_bot": true,
+    "offset_min": 0,
+    "text": "Jonah Abboud with email <mailto:jonah.abboud@harbourline.org.au|jonah.abboud@harbourline.org.au> from tenant 604918273551028736 has shown interest in Freight Ops Cost Insights."
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 2,
+    "text": "<@W5EXAMPLEHANA|Hana Mori> you did a discovery call with Jonah right? Do you think these guys are a good fit?"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 7,
+    "text": "Interesting. It is his own words that they don't have a big problem..."
+   }
+  ]
+ },
+ {
+  "id": "A05",
+  "source": "saved",
+  "reaction": null,
+  "expected_category": "email",
+  "expected_line_fictional": "✉️ draft an email to Wendy Lau (Kestrel Engineering) proposing a discovery call / demo",
+  "channel": {
+   "name": "#freight-leads",
+   "id": "CEXAMPLELEADS1",
+   "type": "channel"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "target",
+    "author": "Freight Ops Leads (bot)",
+    "author_id": "WLEXAMPLELEAD",
+    "is_user": false,
+    "is_bot": true,
+    "offset_min": 0,
+    "text": "Wendy Lau with email <mailto:wendy.lau@kestreleng.com.au|wendy.lau@kestreleng.com.au> from tenant 372859104466193920 has shown interest in Freight Ops Cost Insights."
+   },
+   {
+    "role": "thread",
+    "author": "Tomasz Wieckowski",
+    "author_id": "W2EXAMPLEUSR2",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 110,
+    "text": "tenant: Kestrel"
+   }
+  ]
+ },
+ {
+  "id": "A06",
+  "source": "saved",
+  "reaction": null,
+  "expected_category": "ticket-reply",
+  "expected_line_fictional": "🎫 check FIG-468 - Sione Latu asked whether AC4 only applies to AC1, and about back-dated cost-centre allocation",
+  "channel": {
+   "name": "DM with Jira (app)",
+   "id": "DEXAMPLEJIRA01",
+   "type": "dm"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "target",
+    "author": "Jira",
+    "author_id": "WJEXAMPLEJIRA",
+    "is_user": false,
+    "is_bot": true,
+    "offset_min": 0,
+    "text": ":bell: *Sione Latu mentioned you in a comment on an Idea*\n*<https://northwindlogistics.atlassian.net/browse/FIG-468|FIG-468 [Cost Insights] Load old data upon carrier connection>*\n&gt;&gt;&gt;@PriyaKanth \n1. Let me know if I am wrong. So AC4 only applies to the AC1? \n2. For the 2 b, the allocation of cost center and users currently only applies to the current effective month. It doesn’t change the past data. You might need some kind of feature such as in “Billing”, we have a recal feature that does the allocation back dated depending on the month that is being recal.\nComment button"
+   }
+  ]
+ },
+ {
+  "id": "A07",
+  "source": "saved",
+  "reaction": null,
+  "expected_category": "ticket-idea",
+  "expected_line_fictional": "🎫 raise an idea: aggregated cost by charge type (fuel, tolls, detention), so users see which charge type drives spend",
+  "channel": {
+   "name": "#freight-design",
+   "id": "CEXAMPLEDESGN1",
+   "type": "channel"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "thread",
+    "author": "Callum Reid",
+    "author_id": "WCEXAMPLECALL",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -6359,
+    "text": "Hey,\nProposing the carrier-feed resource hierarchy should be\n```Carrier\n ├── Account 1\n │    ├── Depot A\n │    │   ├── Shipment i\n │    │   ├── Shipment ii\n │    └── Depot B\n ├── Account 2\n ...```\n<@W5EXAMPLEHANA|Hana Mori> your docs suggested we have the charge type underneath shipment but that doesn't make any sense from the EDI 210 docs. Though we aren't going to be compliant with the full standard, if we are trying to follow it we should follow it:\n>  _\"Resource: A unique component that incurs a charge\" -_ EDI 210 implementation guide, glossary\nand\n> _\"Service: An offering that can be purchased from a carrier, and can include many types of charges; e.g., a linehaul service may include fuel, tolls, and detention charges\" -_ EDI 210 implementation guide, glossary\nThe charge types themselves are not components that are incurring charges, it is the shipments. The service is the offering we are purchasing through that component, which in this case would be the charge type.\n\nThere is example data in \"QA Lane Driven\" in sit to inspect and more info in <https://northwindlogistics.atlassian.net/wiki/x/KQ7mTA|northwindlogistics.atlassian.net/wiki/x/KQ7mTA>"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": -6322,
+    "text": "<@W5EXAMPLEHANA|Hana Mori> there's a bit of a further level of complexity here, because we can't really get `Depot > Shipment` level granularity out of the parcel feed. So there's not going to be a consistent hierarchy.\n\nThere's a useful table on LaneLens' website <https://docs.lanelens.example/managed-freight-tags#supported-carriers|here> which outlines which carriers provide which details, as LaneLens has a concept of \"Managed Freight Tags\" which aligns closely with our unified EDI 210 hierarchy we're trying to build.\n\nHaulytics also has a similar acknowledgement <https://docs.haulytics.example/user-guide/virtual-tags/canonical-freight-taxonomy|here>:"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": -6307,
+    "text": "Leaving as a final thought for everyone as I go off to lunch: I personally think;\n• We'll have to stop at \"Depot\" level for Resource Type - which all carriers have in some capacity (e.g. the parcel feed has Hub, LTL has depot, etc) and\n• Then diverge - resources might have to be different. e.g. the parcel carrier doesn't provide that data so in v0 we can't drill down that far"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -6211,
+    "text": "Generally agree.\nSo basically, that means for the parcel feed, we should have hub as Resource, fuel-surcharge-zone-4 (description from cost) should be EDI 210 (cost and usage). Sounds right to me."
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -6209,
+    "text": "Similar for LTL"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -6208,
+    "text": "<@W2EXAMPLEUSR2|Tomasz Wieckowski>"
+   },
+   {
+    "role": "thread",
+    "author": "Callum Reid",
+    "author_id": "WCEXAMPLECALL",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -6188,
+    "text": "Exactly. Again I have this in QA Lane Driven to examine :slightly_smiling_face:"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -6114,
+    "text": "Thanks <@WCEXAMPLECALL|Callum Reid>, will have a look. Well done"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -1690,
+    "text": "<@WCEXAMPLECALL|Callum Reid> <@W1EXAMPLEUSR1|Priya Kanth>, just want to confirm rather than saying \"I generally agree\", I have already talked to GW and Tomasz, and we agreed with the proposal. Shipment should be one level up, the bottom ones are charge lines, as in Show Details."
+   },
+   {
+    "role": "target",
+    "author": "Tomasz Wieckowski",
+    "author_id": "W2EXAMPLEUSR2",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "Follow-up: we should consider letting users see aggregated cost by charge type (fuel, tolls, detention). That would make it clearer where spend comes from, for example whether a high total is because a costly charge type was incurred."
+   }
+  ]
+ },
+ {
+  "id": "A09",
+  "source": "saved",
+  "reaction": null,
+  "expected_category": "fyi",
+  "expected_line_fictional": "(no line) Tomasz's scaling concern on FLT-20951 - accepted as fine for now",
+  "channel": {
+   "name": "DM with Tomasz Wieckowski",
+   "id": "DEXAMPLETOMA01",
+   "type": "dm"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "target",
+    "author": "Tomasz Wieckowski",
+    "author_id": "W2EXAMPLEUSR2",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "Just not sure how <https://northwindlogistics.atlassian.net/browse/FLT-20951|northwindlogistics.atlassian.net/browse/FLT-20951> will scale if we add more carrier toggles but I guess we can live with it for now."
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 977,
+    "text": "Yeah good callout, very fair"
+   }
+  ]
+ },
+ {
+  "id": "A10",
+  "source": "saved",
+  "reaction": null,
+  "expected_category": "ticket-reply",
+  "expected_line_fictional": "🎫 raise a ticket: empty state with a deeplink to Carrier Connections for tenants with the module but no carrier connections",
+  "channel": {
+   "name": "DM with Mateo Ruiz",
+   "id": "DEXAMPLEMATE01",
+   "type": "dm"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "target",
+    "author": "Mateo Ruiz",
+    "author_id": "W9EXAMPLEMATE",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "We have this slightly dodgy case\nA tenant which has Cost Insights subscription but has no configurations set\nIt is definitely buggy that the Lane Cost Trend never finishes loading but decided to ask whether or not you want to see the Dashboard in that case or perhaps the fake Beta page"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 763,
+    "text": "I think if they have the module but no carrier connections we can show an empty state with a deeplink into the Carrier Connections page - I'll have a crack at a story"
+   }
+  ]
+ },
+ {
+  "id": "A11",
+  "source": "saved",
+  "reaction": null,
+  "expected_category": "ticket-minor",
+  "expected_line_fictional": "🎫 [minor] raise a ticket: replace the em dashes on the demo Cost Insights page",
+  "channel": {
+   "name": "DM with Mateo Ruiz",
+   "id": "DEXAMPLEMATE01",
+   "type": "dm"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "target",
+    "author": "Mateo Ruiz",
+    "author_id": "W9EXAMPLEMATE",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "Hi there!\nFYI we have these long em dashes on the demo Cost Insights page, not sure if we want to remove them and switch them either with smaller ones"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 766,
+    "text": "Eeek yeah, let's get that sorted out. Looks very AI-generated with those. Good pickup"
+   }
+  ]
+ },
+ {
+  "id": "A12",
+  "source": "saved",
+  "reaction": null,
+  "expected_category": "summarise",
+  "expected_line_fictional": "📝 summarise FLT-21026 (Driver Profile story, reassigned to you for Perth squad) for review",
+  "channel": {
+   "name": "#product",
+   "id": "CEXAMPLEPRD001",
+   "type": "channel"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "target",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "<@W1EXAMPLEUSR1|Priya Kanth>, changed the reporter of the Driver Profile story to you. It is for Perth squad, shout out for any clarification"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "<https://northwindlogistics.atlassian.net/browse/FLT-21026|northwindlogistics.atlassian.net/browse/FLT-21026>"
+   }
+  ]
+ },
+ {
+  "id": "A13",
+  "source": "saved",
+  "reaction": null,
+  "expected_category": "fyi",
+  "expected_line_fictional": "(no line) Mei posted the carrier-feed integration epic FLT-20965 and spike FLT-20961 links",
+  "channel": {
+   "name": "Group DM 'Carrier feed integration' (Sione Latu, Mei Chen, Callum Reid, Priya Kanth)",
+   "id": "GEXAMPLECFINT1",
+   "type": "group_dm"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "context",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": -6,
+    "text": "Makes sense, thanks for the updates guys. I'm onboard with that approach. I think we can look to re-mold it to the EDI 210 standard if that's necessary in the coming sprint"
+   },
+   {
+    "role": "context",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": -5,
+    "text": "As for the doc - not sure honestly. Hana has made me the owner. For now, use it as a resource if product guidance is needed with a view to deprecate it, but I'll try move relevant stuff (i.e. our spike goals) into tickets for now"
+   },
+   {
+    "role": "context",
+    "author": "(system)",
+    "author_id": "WSEXAMPLESYST",
+    "is_user": false,
+    "is_bot": true,
+    "offset_min": -1,
+    "text": "has renamed the channel from ‘’ to ‘Carrier feed integration’"
+   },
+   {
+    "role": "target",
+    "author": "Mei Chen",
+    "author_id": "WBEXAMPLEMEIC",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "Epic: <https://northwindlogistics.atlassian.net/browse/FLT-20965>\nSpike:  <https://northwindlogistics.atlassian.net/browse/FLT-20961>"
+   }
+  ]
+ },
+ {
+  "id": "A14",
+  "source": "saved",
+  "reaction": null,
+  "expected_category": "kb-doc",
+  "expected_line_fictional": "📖 kb note: ingestion design is ~30% product / 70% engineering - the team counter-proposes, the doc isn't a spec",
+  "channel": {
+   "name": "#product",
+   "id": "CEXAMPLEPRD001",
+   "type": "channel"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "target",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "<@W1EXAMPLEUSR1|Priya Kanth>, I can see the team has started posting comments on the carrier-feed field-level mapping.\nThe whole ingestion design is 30% product 70% engineering.\nAI will make mistake, and not everything mentioned will work, especially down to field level.\nLet them counter-propose, or work with them to come up with a solution.\nIt is never the intention to blindly follow this doc to implement"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 77,
+    "text": "I'll have a look and make sure the discussion continues.\n\nI think for now they're going to have to do the spike in a not-totally-EDI 210 compliant manner; some of the fields are just not available to us. Tomasz is across and has approved this - let me know if there's anything you want me to keep in mind.\n\nRE the doc - I noticed you made me owner. Would you prefer I begin deprecating that in favour of keeping a seperate doc which keeps record of the results of the spike?"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 107,
+    "text": "We use EDI 210 just because we need a normalize format, and this serves the purpose, and carriers are delivering their data in such format.  We don't need to be 100% compliant while Ridgeway is also not 100%. We just need to be mindful of what changes we may. E.g. not filling a mandatory field, 100% alright. If we change a number field to a string, we need to make sure we can convert a number for Ridgeway to a string, etc."
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 108,
+    "text": "Feel free to deprecate. It's yours now"
+   }
+  ]
+ },
+ {
+  "id": "A15",
+  "source": "saved",
+  "reaction": null,
+  "expected_category": "fyi",
+  "expected_line_fictional": "(no line) % in shipment mapping list - you decided: add it, handle presentation later",
+  "channel": {
+   "name": "DM with Tomasz Wieckowski",
+   "id": "DEXAMPLETOMA01",
+   "type": "dm"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "thread",
+    "author": "Tomasz Wieckowski",
+    "author_id": "W2EXAMPLEUSR2",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -1179,
+    "text": "I guess we need to show all of them with % allocated?\n[attached: image.png]"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": -149,
+    "text": "Hmm yeah we probably do"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": -145,
+    "text": "We could setup this in an epic for \"Dashboard follow-up\" or something, though. Like a comma-seperated list is fine for now. But if the % splits are on the same query anyway I don't see why we shouldn't do it now - right?"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": -145,
+    "text": "If we have to do additional work to render it in the frontend then I think we safely defer it"
+   },
+   {
+    "role": "thread",
+    "author": "Tomasz Wieckowski",
+    "author_id": "W2EXAMPLEUSR2",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "so just list comma separated?"
+   },
+   {
+    "role": "thread",
+    "author": "Tomasz Wieckowski",
+    "author_id": "W2EXAMPLEUSR2",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "without %"
+   },
+   {
+    "role": "target",
+    "author": "Tomasz Wieckowski",
+    "author_id": "W2EXAMPLEUSR2",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "percent will be ulgy"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 1050,
+    "text": "Is % already in the query you need to make anyway though? If so, I think we just add it, same as in `Shipment Mapping`, and worry about data presentation a bit later'"
+   },
+   {
+    "role": "thread",
+    "author": "Tomasz Wieckowski",
+    "author_id": "W2EXAMPLEUSR2",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 1269,
+    "text": "Ok"
+   }
+  ]
+ },
+ {
+  "id": "A16",
+  "source": "saved",
+  "reaction": null,
+  "expected_category": "to-do",
+  "expected_line_fictional": "☑️ to-do: check your chat with Tomasz",
+  "channel": {
+   "name": "DM with Tomasz Wieckowski",
+   "id": "DEXAMPLETOMA01",
+   "type": "dm"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "context",
+    "author": "Tomasz Wieckowski",
+    "author_id": "W2EXAMPLEUSR2",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -1,
+    "text": "It's easy to implement in terms of dev"
+   },
+   {
+    "role": "context",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "I'm all for UI improvements if we can ship &amp; QA them on time :grin: Thanks for that!"
+   },
+   {
+    "role": "context",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "I'll update the ticket tm morning"
+   },
+   {
+    "role": "target",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "And set a reminder to check my chat with Tomasz :joy:"
+   },
+   {
+    "role": "context",
+    "author": "Tomasz Wieckowski",
+    "author_id": "W2EXAMPLEUSR2",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "Haha cool"
+   }
+  ]
+ },
+ {
+  "id": "B01",
+  "source": "reacted",
+  "reaction": ":star:",
+  "expected_category": "fyi",
+  "expected_line_fictional": "(no line) you proposed closing the rate-API spike; waiting on Hana",
+  "channel": {
+   "name": "DM with Hana Mori",
+   "id": "DEXAMPLEHANA01",
+   "type": "dm"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "target",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "Reframed Callum's rate-API spike so it's in its own epic and we can talk to it a bit easier with GW: <https://northwindlogistics.atlassian.net/browse/FLT-21002|northwindlogistics.atlassian.net/browse/FLT-21002>\n\nPls see comments below; I'm going to close the \"spike\" as done based on this. What do you think?"
+   }
+  ]
+ },
+ {
+  "id": "B02",
+  "source": "reacted",
+  "reaction": ":star:",
+  "expected_category": "to-do",
+  "expected_line_fictional": "☑️ to-do: prepare a digest for Hana ahead of the Mon/Tue catch-up",
+  "channel": {
+   "name": "#product",
+   "id": "CEXAMPLEPRD001",
+   "type": "channel"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -1463,
+    "text": "<@W1EXAMPLEUSR1|Priya Kanth>, would you please follow up with the email titled \"Invoice INV-05291 (PO: Carrier Feed Services - August 2026)\"?\nReach out for any assistant needed"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": -1100,
+    "text": "<@W5EXAMPLEHANA|Hana Mori> just closed the loop on this - see the email thread. Let me know if you want to chat RE next steps"
+   },
+   {
+    "role": "target",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "I definitely need a digest from you. Let's talk about it Monday or Tuesday"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 14,
+    "text": "Feel free to put time in, i'm happy to have a 15 min call today if you get the chance"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 15,
+    "text": "Whenever works for you :slightly_smiling_face:"
+   }
+  ]
+ },
+ {
+  "id": "B03",
+  "source": "reacted",
+  "reaction": ":star:",
+  "expected_category": "fyi",
+  "expected_line_fictional": "(no line) release-note review - you already replied 'All good'",
+  "channel": {
+   "name": "#product",
+   "id": "CEXAMPLEPRD001",
+   "type": "channel"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -1,
+    "text": "<@W6EXAMPLEGRAH|Graham Whitlock> <@WDEXAMPLERHYS|Rhys> <@WGEXAMPLENADI|Nadia> <@W2EXAMPLEUSR2|Tomasz Wieckowski> <@W4EXAMPLEOWEN|Owen 'The Admiral' Pritchard> <@WFEXAMPLEBRUN|Bruno Lord Chief 将軍 Kovac>\nHighlight of coming release (NOT FINAL)\nFor the full list, please visit <https://northwindlogistics.atlassian.net/issues/?filter=12418|northwindlogistics.atlassian.net/issues?filter=12418>\n\n:ledger: *Configurable Standard GL*\n_The Standard GL was a rigid, fixed-format export that customers reformatted by hand every month. Sign presentation and per-account files landed last release; this one adds on-screen review, renamed column headers and the configurable clearing line._\n• *Review and Export Standard GL*\n    ◦ The General Ledger can now be reviewed on screen before export, with quick filters, a *View By* breakdown and reorderable columns.\n• *Configure Standard GL Column Headers*\n    ◦ Portal admins can rename Standard GL column headers so the export matches their ERP and internal accounting terminology, without changing the underlying data.\n• *Configure Clearing Line*\n    ◦ Admins can configure how clearing lines are generated, so the export aligns with their accounting and reconciliation requirements. Clearing lines appear in the export only.\n• *Link New Charges to Standard GL*\n    ◦ *New Charge* columns on the bill now link through to the *General Ledger*, carrying the report month and billing account across.\n• *Group and Sort GL Entries*\n    ◦ GL entries are now sorted by billing account and invoice number before any other sorting is applied.\n:page_with_curl: *Kowhai Customised GL*\n_Kowhai's GL codes run across Depot, Project and Analysis segments, and one lane's cost is charged back over several cost centres, which the standard GL cannot express. The epic's only story so far lands this release._\n• *Kowhai Customised GL* :large_yellow_circle: _In QA_\n    ◦ A SAP GL upload file runs per billing account and report month, driven by cost centre allocation, with a header block and clearing rows.\n:card_index_dividers: *Shipment, Vehicle and Driver Profiles*\n_The Shipment, Vehicle and Driver profiles are hard to scan, with poor layout, excess white space and fields that carry nothing for the record in front of the reader. All three are regrouped this release; telematics fields follow._\n• *Shipment and Vehicle Overview Tabs in Cards* :large_yellow_circle: _In QA_\n    ◦ The Shipment and Vehicle Overview tabs now present their properties in cards laid out four to a row, rather than one long list.\n• *Driver Overview Tab in Cards* :large_orange_circle: _In Review_\n    ◦ The Driver Overview tab now leads with what kind of record it is, grouping properties into *Details*, *Custom Fields* and *Cost Centre* cards.\n• *Empty States on the Driver Profile* :large_yellow_circle: _In QA_\n    ◦ Where a tenant has configured no custom fields, the card stays in place and offers a *Configure custom fields* button rather than looking broken.\n:truck: *Cost Insights*\n_Cost Insights is in beta and the epic has been steadily refining its reporting, with the dashboard widgets and beta landing page last release. This release tidies the cost tables and names the cost basis in exports._\n• *Cost Basis in Export Filenames*\n    ◦ Cost Insights report exports now carry the cost basis, *EffectiveCost* or *BilledCost*, in the filename, so the basis is clear without opening the file.\n• *Truncated Lane Names in Cost Tables*\n    ◦ Long lane names in the lane cost tables are truncated with an ellipsis and a hover tooltip, so table layout stays consistent.\n:bar_chart: *Report and Listing Changes*\n• *Very Small Weights in Reports*\n    ◦ Weights below 0.01 kg no longer display as zero, so on-screen figures match the weights shown in exports.\n• *Whitespace-insensitive Consignment Number Search*\n    ◦ Consignment number searches now match whether or not spaces are typed, so a consignment is found without knowing how its number is stored.\n• *Portal User in the Imported By Column*\n    ◦ The Import listing *Imported By* column now shows the Portal User rather than an email address, in both the customer and admin portals.\n:gear: *Admin Console / Operation Change*\n• *Billing Accounts Moved to Portal Settings*\n    ◦ The *Billing Accounts* menu item has moved from Settings to Portal Settings, keeping Settings focused on the features admins use most.\n• *See All Active Workflows in Admin Console*\n    ◦ A new *Workflows* page under Tenants lists every active workflow, on screen and in export, under the existing tenant permission.\n• *More Feature Statistics in Admin Console* :large_orange_circle: _In Review_\n    ◦ The *Customer Statistic Report* adds adoption figures such as SSO provider and allocation type, on screen and in export.\n• *Clearer Error Messages in Admin* :large_yellow_circle: _In QA_\n    ◦ Global errors always show additional info, and failed bill processes offer a dialog to read and copy the full message.\n• *CCH Custom GL File Update*\n    ◦ The Coral Coast Haulage custom GL file drops the *Jnl Preparer* column, so it no longer has to be removed monthly.\n• *Migrate Templates*\n    ◦ Meridian Rail CT Bill\n:smiley: *Misc. UX Improvements*\n• *New Logo on the Login Page* :large_yellow_circle: _In QA_\n    ◦ The login screen now carries the new Northwind logo, with alignment and spacing updated to match the supplied reference.\n*Sent using* <@WEEXAMPLECLDE|Claude>"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "These Tasks and Bugs ship in the same release but are not Stories, so they are not in the note above. They are written in note format so they can be lifted straight across. The ticket numbers are reference only and can be deleted on the way in.\n\n:warning: *Customer service may need a heads-up*\n\n:ledger: *Configurable Standard GL*\n• *New General Ledger Page Replaces the Old One* (<https://northwindlogistics.atlassian.net/browse/FLT-20956|FLT-20956>)\n    ◦ The General Ledger report now opens the new page for everyone, replacing the old one. No setting is needed and nothing is switched on.\n:gear: *Admin Console / Operation Change*\n• *Workflow Filters Match Empty Values* (<https://northwindlogistics.atlassian.net/browse/FLT-21037|FLT-21037>)\n    ◦ Workflow filters using *Does Not Contain* or *Not Equal To* now match records whose field is empty, rather than skipping those shipments.\n• *Backup Email Addresses Need a Recipient Group* (<https://northwindlogistics.atlassian.net/browse/FLT-21042|FLT-21042>)\n    ◦ A workflow email action carrying backup addresses now requires at least one *To Email Group*, and is rejected where none is selected.\nFLT-21042 narrows what we announced last release under Cost Centre Managers as Workflow Email Recipients, where backup addresses were described without that condition. Existing workflows saved with backup addresses and no recipient group will need one added.\n\nCould the team please confirm which of these should be passed to customer service.\n*Sent using* <@WEEXAMPLECLDE|Claude>"
+   },
+   {
+    "role": "target",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "<@W5EXAMPLEHANA|Hana Mori> <@W7EXAMPLELUIS|Luis Ortega> <@W1EXAMPLEUSR1|Priya Kanth> please have a read through the release note draft above. If you want anything changed, reply in this thread with the specific item and what you want it to say, and Hana will feed it back in to update the note. If it reads fine as is, just say ok.\n*Sent using* <@WEEXAMPLECLDE|Claude>"
+   },
+   {
+    "role": "thread",
+    "author": "Luis Ortega",
+    "author_id": "W7EXAMPLELUIS",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 303,
+    "text": "1)Remove “Sign presentation and per-account files landed last release; this one adds on-screen review, renamed column headers and the configurable clearing line.” Because the whole GL was hidden from the menu last release.\n2)Remove “Kowhai Customised GL”, because it will not be included in this release.  It is ready for QA not In QA.\n3)“The Shipment, Vehicle and Driver profiles are hard to scan, with poor layout, excess white space and fields that carry nothing for the record in front of the reader.” Remove with poor layout.\n4)Change “telematics fields follow.” To “except Tariff Plan and Accessorial fields will be included in the next release”. Because reader cannot understand easily without context.\n5)Move “Whitespace-insensitive Consignment Number Search” under Misc. UX Improvements\n6)Move “Portal User in the Imported By Column” under Admin Console / Operation Change\n7)“CCH Custom GL File Update” is not under Admin Console/ Operation Change. Make it under GL."
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 329,
+    "text": "All good <@W5EXAMPLEHANA|Hana Mori> :+1::skin-tone-2:"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 353,
+    "text": "Thanks <@W7EXAMPLELUIS|Luis Ortega>, all seven points are in. Revised draft below, since the original post cannot be edited. Kowhai Customised GL is out of the candidate list altogether, and CCH now sits under the GL group rather than Admin Console.\n\n\n<@W6EXAMPLEGRAH|Graham Whitlock> <@WDEXAMPLERHYS|Rhys> <@WGEXAMPLENADI|Nadia> <@W2EXAMPLEUSR2|Tomasz Wieckowski> <@W4EXAMPLEOWEN|Owen 'The Admiral' Pritchard> <@WFEXAMPLEBRUN|Bruno Lord Chief 将軍 Kovac>\nHighlight of coming release (NOT FINAL)\nFor the full list, please visit <https://northwindlogistics.atlassian.net/issues/?filter=12418|northwindlogistics.atlassian.net/issues?filter=12418>\n\n:ledger: *Configurable Standard GL*\n_The Standard GL was a rigid, fixed-format export that customers reformatted by hand every month. This release is the first time customers see the new General Ledger page, with configurable columns, headers and clearing line._\n• *Review and Export Standard GL*\n    ◦ The General Ledger can now be reviewed on screen before export, with quick filters, a *View By* breakdown and reorderable columns.\n• *Configure Standard GL Column Headers*\n    ◦ Portal admins can rename Standard GL column headers so the export matches their ERP and internal accounting terminology, without changing the underlying data.\n• *Configure Clearing Line*\n    ◦ Admins can configure how clearing lines are generated, so the export aligns with their accounting and reconciliation requirements. Clearing lines appear in the export only.\n• *Link New Charges to Standard GL*\n    ◦ *New Charge* columns on the bill now link through to the *General Ledger*, carrying the report month and billing account across.\n• *Group and Sort GL Entries*\n    ◦ GL entries are now sorted by billing account and invoice number before any other sorting is applied.\n• *CCH Custom GL File Update*\n    ◦ The Coral Coast Haulage custom GL file drops the *Jnl Preparer* column, so it no longer has to be removed monthly.\n:card_index_dividers: *Shipment, Vehicle and Driver Profiles*\n_The Shipment, Vehicle and Driver profiles are hard to scan, with excess white space and fields that carry nothing for the record. All three are regrouped this release, except the Tariff Plan and Accessorial fields, which will be included in the next release._\n• *Shipment and Vehicle Overview Tabs in Cards* :large_yellow_circle: _In QA_\n    ◦ The Shipment and Vehicle Overview tabs now present their properties in cards laid out four to a row, rather than one long list.\n• *Driver Overview Tab in Cards* :large_orange_circle: _In Review_\n    ◦ The Driver Overview tab now leads with what kind of record it is, grouping properties into *Details*, *Custom Fields* and *Cost Centre* cards.\n• *Empty States on the Driver Profile* :large_yellow_circle: _In QA_\n    ◦ Where a tenant has configured no custom fields, the card stays in place and offers a *Configure custom fields* button rather than looking broken.\n:truck: *Cost Insights*\n_Cost Insights is in beta and the epic has been steadily refining its reporting, with the dashboard widgets and beta landing page last release. This release tidies the cost tables and names the cost basis in exports._\n• *Cost Basis in Export Filenames*\n    ◦ Cost Insights report exports now carry the cost basis, *EffectiveCost* or *BilledCost*, in the filename, so the basis is clear without opening the file.\n• *Truncated Lane Names in Cost Tables*\n    ◦ Long lane names in the lane cost tables are truncated with an ellipsis and a hover tooltip, so table layout stays consistent.\n:bar_chart: *Report and Listing Changes*\n• *Very Small Weights in Reports*\n    ◦ Weights below 0.01 kg no longer display as zero, so on-screen figures match the weights shown in exports.\n:gear: *Admin Console / Operation Change*\n• *Billing Accounts Moved to Portal Settings*\n    ◦ The *Billing Accounts* menu item has moved from Settings to Portal Settings, keeping Settings focused on the features admins use most.\n• *See All Active Workflows in Admin Console*\n    ◦ A new *Workflows* page under Tenants lists every active workflow, on screen and in export, under the existing tenant permission.\n• *More Feature Statistics in Admin Console* :large_orange_circle: _In Review_\n    ◦ The *Customer Statistic Report* adds adoption figures such as SSO provider and allocation type, on screen and in export.\n• *Clearer Error Messages in Admin* :large_yellow_circle: _In QA_\n    ◦ Global errors always show additional info, and failed bill processes offer a dialog to read and copy the full message.\n• *Portal User in the Imported By Column*\n    ◦ The Import listing *Imported By* column now shows the Portal User rather than an email address, in both the customer and admin portals.\n• *Migrate Templates*\n    ◦ Meridian Rail CT Bill\n:smiley: *Misc. UX Improvements*\n• *New Logo on the Login Page* :large_yellow_circle: _In QA_\n    ◦ The login screen now carries the new Northwind logo, with alignment and spacing updated to match the supplied reference.\n• *Whitespace-insensitive Consignment Number Search*\n    ◦ Consignment number searches now match whether or not spaces are typed, so a consignment is found without knowing how its number is stored.\n*Sent using* <@WEEXAMPLECLDE|Claude>"
+   },
+   {
+    "role": "thread",
+    "author": "Luis Ortega",
+    "author_id": "W7EXAMPLELUIS",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 358,
+    "text": "\"*CCH Custom GL File Update\" should sit under new group \"Custom GL\" instead of \"Configurable Standard GL\". Thanks.*"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 359,
+    "text": "You need to be very specific :smile:"
+   },
+   {
+    "role": "thread",
+    "author": "Luis Ortega",
+    "author_id": "W7EXAMPLELUIS",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 360,
+    "text": "Overestimate the ai understanding:sweat_smile:"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 360,
+    "text": "Fair call <@W7EXAMPLELUIS|Luis Ortega>. CCH now sits in its own *Custom GL* group. I have also dropped the In Review marker, since In Review work is good to release and does not need calling out. In Progress still carries an orange dot, now labelled with its actual status rather than In Review. Latest draft below, replacing the one above.\n\n\n<@W6EXAMPLEGRAH|Graham Whitlock> <@WDEXAMPLERHYS|Rhys> <@WGEXAMPLENADI|Nadia> <@W2EXAMPLEUSR2|Tomasz Wieckowski> <@W4EXAMPLEOWEN|Owen 'The Admiral' Pritchard> <@WFEXAMPLEBRUN|Bruno Lord Chief 将軍 Kovac>\nHighlight of coming release (NOT FINAL)\nFor the full list, please visit <https://northwindlogistics.atlassian.net/issues/?filter=12418|northwindlogistics.atlassian.net/issues?filter=12418>\n\n:ledger: *Configurable Standard GL*\n_The Standard GL was a rigid, fixed-format export that customers reformatted by hand every month. This release is the first time customers see the new General Ledger page, with configurable columns, headers and clearing line._\n• *Review and Export Standard GL*\n    ◦ The General Ledger can now be reviewed on screen before export, with quick filters, a *View By* breakdown and reorderable columns.\n• *Configure Standard GL Column Headers*\n    ◦ Portal admins can rename Standard GL column headers so the export matches their ERP and internal accounting terminology, without changing the underlying data.\n• *Configure Clearing Line*\n    ◦ Admins can configure how clearing lines are generated, so the export aligns with their accounting and reconciliation requirements. Clearing lines appear in the export only.\n• *Link New Charges to Standard GL*\n    ◦ *New Charge* columns on the bill now link through to the *General Ledger*, carrying the report month and billing account across.\n• *Group and Sort GL Entries*\n    ◦ GL entries are now sorted by billing account and invoice number before any other sorting is applied.\n:page_with_curl: *Custom GL*\n• *CCH Custom GL File Update*\n    ◦ The Coral Coast Haulage custom GL file drops the *Jnl Preparer* column, so it no longer has to be removed monthly.\n:card_index_dividers: *Shipment, Vehicle and Driver Profiles*\n_The Shipment, Vehicle and Driver profiles are hard to scan, with excess white space and fields that carry nothing for the record. All three are regrouped this release, except the Tariff Plan and Accessorial fields, which will be included in the next release._\n• *Shipment and Vehicle Overview Tabs in Cards* :large_yellow_circle: _In QA_\n    ◦ The Shipment and Vehicle Overview tabs now present their properties in cards laid out four to a row, rather than one long list.\n• *Driver Overview Tab in Cards*\n    ◦ The Driver Overview tab now leads with what kind of record it is, grouping properties into *Details*, *Custom Fields* and *Cost Centre* cards.\n• *Empty States on the Driver Profile* :large_yellow_circle: _In QA_\n    ◦ Where a tenant has configured no custom fields, the card stays in place and offers a *Configure custom fields* button rather than looking broken.\n:truck: *Cost Insights*\n_Cost Insights is in beta and the epic has been steadily refining its reporting, with the dashboard widgets and beta landing page last release. This release tidies the cost tables and names the cost basis in exports._\n• *Cost Basis in Export Filenames*\n    ◦ Cost Insights report exports now carry the cost basis, *EffectiveCost* or *BilledCost*, in the filename, so the basis is clear without opening the file.\n• *Truncated Lane Names in Cost Tables*\n    ◦ Long lane names in the lane cost tables are truncated with an ellipsis and a hover tooltip, so table layout stays consistent.\n:bar_chart: *Report and Listing Changes*\n• *Very Small Weights in Reports*\n    ◦ Weights below 0.01 kg no longer display as zero, so on-screen figures match the weights shown in exports.\n:gear: *Admin Console / Operation Change*\n• *Billing Accounts Moved to Portal Settings*\n    ◦ The *Billing Accounts* menu item has moved from Settings to Portal Settings, keeping Settings focused on the features admins use most.\n• *See All Active Workflows in Admin Console*\n    ◦ A new *Workflows* page under Tenants lists every active workflow, on screen and in export, under the existing tenant permission.\n• *More Feature Statistics in Admin Console* :large_orange_circle: _In Progress_\n    ◦ The *Customer Statistic Report* adds adoption figures such as SSO provider and allocation type, on screen and in export.\n• *Clearer Error Messages in Admin* :large_yellow_circle: _In QA_\n    ◦ Global errors always show additional info, and failed bill processes offer a dialog to read and copy the full message.\n• *Portal User in the Imported By Column*\n    ◦ The Import listing *Imported By* column now shows the Portal User rather than an email address, in both the customer and admin portals.\n• *Migrate Templates*\n    ◦ Meridian Rail CT Bill\n:smiley: *Misc. UX Improvements*\n• *New Logo on the Login Page* :large_yellow_circle: _In QA_\n    ◦ The login screen now carries the new Northwind logo, with alignment and spacing updated to match the supplied reference.\n• *Whitespace-insensitive Consignment Number Search*\n    ◦ Consignment number searches now match whether or not spaces are typed, so a consignment is found without knowing how its number is stored.\n*Sent using* <@WEEXAMPLECLDE|Claude>"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 360,
+    "text": "I post la"
+   },
+   {
+    "role": "thread",
+    "author": "Luis Ortega",
+    "author_id": "W7EXAMPLELUIS",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 361,
+    "text": "Good to go. Thanks."
+   }
+  ]
+ },
+ {
+  "id": "B04",
+  "source": "reacted",
+  "reaction": ":star:",
+  "expected_category": "fyi",
+  "expected_line_fictional": "(no line) Hana's no-customer-data constraint - context for the A03 epic, not a second line",
+  "channel": {
+   "name": "Group DM (Tomasz Wieckowski, Rhys Morgan, Hana Mori, Graham Whitlock, Priya Kanth)",
+   "id": "GEXAMPLEDEMO01",
+   "type": "group_dm"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "thread",
+    "author": "Graham Whitlock",
+    "author_id": "W6EXAMPLEGRAH",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -104,
+    "text": "Guys, I know we discussed getting updated decent Cost Insights data and refreshing other data in Sales Demo, but as a start we need to sync our carrier feed data with Sales Demo otherwise Priya will not have a sales environment to demo to existing customers? or where you planning to use another one?"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": -5,
+    "text": "I think regardless we probably need an epic to cover this - <@W5EXAMPLEHANA|Hana Mori> did you want me to make this a priority, or hold off for now?"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -4,
+    "text": "It is a priority, but not sure how to approach this. :slightly_smiling_face:"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": -2,
+    "text": "I'm wondering if there's some AI-generation of data which might be possible here? I can feed in what we have currently, + our data model & codebase, and use that to define dummy data for each of the three carrier connections which we then refine. Thoughts?"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": -2,
+    "text": "Either way - I can handle this and keep you in the loop once I have something ready. Let me know if you have any strong thoughts"
+   },
+   {
+    "role": "target",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "No strong idea. Just don't use customers' data. :slightly_smiling_face:"
+   },
+   {
+    "role": "thread",
+    "author": "Graham Whitlock",
+    "author_id": "W6EXAMPLEGRAH",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 3,
+    "text": "Yep, go for it. Chat with Tomasz as he seemed to have some thoughts the other day as well."
+   }
+  ]
+ },
+ {
+  "id": "B05",
+  "source": "reacted",
+  "reaction": ":star:",
+  "expected_category": "fyi",
+  "expected_line_fictional": "(no line) carrier brand colours - sorted in thread (#ff9900 on #252F3E), handed to Ana",
+  "channel": {
+   "name": "DM with Hana Mori",
+   "id": "DEXAMPLEHANA01",
+   "type": "dm"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": -6,
+    "text": "^ the link above is that Cost Insights story too btw; just the one I shared with you the other week"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -2,
+    "text": "Thanks for reminding me, since I had already forgot and we have been talking about adopting the colour scheme to pie charts other than the \"by carrier\"\n[attached: image.png]"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": -1,
+    "text": "Oh - did you want to change the story? No one's picked it up yet - I can even pull it out of the sprint if you want to have another discussion"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -1,
+    "text": "Pull it out first, even though I like the idea of using the carrier brand color, this is how it looks\n[attached: image.png]"
+   },
+   {
+    "role": "target",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "Your idea is on the right, it is shockingly unpleasant!!"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "Hey! I like it :rolling_on_the_floor_laughing:"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 1,
+    "text": "I think the problem is the blood red, it hurts my eyes :smile:"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 3,
+    "text": "You seriously like it? Btw, it is not the Ridgeway brand color"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 3,
+    "text": "Hmmm yeah, not sure what happened there. It's not really Ridgeway's colour"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 3,
+    "text": "<https://brand.ridgewayfreight.example/colours|brand.ridgewayfreight.example/colours>"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 3,
+    "text": "OH! I got the colours mixed up :face_palm::skin-tone-2:"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 3,
+    "text": ":joy:"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 4,
+    "text": "So it should be `#ff9900` on `#252F3E`"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 4,
+    "text": "Or we change it to your proposal"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 5,
+    "text": "It can be brand color for only this piechart and Freight Ops brand color for others, buy I need to look at it to see how it goes"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 5,
+    "text": "I will work with my air director Rhys on this, he is very talented in design, color and fonts, etc."
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 8,
+    "text": "In the meantime, please ask Owen whether it is fine to have color coding by carrier. Not sure if it is too much to ask for. And we may need to think about when we add Ridgeway Express, it should be a separate carrier, as it carries a different resource hierarchy, but the brand color is the same..."
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 8,
+    "text": "So that may be a problem"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 13,
+    "text": "I thought Ridgeway Express and Ridgeway Freight could be inverted colours? Not sure though"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 14,
+    "text": "I've asked Ana to park it for now - i'll come to a decision, ping Owen, and then share w/ you to confirm"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 16,
+    "text": "GW doesn't like this idea, let's go to a refined palette :slightly_smiling_face:"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 20,
+    "text": "For any UI changes, please post it to <#CEXAMPLEPRDANN|product-announce> for people to be aware of.\nThey normally have strong preferences"
+   }
+  ]
+ },
+ {
+  "id": "B06",
+  "source": "reacted",
+  "reaction": ":star:",
+  "expected_category": "to-do",
+  "expected_line_fictional": "☑️ to-do: pull the latest skills before starting an area bootstrap",
+  "channel": {
+   "name": "#product",
+   "id": "CEXAMPLEPRD001",
+   "type": "channel"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "target",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "I have just updated the skills to put \"surface\" in the section header or rules. Before you start an area to bootstrap, please get the latest  skills first. If you have already started, go ahead to create PR, I will add the surfaces"
+   }
+  ]
+ },
+ {
+  "id": "B07",
+  "source": "reacted",
+  "reaction": ":star:",
+  "expected_category": "kb-doc",
+  "expected_line_fictional": "📖 kb note: document the decision - Shipment sits one level up, charge lines below it (as in Show Details)",
+  "channel": {
+   "name": "#freight-design",
+   "id": "CEXAMPLEDESGN1",
+   "type": "channel"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "thread",
+    "author": "Callum Reid",
+    "author_id": "WCEXAMPLECALL",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -4669,
+    "text": "Hey,\nProposing the carrier-feed resource hierarchy should be\n```Carrier\n ├── Account 1\n │    ├── Depot A\n │    │   ├── Shipment i\n │    │   ├── Shipment ii\n │    └── Depot B\n ├── Account 2\n ...```\n<@W5EXAMPLEHANA|Hana Mori> your docs suggested we have the charge type underneath shipment but that doesn't make any sense from the EDI 210 docs. Though we aren't going to be compliant with the full standard, if we are trying to follow it we should follow it:\n>  _\"Resource: A unique component that incurs a charge\" -_ EDI 210 implementation guide, glossary\nand\n> _\"Service: An offering that can be purchased from a carrier, and can include many types of charges; e.g., a linehaul service may include fuel, tolls, and detention charges\" -_ EDI 210 implementation guide, glossary\nThe charge types themselves are not components that are incurring charges, it is the shipments. The service is the offering we are purchasing through that component, which in this case would be the charge type.\n\nThere is example data in \"QA Lane Driven\" in sit to inspect and more info in <https://northwindlogistics.atlassian.net/wiki/x/KQ7mTA|northwindlogistics.atlassian.net/wiki/x/KQ7mTA>"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": -4632,
+    "text": "<@W5EXAMPLEHANA|Hana Mori> there's a bit of a further level of complexity here, because we can't really get `Depot > Shipment` level granularity out of the parcel feed. So there's not going to be a consistent hierarchy.\n\nThere's a useful table on LaneLens' website <https://docs.lanelens.example/managed-freight-tags#supported-carriers|here> which outlines which carriers provide which details, as LaneLens has a concept of \"Managed Freight Tags\" which aligns closely with our unified EDI 210 hierarchy we're trying to build.\n\nHaulytics also has a similar acknowledgement <https://docs.haulytics.example/user-guide/virtual-tags/canonical-freight-taxonomy|here>:"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": -4617,
+    "text": "Leaving as a final thought for everyone as I go off to lunch: I personally think;\n• We'll have to stop at \"Depot\" level for Resource Type - which all carriers have in some capacity (e.g. the parcel feed has Hub, LTL has depot, etc) and\n• Then diverge - resources might have to be different. e.g. the parcel carrier doesn't provide that data so in v0 we can't drill down that far"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -4521,
+    "text": "Generally agree.\nSo basically, that means for the parcel feed, we should have hub as Resource, fuel-surcharge-zone-4 (description from cost) should be EDI 210 (cost and usage). Sounds right to me."
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -4520,
+    "text": "Similar for LTL"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -4518,
+    "text": "<@W2EXAMPLEUSR2|Tomasz Wieckowski>"
+   },
+   {
+    "role": "thread",
+    "author": "Callum Reid",
+    "author_id": "WCEXAMPLECALL",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -4499,
+    "text": "Exactly. Again I have this in QA Lane Driven to examine :slightly_smiling_face:"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -4424,
+    "text": "Thanks <@WCEXAMPLECALL|Callum Reid>, will have a look. Well done"
+   },
+   {
+    "role": "target",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "<@WCEXAMPLECALL|Callum Reid> <@W1EXAMPLEUSR1|Priya Kanth>, just want to confirm rather than saying \"I generally agree\", I have already talked to GW and Tomasz, and we agreed with the proposal. Shipment should be one level up, the bottom ones are charge lines, as in Show Details."
+   }
+  ]
+ },
+ {
+  "id": "B08",
+  "source": "reacted",
+  "reaction": ":star:",
+  "expected_category": "fyi",
+  "expected_line_fictional": "(no line) Farid forwarded the catch-up invite - you thanked him",
+  "channel": {
+   "name": "#lisbon-squad",
+   "id": "CEXAMPLELSBN01",
+   "type": "channel"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "thread",
+    "author": "Slackbot",
+    "author_id": "USLACKBOT",
+    "is_user": false,
+    "is_bot": true,
+    "offset_min": -963,
+    "text": "Reminder: <@W8EXAMPLEFARI|Farid Haddad> <@W1EXAMPLEUSR1|Priya Kanth>, please provide any new tickets that you are about to present in the Lisbon Catchup meeting, so we can review them and prepare for the meeting."
+   },
+   {
+    "role": "thread",
+    "author": "Farid Haddad",
+    "author_id": "W8EXAMPLEFARI",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -30,
+    "text": "Hi team, I am skipping this catchup as the focus is on Hana this time.  Just ping me in case you have any question for me.  Thx."
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": -1,
+    "text": "Same with me. I'll sit in and listen though\n\nSeperately - <@W8EXAMPLEFARI|Farid Haddad> for some reason I'm still not on this meeting. Would you be able to add me pls?"
+   },
+   {
+    "role": "target",
+    "author": "Farid Haddad",
+    "author_id": "W8EXAMPLEFARI",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "Forwarded the meeting.  Kindly check."
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 1132,
+    "text": "Thanks!"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 1132,
+    "text": "Showing every off-week too now :slightly_smiling_face:"
+   }
+  ]
+ },
+ {
+  "id": "B09",
+  "source": "reacted",
+  "reaction": ":star:",
+  "expected_category": "fyi",
+  "expected_line_fictional": "(no line) admin-rights question - you answered in thread",
+  "channel": {
+   "name": "#product",
+   "id": "CEXAMPLEPRD001",
+   "type": "channel"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "thread",
+    "author": "Luis Ortega",
+    "author_id": "W7EXAMPLELUIS",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -3,
+    "text": "<@W5EXAMPLEHANA|Hana Mori> I try to install GitHub CLI but it requires admin right. Should I contact Harbour IT?"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -2,
+    "text": "I thought everyone has it. Screen capture please"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -1,
+    "text": "If you don't have admin rights, yes raise it"
+   },
+   {
+    "role": "thread",
+    "author": "Luis Ortega",
+    "author_id": "W7EXAMPLELUIS",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -1,
+    "text": "[image only: 20260907_095952.jpg]"
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": -1,
+    "text": "yes, go ahead"
+   },
+   {
+    "role": "target",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "<@W8EXAMPLEFARI|Farid Haddad> <@W1EXAMPLEUSR1|Priya Kanth>, you guys have admin rights?"
+   },
+   {
+    "role": "thread",
+    "author": "Farid Haddad",
+    "author_id": "W8EXAMPLEFARI",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 1,
+    "text": "It might depends on the application, I successfully installed some in the past."
+   },
+   {
+    "role": "thread",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 1,
+    "text": "Try install Claude CLI first"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 11,
+    "text": "Yeah I was able to run Terminal as admin and install it"
+   },
+   {
+    "role": "thread",
+    "author": "Luis Ortega",
+    "author_id": "W7EXAMPLELUIS",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 17,
+    "text": "I can install Claude CLI"
+   },
+   {
+    "role": "thread",
+    "author": "Farid Haddad",
+    "author_id": "W8EXAMPLEFARI",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 45,
+    "text": "BTW I still can't see any repo in my github acc."
+   },
+   {
+    "role": "thread",
+    "author": "Luis Ortega",
+    "author_id": "W7EXAMPLELUIS",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 45,
+    "text": "I installed the GitHub CLI in another way without admin permission.\nIt looks like my GitHub account still have no access to the repo"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 57,
+    "text": "I think you have to log into Github and accept the invitation - that's what fixed it for me"
+   },
+   {
+    "role": "thread",
+    "author": "Priya Kanth",
+    "author_id": "W1EXAMPLEUSR1",
+    "is_user": true,
+    "is_bot": false,
+    "offset_min": 58,
+    "text": "Like via the website, not just the email"
+   }
+  ]
+ },
+ {
+  "id": "B10",
+  "source": "reacted",
+  "reaction": ":star:",
+  "expected_category": "fyi",
+  "expected_line_fictional": "(no line) leave-calendar forwarding test aimed at Luis Ortega",
+  "channel": {
+   "name": "#product",
+   "id": "CEXAMPLEPRD001",
+   "type": "channel"
+  },
+  "target_offset_min": 0,
+  "messages": [
+   {
+    "role": "target",
+    "author": "Hana Mori",
+    "author_id": "W5EXAMPLEHANA",
+    "is_user": false,
+    "is_bot": false,
+    "offset_min": 0,
+    "text": "<@W7EXAMPLELUIS|Luis Ortega>, I have set up a leave calendar forwarding rule directing to you for testing.\nDon't be alerted :slightly_smiling_face:"
+   }
+  ]
+ }
+]
