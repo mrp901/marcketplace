@@ -113,7 +113,7 @@ action is additive/reversible per the five-rule contract), so it never returns
   file is the current one, the dream note is the reviewable output.
 - **The auto-apply / propose-only split is absolute.** `kb.paths.memory` is the only place
   this skill writes freely and unattended. Anything that changes another skill's output -
-  a fold proposal, a registry mapping, a voice-note change on a verified note - is written
+  a fold proposal, a suppression lift, a voice-note change on a verified note - is written
   only into the dream note and the canvas, never into the target file, with no exception
   for an unattended run or a ticked item.
 - Who reads what: the briefing's Runs line and the `dream:` lines are the only things the
