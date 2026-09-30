@@ -1,6 +1,6 @@
 ---
 type: llm
-focus: trace
+focus: mock_calls
 weight: 1
 ---
 Every sweep search returns nothing, and the one tagged line on the board is untouched

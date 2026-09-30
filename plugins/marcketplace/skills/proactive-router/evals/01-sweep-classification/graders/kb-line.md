@@ -1,6 +1,6 @@
 ---
 type: llm
-focus: trace
+focus: mock_calls
 weight: 1
 ---
 The metric-formatting decision (permalink containing `DEXAMPLEFUELFMT1`) was surfaced only via

@@ -1,6 +1,6 @@
 ---
 type: llm
-focus: trace
+focus: mock_calls
 weight: 1
 ---
 The fuel-price-feed concern (permalink containing `DEXAMPLEFUELRISK1`) has no explicit ask from
