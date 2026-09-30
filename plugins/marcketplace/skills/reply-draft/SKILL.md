@@ -57,7 +57,7 @@ onboarding tool-resolution allowance. Guidelines in `../../shared/token-discipli
 9. **Record for the voice ledger.** Append one `state.voice_edits` entry:
    `{tag, register, draft_hash, sent_ref: <draft note path>, recorded_at}`. A later
    dispatch of `reply-draft` against the same source thread compares this run's draft to
-   what the user actually sent, per `voice.md`'s compounding mechanism - this run's job is
+   what the user actually sent and sets that entry's `edited`, per `voice.md`'s compounding mechanism - this run's job is
    only to record the entry.
 10. **Return the handler contract JSON.** See "Handler mode" below.
 

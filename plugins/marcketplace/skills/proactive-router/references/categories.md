@@ -3,7 +3,7 @@
 This mirrors `../../../shared/handler-contract.md`'s category table exactly; read that
 file first for the allowlist principle and the full dispatch/return contract. This file
 adds the one thing that belongs to the router alone: the fixed candidate table a
-three-unmapped-ticks proposal draws from. Never invent a candidate at run time; if a
+unmapped-tick proposal draws from. Never invent a candidate at run time; if a
 category genuinely isn't here, the proposal names it `needs a new skill`.
 
 ## Taxonomy
@@ -45,9 +45,9 @@ set, with one exception: a line added inside an idea block is `idea-decision` if
 reads as an answer to a question in that block, else classified as usual with
 `idea_key` set.
 
-## Candidate table for the three-unmapped-ticks proposal
+## Candidate table for the unmapped-tick proposal
 
-Only a category that can actually reach `unmapped_ticks >= 3` needs an entry: one with no
+Only a category that can actually be ticked unmapped needs an entry: one with no
 `state.registry[category].handler` set. Every mapped category above is excluded here by
 construction; a proposal only fires for a gap.
 

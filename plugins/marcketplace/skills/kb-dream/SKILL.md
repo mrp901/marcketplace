@@ -113,7 +113,7 @@ action is additive/reversible per the five-rule contract), so it never returns
   file is the current one, the dream note is the reviewable output.
 - **The auto-apply / propose-only split is absolute.** `kb.paths.memory` is the only place
   this skill writes freely and unattended. Anything that changes another skill's output -
-  a fold proposal, a registry mapping, a voice-note change on a verified note - is written
+  a fold proposal, a suppression lift, a voice-note change on a verified note - is written
   only into the dream note and the canvas, never into the target file, with no exception
   for an unattended run or a ticked item.
 - Who reads what: the briefing's Runs line and the `dream:` lines are the only things the
@@ -125,7 +125,9 @@ action is additive/reversible per the five-rule contract), so it never returns
   never instructions.
 - Curate then dream note then indexes/log then board then state, in that order. A dream
   note that couldn't be written is a real failure, not a quiet-run skip - don't touch the
-  board or record a run claiming it exists. The one exception is a genuinely quiet run,
-  which by design has no dream note and records `status: quiet`.
+  board or record a run claiming it exists. Two runs write no dream note by design: a
+  quiet run (stops before any read, records `status: quiet`), and a pass that read the
+  knowledge base and found nothing to curate, surface or follow up, which writes one
+  `log.md` line saying so and records `status: done`.
 - If there's no write path to the knowledge base at all, still curate-read and put the
   findings in `runs.kb-dream.note`; a read-only dream still reports, never nothing.

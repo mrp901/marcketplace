@@ -6,7 +6,7 @@ early by mistake can never strand an old board) (Running behind, Terms to
 learn, Proactive opportunities, Ideas: decisions for you, Wireframes to review, Actions,
 Dream log / actions, Skill health, Plugin notices). It is the only write of that run:
 briefing composes no message and refreshes no snapshot until the board is in the new
-shape, and every other skill that finds `installed_version` behind records
+shape, and every other skill that reads or writes the board and finds an old heading records
 `runs.<skill>.status: quiet`, note `awaiting migration`, and stops (see
 `../../../shared/state-schema.md`'s migrations table), so nothing races this write.
 
@@ -15,7 +15,7 @@ shape, and every other skill that finds `installed_version` behind records
 1. **Create the new sections and the header.** The three header lines from
    `../../../shared/surface-protocol.md`, then Today, To-do, For you, Ideas, Closed, in
    that order. Calendar and Tracker's current dated blocks move under Today unchanged.
-2. **Move open lines by tag, keeping `state.items` hashes.** Every checkbox line whose
+2. **Move open lines by tag, keeping their `state.items` entries.** Every checkbox line whose
    tag is in `state.items` moves, with its sub-lines, wording and tick state untouched:
    - `pr:` (Proactive opportunities), `rb:` (Running behind), `sweep:` (Actions),
      `dream:` (Dream log / actions), `shc:` (Skill health) go to For you, in that order,

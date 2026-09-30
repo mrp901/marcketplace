@@ -20,8 +20,7 @@ else.
 - Profile: `org.product_tag`, `org.product_scope`, `org.modules_context`,
   `ideas.project_key`, `ideas.issue_type`, `ideas.qualifiers`, `tracker.cloud_id`,
   `user.tracker_account_id`, `kb.paths.voice`, `voice.registers` (optional),
-  `budgets.models.critic`. `voice.calibration_refs` (optional - see Ground rules; not
-  currently a defined key, see HISTORY.md)
+  `budgets.models.critic`. `voice.calibration_refs` (optional - see Ground rules)
 - Tool categories: `ideas` (search issues JQL, get issue, create issue), `kb` (search,
   read - voice register and an optional vault check), `web` (optional, confirmation only
   - see Ground rules)
@@ -55,9 +54,10 @@ Two consequences this skill gets wrong if forgotten:
 
 1. **Ground it.** If a screenshot or screen is referenced, read it for exact labels,
    numbers and field names - "the Cloud Spend tile's '+6.5% prior month' figure" beats "the
-   dashboard shows a misleading percentage". If which product area is ambiguous, ask one
-   quick clarifying question rather than guessing, defaulting to `profile.org.product_scope`
-   unless told otherwise.
+   dashboard shows a misleading percentage". If which product area is ambiguous and the user
+   invoked this directly, ask one quick clarifying question. Dispatched by the hub, no one
+   is there to answer: take `profile.org.product_scope` (or the likeliest area), draft, and
+   mark the assumption in the draft for the user to check at the confirm tick.
 2. **Capped investigation.** Duplicate/precedent check: one or two `ideas: search issues
    (JQL)` calls against `profile.ideas.project_key` on obvious keywords - has this already
    been raised (tell the user, don't create a duplicate), and is there a sibling idea worth

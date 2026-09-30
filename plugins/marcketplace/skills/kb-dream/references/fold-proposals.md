@@ -33,7 +33,9 @@ The proposal is the exact edit, not a description of one: a diff-shaped block na
 target file, the line or section it touches, and the replacement text - written so a human
 (or a later `skill-eval` pass) could apply it verbatim. It goes in the dream note's
 Surfaced section and, if it is actionable in one tick, a matching `dream:` line in For
-you.
+you. Every drafted fold also gets a `state.proposals` record (`kind: skill_fold`, the
+target skill as `candidate`), written in the same run, so a `settle` tick on its line
+finds it by `id`.
 
 ```markdown
 - [ ] **Fold: `<skill>/SKILL.md` <section>.** <one clause of what's wrong now>.

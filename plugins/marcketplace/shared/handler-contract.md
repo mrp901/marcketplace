@@ -56,11 +56,12 @@ Concretely: classification names the concrete action whether or not a handler ex
 
 A tick on a line whose category has no `registry[category].handler` set (neither a shipped default from the table above nor a `user_tick`-set mapping in `state.registry`) does not dispatch anything. Instead:
 
-1. Add a sub-line: `  - ↳ router: no handler for <category> yet · tick recorded (n of 3) · <link>`
+1. Add a sub-line: `  - ↳ router: no handler for <category> yet · mapping proposed in For you · <link>`
 2. `tally.<category>.unmapped_ticks += 1`
-3. Briefing closes the line to Closed as `acknowledged, no handler`.
+3. Open the unmapped-tick proposal below for that category, unless one is already open.
+4. Briefing closes the line to Closed as `acknowledged, no handler`.
 
-This is not a failure state: it is the mechanism that feeds the three-unmapped-ticks proposal below.
+This is not a failure state: a tick on something with no handler is the user saying they want that kind of action, so the answer is to propose the action that would handle it next time.
 
 ## Option groups
 
@@ -145,9 +146,9 @@ Applied by the hub at the end of every run, after dispatch results are in:
 - **Tally.** Append each dispatch's outcome to `state.outcomes` (ring buffer, max 50, newest first). Increment `tally.<category>.{ticked, unmapped_ticks}` as lines are ticked; increment `.edited` when the tick table's edited-not-ticked row applies to a category-bearing line.
 - **Suppression on delete.** Every deletion adds a `state.suppressions` entry `{source_id, category, pattern: "<channel_id>:<category>", added_at}` and increments `tally.<category>.deleted`.
 - **Pattern blocking.** Three deletions of the same `<channel>:<category>` pattern adds it to `state.patterns_blocked`; the classification step in whichever skill produces that category stops proposing it for that channel entirely.
-- **Three-unmapped-ticks proposal.** When `tally.<category>.unmapped_ticks >= 3` and no open proposal exists for that category, write to For you:
+- **Unmapped-tick proposal.** On the first unmapped tick for a category with no open proposal, write to For you, and record it in `state.proposals` (`kind: mapping`):
   ```
-  - [ ] (pr:prop-<category>) propose: map <category> → <candidate or "needs a new skill"> · 3 ticks since <date>
+  - [ ] (pr:prop-<category>) propose: map <category> → <candidate or "needs a new skill"> · ticked <date>
   ```
   `<candidate>` comes from a fixed table in the router's own `references/categories.md`, never invented at run time. A tick on this line sets `state.registry[category] = {handler: <candidate>, mode, since: <now>, set_by: user_tick}`.
 - **Sixty-day dismissal.** A proposal untouched for 60 days is dismissed by `kb-dream`'s monthly pass, not by the router itself.

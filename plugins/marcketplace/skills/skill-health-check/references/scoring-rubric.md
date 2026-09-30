@@ -12,7 +12,7 @@ that absence is named in the evidence-sources line below.
 | `amber` | Minor conformance issues, or exactly one correction/edit-cluster/`blocked` outcome, nothing structural. |
 | `red` | A pattern - more than one correction, a recurring `blocked`/`partial` handler outcome, broken links, or a note/ticket that needed real rework. |
 
-Every log entry and, for amber/red, every surface line carries:
+Every log entry carries (a red score's board line points at it):
 
 - **2 to 4 evidence bullets**, each naming the specific note, ticket, outcome or ledger entry
   it's about - never a vague "quality seemed off" bullet.

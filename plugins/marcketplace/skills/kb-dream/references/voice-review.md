@@ -11,9 +11,11 @@ only says what `kb-dream` specifically does to trigger and record it.
    `state.cursors.kb-dream.last_voice_review_at`, not the full history again.
 2. **Refresh exemplars.** Update each register note's 3-5 verbatim exemplars per
    `voice.md`'s structure, favouring the freshest strong examples over the oldest.
-3. **Promote from the ledger.** Scan `state.voice_edits` (ring buffer, up to 30 entries)
-   for a recurring edit pattern - the same kind of change made more than once since the
-   last review. A recurring pattern is promoted either into a new observed trait on the
+3. **Promote from the ledger.** First settle any entry still missing `edited` whose
+   `sent_ref` is a note (the comparison `voice.md` assigns to this skill): compare the note
+   as it stands with what was drafted and set `edited: true` or `false`. Then scan the
+   entries marked `edited: true` (ring buffer, up to 30 entries) for a recurring edit
+   pattern - the same kind of change made more than once since the last review. A recurring pattern is promoted either into a new observed trait on the
    relevant register note, or into `Voice/ai-patterns-to-avoid.md` if it matches an
    AI-tell shape rather than a register-specific preference.
 4. **Human-verified is untouchable.** A voice note carrying `verified: { by: human:<user>

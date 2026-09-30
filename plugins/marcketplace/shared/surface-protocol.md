@@ -73,7 +73,7 @@ Every checkbox line on the surface follows one grammar, and reads as the action 
 | Same, about a tracker item | `(feed:260910-1)` | briefing's first tracker-feed mismatch on 10 Sep 2026. The line names a tracker item but is not tagged with its key, so a later mismatch on the same key, or another skill's line about it, never shares its `state.items` tag |
 | Idea block line | `(PRJ-164/d1a)` | a line inside an idea block: the idea key, a slash, then the group and option (see the Ideas block grammar) |
 
-A tag is the item's identity across runs. `state.items.<tag>` holds what was written and its text hash, which is how a writer tells "still exactly as I left it" from "the user touched this" on its next read. Never invent a tag form ad hoc; if a new writer needs one, pick a short lowercase abbreviation, add it to the prefix table above, and record it in that skill's `references/`.
+A tag is the item's identity across runs. `state.items.<tag>.text` holds the line exactly as written, compared verbatim with the board, which is how a writer tells "still exactly as I left it" from "the user touched this" on its next read. Never invent a tag form ad hoc; if a new writer needs one, pick a short lowercase abbreviation, add it to the prefix table above, and record it in that skill's `references/`.
 
 ## The tick table
 
@@ -81,7 +81,7 @@ One table, every section, with To-do as the sole exception:
 
 | The user did | It means | Effect |
 |---|---|---|
-| Nothing (hash matches, box off) | No instruction | Leave exactly as written |
+| Nothing (text matches, box off) | No instruction | Leave exactly as written |
 | Ticked, text unchanged | Yes, do this | The hub dispatches or performs the line's action on its next run |
 | Edited, then ticked | Do it my way | Same as ticked, using the edited text as the instruction |
 | Edited, not ticked | Nothing happens yet; the wording is kept | `tally.edited += 1`; the edited text is the new baseline and is never rewritten by the owner |
@@ -184,7 +184,7 @@ Two-space indent, `↳` arrow, handler name, timestamp, one of the four fixed ou
 
 Documented variants, the only ones:
 
-- No handler: `  - ↳ router: no handler for <category> yet · tick recorded (n of 3) · <link>`.
+- No handler: `  - ↳ router: no handler for <category> yet · mapping proposed in For you · <link>`.
 - Two options ticked: `  - ↳ router: blocked · pick one`.
 - A `shc:` tick: `  - ↳ router: queued for your next skill-eval run`.
 
@@ -208,6 +208,7 @@ Briefing is the only skill that moves lines to Closed, and it closes a line only
 - It is a To-do line and it is ticked.
 - It is an option whose sibling closed as `done`; it closes as `not chosen`.
 - A `state.outcomes` entry names its tag with `status: done` (the manual `skill-eval` path).
+- A `no handler` sub-line sits under it; it closes as `acknowledged, no handler` (the mapping proposal carries the request forward).
 
 A `partial` or `blocked` sub-line, or a `needs your tick` sub-line whose fresh line is still open, keeps the parent open. A `term:` line whose sub-line is `done` is removed rather than logged: a confirmed term is vocabulary the system absorbed, not work anyone finished. That exception is deliberate; do not "fix" it.
 
@@ -225,7 +226,7 @@ Format, one line per closed item, newest first:
 
 ## Migration
 
-The first `briefing` run that finds any pre-1.1.0 heading on the board migrates it before doing anything else, whatever `state.installed_version` says. The procedure lives in `skills/briefing/references/migration.md`; in short: create the five sections and the header, move every open line into For you or an idea block by its tag prefix keeping its `state.items` hash, convert old idea and wireframe lines into blocks, delete the old headings, and log one `board migrated` line to Closed. The Router does not run until briefing has migrated; a Router run that finds old headings records `runs.proactive-router.status: quiet` with the note `awaiting migration` and stops.
+The first `briefing` run that finds any pre-1.1.0 heading on the board migrates it before doing anything else, whatever `state.installed_version` says. The procedure lives in `skills/briefing/references/migration.md`; in short: create the five sections and the header, move every open line into For you or an idea block by its tag prefix keeping its `state.items` entry, convert old idea and wireframe lines into blocks, delete the old headings, and log one `board migrated` line to Closed. The Router does not run until briefing has migrated; a Router run that finds old headings records `runs.proactive-router.status: quiet` with the note `awaiting migration` and stops.
 
 ## Never
 
