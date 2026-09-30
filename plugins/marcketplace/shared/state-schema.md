@@ -70,13 +70,15 @@ suppressions: [{source_id, category, pattern: "<channel_id>:<category>", added_a
 patterns_blocked: []
 
 items:
-  <tag>: {section, written_by, written_at, text_hash, ref, category, group, idea_key,
+  <tag>: {section, written_by, written_at, text, ref, category, group, idea_key,
           status: open | blocked, blocked_reason, blocked_on, blocked_at, retried_for}
+  # text: the line exactly as written, compared verbatim with the board to spot an edit
   # pruned when the line reaches Closed; group is the question's tag stem on an option line
   # status and the blocked_* fields are optional (absent = open); only the hub sets them, on pr: lines
 
 outcomes: []                 # ring buffer, max 50, newest first: {tag, handler, status, report_line, recorded_at}
-voice_edits: []              # ring buffer, max 30: {tag, register, draft_hash, sent_ref, recorded_at}
+voice_edits: []              # ring buffer, max 30: {tag, register, draft_hash, sent_ref, recorded_at, edited}
+                             # one entry per draft; edited is absent until the later comparison sets true/false
 
 machines:
   <machine_id>: {tools: {chat: "mcp__...__", tracker: "...", ...}, kb_access, codebase_access, resolved_at}
@@ -91,7 +93,7 @@ requeue flag set by one tick, cleared by the skill that acts on it, never a labe
 | Key | Written by | Read by | Retention |
 |---|---|---|---|
 | `state_version` | onboarding, on bootstrap | every skill (compatibility check) | permanent |
-| `installed_version` | onboarding on bootstrap; afterwards only the skill that completes a migration (for 1.0.0 to 1.1.0, `briefing`) | every skill (migration check) | permanent; never bumped by a skill that skipped a pending migration |
+| `installed_version` | onboarding on bootstrap; afterwards only the skill that completes a migration (for 1.0.0 to 1.1.0, `briefing`) | `briefing` (the migrating skill); other skills check the board's headings instead | permanent; never bumped by a skill that skipped a pending migration |
 | `profile_ref` | onboarding, on bootstrap | every skill | permanent |
 | `runs.<skill>` | that skill, at the end of its own run | briefing (the Runs report), skill-health-check | permanent, one entry per skill, overwritten each run |
 | `runs.proactive-router.fyi` | proactive-router | briefing | overwritten each run |
@@ -110,13 +112,13 @@ requeue flag set by one tick, cleared by the skill that acts on it, never a labe
 | `nicknames` | briefing (carried and added to) | briefing, kb-dream, session-log | permanent, additive |
 | `registry.<category>` | proactive-router (a tick sets `set_by: user_tick`; shipped defaults ship with `set_by: shipped`) | proactive-router | permanent until reassigned |
 | `tally.<category>` | proactive-router, per run outcome | proactive-router, kb-dream (monthly registry review), skill-health-check | permanent, counters only increment |
-| `proposals` | proactive-router (opens on `unmapped_ticks >= 3`), kb-dream (folds and lifts) | proactive-router, kb-dream (dismisses after 60 days untouched) | until resolved or dismissed |
+| `proposals` | proactive-router (opens a mapping on the first unmapped tick), kb-dream (folds and lifts) | proactive-router, kb-dream (dismisses after 60 days untouched) | until resolved or dismissed |
 | `suppressions` | proactive-router (on delete) | proactive-router | permanent until lifted |
 | `patterns_blocked` | proactive-router (after 3 deletions of the same channel+category pattern) | proactive-router | permanent until lifted |
 | `items.<tag>` | whichever skill wrote the surface line | proactive-router, briefing, action-sweep (dedupe) | pruned when the line reaches Closed |
 | `items.<tag>.status`, `.blocked_reason`, `.blocked_on`, `.blocked_at`, `.retried_for` | proactive-router, on its own `pr:` lines only, when a dispatch returns `blocked` | proactive-router (blocked-line retry) | cleared on retry; pruned with the item |
 | `outcomes` | proactive-router, after each dispatch or inline action; skill-eval, when a manual run finishes | briefing (handler outcome summary and the manual close) | ring buffer, max 50, newest first |
-| `voice_edits` | reply-draft, kb-note | kb-dream (monthly voice review), skill-health-check | ring buffer, max 30 |
+| `voice_edits` | reply-draft, kb-note (append); reply-draft, kb-dream (set `edited`) | kb-dream (monthly voice review), skill-health-check | ring buffer, max 30 |
 | `machines.<machine_id>` | onboarding, on tool discovery | every skill (reads its own machine's prefixes) | permanent, one entry per machine, re-resolved on failure |
 
 ## Write discipline
@@ -160,16 +162,19 @@ requeue flag set by one tick, cleared by the skill that acts on it, never a labe
 
 ## Migrations
 
-`installed_version` records the plugin version a skill last ran under. Every skill
-compares it against the plugin's own `plugin.json` version at run start; a skill running
-under a newer plugin version than `installed_version` records runs the migrations listed
-below for the versions between the two, in order, before doing anything else, then writes
-the new `installed_version`. A skill that stops with `awaiting migration` never writes
-it: that is what keeps the pending migration visible to the skill that owns it.
+`installed_version` records the plugin version the state and board were last migrated to.
+Only the skill that owns a migration runs it (for 1.0.0 to 1.1.0, `briefing`): it runs the
+steps listed below for the versions between `installed_version` and the plugin's own
+`plugin.json` version, in order, before doing anything else, then writes the new
+`installed_version`. The trigger for every other skill is the board, not the version: a
+skill that reads or writes the board and finds it still in the pre-migration shape (for
+1.1.0, any pre-1.1.0 heading) records `runs.<skill>.status: quiet`, note `awaiting
+migration`, and stops, and never writes `installed_version`. A skill that never touches
+the board has nothing to race and runs as normal.
 
 | From version | To version | Migration |
 |---|---|---|
-| 1.0.0 | 1.1.0 | Add `ideas: {}`, `cursors.action-sweep.chat_since`, `cursors.idea-scout`, and `ref` on every existing `runs.<skill>` entry (empty). Drop any `proposals` entry with `kind: skill_eval` (status `dismissed`, never deleted). The board itself is migrated by `briefing` alone, per `skills/briefing/references/migration.md`; every other skill that finds `installed_version` behind records `runs.<skill>.status: quiet`, note `awaiting migration`, and stops |
+| 1.0.0 | 1.1.0 | Add `ideas: {}`, `cursors.action-sweep.chat_since`, `cursors.idea-scout`, and `ref` on every existing `runs.<skill>` entry (empty). Drop any `proposals` entry with `kind: skill_eval` (status `dismissed`, never deleted). The board itself is migrated by `briefing` alone, per `skills/briefing/references/migration.md`; every other skill that reads or writes the board and finds any pre-1.1.0 heading records `runs.<skill>.status: quiet`, note `awaiting migration`, and stops |
 
 A migration is always **additive**: it may add a new key with its default value, or
 reshape a key it explicitly names, but it never deletes a key it does not understand.

@@ -43,7 +43,7 @@ keeping the single-yard rewrite on track instead. Happy for you to pass that alo
 Let me know if there's anything else the customer needs ahead of Friday.
 ```
 
-**Draft note**, `Inbox/2026-09-22-reply-owen-multi-yard-timeline.md`:
+**Draft note**, `Drafts/2026-09-22-reply-owen-multi-yard-timeline.md`:
 
 ```yaml
 ---
@@ -84,7 +84,7 @@ Let me know if there's anything else the customer needs ahead of Friday.
 {
   "status": "done",
   "report_line": "drafted a reply to Owen · customer_facing · 1 gap marked · <draft link>",
-  "artefacts": [{"kind": "reply_draft", "ref": "Inbox/2026-09-22-reply-owen-multi-yard-timeline.md"}],
+  "artefacts": [{"kind": "reply_draft", "ref": "Drafts/2026-09-22-reply-owen-multi-yard-timeline.md"}],
   "next_action": null
 }
 ```

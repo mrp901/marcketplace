@@ -20,6 +20,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `kb-dream` escalates a follow-up still open after three dreams to a `dream:` line.
 - `proactive-router` retries its own blocked `pr:` lines once the profile key a block names
   is filled in.
+- `skill-health-check` no longer counts every `voice_edits` entry as an edit: an entry
+  records a draft, and only `edited: true` (set by the later comparison in `reply-draft` or
+  `kb-dream`) counts. Stops `kb-note` drifting toward red on drafts kept as written.
+- `skill-health-check`'s scoring rubric agrees with the skill: only a red score gets a board
+  line.
+- `reply-draft`'s worked example writes the draft to `Drafts/`, not `Inbox/`, so the model
+  stops copying a path `kb-dream`'s draft reaping never looks in.
+- `idea-ticket` no longer calls `voice.calibration_refs` undefined; the profile schema
+  defines it.
+- `state.items.<tag>` stores the line's verbatim `text` instead of a `text_hash` no script
+  computed; the hub compares text directly (matches the router eval fixtures).
+- `proactive-router` lists `machines` in the state it writes, and drops porting-era
+  wording from its intro.
 
 ## [1.1.0] - 2026-09-25
 
