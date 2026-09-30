@@ -6,7 +6,7 @@ description: "Use when the scheduled proactive-router routine fires, or the user
 # Proactive Router
 
 The hub. Once a day this skill both finds new candidate work (a chat sweep of reactions
-and saved items, unchanged) and acts on everything the user did to the board since the
+and saved items) and acts on everything the user did to the board since the
 last run: every tick, edit, delete and added line, in every section, whoever owns the
 line. Every tick means "yes, do it". It is the only skill that dispatches a handler
 subagent and the only skill allowed to write a sub-line under a line it does not own.
@@ -23,7 +23,8 @@ else.
   handler's `## Needs`; see `references/dispatch.md`.
 - State: `cursors.proactive-router`, `items`, `registry`, `tally`, `outcomes`,
   `suppressions`, `patterns_blocked`, `proposals`, `glossary` (`inline:promote` writes),
-  `ideas.<key>.requeue_scout` (`inline:requeue` writes), `runs.proactive-router`.
+  `ideas.<key>.requeue_scout` (`inline:requeue` writes), `runs.proactive-router`,
+  `machines` (tool categories resolved for a handler about to be dispatched).
 - Writes lines tagged `pr:`; adds sub-lines under any ticked line; adds a To-do line on
   `inline:to-do`.
 
@@ -39,7 +40,7 @@ re-dispatch it releases counts against `.dispatches`. Guidelines in
 `../../shared/token-discipline.md`.
 
 **Quiet exit:** if every sweep search returns nothing new since the cursor and no line on
-the board differs from its `state.items` hash, write the cursor and
+the board differs from its `state.items` text, write the cursor and
 `runs.proactive-router.status: quiet` and stop before reading a single thread.
 
 ## Flow
@@ -59,7 +60,7 @@ the board differs from its `state.items` hash, write the cursor and
    `runs.proactive-router.fyi` for the briefing message.
 4. **Read the board once** for `section_id_mapping` and every line in To-do, For you and
    Ideas, sub-lines included.
-5. **Classify every existing line** against `state.items[<tag>].text_hash` per the tick
+5. **Classify every existing line** against `state.items[<tag>].text` per the tick
    table in `../../shared/surface-protocol.md`: untouched, ticked, edited, edited and
    ticked, deleted, user-added. An edited line's wording is authoritative and is never
    rewritten. A user-added line is classified like a swept message (step 3), in place; one

@@ -70,13 +70,15 @@ suppressions: [{source_id, category, pattern: "<channel_id>:<category>", added_a
 patterns_blocked: []
 
 items:
-  <tag>: {section, written_by, written_at, text_hash, ref, category, group, idea_key,
+  <tag>: {section, written_by, written_at, text, ref, category, group, idea_key,
           status: open | blocked, blocked_reason, blocked_on, blocked_at, retried_for}
+  # text: the line exactly as written, compared verbatim with the board to spot an edit
   # pruned when the line reaches Closed; group is the question's tag stem on an option line
   # status and the blocked_* fields are optional (absent = open); only the hub sets them, on pr: lines
 
 outcomes: []                 # ring buffer, max 50, newest first: {tag, handler, status, report_line, recorded_at}
-voice_edits: []              # ring buffer, max 30: {tag, register, draft_hash, sent_ref, recorded_at}
+voice_edits: []              # ring buffer, max 30: {tag, register, draft_hash, sent_ref, recorded_at, edited}
+                             # one entry per draft; edited is absent until the later comparison sets true/false
 
 machines:
   <machine_id>: {tools: {chat: "mcp__...__", tracker: "...", ...}, kb_access, codebase_access, resolved_at}
@@ -116,7 +118,7 @@ requeue flag set by one tick, cleared by the skill that acts on it, never a labe
 | `items.<tag>` | whichever skill wrote the surface line | proactive-router, briefing, action-sweep (dedupe) | pruned when the line reaches Closed |
 | `items.<tag>.status`, `.blocked_reason`, `.blocked_on`, `.blocked_at`, `.retried_for` | proactive-router, on its own `pr:` lines only, when a dispatch returns `blocked` | proactive-router (blocked-line retry) | cleared on retry; pruned with the item |
 | `outcomes` | proactive-router, after each dispatch or inline action; skill-eval, when a manual run finishes | briefing (handler outcome summary and the manual close) | ring buffer, max 50, newest first |
-| `voice_edits` | reply-draft, kb-note | kb-dream (monthly voice review), skill-health-check | ring buffer, max 30 |
+| `voice_edits` | reply-draft, kb-note (append); reply-draft, kb-dream (set `edited`) | kb-dream (monthly voice review), skill-health-check | ring buffer, max 30 |
 | `machines.<machine_id>` | onboarding, on tool discovery | every skill (reads its own machine's prefixes) | permanent, one entry per machine, re-resolved on failure |
 
 ## Write discipline

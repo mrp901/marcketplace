@@ -20,8 +20,7 @@ else.
 - Profile: `org.product_tag`, `org.product_scope`, `org.modules_context`,
   `ideas.project_key`, `ideas.issue_type`, `ideas.qualifiers`, `tracker.cloud_id`,
   `user.tracker_account_id`, `kb.paths.voice`, `voice.registers` (optional),
-  `budgets.models.critic`. `voice.calibration_refs` (optional - see Ground rules; not
-  currently a defined key, see HISTORY.md)
+  `budgets.models.critic`. `voice.calibration_refs` (optional - see Ground rules)
 - Tool categories: `ideas` (search issues JQL, get issue, create issue), `kb` (search,
   read - voice register and an optional vault check), `web` (optional, confirmation only
   - see Ground rules)

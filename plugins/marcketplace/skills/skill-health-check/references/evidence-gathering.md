@@ -63,8 +63,10 @@ source in this skill and should never be skipped for a handler that has one.
 
 For a drafting skill (`reply-draft`, `kb-note`, `idea-ticket` - anything listing `voice` in
 its own `## Needs`), read `state.voice_edits` entries recorded since the window opened. Each
-entry (`{tag, register, draft_hash, sent_ref, recorded_at}`) is a direct measure of how often
-the user edited a draft before acting on it. A cluster of edits in one register is a sharper
+entry (`{tag, register, draft_hash, sent_ref, recorded_at, edited}`) records one draft; only
+entries marked `edited: true` count as the user editing a draft before acting on it. An entry
+with `edited` absent has not been compared yet and is evidence neither way; `false` is a
+draft kept as written. A cluster of edits in one register is a sharper
 signal than a general "voice felt off" impression - name the register in the evidence bullet.
 This is cheap: the ledger is already maintained by the drafting skills themselves per
 `voice.md`'s compounding mechanism, so this skill only reads it, never recomputes it.
