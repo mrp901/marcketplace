@@ -1,0 +1,62 @@
+<!doctype html>
+<!-- idea-spar sketch kit. Copy the <style> block into a pack's sketch section and build
+     options only from these classes. Greyscale, one accent (--mark) for note markers. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sketch kit</title>
+<style>
+  :root { --paper:#fff; --ink:#1d1d1f; --mid:#8a8a8e; --fill:#e6e6e9; --line:#c9c9ce; --mark:#d0402b; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --paper:#18181a; --ink:#ececee; --mid:#8a8a8e; --fill:#2c2c30; --line:#45454b; } }
+  :root[data-theme="dark"] { --paper:#18181a; --ink:#ececee; --mid:#8a8a8e; --fill:#2c2c30; --line:#45454b; }
+  body { background:var(--paper); color:var(--ink); font:14px/1.4 system-ui, sans-serif; margin:0; padding:16px; }
+  .options { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:20px; }
+  .option h3 { font-size:13px; margin:0 0 6px; }
+  .tradeoff { font-size:12px; color:var(--mid); margin:6px 0 4px; }
+  .notes { font-size:12px; margin:0; padding-left:18px; }
+  .shell { border:1px solid var(--line); border-radius:4px; overflow:hidden; position:relative; }
+  .shell > .bar { background:var(--fill); padding:6px 10px; font-size:12px; color:var(--mid); }
+  .shell > .body { padding:10px; display:flex; flex-direction:column; gap:8px; }
+  .row { display:flex; gap:8px; align-items:center; }
+  .card { border:1px solid var(--line); border-radius:4px; padding:8px; }
+  .card .label { font-size:12px; color:var(--mid); } .card .num { font-size:18px; font-weight:600; }
+  .table { width:100%; border-collapse:collapse; font-size:12px; }
+  .table th { text-align:left; color:var(--mid); font-weight:500; border-bottom:1px solid var(--line); padding:4px; }
+  .table td { border-bottom:1px solid var(--fill); padding:4px; }
+  .filter { border:1px solid var(--line); border-radius:4px; padding:3px 8px; font-size:12px; }
+  .filter::after { content:" ▾"; color:var(--mid); }
+  .tabs { display:flex; gap:14px; border-bottom:1px solid var(--line); font-size:12px; }
+  .tabs span { padding:4px 0; } .tabs .on { border-bottom:2px solid var(--ink); font-weight:600; }
+  .split { display:grid; grid-template-columns:1fr 38%; gap:8px; }
+  .drawer { background:var(--fill); border-left:1px solid var(--line); padding:8px; }
+  .modal { border:3px double var(--line); padding:10px; margin:6px auto; max-width:80%; }
+  .btn { border:1px solid var(--ink); background:var(--ink); color:var(--paper); border-radius:4px; padding:3px 10px; font-size:12px; }
+  .btn.secondary { background:none; color:var(--ink); }
+  .chip { background:var(--fill); border-radius:10px; padding:1px 8px; font-size:11px; }
+  .chart { height:48px; background:repeating-linear-gradient(90deg, var(--fill) 0 10px, transparent 10px 14px); border-bottom:1px solid var(--line); }
+  .empty { color:var(--mid); text-align:center; padding:14px; font-size:12px; border:1px dashed var(--line); }
+  .text { height:8px; background:var(--fill); border-radius:4px; width:70%; }
+  .text.short { width:40%; }
+  .mark { position:absolute; width:16px; height:16px; border-radius:50%; background:var(--mark); color:#fff; font-size:10px; text-align:center; line-height:16px; }
+</style>
+</head>
+<body>
+<div class="options">
+  <section class="option">
+    <h3>A · Inline banner</h3>
+    <div class="shell">
+      <div class="bar">Freight › Loads</div>
+      <div class="body" style="position:relative">
+        <div class="row"><span class="chip">2 drifting</span><span class="btn">Review</span></div>
+        <span class="mark" style="top:6px; right:6px">1</span>
+        <table class="table"><tr><th>Load</th><th>Route</th><th>ETA</th></tr>
+          <tr><td>L-12</td><td><div class="text short"></div></td><td>14:20</td></tr></table>
+      </div>
+    </div>
+    <p class="tradeoff">+ seen at once / − noisy</p>
+    <ol class="notes"><li>Needs a mute rule (challenge)</li></ol>
+  </section>
+</div>
+</body>
+</html>

@@ -18,7 +18,7 @@ suppressions: []
 patterns_blocked: []
 outcomes: []
 items:
-  shc:260921-1: {section: For you, written_by: skill-health-check, written_at: 2026-09-21T03:00:00+10:00, text: "🔴 idea-deep-dive scored red: two notes superseded by your own corrections this fortnight. Run skill-eval on it?", text_hash: h-shc1, ref: ".utility/skill-health/idea-deep-dive.md", category: skill-eval, group: "", idea_key: ""}
+  shc:260921-1: {section: For you, written_by: skill-health-check, written_at: 2026-09-21T03:00:00+10:00, text: "🔴 kb-note scored red: two notes superseded by your own corrections this fortnight. Run skill-eval on it?", text_hash: h-shc1, ref: ".utility/skill-health/kb-note.md", category: skill-eval, group: "", idea_key: ""}
 machines:
   eval-machine: {tools: {chat: "mcp__slack__"}, resolved_at: 2026-09-21T23:30:00+10:00}
 ```

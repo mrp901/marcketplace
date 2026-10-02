@@ -43,8 +43,8 @@ the sentence that makes the ask legible.
 
 **Bad** (one row, one paragraph, mostly re-explaining a note that already exists):
 
-> | Update | `log.md` - Backfilled three deferred entries for notes written by idea-scout
-> and idea-wireframe. Each entry records what the note argues about the opportunity, the
+> | Update | `log.md` - Backfilled three deferred entries for notes written by idea-spar
+> and kb-note. Each entry records what the note argues about the opportunity, the
 > reasoning behind that position, which existing notes it links to, whether it has been
 > added to the folder index, and the outcome of the attempted tracker label write, which
 > was rejected by the screen scheme. |

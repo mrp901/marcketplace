@@ -11,7 +11,7 @@ good run:
   answer to that block's open question, so it is classified `idea-decision` in group
   `FIG-204/d2` with `idea_key: FIG-204`, and given a `pr:` tag in the same write.
 - Because it is the only ticked line in the group, treats it as the chosen option and
-  prepares a dispatch to `idea-scout` in `decide` mode carrying the user's own text as
+  prepares a dispatch to `idea-spar` in `decide` mode carrying the user's own text as
   `text_as_ticked`. A sub-line saying a tool category could not be resolved is an
   acceptable outcome of the dispatch step.
 - Does NOT treat the line as a swept chat message (there is no permalink; it needs none),

@@ -18,8 +18,8 @@ suppressions: []
 patterns_blocked: []
 outcomes: []
 items:
-  FIG-204/d2a: {section: Ideas, written_by: idea-scout, written_at: 2026-09-21T02:10:00+10:00, text: "One fixed distance/time drift for every route", text_hash: h-d2a, ref: "", category: idea-decision, group: FIG-204/d2, idea_key: FIG-204}
-  FIG-204/d2b: {section: Ideas, written_by: idea-scout, written_at: 2026-09-21T02:10:00+10:00, text: "A threshold set per customer", text_hash: h-d2b, ref: "", category: idea-decision, group: FIG-204/d2, idea_key: FIG-204}
+  FIG-204/d2a: {section: Ideas, written_by: idea-spar, written_at: 2026-09-21T02:10:00+10:00, text: "One fixed distance/time drift for every route", text_hash: h-d2a, ref: "", category: idea-decision, group: FIG-204/d2, idea_key: FIG-204}
+  FIG-204/d2b: {section: Ideas, written_by: idea-spar, written_at: 2026-09-21T02:10:00+10:00, text: "A threshold set per customer", text_hash: h-d2b, ref: "", category: idea-decision, group: FIG-204/d2, idea_key: FIG-204}
 machines:
   eval-machine: {tools: {chat: "mcp__slack__"}, resolved_at: 2026-09-21T23:30:00+10:00}
 ```
