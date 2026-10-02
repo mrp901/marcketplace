@@ -7,7 +7,7 @@ The Ideas block for FIG-204 has one decision group with three options, and exact
 of them (`FIG-204/d1b`, "Email only") is ticked. A good run:
 
 - Treats `d1b` as the chosen option and the other two as its unticked siblings.
-- Prepares a dispatch to `idea-scout` in `decide` mode for that one line, with
+- Prepares a dispatch to `idea-spar` in `decide` mode for that one line, with
   `item.idea_key: FIG-204`, `item.group: FIG-204/d1` and `text_as_ticked` carrying the
   "Email only" text. Whether the subagent completes or the hub instead writes a sub-line
   saying a tool category could not be resolved, both are acceptable outcomes of the

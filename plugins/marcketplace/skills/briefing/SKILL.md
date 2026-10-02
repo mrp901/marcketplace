@@ -9,7 +9,8 @@ Unattended, scheduled, cheap, and the plugin's reporter. Each run it refreshes t
 snapshots, closes lines the hub has finished with, prunes `state.items`, trims Closed,
 reports what every skill did since last time, and posts the one message the plugin ever
 sends. Briefing never dispatches and never acts on a tick: the Router acts, briefing
-closes and reports. A run that finds pre-1.1.0 headings on the board migrates it first.
+closes and reports. A run that finds pre-1.1.0 headings on the board migrates it first;
+one whose `installed_version` is 1.1.0 retires the old idea lines first.
 
 ## Needs
 - Profile: `org.timezone`, `user.name`, `user.chat_user_id`, `tracker.my_work_jql`,
@@ -56,7 +57,8 @@ Fires more than once a day on a changing schedule; never assume a time of day.
    `nicknames`, `glossary`, `outcomes`, `runs`, `installed_version`. Read the board once
    (`chat: read canvas`) for every section; hold the `section_id_mapping` for step 6's one
    write. Reading is silent. If the board still carries any pre-1.1.0 heading, run `references/migration.md` first, as the
-   only write of this run, and stop after writing state.
+   only write of this run, and stop after writing state. If `installed_version` is 1.1.0,
+   run that file's "1.1.0 to 1.2.0" steps inside this run's one write, then carry on.
 2. **Close.** For every line on the board, apply the closing rule in
    `../../shared/surface-protocol.md`'s "Closing": a `done` sub-line closes the line; a
    ticked To-do line closes as done by you; an option whose sibling closed closes as `not

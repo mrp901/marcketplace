@@ -30,7 +30,7 @@ shape, and every other skill that reads or writes the board and finds an old hea
    in Ideas: decisions for you and Wireframes to review, one block under Ideas:
    - The header `- <key> · <title> · note · wireframe`, with each link present only where
      the artefact exists (the research note under `kb.paths.research`, the wireframe
-     under `kb.paths.prototypes`); the title comes from the old line's text.
+     under the prototypes folder); the title comes from the old line's text.
    - Each old decision line becomes one decision question with its options split out
      where the line already implied them (`<key>/d1a`, `<key>/d1b`, …). Where the line
      stated no options, it becomes a one-line question: `(<key>/d1) <text> · edit this
@@ -54,3 +54,22 @@ Then write state: `installed_version` = this plugin's version, `items` as rebuil
 Do not guess. Record `runs.briefing.status: error`, note `board layout unrecognised`,
 post that one line to `profile.notify.fallback_channel_id` per `../../../shared/notify.md`,
 and stop. The user runs briefing interactively once to sort it out.
+
+## 1.1.0 to 1.2.0: retiring the old idea lines
+
+The idea pipeline (`idea-scout`, `idea-deep-dive`, `idea-wireframe`) was replaced by
+`idea-spar`, which writes only `<key>/d…` decision groups. Lines the retired skills wrote
+have no owner and no handler now, so they close rather than wait forever. Unlike the
+1.0.0 migration this is not the run's only write: the steps go inside the run's ordinary
+`chat: update canvas` batch.
+
+1. Every open line tagged `<key>/q…`, `<key>/w-…` or `<key>/r` moves to Closed as
+   `- <date> (<tag>) retired · <text, 120 chars> · by briefing`, ticked or not. Its
+   `state.items` entry is pruned.
+2. Open `<key>/d…` groups stay exactly as they are; a tick on one now dispatches
+   `idea-spar` `decide`.
+3. A block header left with no open lines is removed, as usual. A header that keeps lines
+   has its `note` and `wireframe` link text left alone; idea-spar adds `pack` when it next
+   writes the block.
+4. Apply the state steps in `../../../shared/state-schema.md`'s 1.1.0 to 1.2.0 row, then
+   write `installed_version` = 1.2.0.

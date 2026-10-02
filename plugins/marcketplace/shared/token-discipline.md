@@ -9,8 +9,7 @@ step; rule 7 says so and outranks the other six.
    own condition into its `SKILL.md`'s `## Budget`. For example:
    - proactive-router: no new reactions or saves since the cursor, and no surface line
      differs from `state.items`.
-   - idea-scout: no qualifying idea, no requeued idea, and no roadmap change.
-   - idea-wireframe: nothing eligible and nothing requeued.
+   - idea-spar (Next watch): no idea newly moved into Next and no pack still pending.
    - kb-dream: nothing new in the inbox or the log since the last dream, and not a
      monthly run.
    - skill-health-check: no runs since the last check.

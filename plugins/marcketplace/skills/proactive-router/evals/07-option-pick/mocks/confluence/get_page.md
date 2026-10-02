@@ -18,9 +18,9 @@ suppressions: []
 patterns_blocked: []
 outcomes: []
 items:
-  FIG-204/d1a: {section: Ideas, written_by: idea-scout, written_at: 2026-09-21T02:10:00+10:00, text: "In-app only: cheap, but dispatchers report living in email", text_hash: h-d1a, ref: "", category: idea-decision, group: FIG-204/d1, idea_key: FIG-204}
-  FIG-204/d1b: {section: Ideas, written_by: idea-scout, written_at: 2026-09-21T02:10:00+10:00, text: "Email only: reaches them, no history in-product", text_hash: h-d1b, ref: "", category: idea-decision, group: FIG-204/d1, idea_key: FIG-204}
-  FIG-204/d1c: {section: Ideas, written_by: idea-scout, written_at: 2026-09-21T02:10:00+10:00, text: "Both: probably right, higher build cost now", text_hash: h-d1c, ref: "", category: idea-decision, group: FIG-204/d1, idea_key: FIG-204}
+  FIG-204/d1a: {section: Ideas, written_by: idea-spar, written_at: 2026-09-21T02:10:00+10:00, text: "In-app only: cheap, but dispatchers report living in email", text_hash: h-d1a, ref: "", category: idea-decision, group: FIG-204/d1, idea_key: FIG-204}
+  FIG-204/d1b: {section: Ideas, written_by: idea-spar, written_at: 2026-09-21T02:10:00+10:00, text: "Email only: reaches them, no history in-product", text_hash: h-d1b, ref: "", category: idea-decision, group: FIG-204/d1, idea_key: FIG-204}
+  FIG-204/d1c: {section: Ideas, written_by: idea-spar, written_at: 2026-09-21T02:10:00+10:00, text: "Both: probably right, higher build cost now", text_hash: h-d1c, ref: "", category: idea-decision, group: FIG-204/d1, idea_key: FIG-204}
 machines:
   eval-machine: {tools: {chat: "mcp__slack__"}, resolved_at: 2026-09-21T23:30:00+10:00}
 ```

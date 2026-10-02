@@ -23,7 +23,7 @@ else.
   handler's `## Needs`; see `references/dispatch.md`.
 - State: `cursors.proactive-router`, `items`, `registry`, `tally`, `outcomes`,
   `suppressions`, `patterns_blocked`, `proposals`, `glossary` (`inline:promote` writes),
-  `ideas.<key>.requeue_scout` (`inline:requeue` writes), `runs.proactive-router`,
+  `runs.proactive-router`,
   `machines` (tool categories resolved for a handler about to be dispatched).
 - Writes lines tagged `pr:`; adds sub-lines under any ticked line; adds a To-do line on
   `inline:to-do`.
@@ -76,8 +76,8 @@ the board differs from its `state.items` text, write the cursor and
    the new sub-line lands under the old one. The line is settled in place and never
    re-posted, and a deleted line is never retried. Full rule: `references/dispatch.md`,
    "Retrying blocked lines". Without this, a block whose cause was fixed would stay forever.
-   - Inline actions (`inline:investigate`, `inline:promote`, `inline:requeue`,
-     `inline:to-do`) run here, in this run, uncapped, per `references/dispatch.md`.
+   - Inline actions (`inline:investigate`, `inline:promote`, `inline:to-do`) run
+     here, in this run, uncapped, per `references/dispatch.md`.
    - A `shc:` line gets `  - ↳ router: queued for your next skill-eval run` and nothing
      else; `skill-eval` is manual.
    - A category with `state.registry[category].handler` set to a skill dispatches one

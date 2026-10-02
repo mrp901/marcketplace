@@ -46,9 +46,7 @@ as the eval fixture.
 | `kb-note` | Captures one decision or reference note into the knowledge base | Handler |
 | `action-sweep` | Sweeps canvases, mentions, assigned tickets, meeting actions and your own chat commitments into one line each | Schedule, and a handler |
 | `idea-ticket` | Writes an ideas-board ticket in your voice, audited before you see it | Direct, and a handler |
-| `idea-scout` | First-pass discovery on one qualifying idea; records your decisions; watches the roadmap | Schedule, and a handler |
-| `idea-deep-dive` | Resolves an idea's open questions across four sources | Schedule |
-| `idea-wireframe` | One annotated wireframe for an investigated idea; reworks it on your say-so | Schedule, and a handler |
+| `idea-spar` | A sparring partner while you work an idea: challenge, codebase reality, market, 2-3 option sketches, and a shareable pack; packs an idea when it moves into Next | Direct, schedule, and a handler |
 | `session-log` | Writes a working session up as a durable note | Direct, plus hooks |
 | `kb-dream` | Curates the knowledge base, consolidates memory, reviews the learning loop | Schedule, and a handler |
 | `skill-eval` | Turns feedback on one run into an amended skill | Direct only |

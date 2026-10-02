@@ -121,7 +121,6 @@ handler name, and an `outcomes` entry.
 |---|---|---|
 | `inline:investigate` | `running-behind`, `feed-mismatch` | Reads what the line points at (the meeting, the ticket; for a `feed:` line, the issue's history and the feed message) and reports in the sub-line what it found, what changed, or what input is missing. Reads only |
 | `inline:promote` | `term` | Writes the line's text as the user left it into `state.glossary`, keyed by the term. Sub-line `done · added to glossary`. Briefing then removes the line without a Closed entry |
-| `inline:requeue` | `idea-refresh` | Sets `state.ideas.<idea_key>.requeue_scout: true`. Sub-line `done · queued for the next scout run` |
 | `inline:to-do` | `to-do` | Adds one unticked line at the top of To-do with the line's text (post-edit) and no tag. Sub-line `done · added to your To-do` |
 
 `manual:skill-eval` (`shc:` lines) is not inline and not a dispatch: the sub-line
