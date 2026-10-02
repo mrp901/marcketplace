@@ -21,8 +21,8 @@ arrows, to keep the diagram acyclic:
 
 - **Your tick → `proactive-router`.** The hub reads the board fresh on its next run,
   including whatever you ticked, edited, deleted or added.
-- **`idea-scout`'s label → `idea-wireframe`.** Scout sets `investigated`; wireframe finds
-  it by JQL on its own next run.
+- **A decision log → your next spar.** `idea-spar` `decide` writes each ticked decision to
+  the idea's decision log, which the next session on that idea reads as known context.
 - **`session-log`'s notes → `kb-dream`.** Dream reads recent `Sessions/` notes as one of
   its inputs on its next run.
 
@@ -32,7 +32,7 @@ flowchart TB
         direction TB
         router["proactive-router\n(the hub: sweep, then act on every tick)"]
         dream["kb-dream"]
-        wireframe["idea-wireframe"]
+        sparwatch["idea-spar\n(Next watch)"]
         sweep["action-sweep"]
         briefing["briefing\n(close, report, post)"]
     end
@@ -43,7 +43,8 @@ flowchart TB
 
     router --> board
     dream --> board
-    wireframe --> board
+    sparwatch -->|"forks only"| board
+    sparwatch -.->|"pack link via runs"| message
     sweep --> board
     briefing --> board
     briefing --> message
@@ -55,18 +56,16 @@ flowchart TB
         kbnote["kb-note"]
         ideaticket["idea-ticket\n(draft → file)"]
         sweeptargeted["action-sweep\n(targeted / meeting → push)"]
-        scoutdecide["idea-scout\n(decide)"]
-        wireframereact["idea-wireframe\n(react)"]
+        spardecide["idea-spar\n(decide)"]
         dreamsettle["kb-dream\n(settle)"]
-        inline["inline: investigate,\npromote, requeue, to-do"]
+        inline["inline: investigate,\npromote, to-do"]
     end
 
     router -.-> replydraft
     router -.-> kbnote
     router -.-> ideaticket
     router -.-> sweeptargeted
-    router -.-> scoutdecide
-    router -.-> wireframereact
+    router -.-> spardecide
     router -.-> dreamsettle
     router -.-> inline
 
@@ -74,39 +73,32 @@ flowchart TB
         direction TB
         sessionlog["session-log"]
         ideaticketdirect["idea-ticket\n(direct)"]
+        sparsession["idea-spar\n(session: challenge, reality,\nmarket, sketch, pack it)"]
         skilleval["skill-eval\n(manual only)"]
     end
 
     sessionhook(["SessionEnd / SessionStart hooks"])
     sessionhook --> sessionlog
+    roadmap(["You move an idea into Next"])
+    roadmap -.-> sparwatch
 
     subgraph weekly["Weekly band, each on its own schedule"]
         direction TB
-        scout["idea-scout\n(scout, refresh, roadmap watch)"]
-        deepdive["idea-deep-dive\n(no selector: key given by the caller)"]
         healthcheck["skill-health-check"]
     end
 
-    ideaticketdirect -->|"unlabelled idea"| scout
-    sweep -->|"'Larger' item,\nunlabelled idea"| scout
-    scout -.->|"reads scout note"| deepdive
-    scout --> board
-    deepdive --> board
     healthcheck -->|"red score only"| board
     healthcheck -.->|"amber, green"| message
 
     subgraph feedback["Feedback loops"]
         direction TB
-        requeue(["state.ideas requeue flags"])
-        tastelog(["taste log reactions"])
+        decisionlog(["idea decision logs"])
         outcomes(["state.outcomes"])
     end
 
-    inline -.->|"requeue"| requeue
-    wireframereact -.-> tastelog
-    requeue -.-> scout
-    requeue -.-> wireframe
-    tastelog -.-> wireframe
+    spardecide -.-> decisionlog
+    decisionlog -.-> sparsession
+    decisionlog -.-> sparwatch
     tick -.->|"ticked shc: line,\nqueued"| skilleval
     skilleval -.-> outcomes
     outcomes -.-> briefing
@@ -137,17 +129,14 @@ flowchart TB
 | A term to add to the glossary | `term:` | `inline:promote`; the line is removed, never logged |
 | A curation task | `dream:` | `kb-dream` `settle` |
 | A red health score | `shc:` | queued; you run `skill-eval` |
-| An option under an idea's decision | `<key>/d…`, `<key>/q…` | `idea-scout` `decide` records it in the note |
-| Keep, rework or drop a wireframe | `<key>/w-…` | `idea-wireframe` `react`; a rework requeues the idea |
-| Refresh a parked idea that moved | `<key>/r` | `inline:requeue` |
+| An option under an idea's decision | `<key>/d…` | `idea-spar` `decide` records it in the idea's decision log |
 | Your own To-do | (none) | done; briefing closes it |
 
 ## Known gaps
 
-- **`idea-deep-dive` still has no selector.** It runs on its own schedule but nothing in
-  the code picks which idea it works on; the key comes from the caller. Deliberately left
-  as is in this release (the redesign plan's constraints). Its forks now reach the board
-  as option groups, so a decision on its output does land in the note.
+- **`idea-spar`'s Next watch only sees moves.** An idea created straight into Next, or
+  first seen by the watch already in Next, is seeded rather than briefed. Spar on it
+  directly.
 - **The migration is one-way and runs once.** The first `briefing` run under 1.1.0
   rewrites the board into the five-section layout; every other skill waits for it. A
   board that can't be read as either layout stops briefing with a fallback post rather

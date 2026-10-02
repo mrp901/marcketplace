@@ -4,12 +4,12 @@ The indirection layer that lets a `SKILL.md` name what it needs done, not which 
 
 ## Category verbs
 
-The starting set below is not exhaustive on its own; it is extended with every verb the thirteen skills actually call for, drawn from the source skills' real tool calls.
+The starting set below is not exhaustive on its own; it is extended with every verb the skills actually call for, drawn from the source skills' real tool calls.
 
 | Verb | What it does | Typical tool names (hints only) | Used by |
 |---|---|---|---|
-| `chat: read canvas` | Read the surface's current content and section addressing | `slack_read_canvas` | briefing, proactive-router, idea-scout, idea-deep-dive, idea-wireframe, kb-dream, action-sweep, skill-health-check |
-| `chat: update canvas` | Write one batch of operations against a surface addressing snapshot | `slack_update_canvas` | briefing, proactive-router, idea-scout, idea-deep-dive, idea-wireframe, kb-dream, action-sweep, skill-health-check |
+| `chat: read canvas` | Read the surface's current content and section addressing | `slack_read_canvas` | briefing, proactive-router, idea-spar, kb-dream, action-sweep, skill-health-check |
+| `chat: update canvas` | Write one batch of operations against a surface addressing snapshot | `slack_update_canvas` | briefing, proactive-router, idea-spar, kb-dream, action-sweep, skill-health-check |
 | `chat: search messages` | Search reactions, saved items, DMs and channel history; see the search forms below | `slack_search_public_and_private` | briefing, proactive-router, action-sweep |
 | `chat: read thread` | Fetch one specific thread or message by its permalink, when a reference already names it | `slack_read_thread`, `slack_get_permalink` | reply-draft, kb-note, action-sweep |
 | `chat: search users` | Resolve a name to a user id when not already known | `slack_search_users` | briefing |
@@ -18,26 +18,25 @@ The starting set below is not exhaustive on its own; it is extended with every v
 | `tracker: get issue` | Fetch one issue's full fields, comments, links | `getJiraIssue` | action-sweep, idea-ticket |
 | `tracker: create issue` | File a new issue | `createJiraIssue` | action-sweep (push), idea-ticket (file) |
 | `tracker: add comment` | Post a non-destructive comment to an existing issue | `addCommentToJiraIssue` | action-sweep (push) |
-| `tracker: update issue` | Edit fields or labels on an existing issue, never description/AC | `editJiraIssue` | idea-scout, idea-wireframe (labels) |
-| `ideas: search issues (JQL)` | Query the ideas board for a candidate | `searchJiraIssuesUsingJql` (ideas project) | idea-scout, idea-wireframe |
-| `ideas: get issue` | Fetch one idea's full fields and comments | `getJiraIssue` (ideas project) | idea-scout, idea-wireframe |
+| `ideas: search issues (JQL)` | Query the ideas board for a candidate | `searchJiraIssuesUsingJql` (ideas project) | idea-spar |
+| `ideas: get issue` | Fetch one idea's full fields and comments | `getJiraIssue` (ideas project) | idea-spar |
 | `ideas: create issue` | File a new idea, unlabelled | `createJiraIssue` (ideas project) | idea-ticket (file) |
-| `ideas: add label` | Append a workflow label (`investigated`, `wireframed`) | `editJiraIssue` | idea-scout, idea-wireframe |
 | `wiki: get page by id` | Fetch a page by its id - never search | `getConfluencePage` | onboarding (profile/state docs), any skill reading a wiki-hosted kb |
 | `wiki: update page` | Full-replace or patch a page | update-page equivalent | onboarding (profile/state docs), kb-note, kb-dream when `kb.kind: confluence` |
-| `kb: search` | Search the knowledge base connector for matching files | `sharepoint_search` | action-sweep, idea-scout, idea-wireframe, kb-dream, session-log |
-| `kb: read` | Read one kb file by path or resource id | `read_resource` | idea-scout, idea-wireframe, kb-dream, session-log, kb-note |
-| `kb: write` | Create or full-replace a kb file, byte-checked where the connector requires it | `sharepoint_upload_file` | idea-scout, idea-wireframe, kb-dream, session-log, kb-note |
+| `kb: search` | Search the knowledge base connector for matching files | `sharepoint_search` | action-sweep, idea-spar, kb-dream, session-log |
+| `kb: read` | Read one kb file by path or resource id | `read_resource` | idea-spar, kb-dream, session-log, kb-note |
+| `kb: write` | Create or full-replace a kb file, byte-checked where the connector requires it | `sharepoint_upload_file` | idea-spar, kb-dream, session-log, kb-note |
 | `calendar: list today` | Today's events only, local timezone window | `outlook_calendar_search` | briefing |
 | `email: search` | Search mail for threads/mentions | mail-search equivalent | reply-draft, action-sweep |
 | `email: sent` | List the user's own sent mail, for voice calibration | mail-sent equivalent | voice calibration |
-| `notetaker: list meetings` | List recent recorded meetings | meetings-list equivalent | action-sweep (fourth source), idea-deep-dive (circle 2), briefing (prep lines) |
-| `notetaker: transcript` | Fetch one meeting's transcript | transcript-fetch equivalent | action-sweep, idea-deep-dive |
-| `codebase: search` | Search the connected codebase for a term or symbol | device-bridge or filesystem search | idea-deep-dive (circle 3) |
-| `codebase: read` | Read one file from the connected codebase | device-bridge or filesystem read | idea-deep-dive (circle 3) |
-| `web: search` | General web search for market/competitor research | web-search equivalent | idea-scout, idea-deep-dive (circle 4), idea-ticket |
+| `notetaker: list meetings` | List recent recorded meetings | meetings-list equivalent | action-sweep (fourth source), briefing (prep lines) |
+| `notetaker: transcript` | Fetch one meeting's transcript | transcript-fetch equivalent | action-sweep |
+| `codebase: search` | Search the connected codebase for a term or symbol | device-bridge or filesystem search | idea-spar (reality lens) |
+| `codebase: read` | Read one file from the connected codebase | device-bridge or filesystem read | idea-spar (reality lens) |
+| `web: search` | General web search for market/competitor research | web-search equivalent | idea-spar (market lens), idea-ticket |
+| `page: publish` | Publish (or republish in place) one self-contained HTML page and return a shareable link | an artifact or doc publisher | idea-spar (the pack) |
 
-A category a skill doesn't use is simply absent from its `## Needs` - this table is the full catalogue across all thirteen skills, not a per-skill checklist.
+A category a skill doesn't use is simply absent from its `## Needs` - this table is the full catalogue across all the skills, not a per-skill checklist.
 
 ## Chat search forms
 

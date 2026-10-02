@@ -21,8 +21,7 @@ budgets:
 | Skill | Step | Tier | Why |
 |---|---|---|---|
 | idea-ticket | draft audit (a fresh subagent checks a ticket draft before it goes to the user) | `critic` | the point of the audit is a sharper, more careful reader than the one that wrote the draft; the source skill deliberately does not let this step inherit the default model |
-| idea-wireframe | critic round (ranks the wireframe against recent prior wireframes) | `critic` | judgement is the one place worth the stronger model; the critic only ever sees a screenshot and a one-line problem statement, so the call stays cheap even on the stronger tier |
-| idea-deep-dive | every circle 1/2/3/4 search, dispatched as a subagent with one narrow job | `search` | vault, chat and web lookups are near-free structured lookups; tiering by task (not by step) keeps raw thread/page/file content out of the primary model's context |
+| idea-spar | every web and codebase search behind the reality and market lenses, dispatched as a subagent with one narrow job | `search` | code and web lookups are near-free structured lookups; tiering by task (not by step) keeps raw file and page content out of the primary model's context |
 | skill-eval | Step 2 synthesis (revises a `SKILL.md` from captured feedback) | `critic` | this is the hard reasoning step - holding the whole original skill, the specific feedback and the discipline not to over-edit all at once |
 
 Every other skill and step runs on `worker` by default, including all of reply-draft,
@@ -36,8 +35,8 @@ step above escalates, never the drafting itself.
 A skill that needs a higher tier for a single step spawns a **fresh subagent** explicitly
 set to that tier for that step only - it does not switch its own running model. The
 escalation is scoped to the one call: the subagent gets only what that step needs (per
-idea-wireframe, a genuinely fresh context with no inherited build reasoning, so the critic
-does not anchor on the primary model's own thinking), returns its narrow result, and the
+idea-ticket's audit, a genuinely fresh context with no inherited drafting reasoning, so the
+critic does not anchor on the primary model's own thinking), returns its narrow result, and the
 calling skill resumes on `worker` for everything after.
 
 ## Stating an unavailable tier

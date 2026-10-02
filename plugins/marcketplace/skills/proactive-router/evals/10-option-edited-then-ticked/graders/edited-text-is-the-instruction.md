@@ -10,7 +10,7 @@ rather than a stream") and then ticked. A good run:
 - Classifies the line as edited-and-ticked (the canvas text differs from the stored
   `text`), and treats the edit as a variation of that option, so the dispatch payload
   carries the edited text as `text_as_ticked` and the stored text as `original_text`.
-- Prepares a dispatch to `idea-scout` in `decide` mode for that one line; a sub-line
+- Prepares a dispatch to `idea-spar` in `decide` mode for that one line; a sub-line
   saying a tool category could not be resolved is an acceptable outcome of the dispatch
   step.
 - Increments `tally.idea-decision.edited` (or records the edit in the tally) on the

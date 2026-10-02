@@ -4,7 +4,7 @@
 
 State is the plugin's working memory: run history, cursors, the category-to-handler
 registry and its tally, the item ledger the surface protocol needs to interpret ticks,
-the idea pipeline's requeue flags, and per-machine tool-prefix resolutions. Like the
+idea-spar's per-idea roadmap memory, and per-machine tool-prefix resolutions. Like the
 profile, it lives in a cloud-connector document the user owns (a Confluence page or a
 SharePoint/OneDrive file) and never local-only. The state document points back to the
 profile via `profile_ref`, and the profile points to state via `state_ref`; they are two
@@ -47,14 +47,14 @@ cursors:
   briefing: {last_run_ts, last_seen: {<channel_id>: <ts>}}   # every channel briefing reads, feed channels included
   proactive-router: {last_scanned}
   action-sweep: {scanned_through, chat_since}
-  idea-scout: {roadmap_checked_at}
+  idea-spar: {roadmap_checked_at}
   kb-dream: {last_dream_at, last_full_dream_at, last_registry_review_at, last_voice_review_at,
              open_followups: {<note path>#<slug>: {text, first_flagged_at, dreams_open, escalated_tag}}}
   session-log: {last_pending_processed}
   skill-health-check: {last_checked: {<skill>: <date>}}
 
 ideas:
-  <idea key>: {roadmap_last_seen, requeue_scout: false, requeue_wireframe: {feedback}}
+  <idea key>: {roadmap_last_seen, pack_ref, pack_pending: false}
 
 glossary: {<term>: <meaning>}
 nicknames: {<email>: <nickname>}
@@ -84,9 +84,9 @@ machines:
   <machine_id>: {tools: {chat: "mcp__...__", tracker: "...", ...}, kb_access, codebase_access, resolved_at}
 ```
 
-The tracker labels (`investigated`, `wireframed`) remain the idea pipeline's first-pass
-idempotency keys. A second pass on the same idea is driven by `ideas.<key>` instead: a
-requeue flag set by one tick, cleared by the skill that acts on it, never a label change.
+`ideas.<key>` is idea-spar's only memory of an idea: the roadmap slot it last saw, the
+link to the idea's latest pack, and whether a Next-watch pack is still owed. No skill writes
+a tracker label on an idea.
 
 ## Key-by-key table
 
@@ -101,13 +101,13 @@ requeue flag set by one tick, cleared by the skill that acts on it, never a labe
 | `cursors.briefing` | briefing | briefing | permanent, overwritten each run |
 | `cursors.proactive-router` | proactive-router | proactive-router | permanent, overwritten each run |
 | `cursors.action-sweep` | action-sweep | action-sweep | permanent, overwritten each run |
-| `cursors.idea-scout` | idea-scout | idea-scout | permanent, overwritten each run |
+| `cursors.idea-spar` | idea-spar (Next watch) | idea-spar | permanent, overwritten each run |
 | `cursors.kb-dream` | kb-dream | kb-dream | permanent, overwritten each run; `open_followups` drops an entry once it resolves or its escalated line is deleted |
 | `cursors.session-log` | session-log | session-log | permanent, overwritten each run |
 | `cursors.skill-health-check` | skill-health-check | skill-health-check | permanent, one entry per skill checked |
-| `ideas.<key>.roadmap_last_seen` | idea-scout (roadmap watch) | idea-scout | permanent, overwritten when the slot changes |
-| `ideas.<key>.requeue_scout` | proactive-router (`inline:requeue`, sets); idea-scout (clears) | idea-scout | until cleared |
-| `ideas.<key>.requeue_wireframe` | idea-wireframe `react` (sets); idea-wireframe (clears) | idea-wireframe | until cleared |
+| `ideas.<key>.roadmap_last_seen` | idea-spar (Next watch) | idea-spar | permanent, overwritten when the slot changes |
+| `ideas.<key>.pack_ref` | idea-spar, whenever it publishes a pack for a keyed idea | idea-spar (`decide`, the decision log's sources), briefing (via `runs.idea-spar.ref`) | overwritten by the next pack |
+| `ideas.<key>.pack_pending` | idea-spar (Next watch sets on a move into Next, clears once the pack is published) | idea-spar | until cleared |
 | `glossary` | proactive-router (`inline:promote` on a ticked `term:` line) | briefing | permanent, additive |
 | `nicknames` | briefing (carried and added to) | briefing, kb-dream, session-log | permanent, additive |
 | `registry.<category>` | proactive-router (a tick sets `set_by: user_tick`; shipped defaults ship with `set_by: shipped`) | proactive-router | permanent until reassigned |
@@ -132,7 +132,7 @@ requeue flag set by one tick, cleared by the skill that acts on it, never a labe
   skill's `runs.<skill>`, `cursors.<skill>` or `items` entries it did not itself write.
   The shared exceptions are `tally.<category>`, which any dispatch outcome may increment
   by exactly the amount this run's ticks, edits and deletes justify; `ideas.<key>`, which
-  the hub sets and the idea skills clear; and `outcomes`, which the hub and a manual
+  only idea-spar writes; and `outcomes`, which the hub and a manual
   `skill-eval` run both append to.
 - **Pass the page version where the connector supports it.** Confluence and similar
   connectors expose a version number on read; carry it into the write call so the
@@ -153,8 +153,8 @@ requeue flag set by one tick, cleared by the skill that acts on it, never a labe
 - **`items`** entries are pruned once the surface line they describe reaches the Closed
   section. Pruning `items` is briefing's job, since briefing is the skill that moves
   lines into Closed.
-- **`ideas.<key>`** entries stay while the idea is in the pipeline; kb-dream's monthly
-  pass drops any entry whose idea no longer exists on the board or the tracker.
+- **`ideas.<key>`** entries stay while the idea exists; kb-dream's monthly pass drops any
+  entry whose idea no longer exists on the tracker.
 - **`glossary` and `nicknames`** are additive and have no cap.
 - **Everything else** (`registry`, `tally`, `proposals`, `suppressions`,
   `patterns_blocked`, `machines`) has no automatic pruning; `proposals` entries are
@@ -175,6 +175,7 @@ the board has nothing to race and runs as normal.
 | From version | To version | Migration |
 |---|---|---|
 | 1.0.0 | 1.1.0 | Add `ideas: {}`, `cursors.action-sweep.chat_since`, `cursors.idea-scout`, and `ref` on every existing `runs.<skill>` entry (empty). Drop any `proposals` entry with `kind: skill_eval` (status `dismissed`, never deleted). The board itself is migrated by `briefing` alone, per `skills/briefing/references/migration.md`; every other skill that reads or writes the board and finds any pre-1.1.0 heading records `runs.<skill>.status: quiet`, note `awaiting migration`, and stops |
+| 1.1.0 | 1.2.0 | The idea pipeline (`idea-scout`, `idea-deep-dive`, `idea-wireframe`) is replaced by `idea-spar`. Add `cursors.idea-spar` absent (its first run seeds and briefs nothing). Reshape each `ideas.<key>` to `{roadmap_last_seen, pack_ref: "", pack_pending: false}`, keeping `roadmap_last_seen` and dropping `requeue_scout` and `requeue_wireframe`. Set `registry.idea-decision.handler` to `idea-spar` (mode `decide`) and `registry.wireframe-reaction` and `registry.idea-refresh` to `handler: null`. Leave `cursors.idea-scout` in place, unread. On the board, `briefing` closes every open `<key>/q…`, `<key>/w-…` and `<key>/r` line as `retired` and prunes its `items` entry; open `<key>/d…` groups stay and now dispatch to `idea-spar` |
 
 A migration is always **additive**: it may add a new key with its default value, or
 reshape a key it explicitly names, but it never deletes a key it does not understand.

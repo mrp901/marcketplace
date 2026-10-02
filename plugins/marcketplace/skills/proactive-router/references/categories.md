@@ -24,9 +24,7 @@ category genuinely isn't here, the proposal names it `needs a new skill`.
 | `running-behind` | ⏰ | An overdue item worth a closer look before flagging further | `inline:investigate` |
 | `feed-mismatch` | 🔎 | A tracker-feed claim the live issue contradicts; look into who changed what | `inline:investigate` |
 | `term` | 📘 | A word or acronym worth adding to the glossary | `inline:promote` |
-| `idea-decision` | 🔀 | One option of a decision on an idea | idea-scout `decide` |
-| `wireframe-reaction` | 🖼️ | Keep, rework or drop a wireframe | idea-wireframe `react` |
-| `idea-refresh` | ⬆️ | An idea that left a parked roadmap slot; refresh its research | `inline:requeue` |
+| `idea-decision` | 🔀 | One option of a decision on an idea | idea-spar `decide` |
 | `skill-eval` | 🔴 | A skill scored red; run skill-eval on it | `manual:skill-eval` (queued, never dispatched) |
 | `calendar` | 📅 | A scheduling action (book, move, decline a meeting) | none yet |
 | `fyi` | (none) | Genuinely nothing to act on | never on the board; `runs.proactive-router.fyi` |
