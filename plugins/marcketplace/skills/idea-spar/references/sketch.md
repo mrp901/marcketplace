@@ -12,8 +12,8 @@ way real UI reads. The sketch exists to compare options, not to specify one.
   styling.
 - **One line under each option: the trade-off**, in the form `+ <what it buys> / − <what
   it costs>`. That line is the only prose an option carries.
-- **Up to three numbered notes per option, outside the frame**, each one line, each tied to
-  a finding from a lens or to an open fork. A note that only describes what the drawing
+- **Up to three numbered notes per option, outside the frame**, each at most twelve words
+  plus its source in brackets, each tied to a finding from a lens or to an open fork. A note that only describes what the drawing
   already shows is cut.
 
 ## Components, not inventions
