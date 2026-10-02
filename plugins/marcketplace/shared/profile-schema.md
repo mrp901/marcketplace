@@ -47,6 +47,7 @@ tools:                     # which SERVICE serves each category; prefixes live i
   kb: {service: sharepoint | device_bridge | filesystem}
   codebase: {service: device_bridge | filesystem | none}
   web: {service: websearch}
+  page: {service: claude_artifact | confluence | none}   # publishes idea-spar's shareable pack
 
 chat:
   team_id:                 # chat workspace/team id
@@ -64,8 +65,7 @@ briefing:
   expected_runs:             # skill -> max days between runs before the Runs report calls it overdue
     proactive-router: 2
     action-sweep: 8
-    idea-scout: 8
-    idea-wireframe: 8
+    idea-spar: 8
     kb-dream: 8
     skill-health-check: 8
 
@@ -85,10 +85,9 @@ ideas:
   issue_type: {name, id}
   area_field:                  # custom field that carries the product-area tag
   area_value:                   # the value that qualifies an idea as in scope
-  roadmap_field:                 # custom field that carries roadmap slot (reported, never qualifying)
-  labels: {investigated, wireframed}
+  roadmap_field:                 # custom field that carries roadmap slot (the Next watch's trigger, never a qualifier)
   qualifiers: [summary_has_product_tag, area_field_has_area_value, assignee_is_me]  # first-match gate
-  parked_roadmap_values: ["Someday"]   # roadmap slots that mean parked; an idea leaving one gets a refresh question
+  next_roadmap_values: ["Next"]   # roadmap slots that mean "about to be worked"; an idea moving into one gets a pack
 
 notetaker:
   lookback_days: 7
@@ -111,7 +110,6 @@ kb:
     inbox:
     drafts:
     research:
-    prototypes:
     screenshots:
     sessions:
     dreams:
@@ -158,9 +156,7 @@ budgets:
   proactive-router: {searches: 5, thread_reads: 6, dispatches: 3}
   action-sweep: {canvas_guard: 5, cold_start_days: 7, targeted_search_per_todo: 1, thread_reads: 6}
   idea-ticket:    {investigation_calls: 4, web_searches: 1, audit_rounds: 2}
-  idea-scout: {web_searches: 4, kb_notes: 3, note_words: 800}
-  idea-deep-dive: {loop_budget: 8, circle_caps: {kb: 2, people: 2, code: 3, web: 4}, depth_cap: 3}
-  idea-wireframe: {pngs: 5, competitor_pngs: 2, md_reads: 5, html_lines: 300, critic_rounds: 1}
+  idea-spar: {web_searches: 4, code_reads: 8, kb_reads: 3, findings_per_lens: 5, sketch_options: 3, next_per_run: 1}
   kb-dream: {incremental_reads: 25, sessions_incremental: 5, sessions_full: 10, reviews: monthly}
   skill-health-check: {kb_reads: 15}
   models: {worker: sonnet, search: haiku, critic: opus}
@@ -174,23 +170,23 @@ budgets:
 | `state_ref` | onboarding (all skills) | ask (set once at bootstrap) | never guessed; onboarding step 2 fails fast without it |
 | `org.name` | all skills (org context in prose and notes) | ask | |
 | `org.product_scope` | all skills | ask | |
-| `org.product_tag` | idea-scout, idea-ticket, proactive-router | ask | used by `ideas.qualifiers: summary_has_product_tag` |
-| `org.modules_context` | briefing, idea-scout, idea-deep-dive, idea-wireframe | ask | one line, quoted verbatim, not summarised |
+| `org.product_tag` | idea-spar, idea-ticket, proactive-router | ask | used by `ideas.qualifiers: summary_has_product_tag` |
+| `org.modules_context` | briefing, idea-spar | ask | one line, quoted verbatim, not summarised |
 | `org.timezone` | briefing, kb-dream, action-sweep, session-log | discover (system clock) | |
 | `user.name` | briefing, kb-dream, reply-draft, kb-note, session-log | ask | |
 | `user.email` | reply-draft, kb-note, kb-dream (voice calibration) | discover (chat auth test) | |
-| `user.chat_user_id` | briefing, proactive-router, action-sweep, idea-scout, idea-wireframe, kb-dream | discover (chat auth test) | |
+| `user.chat_user_id` | briefing, proactive-router, action-sweep, kb-dream | discover (chat auth test) | |
 | `user.tracker_account_id` | action-sweep, idea-ticket, briefing | discover (tracker "myself") | |
 | `tools.*` | onboarding (all skills) | default, refined by discovery | prefixes never stored here, only the service name |
-| `chat.team_id` | briefing, kb-dream, idea-scout, idea-wireframe | discover (parsed from surface URL) | |
-| `chat.team_url` | briefing, kb-dream, idea-scout, idea-wireframe | discover (parsed from surface URL) | |
+| `chat.team_id` | briefing, kb-dream | discover (parsed from surface URL) | |
+| `chat.team_url` | briefing, kb-dream | discover (parsed from surface URL) | |
 | `chat.starter_emoji` | proactive-router | default | |
 | `chat.include_saved_items` | proactive-router | default | |
 | `chat.tracker_feed_channels.work_started` | briefing | ask | identity-shaped: never defaulted. A channel id, or `none` if the install has no such feed |
 | `chat.tracker_feed_channels.fix_version` | briefing | ask | same as `work_started` |
 | `calendar.day_window` | briefing | default | |
 | `briefing.expected_runs` | briefing | default | one entry per scheduled skill; a skill missing from the map is never called overdue |
-| `tracker.cloud_id` | briefing, action-sweep, idea-scout, idea-deep-dive, idea-wireframe, idea-ticket, skill-health-check | discover (accessible-resources) | |
+| `tracker.cloud_id` | briefing, action-sweep, idea-spar, idea-ticket, skill-health-check | discover (accessible-resources) | |
 | `tracker.site_url` | same as `tracker.cloud_id` | discover (accessible-resources) | |
 | `tracker.project_key` | action-sweep, idea-ticket | ask | |
 | `tracker.issue_types` | action-sweep, idea-ticket | discover (create-metadata) | |
@@ -199,33 +195,32 @@ budgets:
 | `tracker.ticket_template` | idea-ticket, action-sweep | default | |
 | `tracker.parked_prefix` | action-sweep | default | |
 | `tracker.my_work_jql` | briefing, action-sweep | default | |
-| `ideas.project_key` | idea-scout, idea-deep-dive, idea-wireframe, idea-ticket | ask | |
-| `ideas.issue_type` | idea-scout, idea-deep-dive, idea-wireframe, idea-ticket | discover (create-metadata) | |
-| `ideas.area_field` | idea-scout, idea-wireframe, idea-ticket | discover (create-metadata) | |
-| `ideas.area_value` | idea-scout, idea-wireframe, idea-ticket | ask | |
-| `ideas.roadmap_field` | idea-scout, idea-wireframe | discover (create-metadata) | reported, never a qualifier |
-| `ideas.labels` | idea-scout, idea-wireframe | default | |
-| `ideas.qualifiers` | idea-scout, idea-ticket | default | first-match gate, generalised from the source's single hardcoded gate |
-| `ideas.parked_roadmap_values` | idea-scout (roadmap watch) | default | the slots that mean parked; leaving one is the only roadmap change that produces a board line |
-| `notetaker.lookback_days` | action-sweep, idea-deep-dive, briefing | default | |
+| `ideas.project_key` | idea-spar, idea-ticket | ask | |
+| `ideas.issue_type` | idea-spar, idea-ticket | discover (create-metadata) | |
+| `ideas.area_field` | idea-spar, idea-ticket | discover (create-metadata) | |
+| `ideas.area_value` | idea-spar, idea-ticket | ask | |
+| `ideas.roadmap_field` | idea-spar (Next watch) | discover (create-metadata) | the trigger, never a qualifier |
+| `ideas.qualifiers` | idea-spar (Next watch), idea-ticket | default | first-match gate, generalised from the source's single hardcoded gate |
+| `ideas.next_roadmap_values` | idea-spar (Next watch) | default | the slots that mean "about to be worked"; moving into one is the only roadmap change that produces a pack |
+| `notetaker.lookback_days` | action-sweep, briefing | default | |
 | `notetaker.prep_lines` | briefing | default | |
-| `kb.name` | kb-note, session-log, kb-dream, idea-scout, idea-deep-dive, idea-wireframe, action-sweep | ask | |
+| `kb.name` | kb-note, session-log, kb-dream, idea-spar, action-sweep | ask | |
 | `kb.kind` | kb-note, session-log, kb-dream | ask | |
-| `kb.local_root` | kb-note, session-log, kb-dream, idea-scout, idea-wireframe | default (empty until a device bridge is linked) | |
-| `kb.remote` | kb-note, session-log, kb-dream, idea-scout, idea-wireframe | default | |
+| `kb.local_root` | kb-note, session-log, kb-dream | default (empty until a device bridge is linked) | |
+| `kb.remote` | kb-note, session-log, kb-dream | default | |
 | `kb.conventions_file` | session-log, kb-dream, kb-note | default | |
 | `kb.types_registry` | session-log, kb-dream | default | |
-| `kb.people_file` | session-log, kb-dream, idea-scout, idea-wireframe, action-sweep | ask | name-collision key |
-| `kb.link_style` | kb-note, session-log, kb-dream, idea-scout, idea-wireframe | ask | |
+| `kb.people_file` | session-log, kb-dream, action-sweep | ask | name-collision key |
+| `kb.link_style` | kb-note, session-log, kb-dream, idea-spar | ask | |
 | `kb.frontmatter_required` | kb-note, session-log, kb-dream | default | |
 | `kb.tag_hints` | kb-note, session-log | default | |
-| `kb.paths.*` | kb-note, session-log, kb-dream, idea-scout, idea-deep-dive, idea-wireframe, action-sweep, reply-draft (voice) | default (asked only for `inbox`/`sessions` if the org has no convention) | |
-| `kb.log_size_cap_kb` | session-log, kb-dream, idea-scout, idea-wireframe | default | |
-| `kb.sweep_queries` | idea-wireframe, kb-dream | default | |
-| `codebase.path` | idea-deep-dive | optional | only asked if `codebase.access != none` |
-| `codebase.access` | idea-deep-dive | default | |
+| `kb.paths.*` | kb-note, session-log, kb-dream, idea-spar, action-sweep, reply-draft (voice) | default (asked only for `inbox`/`sessions` if the org has no convention) | |
+| `kb.log_size_cap_kb` | session-log, kb-dream, idea-spar | default | |
+| `kb.sweep_queries` | kb-dream | default | |
+| `codebase.path` | idea-spar (reality lens) | optional | only asked if `codebase.access != none` |
+| `codebase.access` | idea-spar (reality lens) | default | |
 | `surface.kind` | proactive-router, briefing | default | |
-| `surface.id` | proactive-router, briefing, idea-scout, idea-deep-dive, idea-wireframe, action-sweep, kb-dream, skill-health-check | ask | every surface-owning skill needs it |
+| `surface.id` | proactive-router, briefing, idea-spar, action-sweep, kb-dream, skill-health-check | ask | every surface-owning skill needs it |
 | `surface.url` | same as `surface.id` | ask | |
 | `surface.home_channel_id` | briefing, kb-dream (webhook fallback) | ask | |
 | `notify.mode` | briefing | ask | briefing is the only skill that posts |
@@ -233,7 +228,7 @@ budgets:
 | `notify.mention_form` | briefing | default | |
 | `notify.webhooks.briefing` | briefing | optional | the only webhook key read; per-skill keys left over from 1.0.0 are ignored |
 | `notify.proof_of_life` | none | unused | kept in the shape so an old profile still parses; `briefing.expected_runs` replaced it |
-| `people[]` | briefing, session-log, kb-dream, idea-scout, idea-wireframe, action-sweep | ask | |
+| `people[]` | briefing, session-log, kb-dream, action-sweep | ask | |
 | `people_confusions` | kb-dream, session-log | optional, starts empty | |
 | `known_fact_errors` | kb-dream, session-log | optional, starts empty | |
 | `voice.guide_path` | reply-draft, kb-note, idea-ticket, kb-dream | default | |
@@ -242,7 +237,7 @@ budgets:
 | `voice.calibration_refs` | idea-ticket | optional | Tracker keys whose prose is the strongest reference for the `ticket_prose` register. Weighted above general samples during calibration |
 | `voice.sample_counts` | kb-dream | default | |
 | `budgets.<skill>` | that skill only | default | a skill only ever reads its own subtree |
-| `budgets.models` | idea-ticket, idea-wireframe, idea-deep-dive, skill-eval | default | see `model-tiers.md` |
+| `budgets.models` | idea-ticket, idea-spar, skill-eval | default | see `model-tiers.md` |
 
 ## Where the current values come from
 
@@ -317,7 +312,7 @@ Two groups of keys live under `kb` and the difference is easy to mis-cite from m
   `kb.frontmatter_required`, `kb.tag_hints`, `kb.log_size_cap_kb`, `kb.sweep_queries`.
   These describe the knowledge base itself: what it is, how to reach it, and the rules it
   keeps. There is one of each.
-- **Under `kb.paths.<name>`**: `inbox`, `drafts`, `research`, `prototypes`, `screenshots`,
+- **Under `kb.paths.<name>`**: `inbox`, `drafts`, `research`, `screenshots`,
   `sessions`, `dreams`, `decisions`, `memory`, `voice`, `log`, `product_index`,
   `service_map`, `utility`. These are locations inside it: where a given kind of thing is
   written or found.

@@ -27,7 +27,7 @@ Five sections, in this order, no others:
 | Today | The Calendar and Tracker snapshots (one dated block each) | briefing |
 | To-do | The user's own list | the user; briefing closes ticked lines |
 | For you | Every line that needs the user's tick, other than idea lines: tags `pr:` `rb:` `sweep:` `dream:` `term:` `feed:` `shc:` | the skill that owns each tag prefix; the hub adds sub-lines |
-| Ideas | One block per idea with open decisions, wireframe reactions or a refresh question | idea-scout, idea-deep-dive, idea-wireframe, by tag prefix inside the block |
+| Ideas | One block per idea with open decisions from its pack | idea-spar, by tag prefix inside the block |
 | Closed | The log, 5 days or 20 lines | briefing |
 
 There is no Plugin notices section. A fast-fail is recorded in `state.runs.<skill>` (see `onboarding.md`) and the briefing message reports it.
@@ -45,9 +45,7 @@ A skill owns the lines it wrote, identified by their tag prefix, wherever they s
 | `term:` | briefing | term |
 | `feed:` | briefing | feed-mismatch |
 | `shc:` | skill-health-check | skill-eval |
-| `<idea key>/d…`, `<idea key>/r` | idea-scout | idea-decision, idea-refresh |
-| `<idea key>/q…` | idea-deep-dive | idea-decision |
-| `<idea key>/w-…` | idea-wireframe | wireframe-reaction |
+| `<idea key>/d…` | idea-spar | idea-decision |
 
 Owning a line means: only the owner rewrites its own untouched lines, only the owner decides when to post a new one, and the owner settles its own lines before appending (see below). Two things cut across ownership, and only two: the hub may add a sub-line under any ticked line, and briefing may move any line to Closed. Neither ever edits another skill's wording.
 
@@ -115,22 +113,15 @@ The question line carries no checkbox and no tag of its own; `state.items` recor
 The Ideas section holds one block per idea that has anything open. Blocks are removed by briefing once they have no open lines.
 
 ```
-- PRJ-164 · <title> · note · wireframe
+- PRJ-164 · <title> · pack
   - <decision question>
     - [ ] (PRJ-164/d1a) <option>
     - [ ] (PRJ-164/d1b) <option>
-  - How does the wireframe land?
-    - [ ] (PRJ-164/w-keep) 👍 Keep this wireframe direction
-    - [ ] (PRJ-164/w-rework) 🔁 Rework: edit this line to say what to change
-    - [ ] (PRJ-164/w-drop) 🗑️ Drop it
-  - [ ] (PRJ-164/r) ⬆️ Moved <parked slot> → <slot>. Refresh the research?
 ```
 
-- The header line is `- <key> · <title> · <link text per artefact>`: `note` links the research note, `wireframe` links the wireframe, each present only once it exists. Whichever idea skill first needs the block writes the header; briefing removes it when the block empties.
-- Decision groups are `<key>/d<n><letter>` (idea-scout) and `<key>/q<n><letter>` (idea-deep-dive). At most 2 open decisions per idea, with 2 to 4 options each. A stuck or paused deep-dive question is one line, `(<key>/q<n>) <question> · edit this line with your answer and tick`.
-- Wireframe reactions are one group of three (idea-wireframe).
-- The refresh line `<key>/r` is idea-scout's roadmap watch.
-- Ticks on any of these dispatch per `handler-contract.md`: decisions to idea-scout `decide`, reactions to idea-wireframe `react`, the refresh line to `inline:requeue`.
+- The header line is `- <key> · <title> · pack`, `pack` linking the idea's shareable pack. idea-spar writes the header when it first needs the block; briefing removes it when the block empties.
+- Decision groups are `<key>/d<n><letter>`, written by idea-spar's Next watch from the pack's open forks. At most 2 open decisions per idea, with 2 to 4 options each.
+- A tick on an option dispatches idea-spar `decide` per `handler-contract.md`.
 
 ## The snapshot rule
 

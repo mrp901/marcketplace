@@ -63,8 +63,7 @@ the board to learn that something they ticked has not been actioned yet.
 ## The Runs block
 
 Built from `state.runs`, one line per scheduled skill that ran inside the window, in a
-fixed order (proactive-router, action-sweep, idea-scout, idea-deep-dive, idea-wireframe,
-kb-dream, skill-health-check), then the health scores, FYIs and overdue lines:
+fixed order (proactive-router, action-sweep, idea-spar, kb-dream, skill-health-check), then the health scores, FYIs and overdue lines:
 
 ```
 Runs
@@ -77,7 +76,7 @@ Runs
 
 Rules:
 
-- A `quiet` run gets one short line (`idea-scout quiet: nothing qualifying`). A skill that
+- A `quiet` run gets one short line (`idea-spar quiet: nothing moved into Next`). A skill that
   did not run inside the window gets no line unless it is overdue.
 - `overdue` compares `runs.<skill>.last_run_at` against `profile.briefing.expected_runs`;
   a skill absent from that map is never called overdue. This replaces every per-skill

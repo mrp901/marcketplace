@@ -25,6 +25,7 @@ tools:
   kb: {service: sharepoint}
   codebase: {service: device_bridge}
   web: {service: websearch}
+  page: {service: claude_artifact}
 
 chat:
   team_id: TEXAMPLE001
@@ -42,8 +43,7 @@ briefing:
   expected_runs:
     proactive-router: 2
     action-sweep: 8
-    idea-scout: 8
-    idea-wireframe: 8
+    idea-spar: 8
     kb-dream: 8
     skill-health-check: 8
 
@@ -64,9 +64,8 @@ ideas:
   area_field: "cf[20067]"
   area_value: "Freight Ops"
   roadmap_field: "cf[20054]"
-  labels: {investigated: investigated, wireframed: wireframed}
   qualifiers: [summary_has_product_tag, area_field_has_area_value, assignee_is_me]
-  parked_roadmap_values: ["Someday", "Parking lot"]
+  next_roadmap_values: ["Next"]
 
 notetaker:
   lookback_days: 7
@@ -89,7 +88,6 @@ kb:
     inbox: Inbox/
     drafts: Drafts/
     research: Product/FreightOps/Research/
-    prototypes: Product/FreightOps/Prototypes/
     screenshots: References/Images and Screenshots/Screenshots/
     sessions: Sessions/
     dreams: Dreams/
@@ -145,9 +143,7 @@ budgets:
   proactive-router: {searches: 5, thread_reads: 6, dispatches: 3}
   action-sweep: {canvas_guard: 5, cold_start_days: 7, targeted_search_per_todo: 1, thread_reads: 6}
   idea-ticket: {investigation_calls: 4, web_searches: 1, audit_rounds: 2}
-  idea-scout: {web_searches: 4, kb_notes: 3, note_words: 800}
-  idea-deep-dive: {loop_budget: 8, circle_caps: {kb: 2, people: 2, code: 3, web: 4}, depth_cap: 3}
-  idea-wireframe: {pngs: 5, competitor_pngs: 2, md_reads: 5, html_lines: 300, critic_rounds: 1}
+  idea-spar: {web_searches: 4, code_reads: 8, kb_reads: 3, findings_per_lens: 5, sketch_options: 3, next_per_run: 1}
   kb-dream: {incremental_reads: 25, sessions_incremental: 5, sessions_full: 10, reviews: monthly}
   skill-health-check: {kb_reads: 15}
   models: {worker: sonnet, search: haiku, critic: opus}

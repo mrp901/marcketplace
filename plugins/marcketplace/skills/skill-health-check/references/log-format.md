@@ -30,7 +30,7 @@ Per `surface-protocol.md`'s line grammar, tag form `shc:<YYMMDD>-<n>`, category
 `skill-eval`, reading as the action a tick causes:
 
 ```
-- [ ] (shc:260910-1) 🔴 idea-deep-dive scored red: two notes superseded by your own corrections this fortnight. Run skill-eval on it? · .utility/skill-health/idea-deep-dive.md
+- [ ] (shc:260910-1) 🔴 kb-note scored red: two notes superseded by your own corrections this fortnight. Run skill-eval on it? · .utility/skill-health/kb-note.md
 ```
 
 The one or two things that drove the tag, not the full evidence list; the log file is the
@@ -45,7 +45,7 @@ No board line. Every score, whatever its colour, is written to
 
 ```yaml
 scores:
-  idea-deep-dive: {tag: red, why: "two notes superseded by your corrections", ref: ".utility/skill-health/idea-deep-dive.md", checked_at: 2026-09-10T03:00:00+10:00}
+  kb-note: {tag: red, why: "two notes superseded by your corrections", ref: ".utility/skill-health/kb-note.md", checked_at: 2026-09-10T03:00:00+10:00}
   reply-draft: {tag: amber, why: "2 of 3 drafts edited before sending", ref: ".utility/skill-health/reply-draft.md", checked_at: 2026-09-10T03:00:00+10:00}
   kb-note: {tag: green, why: "3 notes verified as written", ref: ".utility/skill-health/kb-note.md", checked_at: 2026-09-10T03:00:00+10:00}
 ```

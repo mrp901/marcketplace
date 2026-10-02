@@ -36,7 +36,7 @@ Nothing here ever sends a message on your behalf.
 
 # For you
 
-- [x] (shc:260921-1) 🔴 idea-deep-dive scored red: two notes superseded by your own corrections this fortnight. Run skill-eval on it? · .utility/skill-health/idea-deep-dive.md
+- [x] (shc:260921-1) 🔴 kb-note scored red: two notes superseded by your own corrections this fortnight. Run skill-eval on it? · .utility/skill-health/kb-note.md
 
 # Ideas
 

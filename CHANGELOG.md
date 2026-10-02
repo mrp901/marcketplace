@@ -6,7 +6,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-10-02
+
+The idea pipeline is replaced by one interactive skill.
+
+### Changed
+- `idea-scout`, `idea-deep-dive` and `idea-wireframe` are replaced by `idea-spar`, a
+  sparring partner for an idea you are actively working. Three lenses, each in its own
+  reference file: **challenge** (the strongest case against), **reality** (what the code
+  does today and what that makes cheap or expensive), **market** (what's out there, whether
+  it matters to our positioning, whether it changes the outcome). Context you already have
+  (the ticket, the kb, what you said) goes in as a known packet and is never restated.
+  Every finding carries a source and a "so what".
+- Wireframes are replaced by **sketches**: 2-3 alternative layouts at wireframe fidelity,
+  built from a fixed mock component kit (`references/sketch-kit.html`), labels of three
+  words or fewer, body copy as grey bars, one trade-off line per option. ASCII inline in a
+  session, HTML in a pack.
+- Output lands inline in the session; "pack it" publishes a shareable page (new tool
+  category `page: publish`, falling back to a kb file).
+- The only proactive run is the **Next watch**: an idea that moves into a
+  `ideas.next_roadmap_values` slot gets a full pack, its forks go on the board as
+  `<key>/d…` decision groups, and the briefing reports the pack link. `idea-decision` ticks
+  dispatch `idea-spar` `decide`, which writes the idea's decision log.
+
 ### Added
+- Profile keys `ideas.next_roadmap_values`, `tools.page`, `budgets.idea-spar`; state keys
+  `cursors.idea-spar`, `ideas.<key>.pack_ref`, `ideas.<key>.pack_pending`.
+- State and board migration 1.1.0 to 1.2.0: briefing closes old `<key>/q…`, `<key>/w-…`
+  and `<key>/r` lines as `retired`; open `<key>/d…` groups stay and dispatch to idea-spar.
 - `briefing` cross-checks two tracker-feed chat channels (work started, fix version
   changed) against the live tracker in one batched call and posts one `feed:` line in For
   you per contradicted claim. A tick runs `inline:investigate` (new category
@@ -33,6 +60,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   computed; the hub compares text directly (matches the router eval fixtures).
 - `proactive-router` lists `machines` in the state it writes, and drops porting-era
   wording from its intro.
+
+### Removed
+- Categories `wireframe-reaction` and `idea-refresh`, the `inline:requeue` action, the
+  `react` mode and taste log, the `investigated`/`wireframed` tracker labels (no skill
+  writes a tracker label now), profile keys `ideas.labels`, `ideas.parked_roadmap_values`,
+  `kb.paths.prototypes` and the three old `budgets` subtrees, and state keys
+  `ideas.<key>.requeue_scout` and `.requeue_wireframe`.
 
 ## [1.1.0] - 2026-09-25
 

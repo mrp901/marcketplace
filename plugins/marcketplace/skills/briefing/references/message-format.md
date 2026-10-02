@@ -74,9 +74,9 @@ Since last briefing
 * 1 ticked item queued, waiting on the next dispatch run
 Runs
 * proactive-router ok: 2 new lines, 1 dispatched · https://northwindlogistics.slack.com/docs/TEXAMPLE001/FEXAMPLECANVAS1
-* idea-scout ok: first pass on FIG-204, 2 decisions on the board · Product/FreightOps/Research/fig-204-load-plan-variance-alerts.md
+* idea-spar ok: pack for FIG-204 (moved into Next): per-drift alert or a digest? 2 decisions on the board · https://claude.ai/artifact/example-fig-204-pack
 * kb-dream quiet: nothing new since the last dream
-* health: idea-scout green · reply-draft amber (2 of 3 drafts edited before sending)
+* health: idea-spar green · reply-draft amber (2 of 3 drafts edited before sending)
 * fyi: batch-overnight recalculation agreed in #platform-eng · https://northwindlogistics.slack.com/archives/CEXAMPLEAPPRCH1/p1758510005000500
 * overdue: action-sweep last ran 11 days ago (expected every 8)
 

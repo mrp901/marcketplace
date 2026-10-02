@@ -12,8 +12,8 @@ never goes out twice.
 | briefing | the one briefing message, per `profile.notify` below | yes |
 | every other skill | nothing | yes: `status`, one-line `note`, `ref` to its artefact |
 
-A skill that used to fire its own webhook (idea-scout, idea-deep-dive, idea-wireframe,
-kb-dream, skill-health-check) no longer does. Its `runs.<skill>` entry, written every run
+A skill that used to fire its own webhook (the retired idea pipeline, kb-dream,
+skill-health-check) no longer does. Its `runs.<skill>` entry, written every run
 including a quiet one, is the record; `profile.briefing.expected_runs` is the proof of
 life (a skill that has not run within its `max_gap_days` is named in the Runs report as
 overdue). A handler dispatched by the hub never posts either; its result goes back to the
