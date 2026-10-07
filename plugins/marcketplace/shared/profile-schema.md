@@ -178,6 +178,7 @@ budgets:
 | `user.chat_user_id` | briefing, proactive-router, action-sweep, kb-dream | discover (chat auth test) | |
 | `user.tracker_account_id` | action-sweep, idea-ticket, briefing | discover (tracker "myself") | |
 | `tools.*` | onboarding (all skills) | default, refined by discovery | prefixes never stored here, only the service name |
+| `tools.<category>.cli` | onboarding step 4 (local CLI probe) | default (`auto`) | `off` skips the local CLI probe for that category; see `tool-capabilities.md` "Local CLI first" |
 | `chat.team_id` | briefing, kb-dream | discover (parsed from surface URL) | |
 | `chat.team_url` | briefing, kb-dream | discover (parsed from surface URL) | |
 | `chat.starter_emoji` | proactive-router | default | |
