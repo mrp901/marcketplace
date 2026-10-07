@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added
+- Local CLI first for tracker reads. On a machine with a shell and Atlassian's Teamwork
+  Graph CLI (`twg`) installed and signed in, `tracker`/`ideas` `search issues (JQL)` and
+  `get issue` run through the CLI's summarised output instead of the connector, to keep
+  large issue payloads out of context. Onboarding step 4 probes once per machine (cached
+  in `state.machines.<id>.cli`, re-probed after 7 days, account-matched against
+  `user.tracker_account_id`). Writes and wiki reads stay on the connector. Cloud sessions
+  and routines, which have no `twg`, are unchanged. A failed CLI read falls back to the
+  connector silently. New profile key `tools.<category>.cli: auto | off`; handler
+  payloads carry an optional `cli` block.
+
 ## [1.2.0] - 2026-10-02
 
 The idea pipeline is replaced by one interactive skill.

@@ -56,6 +56,26 @@ Every form is bounded by a cursor date and returns permalinks, which is what `st
 
 Every category resolves to a concrete tool prefix through `state.machines[<machine_id>].tools.<category>`, populated once by onboarding step 4 (`onboarding.md`) via `ToolSearch` and cached there. **Prefixes never appear hardcoded in a skill.** A skill names the category and verb; the runtime looks up that machine's cached prefix and calls the resolved tool. When the cache is stale (a tool renamed, a connector swapped) onboarding's one re-resolution on failure refreshes it before any skill proceeds.
 
+## Local CLI first, for tracker reads
+
+When a run is local, a machine with a shell may also have the service's own command-line client installed and signed in. Its output is usually smaller than a connector's (it returns a summarised view and writes the full payload to a file instead of into context), so for the read verbs below the runtime calls the CLI first and keeps the connector for everything else. Today that means one CLI: Atlassian's Teamwork Graph CLI (`twg`), for `tracker` and `ideas` when their `service` is a Jira flavour.
+
+| Verb | CLI call (`twg`) | Notes |
+|---|---|---|
+| `tracker: search issues (JQL)` / `ideas: search issues (JQL)` | `twg jira workitem query --jql "<jql>" --limit <n> -o json --agent-fields @compact` | add `--fields <a,b,...>` when the skill needs fields beyond the compact set |
+| `tracker: get issue` / `ideas: get issue` | `twg jira workitem get <key> [<key> ...] -o json --agent-fields @compact` | batches keys in one call; add `--comments`, `--remote-links` or `--full` only when the step reads them |
+
+Rules:
+
+- **Reads only.** Every write verb (`create issue`, `add comment`, `wiki: update page`) stays on the connector, and so does `wiki: get page by id`, because the profile, state and kb documents it reads are written back in the same run and must round-trip through one backend.
+- **Resolved per machine, never assumed.** Onboarding step 4 probes for the CLI and records the result in `state.machines[<machine_id>].cli` (see `onboarding.md`). A machine without a shell, without the binary, or not signed in (every cloud session and routine, today) simply has no `cli` entry and uses the connector, with no `Signed out` and no note.
+- **Connector stays resolved.** The connector prefix in `tools.<category>` is still resolved and cached alongside, because writes need it and because it is the fallback.
+- **Fall back once, silently.** If a CLI call fails (non-zero exit, an auth or contract error, or output that doesn't parse), make the same read through the connector and carry on; clear that machine's `cli.<category>` so later runs skip the CLI until the next probe. A CLI failure is never a fast-fail and never makes a section read `Signed out` while the connector works.
+- **Read the summary, not the payload.** Use the output's `stdout_inline` block; when it is absent, read the `output_files.compact` file it names. Open `output_files.stdout` only for a field the compact view left out. Never print a whole payload into context (`token-discipline.md`).
+- **Never set it up.** A skill never runs the CLI's `login`, `setup`, `upgrade` or install commands, and never passes a token as a flag. A missing or signed-out CLI is just "no CLI on this machine".
+- **Quote shell-special arguments.** In PowerShell, `@compact` must be quoted (`'@compact'`), or the shell eats it as splatting and the flag arrives empty.
+- `profile.tools.<category>.cli: off` opts a category out of the probe entirely.
+
 ## Degradation rule
 
 A category that cannot be resolved (no service configured, `ToolSearch` finds nothing, the resolved tool errors on first call) makes the section of the surface that depends on it read `Signed out` - per the snapshot rule in `surface-protocol.md` - and **the run continues**. Losing `calendar` doesn't stop `tracker` from being read; losing `web` doesn't stop a note from being written with what's already in hand.

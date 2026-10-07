@@ -82,6 +82,7 @@ state=<state ref>
 unattended
 machine=<machine_id>
 tools: {<category>: <resolved tool prefix>, ...}   # only the categories this handler needs
+cli: {<category>: <path to local CLI>, ...}       # optional; only categories whose local CLI passed the probe
 item:
   tag: <tag>
   section: <heading>
@@ -99,7 +100,7 @@ budget: {tool_calls: 25, minutes: 10}
 
 **`item.idea_key`** holds a tracker key when the line belongs to an idea block (every `<key>/…` tag) or already refers to one. A line that proposes creating something has no key yet, so the field is absent on the first-pass mode and a handler must not treat its absence as an error. On a confirming mode (`file`, `push`) it carries the key of whatever the first pass produced, when the first pass produced one; where the first pass produced only a draft, the confirming mode finds that draft through `artefacts` on the line's own sub-line instead.
 
-**Resolving the `tools` block.** The hub cannot enumerate in its own `## Needs` every tool category that every handler might need. Instead it resolves on demand: when it is about to dispatch, it reads the target handler's `## Needs`, resolves any category not already cached in `state.machines[<machine_id>]` per `onboarding.md` step 4, caches the result there, and passes only those categories in the payload. A category the hub cannot resolve is not a hub fast-fail: the dispatch is skipped, the sub-line says which category could not be resolved, and the line stays ticked for the next run. Resolving a category on a handler's behalf never grants the hub itself access to it; the prefix is passed through, not used.
+**Resolving the `tools` block.** The hub cannot enumerate in its own `## Needs` every tool category that every handler might need. Instead it resolves on demand: when it is about to dispatch, it reads the target handler's `## Needs`, resolves any category not already cached in `state.machines[<machine_id>]` per `onboarding.md` step 4, caches the result there, and passes only those categories in the payload. A category the hub cannot resolve is not a hub fast-fail: the dispatch is skipped, the sub-line says which category could not be resolved, and the line stays ticked for the next run. Resolving a category on a handler's behalf never grants the hub itself access to it; the prefix is passed through, not used. The same goes for `cli`: the hub copies any `state.machines[<machine_id>].cli` entries for those categories into the payload, and the handler follows `tool-capabilities.md`'s "Local CLI first" rules. A dispatched subagent runs on the same machine as the hub, so the probe result holds for it.
 
 **`output_location`** is an optional override, not a required instruction. Its form depends on what the handler produces:
 

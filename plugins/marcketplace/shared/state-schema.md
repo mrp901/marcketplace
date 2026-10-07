@@ -81,7 +81,9 @@ voice_edits: []              # ring buffer, max 30: {tag, register, draft_hash, 
                              # one entry per draft; edited is absent until the later comparison sets true/false
 
 machines:
-  <machine_id>: {tools: {chat: "mcp__...__", tracker: "...", ...}, kb_access, codebase_access, resolved_at}
+  <machine_id>: {tools: {chat: "mcp__...__", tracker: "...", ...}, kb_access, codebase_access, resolved_at,
+                 cli: {tracker: "<path to twg>", ideas: "..."}, cli_probed_at}
+                 # cli is optional: present only for categories whose local CLI passed the probe
 ```
 
 `ideas.<key>` is idea-spar's only memory of an idea: the roadmap slot it last saw, the
@@ -120,6 +122,7 @@ a tracker label on an idea.
 | `outcomes` | proactive-router, after each dispatch or inline action; skill-eval, when a manual run finishes | briefing (handler outcome summary and the manual close) | ring buffer, max 50, newest first |
 | `voice_edits` | reply-draft, kb-note (append); reply-draft, kb-dream (set `edited`) | kb-dream (monthly voice review), skill-health-check | ring buffer, max 30 |
 | `machines.<machine_id>` | onboarding, on tool discovery | every skill (reads its own machine's prefixes) | permanent, one entry per machine, re-resolved on failure |
+| `machines.<machine_id>.cli`, `.cli_probed_at` | onboarding step 4 (local CLI probe); any skill clears `cli.<category>` when a CLI read fails and it falls back | every skill using a tracker or ideas read verb | re-probed after 7 days; absent on machines without the CLI |
 
 ## Write discipline
 
