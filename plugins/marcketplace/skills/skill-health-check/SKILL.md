@@ -33,8 +33,8 @@ Resolve profile, state and tools per `../../shared/onboarding.md` before doing a
 - Tools: `kb` (search, read, write), `tracker` (search issues by JQL, get issue), `chat`
   (read canvas, update canvas; red only).
 - State: `cursors.skill-health-check`, `outcomes`, `tally`, `voice_edits`, `runs` (every
-  skill's, read; its own `runs.skill-health-check` with `scores`, written), `items` (its own
-  `shc:` lines).
+  skill's, read from the main document and every shard; its own `runs.skill-health-check` with `scores`, written), `items` (its own
+  `shc:` lines). Its own `cursors` and `runs` are in its shard.
 - Writes lines tagged `shc:` in For you.
 
 ## Budget

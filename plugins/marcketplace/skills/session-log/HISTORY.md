@@ -139,3 +139,7 @@ knowledge base should inherit.
 ## 2026-09-25 canvas redesign (1.1.0): every tick means yes, do it
 
 No behaviour change beyond linking the shared token discipline from its Budget.
+
+## 2026-10-07 state shards
+
+The state page passed 49 KB and a full-body-replace write became unsafe to re-type, so `cursors` move to its own shard. See `shared/state-schema.md`, "Shards".

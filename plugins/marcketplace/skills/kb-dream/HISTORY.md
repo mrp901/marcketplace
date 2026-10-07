@@ -222,3 +222,7 @@ A skill-health-check run scored two skills amber for gaps that belonged to this 
   ordinary Surfaced item and a `dream:` line (`references/followup-escalation.md`), whose
   tick reaches `settle` like any other. The threshold is three, not two, so a single busy
   week doesn't escalate. Deleting the line drops the follow-up for good.
+
+## 2026-10-07 state shards
+
+The state page passed 49 KB and a full-body-replace write became unsafe to re-type, so `cursors` and `runs` move to its own shard; the monthly `ideas` prune writes idea-spar's shard. See `shared/state-schema.md`, "Shards".

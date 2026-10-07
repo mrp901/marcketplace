@@ -23,7 +23,7 @@ else.
   handler's `## Needs`; see `references/dispatch.md`.
 - State: `cursors.proactive-router`, `items`, `registry`, `tally`, `outcomes`,
   `suppressions`, `patterns_blocked`, `proposals`, `glossary` (`inline:promote` writes),
-  `runs.proactive-router`,
+  `runs.proactive-router` (`cursors` and `runs` in its shard),
   `machines` (tool categories resolved for a handler about to be dispatched).
 - Writes lines tagged `pr:`; adds sub-lines under any ticked line; adds a To-do line on
   `inline:to-do`.
