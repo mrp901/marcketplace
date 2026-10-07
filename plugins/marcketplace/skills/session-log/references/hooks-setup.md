@@ -41,10 +41,10 @@ the install location never needs configuring by hand:
 {
   "hooks": {
     "SessionEnd": [
-      {"hooks": [{"type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/archive_session.py\"", "timeout": 15}]}
+      {"hooks": [{"type": "command", "command": "P=python3; $P -c '' </dev/null 2>/dev/null || P=python; $P \"${CLAUDE_PLUGIN_ROOT}/scripts/archive_session.py\"", "timeout": 15}]}
     ],
     "SessionStart": [
-      {"hooks": [{"type": "command", "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/pending_sessions.py\""}]}
+      {"hooks": [{"type": "command", "command": "P=python3; $P -c '' </dev/null 2>/dev/null || P=python; $P \"${CLAUDE_PLUGIN_ROOT}/scripts/pending_sessions.py\""}]}
     ]
   }
 }

@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/archive_session.py\"",
+            "command": "P=python3; $P -c '' </dev/null 2>/dev/null || P=python; $P \"${CLAUDE_PLUGIN_ROOT}/scripts/archive_session.py\"",
             "timeout": 15,
             "statusMessage": "Archiving session transcript..."
           }
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/pending_sessions.py\""
+            "command": "P=python3; $P -c '' </dev/null 2>/dev/null || P=python; $P \"${CLAUDE_PLUGIN_ROOT}/scripts/pending_sessions.py\""
           }
         ]
       }
