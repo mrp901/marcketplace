@@ -78,6 +78,19 @@ plainly; anything else is offered marked `(untested)` with `tested: false` recor
 alongside it. One re-resolution is allowed if the cached prefix fails at call time;
 a second failure is a fast-fail.
 
+**Local CLI probe.** After resolving the connector, for each needed category that
+`tool-capabilities.md`'s "Local CLI first" section covers (today `tracker` and `ideas`
+on a Jira service), unless `profile.tools.<category>.cli` is `off`: if
+`state.machines[<machine_id>].cli_probed_at` is under 7 days old, reuse the cached
+result. Otherwise, and only if this run has a shell tool, run `twg whoami -o json`
+(on `command not found`, try `$HOME/.local/bin/twg`, or on Windows
+`$LOCALAPPDATA/Programs/twg/bin/twg.exe`). Record `cli.<category>: <path to twg>` only
+if it exits 0 and the returned `accountId` equals `profile.user.tracker_account_id`
+(when that key is set); in every other case record nothing for that category. Write
+`cli_probed_at` either way. The probe never asks, never fast-fails, and never runs
+login, setup or install, so an unattended run on a machine without the CLI loses
+nothing but the probe call.
+
 ## Step 5 - Voice check
 
 Only for skills that list `voice` in their `## Needs`. If `profile.voice.calibrated_at` is
