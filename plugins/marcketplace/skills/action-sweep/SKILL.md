@@ -30,7 +30,8 @@ it never sends anything. Resolve profile, state and tools per
   create issue, add comment; the last two only in `push` mode), `kb` (search, read,
   write), `notetaker` (list meetings, transcript).
 - State: `cursors.action-sweep` (`scanned_through`, `chat_since`), `items` (dedupe and
-  its own `sweep:` lines), `runs.action-sweep`.
+  its own `sweep:` lines), `runs.action-sweep`
+  (`cursors` and `runs` in its shard).
 - Writes lines tagged `sweep:` in For you.
 
 ## Budget

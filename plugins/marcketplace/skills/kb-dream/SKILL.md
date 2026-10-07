@@ -27,8 +27,8 @@ else.
 - Tools: `chat` (read canvas, update canvas; scheduled run only), `kb` (search, read,
   write), `wiki` (get/update page, only where `kb.kind: confluence`).
 - State: `cursors.kb-dream`, `tally`, `proposals`, `suppressions`, `outcomes`,
-  `voice_edits`, `ideas` (monthly prune), `items` (its own `dream:` lines),
-  `runs.kb-dream`.
+  `voice_edits`, `ideas` (monthly prune, in idea-spar's shard), `items` (its own `dream:` lines),
+  `runs.kb-dream` (`cursors` and `runs` in its shard).
 - Writes lines tagged `dream:` in For you.
 
 ## Budget

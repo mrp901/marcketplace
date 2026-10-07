@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-10-07
+
 ### Added
 - State shards (draft). Full-body-replace connectors made every run resend the whole state
   document, which passed 49 KB and became unsafe for a model to re-type. Every skill's
