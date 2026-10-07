@@ -49,7 +49,8 @@ Ref formats: `confluence:<cloudId>/<pageId>`, `sharepoint:<drive>/<path>`,
 
 Read the profile document **by id, never by search** - onboarding step 1 resolved an
 exact reference, and re-discovering it by search risks landing on the wrong document.
-Read the sibling state document via the profile's `state_ref`; if it does not exist yet,
+Read the sibling state document via the profile's `state_ref`, and, if `shards.<skill>` names
+one for this skill, that shard too (`state-schema.md`, "Shards"); if it does not exist yet,
 create it (this only happens outside the bootstrap flow if a profile was hand-edited to
 remove `state_ref` or point at a missing document - treat that as a fast-fail-worthy
 condition in unattended mode, or ask in interactive mode before creating one silently).
@@ -104,9 +105,11 @@ empty:
 
 Write the profile only if something changed in it this run (a discovered or asked key was
 filled in) - otherwise leave it untouched, since the profile is low-frequency by design
-(see `state-schema.md`'s "Why two documents"). Always write `state.machines` (this run's
-tool resolutions) and `state.runs[<skill>]` (this run's outcome), whether or not anything
-else changed.
+(see `state-schema.md`'s "Why two documents"). Write `state.machines` only when this run
+resolved or changed a tool prefix, and always write `state.runs[<skill>]` (this run's
+outcome). Write them to this skill's shard when it has one, else to the main state
+document. If the document to be written is over 30 KB, do not rewrite it: apply the size
+guard in `state-schema.md` instead.
 
 ## Fast-fail
 
