@@ -54,3 +54,7 @@ Carried over from the retired skills, because each rule exists for a reason:
 Dropped: board-order selection, the investigated/wireframed labels (no tracker write at
 all now), deep-dive's four-circle loop and Run state, the taste log and `react` mode, the
 `idea-refresh` line and `inline:requeue`, the critic round, first-pass research notes.
+
+## 2026-10-07 state shards
+
+The state page passed 49 KB and a full-body-replace write became unsafe to re-type, so `cursors`, `ideas` and `runs` move to its own shard. See `shared/state-schema.md`, "Shards".

@@ -195,3 +195,7 @@ read past.
   `trim_closed.py` in `skills/briefing/scripts/`, referenced by relative path from
   `shared/notify.md` the same way `SKILL.md` already references `trim_closed.py` from
   `shared/surface-protocol.md`'s neighbourhood.
+
+## 2026-10-07 state shards
+
+The state page passed 49 KB and a full-body-replace write became unsafe to re-type, so reads `runs` from every shard; owns the 1.2.0 to 1.3.0 migration. See `shared/state-schema.md`, "Shards".

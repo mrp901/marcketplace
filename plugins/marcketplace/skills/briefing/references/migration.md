@@ -73,3 +73,10 @@ have no owner and no handler now, so they close rather than wait forever. Unlike
    writes the block.
 4. Apply the state steps in `../../../shared/state-schema.md`'s 1.1.0 to 1.2.0 row, then
    write `installed_version` = 1.2.0.
+
+## 1.2.0 to 1.3.0: state shards
+
+No board change. Inside the run's ordinary state write, add `shards: {}` to the main state
+document if absent, then write `installed_version` = 1.3.0. Each skill creates its own shard
+on its next run per `../../../shared/state-schema.md`'s "Shards"; briefing creates its own
+the same way and never creates another skill's.

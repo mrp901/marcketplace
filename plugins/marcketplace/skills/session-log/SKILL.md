@@ -22,7 +22,7 @@ before, and what's still open. Ninety seconds to read, clear on where things sta
   `kb.paths.utility`, `kb.paths.log`, `kb.log_size_cap_kb`, `people`,
   `people_confusions` (optional), `known_fact_errors` (optional - see HISTORY.md).
 - Tools: `kb` (search, read, write).
-- State: `cursors.session-log` (`last_pending_processed`).
+- State: `cursors.session-log` (`last_pending_processed`), in its shard.
 
 Resolve profile, state and tools per `../../shared/onboarding.md` before doing anything else.
 

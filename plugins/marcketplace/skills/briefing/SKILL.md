@@ -25,7 +25,7 @@ one whose `installed_version` is 1.1.0 retires the old idea lines first.
   cross-check), `notetaker` (list meetings, transcript), optional, only called when
   `notetaker.prep_lines` is true.
 - State: `cursors.briefing`, `glossary`, `nicknames`, `items`, `outcomes`, `runs` (every
-  skill's), `installed_version`.
+  skill's, from the main document and every shard), `shards`, `installed_version`.
 - Writes: the board header, the Today snapshots, lines tagged `rb:`, `term:` and `feed:`
   in For you, Closed, and the migration.
 
@@ -58,7 +58,9 @@ Fires more than once a day on a changing schedule; never assume a time of day.
    (`chat: read canvas`) for every section; hold the `section_id_mapping` for step 6's one
    write. Reading is silent. If the board still carries any pre-1.1.0 heading, run `references/migration.md` first, as the
    only write of this run, and stop after writing state. If `installed_version` is 1.1.0,
-   run that file's "1.1.0 to 1.2.0" steps inside this run's one write, then carry on.
+   run that file's "1.1.0 to 1.2.0" steps inside this run's one write, then carry on. If it
+   is 1.2.0, apply the 1.2.0 to 1.3.0 row of `../../shared/state-schema.md` the same way. Read
+   `runs` from the main document and every shard named in `shards`, by id.
 2. **Close.** For every line on the board, apply the closing rule in
    `../../shared/surface-protocol.md`'s "Closing": a `done` sub-line closes the line; a
    ticked To-do line closes as done by you; an option whose sibling closed closes as `not

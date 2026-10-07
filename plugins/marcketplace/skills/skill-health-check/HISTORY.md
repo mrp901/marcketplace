@@ -104,3 +104,7 @@ the tally and the voice ledger), with stated thresholds in
 `references/evidence-gathering.md`. The per-skill webhook is gone. Of the port's open
 questions, the roster one stands as decided then; `budgets.skill-health-check` has had
 its schema row since the 1.0.0 orchestrator pass.
+
+## 2026-10-07 state shards
+
+The state page passed 49 KB and a full-body-replace write became unsafe to re-type, so `cursors` and `runs` move to its own shard; reads every shard for the roster. See `shared/state-schema.md`, "Shards".
