@@ -30,12 +30,49 @@ them apart:
   writes to their own document keeps the retry-once-on-conflict rule (below) cheap and
   rare in practice.
 
+## Shards
+
+A full-body-replace write resends the whole document, so state's cost grows with every
+skill that writes to it, and a routine that only bumps a cursor still resends everything.
+Left alone this grows past what a run can safely re-type (the reference instance's state
+page passed 49 KB). The fix is to shard the **high-frequency, skill-owned** subtrees into
+one small sibling document per skill, so a quiet run rewrites a few hundred bytes.
+
+- **What moves.** `runs.<skill>`, `cursors.<skill>`, and any key only that skill writes
+  (`ideas` for `idea-spar`). These are the subtrees the write discipline already says no
+  other skill may write.
+- **What stays in the main state document.** Everything shared or low-frequency:
+  `state_version`, `installed_version`, `profile_ref`, `shards`, `glossary`, `nicknames`,
+  `registry`, `tally`, `proposals`, `suppressions`, `patterns_blocked`, `items`,
+  `outcomes`, `voice_edits`, `machines`.
+- **Pointer.** The main document carries `shards: {<skill>: <ref>}`, same ref format as
+  `state_ref`. A skill with no `shards.<skill>` entry still reads and writes its subtrees
+  in the main document exactly as before, so sharding is opt-in per skill and never a
+  flag day.
+- **A shard document** holds `shard_version: 1`, `skill`, `state_ref` (pointer back to the
+  main document) and only that skill's subtrees, in the same shape as the main document.
+- **Readers.** `briefing` and `skill-health-check` read `runs.<skill>` for every skill, so
+  each reads the main document plus the shards named in `shards`, by id. A shard that
+  cannot be read is reported as `runs: unreadable` for that skill; it never fails the
+  reader.
+- **Creating a shard.** The owning skill creates it on a run that has something to write:
+  copy its subtrees into a new sibling document, write `shards.<skill>` in the main
+  document in the same run, and leave the old subtrees in the main document untouched
+  until the next run confirms the shard reads back. The next run then deletes them from
+  the main document. Shard first, pointer second, cleanup third, so a failure at any step
+  leaves a readable state.
+- **Size guard.** A skill that is about to write a document over 30 KB, main or shard,
+  does not re-type it in full: it writes `runs.<skill>.status: partial` with note
+  `state too large to rewrite safely - shard it` and stops. A write that cannot be
+  reproduced faithfully is worse than a skipped one.
+
 ## The commented YAML
 
 ```yaml
 state_version: 1
 installed_version:           # from plugin.json; a newer plugin.json triggers the migrations below
 profile_ref:                  # pointer back to the sibling profile doc
+shards: {}                    # optional: {<skill>: <ref>} - that skill's runs/cursors live in its own doc (see Shards)
 
 runs:
   <skill>: {last_run_at, status: ok | quiet | partial | fast-fail | error, machine, note, ref}
@@ -126,6 +163,9 @@ a tracker label on an idea.
 
 ## Write discipline
 
+- **Write the smallest document that holds your change.** A skill with a shard writes its
+  shard, not the main document. A skill without one writes the main document, and only when
+  something in it changed.
 - **Re-read immediately before writing.** State changes often enough between a skill's
   read at run start and its write at run end that a stale in-memory copy is not safe to
   write back verbatim. Re-read right before the write, apply this run's changes to the
@@ -179,6 +219,7 @@ the board has nothing to race and runs as normal.
 |---|---|---|
 | 1.0.0 | 1.1.0 | Add `ideas: {}`, `cursors.action-sweep.chat_since`, `cursors.idea-scout`, and `ref` on every existing `runs.<skill>` entry (empty). Drop any `proposals` entry with `kind: skill_eval` (status `dismissed`, never deleted). The board itself is migrated by `briefing` alone, per `skills/briefing/references/migration.md`; every other skill that reads or writes the board and finds any pre-1.1.0 heading records `runs.<skill>.status: quiet`, note `awaiting migration`, and stops |
 | 1.1.0 | 1.2.0 | The idea pipeline (`idea-scout`, `idea-deep-dive`, `idea-wireframe`) is replaced by `idea-spar`. Add `cursors.idea-spar` absent (its first run seeds and briefs nothing). Reshape each `ideas.<key>` to `{roadmap_last_seen, pack_ref: "", pack_pending: false}`, keeping `roadmap_last_seen` and dropping `requeue_scout` and `requeue_wireframe`. Set `registry.idea-decision.handler` to `idea-spar` (mode `decide`) and `registry.wireframe-reaction` and `registry.idea-refresh` to `handler: null`. Leave `cursors.idea-scout` in place, unread. On the board, `briefing` closes every open `<key>/q…`, `<key>/w-…` and `<key>/r` line as `retired` and prunes its `items` entry; open `<key>/d…` groups stay and now dispatch to `idea-spar` |
+| 1.2.0 | 1.3.0 | Add `shards: {}` to the main document. No other change: each skill shards itself lazily per **Shards**, and a skill that never shards keeps working unchanged |
 
 A migration is always **additive**: it may add a new key with its default value, or
 reshape a key it explicitly names, but it never deletes a key it does not understand.

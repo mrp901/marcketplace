@@ -7,6 +7,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- State shards (draft). Full-body-replace connectors made every run resend the whole state
+  document, which passed 49 KB and became unsafe for a model to re-type. A skill's
+  `runs.<skill>`, `cursors.<skill>` and skill-owned keys can now live in a small sibling
+  document named by `shards.<skill>` in the main state document, so a quiet run rewrites a
+  few hundred bytes. Opt-in per skill, additive, created lazily; a 30 KB size guard makes a
+  skill record `partial` instead of re-typing a document it cannot reproduce faithfully.
+  `machines` is now written only when a tool prefix changed. See `shared/state-schema.md`.
 - Local CLI first for tracker reads. On a machine with a shell and Atlassian's Teamwork
   Graph CLI (`twg`) installed and signed in, `tracker`/`ideas` `search issues (JQL)` and
   `get issue` run through the CLI's summarised output instead of the connector, to keep
