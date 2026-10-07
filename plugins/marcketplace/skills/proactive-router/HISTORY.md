@@ -141,3 +141,7 @@ place, once that key is filled in (`references/dispatch.md`, "Retrying blocked l
   `inline:investigate`. It reads the issue's history and the feed message and reports who
   changed what, so a tick on such a line does something useful without the hub writing to
   the tracker.
+
+## 2026-10-07 state shards
+
+The state page passed 49 KB and a full-body-replace write became unsafe to re-type, so `cursors` and `runs` move to its own shard. See `shared/state-schema.md`, "Shards".

@@ -54,6 +54,10 @@ create it (this only happens outside the bootstrap flow if a profile was hand-ed
 remove `state_ref` or point at a missing document - treat that as a fast-fail-worthy
 condition in unattended mode, or ask in interactive mode before creating one silently).
 
+Then read this skill's shard, named by `shards.<skill>` in the state document, by id. If
+`shards.<skill>` is absent, create the shard per `state-schema.md`'s "Shards" - this is
+routine after the 1.3.0 migration and never asks or fast-fails.
+
 ## Step 3 - Diff Needs against the profile
 
 Compare this skill's `## Needs` heading against what the profile actually has. For every
@@ -104,9 +108,11 @@ empty:
 
 Write the profile only if something changed in it this run (a discovered or asked key was
 filled in) - otherwise leave it untouched, since the profile is low-frequency by design
-(see `state-schema.md`'s "Why two documents"). Always write `state.machines` (this run's
-tool resolutions) and `state.runs[<skill>]` (this run's outcome), whether or not anything
-else changed.
+(see `state-schema.md`'s "Why two documents"). Write `state.machines` only when this run
+resolved or changed a tool prefix, and always write `state.runs[<skill>]` (this run's
+outcome). Write `runs` and the skill's own keys to its shard, and `machines` to the main state
+document. If the document to be written is over 45 KB, do not rewrite it: apply the size
+guard in `state-schema.md` instead.
 
 ## Fast-fail
 

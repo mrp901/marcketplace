@@ -166,3 +166,7 @@ is now a question with one option per tier, which answers the port's open questi
 how an unrouted item ever gets seen: the user picks, the hub dispatches `targeted` with
 the chosen tier. The "never guess a tier" and "never push outside `push`" hard stops are
 unchanged; "never send anything" joined them.
+
+## 2026-10-07 state shards
+
+The state page passed 49 KB and a full-body-replace write became unsafe to re-type, so `cursors` and `runs` move to its own shard. See `shared/state-schema.md`, "Shards".
