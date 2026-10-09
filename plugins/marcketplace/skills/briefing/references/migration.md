@@ -80,3 +80,14 @@ No board change. Inside the run's ordinary state write, add `shards: {}` to the 
 document if absent, then write `installed_version` = 1.3.0. Each skill creates its own shard
 on its next run per `../../../shared/state-schema.md`'s "Shards"; briefing creates its own
 the same way and never creates another skill's.
+
+**If the main document is over the 45 KB size guard**, adding `shards: {}` grows it and the
+guard refuses the write, so no skill could ever migrate. In that case, and only then,
+briefing shards every skill in this run: for each skill with a `runs.<skill>`,
+`cursors.<skill>` or skill-owned key in the main document, create its shard (copying those
+subtrees verbatim, by cutting text, never by re-typing a re-serialised copy), and read each
+back. Then write the main document once, with `shards` naming every new shard, those
+subtrees removed and `installed_version` = 1.3.0. That write shrinks the document, so the
+guard's exception allows it; re-read and compare it as the exception requires. A shard that
+already exists for a skill (one a run created before the pointer could land) is reused
+rather than duplicated, and its values win over the main document's older copy.
