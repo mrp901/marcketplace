@@ -1,6 +1,6 @@
 {
   "name": "marcketplace",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "A profile-driven product-management operating system: daily briefing and router, reply/kb/action/idea handlers, an idea sparring partner and knowledge-base curation, built to run against any organisation's profile.",
   "author": {
     "name": "mrp901"

@@ -170,3 +170,9 @@ unchanged; "never send anything" joined them.
 ## 2026-10-07 state shards
 
 The state page passed 49 KB and a full-body-replace write became unsafe to re-type, so `cursors` and `runs` move to its own shard. See `shared/state-schema.md`, "Shards".
+
+## 2026-10-09 tracker tags were being missed
+
+Two real tags went unsurfaced (one on a ticket the user reports, one walking through ACs). Two causes. The comment scan read markdown, which replaces a mention node's account id with a placeholder (`data-id="id-0"`), so the account-id match never fired; and a search-tier subagent dropped a tag it judged "in passing, no ask". Now comments are read in the structured format, a tag matches on the account id or the literal `@<user.name>` (plain-text tags carry no id), and every unaddressed tag routes to `to-do` rather than a `ticket-reply` draft: the user's words were "this needs my personal judgement". Untagged comments stay out of scope, by the user's choice.
+
+Same day, the user's answers on scope and edges: the tag scan covers issues the user is assignee or reporter on and still watches ("never JUST watched", and an unwatch is a deliberate opt-out); a comment that is nothing but a bare "cc"/"fyi" is dropped, anything more surfaces ("err on the side of caution"); and a tag is "always to-do", even when it implies a ticket.
