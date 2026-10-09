@@ -59,7 +59,7 @@ Fires more than once a day on a changing schedule; never assume a time of day.
    write. Reading is silent. If the board still carries any pre-1.1.0 heading, run `references/migration.md` first, as the
    only write of this run, and stop after writing state. If `installed_version` is 1.1.0,
    run that file's "1.1.0 to 1.2.0" steps inside this run's one write, then carry on. If it
-   is 1.2.0, apply the 1.2.0 to 1.3.0 row of `../../shared/state-schema.md` the same way. Read
+   is 1.2.0 or 1.3.0, apply `../../shared/state-schema.md`'s rows from it up the same way. Read
    `runs` from the main document and every shard named in `shards`, by id.
 2. **Close.** For every line on the board, apply the closing rule in
    `../../shared/surface-protocol.md`'s "Closing": a `done` sub-line closes the line; a

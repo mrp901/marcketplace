@@ -112,7 +112,8 @@ filled in) - otherwise leave it untouched, since the profile is low-frequency by
 resolved or changed a tool prefix, and always write `state.runs[<skill>]` (this run's
 outcome). Write `runs` and the skill's own keys to its shard, and `machines` to the main state
 document. If the document to be written is over 45 KB, do not rewrite it: apply the size
-guard in `state-schema.md` instead.
+guard in `state-schema.md` instead (a write that shrinks it back under 45 KB is the guard's
+one allowed exception).
 
 ## Fast-fail
 

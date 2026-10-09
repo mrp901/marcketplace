@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-10-09
+
+### Fixed
+- The 45 KB size guard deadlocked the 1.3.0 shard migration on any install whose state was
+  already over 45 KB: adding the `shards` pointer grows the main document, the guard refused
+  that write, and every skill then stopped writing state, so cursors froze and runs repeated
+  the same window. The guard now always allows a write that leaves a document smaller than
+  it was and under 45 KB (re-read and compared afterwards). When the main document is over
+  the guard, briefing's 1.3.0 migration shards every skill in one run and writes pointer and
+  cleanup together, and a skill that cannot record `partial` anywhere says so in its run
+  output instead of stalling silently.
+
 ## [1.3.0] - 2026-10-07
 
 ### Added
