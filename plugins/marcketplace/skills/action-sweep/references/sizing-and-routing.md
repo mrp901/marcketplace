@@ -31,13 +31,15 @@ option group can only ever resolve to one tier, chosen by the user.
 
 | Find | Category | Handler on tick |
 |---|---|---|
-| A ticket to raise or a comment owed on an existing one | `ticket-reply` / `ticket-minor` | this skill, `targeted` |
+| A ticket to raise, or new information owed on an existing one | `ticket-reply` / `ticket-minor` | this skill, `targeted` |
+| A tracker tag the user hasn't since addressed (`mention-search-method.md`) | `to-do` | the hub's `inline:to-do`; it needs the user's own judgement, so no reply is drafted |
 | A commitment from a recorded meeting | `meeting-followup` | this skill, `meeting` |
 | A chat thread or mention waiting on the user's reply | `chat-reply` | `reply-draft`, which drafts and never sends |
 | Something only the user can do, with no artefact to draft | `to-do` | the hub's `inline:to-do`: one line on the user's own list |
 
 One find, one action. A find that could be two things (a reply owed that also needs a
-ticket) is posted as the more concrete one, and the draft names the other.
+ticket) is posted as the more concrete one, and the draft names the other. A tracker tag
+is the exception: always `to-do`, even when it implies a ticket; the line says so.
 
 ## Modifications (shape B) never route through this table
 

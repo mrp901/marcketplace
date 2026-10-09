@@ -15,7 +15,7 @@ it never sends anything. Resolve profile, state and tools per
 
 ## Needs
 
-- Profile: `org.timezone`, `user.tracker_account_id`, `user.chat_user_id`,
+- Profile: `org.timezone`, `user.name`, `user.tracker_account_id`, `user.chat_user_id`,
   `tracker.cloud_id`, `tracker.site_url`, `tracker.project_key`, `tracker.issue_types`,
   `tracker.component`, `tracker.default_parent_epic`, `tracker.parked_prefix`,
   `tracker.my_work_jql`, `ideas.project_key`, `ideas.issue_type`, `ideas.area_field`,

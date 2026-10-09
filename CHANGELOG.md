@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.3.2] - 2026-10-09
+
+### Fixed
+- action-sweep missed tracker tags addressed to the user. Comments were fetched as markdown,
+  which replaces a mention's account id with a placeholder, and a search-tier "is this really
+  a question" filter then dropped real tags as "in passing". Comments are now fetched in the
+  tracker's structured format and a tag matches on account id or the literal `@<user.name>`;
+  every tag the user hasn't since addressed is a find, bar an explicitly bare "cc"/"fyi", and
+  routes to `to-do` because it needs the user's own judgement. The tag scan covers issues the
+  user is assignee or reporter on and still watches; an unwatch is a deliberate opt-out. See
+  `skills/action-sweep/references/mention-search-method.md`.
+
 ## [1.3.1] - 2026-10-09
 
 ### Fixed
