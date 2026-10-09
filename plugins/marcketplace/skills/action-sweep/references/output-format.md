@@ -8,10 +8,27 @@ tick causes. Against `profiles/example.md`:
 
 ```
 - [ ] (sweep:260922-1) 🎫 [minor] draft a Story under FLT-401: truncate long load names in the summary table · https://northwindlogistics.slack.com/docs/TEXAMPLE001/FEXAMPLECANVAS9
-- [ ] (sweep:260922-2) 🎫 draft a reply on FLT-166: Tomasz asked whether the MTD comparison should include cancelled loads · https://northwindlogistics.atlassian.net/browse/FLT-166
+- [ ] (sweep:260922-2) ☑️ to-do: answer Tomasz on FLT-166 - should the MTD comparison include cancelled loads? (he tagged you) · https://northwindlogistics.atlassian.net/browse/FLT-166
 - [ ] (sweep:260922-3) 💬 draft a reply to Owen in #freight-ops: he's waiting on your call about the support-ticket spike · https://northwindlogistics.slack.com/archives/CEXAMPLEFRTOPS1/p1758600001000100
 - [ ] (sweep:260922-4) ☑️ to-do: send Tomasz the Q4 capacity figures by Friday (you said so in #planning) · https://northwindlogistics.slack.com/archives/CEXAMPLEPLAN001/p1758600002000200
 - [ ] (sweep:260922-5) 🗓️ draft the follow-up you took in Tuesday's dock sync: confirm multi-yard scope with Ana · notetaker:meeting/2026-09-20-dock-sync
+```
+
+A tracker tag is a to-do, even when it reads as a status update. Tomasz tags the user
+while walking FLT-212's ACs ("AC2: rows are clickable BUT only one carrier opens when
+there are several..."), with no question mark:
+
+```
+bad:  (nothing posted - "mentions the user only in passing, no ask")
+bad:  - [ ] (sweep:260922-7) 🎫 draft a reply on FLT-212: Tomasz walked through the ACs
+good: - [ ] (sweep:260922-7) ☑️ to-do: Tomasz tagged you on FLT-212's ACs - AC2's clickable rows only open one carrier when there are several · https://northwindlogistics.atlassian.net/browse/FLT-212
+```
+
+Only a comment that is nothing but a bare cc or fyi is dropped:
+
+```
+dropped:  "@<user.name> cc"
+surfaces: "fyi @<user.name>, done" · "cc @<user.name> for visibility on the AC2 call"
 ```
 
 A candidate whose tier is unclear is a question, not a guess:

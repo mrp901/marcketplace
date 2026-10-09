@@ -30,7 +30,8 @@ posting the to-do as unresolved. Cap it at `budgets.action-sweep.targeted_search
 See `mention-search-method.md` for the full procedure and why the obvious full-text
 search doesn't work. On cold start (no cursor recorded yet) default to
 `budgets.action-sweep.cold_start_days` and say so in the run record; a safe, stated
-default, not a silent one.
+default, not a silent one. Every tag the user hasn't since addressed routes to `to-do`
+(bar a bare "cc"/"fyi"); the subagent summarises it, it never filters it out.
 
 ## 3. Tickets currently assigned to the user (current state, no cursor)
 
