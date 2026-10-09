@@ -55,7 +55,10 @@ in its own small sibling document (a skill that writes only shared keys, such as
   document into a new sibling document, write `shards.<skill>` in the main document in the
   same run, and leave the old subtrees in the main document until the next run confirms the
   shard reads back. The next run then deletes them from the main document. Shard first,
-  pointer second, cleanup third, so a failure at any step leaves a readable state. Until
+  pointer second, cleanup third, so a failure at any step leaves a readable state. When the
+  main document is over the size guard, pointer and cleanup go in one write as soon as the
+  new shard reads back: that write shrinks the main document, so the guard allows it,
+  whereas a pointer-only write would grow it and be refused every run. Until
   the pointer exists, a skill reads and writes its subtrees in the main document as before.
 - **Cross-shard access.** `kb-dream`'s monthly prune of `ideas.<key>` entries for ideas that
   no longer exist is the one write into another skill's shard (`idea-spar`'s); it reads and
@@ -65,11 +68,17 @@ in its own small sibling document (a skill that writes only shared keys, such as
   cannot be read is reported as `runs: unreadable` for that skill; it never fails the
   reader.
 - **Size guard.** A skill that is about to write a document over 45 KB, main or shard,
-  does not re-type it in full: it writes `runs.<skill>.status: partial` with note
-  `state too large to rewrite safely` and stops. A write that cannot be reproduced
-  faithfully is worse than a skipped one. The main document, with only shared keys left,
-  should sit well under the limit; a shard that nears it means that skill's own subtree
-  needs pruning.
+  does not re-type it in full: it records `runs.<skill>.status: partial` with note
+  `state too large to rewrite safely - shard or prune <document>` and stops. A write that
+  cannot be reproduced faithfully is worse than a skipped one. **One exception, so the
+  guard can never become permanent:** a write that leaves the document smaller than it was
+  on read and under 45 KB (the migration, a pointer-plus-cleanup, a prune) is always
+  allowed, and is re-read straight after and compared with what was intended; on a
+  mismatch, restore the copy read at run start. When the only document the skill could
+  record `partial` in is the oversized one itself, it records nothing and says so in its
+  run output instead (briefing names it in its message), so the stall is never silent. The
+  main document, with only shared keys left, should sit well under the limit; a shard that
+  nears it means that skill's own subtree needs pruning.
 
 ## The commented YAML
 
@@ -224,7 +233,8 @@ the board has nothing to race and runs as normal.
 |---|---|---|
 | 1.0.0 | 1.1.0 | Add `ideas: {}`, `cursors.action-sweep.chat_since`, `cursors.idea-scout`, and `ref` on every existing `runs.<skill>` entry (empty). Drop any `proposals` entry with `kind: skill_eval` (status `dismissed`, never deleted). The board itself is migrated by `briefing` alone, per `skills/briefing/references/migration.md`; every other skill that reads or writes the board and finds any pre-1.1.0 heading records `runs.<skill>.status: quiet`, note `awaiting migration`, and stops |
 | 1.1.0 | 1.2.0 | The idea pipeline (`idea-scout`, `idea-deep-dive`, `idea-wireframe`) is replaced by `idea-spar`. Add `cursors.idea-spar` absent (its first run seeds and briefs nothing). Reshape each `ideas.<key>` to `{roadmap_last_seen, pack_ref: "", pack_pending: false}`, keeping `roadmap_last_seen` and dropping `requeue_scout` and `requeue_wireframe`. Set `registry.idea-decision.handler` to `idea-spar` (mode `decide`) and `registry.wireframe-reaction` and `registry.idea-refresh` to `handler: null`. Leave `cursors.idea-scout` in place, unread. On the board, `briefing` closes every open `<key>/q…`, `<key>/w-…` and `<key>/r` line as `retired` and prunes its `items` entry; open `<key>/d…` groups stay and now dispatch to `idea-spar` |
-| 1.2.0 | 1.3.0 | Add `shards: {}` to the main document. Each skill that owns subtrees then creates its own shard on its next run, per **Shards**; until it does, it keeps using the main document. `briefing` runs this row and writes `installed_version` 1.3.0 |
+| 1.2.0 | 1.3.0 | Add `shards: {}` to the main document. Each skill that owns subtrees then creates its own shard on its next run, per **Shards**; until it does, it keeps using the main document. `briefing` runs this row and writes `installed_version` 1.3.0. If the main document is already over the size guard, `briefing` instead shards every skill in this one run, per `skills/briefing/references/migration.md` |
+| 1.3.0 | 1.3.1 | No state change (the size guard gains its shrinking-write exception). `briefing` writes `installed_version` 1.3.1 |
 
 A migration is always **additive**: it may add a new key with its default value, or
 reshape a key it explicitly names, but it never deletes a key it does not understand.
