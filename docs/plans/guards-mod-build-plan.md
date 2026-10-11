@@ -194,10 +194,10 @@ sources merged over the defaults.
    mod's default patterns, with the override env); `state-schema.md` migration row `1.3.2 ->
    1.4.0: no state change`; `hooks-setup.md` (modules beside classic hooks); README install
    and checks; PORTING.md step 11 adds `claude plugin test`; `docs/skill-flow.md` one line;
-   CHANGELOG 1.4.0. CI in `ci/validate.yml`: `npm i -g @anthropic-ai/claude-code`, `claude
-   plugin validate --strict plugins/marcketplace`, `claude plugin test plugins/marcketplace`
-   (the test step only if spike 0a passed; otherwise validate only, with the reason in a
-   comment). Tell the user to copy it to `.github/workflows/` per `ci/README.md`.
+   CHANGELOG 1.4.0. CI in `ci/validate.yml`: `npm i -g @anthropic-ai/claude-code@2.1.296`
+   (pinned exactly; spike 0a showed tests run offline from that install), `claude plugin
+   validate --strict plugins/marcketplace`, `claude plugin test plugins/marcketplace`. Tell
+   the user to copy it to `.github/workflows/` per `ci/README.md`.
 
 Dependencies: 2 and 3 depend on 1 and can proceed in parallel; 4 on 2; 5 on all.
 
@@ -242,8 +242,10 @@ laid beside the plugin the first time a session loads it with `--plugin-dir`. Th
 carries em dashes and is 800 KB, so it is gitignored and scrub-skipped, never committed.
 Locally: `claude --plugin-dir plugins/marcketplace` once, then `tsc -p tsconfig.mods.json`
 from the repo root (compiler options from the types file header: es2023, module esnext,
-moduleResolution bundler, strict, noEmit, jsx react with factory `h`). CI relies on
-`validate --strict` plus `plugin test`, since a `-p` run never writes the types folder.
+moduleResolution bundler, strict, noEmit, jsx react with factory `h`, plus
+`allowImportingTsExtensions` for `./lib/*.ts` imports). CI relies on `validate --strict`
+plus `plugin test`, since neither a `-p` run nor `plugin test` writes the types folder and
+the npm package does not ship it. See `guards-mod-spike-results.md`.
 
 ## Risks
 
@@ -254,7 +256,8 @@ moduleResolution bundler, strict, noEmit, jsx react with factory `h`). CI relies
 | `prompt.submit` not raised for a routine's opening prompt | spike 0d; fallback is the `Skill` tool args and the dispatch payload |
 | A guard bug kills reads | the `.catch` denies write-class calls only, computed from `e` |
 | Counter race in one agent | `ifVersion` with one retry |
-| `claude plugin test` needs credentials in CI | spike 0a; the CI step is conditional |
+| `claude plugin test` needs credentials in CI | ruled out by spike 0a: tests run with no credentials |
+| Validation does not type-check, and CI cannot | every hook gets an engine test; `tsc` runs locally |
 | Em dash in deny text or fixtures fails scrub | `\u2014` escapes only; scrub runs in CI |
 | Workflow file cannot be pushed from this session | edit `ci/validate.yml`; the user copies it into `.github/workflows/` |
 
