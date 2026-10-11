@@ -6,6 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.3.3] - 2026-10-11
+
+### Added
+- A hooks module (`hooks/register.ts`) beside the two classic session-log hooks. In this
+  release it only observes and refuses nothing: it records whether a run is unattended and
+  which skill it runs, which subagents are hub dispatches (handler, mode, tool-call
+  budget), the profile's notify, feed and surface ids, and each state document's size and
+  keys. It says what it saw in transcript notices the model never reads, beginning
+  `marcketplace observer`, so a routine's transcript shows the module loaded. A failure in
+  the observer is reported once per hook and never blocks a call. The guards that act on
+  what it learns arrive in 1.4.0 (`docs/plans/guards-mod-build-plan.md`).
+- `MARCKETPLACE_GUARDS` environment variable: `off` stops all observation except the load
+  notice; `on` is the default. `warn` and `strict` are accepted and do nothing different
+  until 1.4.0.
+- Tests for the module (`claude plugin test plugins/marcketplace`, offline) and a local
+  type-check config (`tsconfig.mods.json`). `ci/validate.yml` installs Claude Code 2.1.296
+  and runs `claude plugin validate --strict .` and the tests.
+
+### Changed
+- `scrub_check.py` skips the TypeScript declarations Claude Code writes into
+  `.claude-plugin/types/` when it loads the plugin from a folder; the folder is gitignored.
+
 ## [1.3.2] - 2026-10-09
 
 ### Fixed

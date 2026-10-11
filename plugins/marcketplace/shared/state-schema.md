@@ -236,6 +236,7 @@ the board has nothing to race and runs as normal.
 | 1.2.0 | 1.3.0 | Add `shards: {}` to the main document. Each skill that owns subtrees then creates its own shard on its next run, per **Shards**; until it does, it keeps using the main document. `briefing` runs this row and writes `installed_version` 1.3.0. If the main document is already over the size guard, `briefing` instead shards every skill in this one run, per `skills/briefing/references/migration.md` |
 | 1.3.0 | 1.3.1 | No state change (the size guard gains its shrinking-write exception). `briefing` writes `installed_version` 1.3.1 |
 | 1.3.1 | 1.3.2 | No state change (action-sweep's tracker-tag detection and routing change). `briefing` writes `installed_version` 1.3.2 |
+| 1.3.2 | 1.3.3 | No state change (the plugin gains an observe-only hooks module; it keeps its own session state, never this document). `briefing` writes `installed_version` 1.3.3 |
 
 A migration is always **additive**: it may add a new key with its default value, or
 reshape a key it explicitly names, but it never deletes a key it does not understand.

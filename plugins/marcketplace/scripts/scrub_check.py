@@ -18,6 +18,12 @@ EM_DASH = chr(0x2014)
 # Directories skipped while walking a path.
 SKIP_DIRS = {".git", "source", "profiles", "__pycache__"}
 
+# The TypeScript declarations Claude Code writes beside a plugin it loads with
+# --plugin-dir (.claude-plugin/types/). They are the engine's, not this repo's,
+# gitignored, and full of em dashes. Matched as a parent/child pair, so the
+# plugin's own types/ folder is still scanned.
+SKIP_DIR_PAIRS = {(".claude-plugin", "types")}
+
 # This script itself is skipped when walking, since the pattern table below
 # necessarily contains the literals it is looking for.
 SELF_BASENAME = "scrub_check.py"
@@ -97,7 +103,11 @@ def iter_files(paths):
             yield p
         elif os.path.isdir(p):
             for root, dirs, files in os.walk(p):
-                dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
+                parent = os.path.basename(os.path.normpath(root))
+                dirs[:] = [
+                    d for d in dirs
+                    if d not in SKIP_DIRS and (parent, d) not in SKIP_DIR_PAIRS
+                ]
                 for fname in files:
                     if fname == SELF_BASENAME:
                         continue

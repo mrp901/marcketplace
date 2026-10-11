@@ -21,6 +21,18 @@ jobs:
         run: python3 plugins/marcketplace/scripts/line_budget.py --all
       - run: python3 plugins/marcketplace/scripts/check_refs.py
 
-      # `claude plugin validate` is not run here: the Claude Code CLI is not
-      # available on this runner. The orchestrator runs it locally as part
-      # of each wave's QA gate (see PORTING.md step 11).
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # Pinned: the hooks module needs a Claude Code build with function hooks,
+      # and an older npm release has none. Bump this deliberately.
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code@2.1.296
+
+      - name: Validate the marketplace, plugin and hooks module
+        run: claude plugin validate --strict .
+
+      # Runs offline: the tests need no credentials.
+      - name: Test the hooks module
+        run: claude plugin test plugins/marcketplace

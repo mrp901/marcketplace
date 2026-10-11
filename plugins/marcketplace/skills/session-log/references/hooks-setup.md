@@ -57,6 +57,10 @@ being installed at any particular path, and both run correctly with no pointer f
 env var set at all (they just fall back to `~/.claude/session-log`), so a fresh install
 works before this skill has ever run.
 
+The same `hooks.json` also names a hooks module under `"modules"` (`../../hooks/register.ts`),
+the plugin's observer. It is a separate mechanism (TypeScript run inside Claude Code, not a
+command), touches neither script, and leaves both hooks exactly as above.
+
 ## Things worth knowing
 
 - **Transcripts contain everything the session saw** - file contents, secrets that
