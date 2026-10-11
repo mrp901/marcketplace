@@ -58,3 +58,20 @@ interactive `--plugin-dir` load. PORTING.md's QA step names both.
 **Still open.** Whether an installed plugin (not `--plugin-dir`) loads its module in a
 scheduled routine, and whether the laptop behaves the same. Both are checked by the phase 1
 smoke run.
+
+## Phase 1 checks in this container (2026-10-11)
+
+The 1.3.3 observer was installed the way a routine installs it: `claude plugin marketplace
+add mrp901/marcketplace#<branch>` then `claude plugin install marcketplace@marcketplace`,
+in a scratch config folder, with no `--plugin-dir`. In a headless run it:
+
+- loaded as version 1.3.3 and announced an unattended run of briefing;
+- learned the example profile's home channel, both feed channels and the surface id from a
+  plain `cat` of `profiles/example.md`;
+- recognised a subagent started with a dispatch-shaped prompt as a handler dispatch, with
+  its mode and tool-call budget;
+- stored its notices in the session transcript as `system` rows of subtype
+  `informational`, and sent the same lines to the host as `ui_log`.
+
+What remains is the same check inside a real scheduled routine in the routine account,
+which this session cannot see.
