@@ -41,7 +41,7 @@ Every row names whether its mode is **single-shot** (runs once on the tick and i
 | `inline:promote` | Writes the `term:` line's text as the user left it into `state.glossary`, keyed by the term, and adds a `done` sub-line; briefing then removes the line (never to Closed) |
 | `inline:to-do` | Copies the line's text (post-edit) as a new unticked line at the top of To-do and adds a `done` sub-line |
 
-`manual:skill-eval` is not an action at all. A ticked `shc:` line gets the sub-line `  - ↳ router: queued for your next skill-eval run` and nothing is dispatched. `skill-eval` runs only when the user runs it; run with no target, it lists these queued lines as candidates and writes a `state.outcomes` entry when it finishes, which is what lets briefing close the line.
+`manual:skill-eval` is not an action at all. A ticked `shc:` line gets the sub-line `  - ↳ router: queued for your next skill-eval run` and nothing is dispatched. `skill-eval` runs only when the user runs it; run with no target, it lists these queued lines as candidates and writes a `state.outcomes` entry (in its own shard) when it finishes, which is what lets briefing close the line.
 
 ## The allowlist principle
 
@@ -141,7 +141,7 @@ The handler returns exactly one JSON object:
 
 Applied by the hub at the end of every run, after dispatch results are in:
 
-- **Tally.** Append each dispatch's outcome to `state.outcomes` (ring buffer, max 50, newest first). Increment `tally.<category>.{ticked, unmapped_ticks}` as lines are ticked; increment `.edited` when the tick table's edited-not-ticked row applies to a category-bearing line.
+- **Tally.** Append each dispatch's outcome to `state.outcomes` (ring buffer, max 50, newest first). `outcomes`, `tally`, `suppressions` and `patterns_blocked` live in the hub's own shard (`state-schema.md`, "Shards"). Increment `tally.<category>.{ticked, unmapped_ticks}` as lines are ticked; increment `.edited` when the tick table's edited-not-ticked row applies to a category-bearing line.
 - **Suppression on delete.** Every deletion adds a `state.suppressions` entry `{source_id, category, pattern: "<channel_id>:<category>", added_at}` and increments `tally.<category>.deleted`.
 - **Pattern blocking.** Three deletions of the same `<channel>:<category>` pattern adds it to `state.patterns_blocked`; the classification step in whichever skill produces that category stops proposing it for that channel entirely.
 - **Unmapped-tick proposal.** On the first unmapped tick for a category with no open proposal, write to For you, and record it in `state.proposals` (`kind: mapping`):

@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-## [1.5.0] - 2026-10-13
+## [1.6.0] - 2026-10-13
 
 A new direct skill, `action-list`, for the stretch of a day the board does not cover:
 sitting down to clear a block of work. It builds a ranked, time-boxed list with ready
@@ -53,6 +53,36 @@ and finishes generalising the porting notes.
   `skills/briefing/HISTORY.md` speak of "the source organisation" and role words; no
   organisation, repository, product or person name from the source install remains.
 - `shared/onboarding.md` probes for `gh` alongside `twg`.
+
+## [1.5.0] - 2026-10-13
+
+The 1.3.0 shards moved `runs` and `cursors`, but `items` and `outcomes` stayed in the main
+state document. Every run that posts a board line must add an `items` entry, so every such
+run had to re-type the whole 27 KB main page through a full-body-replace connector. Runs
+judged that too risky and skipped it, so the ledger the hub reads ticks against froze and a
+skill's own board line risked being read as a request the user added.
+
+### Changed
+- `items`, `outcomes` and `voice_edits` entries live in their writer's shard, and the hub's
+  `tally`, `suppressions` and `patterns_blocked` in the hub's shard. Every skill has a
+  shard. Readers union the main document and every shard, entry by entry, the shard's copy
+  winning; a main-document copy counts only until a shard holds it. A routine run now
+  writes one small page; the main document keeps only keys written on rare, user-driven
+  events (`glossary`, `nicknames`, `registry`, `proposals`, `machines`, version keys).
+  `shared/state-schema.md` gains a "Which write touches which page" table.
+- Briefing no longer prunes other skills' `items`. It records each tag it closes or removes
+  in `closed` in its own shard; owners prune their own entries on their next write, and a
+  tag in `closed` reads as closed, never as deleted.
+- kb-dream records its voice verdict on another skill's `voice_edits` entry in its own
+  shard's `voice_verdicts`; an accepted suppression lift is applied by the hub, which owns
+  `suppressions`. One writer per document, bar kb-dream's existing monthly `ideas` prune.
+
+### Added
+- The 1.6.0 to 1.6.0 migration, run by briefing: owners seed their own shards on their
+  first write; briefing creates missing shards (shard first), then adds their pointers and
+  removes everything now held in a shard in one shrinking write (pointer and cleanup
+  together). It never re-types more than it removes, except on a page under 10 KB, and is
+  idempotent. See `skills/briefing/references/migration.md`.
 
 ## [1.4.1] - 2026-10-11
 

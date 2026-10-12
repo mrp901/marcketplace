@@ -49,7 +49,9 @@ month's first.
    `voice.md`'s structure, favouring the freshest strong examples over the oldest.
 3. **Settle `state.voice_edits`.** Any entry still missing `edited` whose `sent_ref` is a
    note (the comparison `voice.md` assigns to this skill): compare the note as it stands
-   with what was drafted and set `edited: true` or `false`. Where both texts are readable,
+   with what was drafted and record `voice_verdicts.<tag>: true` or `false` in this skill's
+   own shard (the entry sits in `reply-draft`'s or `kb-note`'s, and is theirs to write);
+   drop any verdict whose tag is in no ledger ring any more. Where both texts are readable,
    an edited one also becomes a ledger entry (Part A then promotes it).
 4. **Unattended run: don't calibrate.** Run step 3 only, leave `last_voice_review_at`
    where it is, and write "Voice re-sample: due since <date>, needs an attended dream" in

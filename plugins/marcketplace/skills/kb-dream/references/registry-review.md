@@ -2,8 +2,9 @@
 
 Runs on the first full-mode dream of a calendar month (see `SKILL.md`'s mode rule), or on
 request. Reads `state.tally`, `state.outcomes`, `state.suppressions`,
-`state.patterns_blocked` and `state.proposals` - all written by `proactive-router`, none
-of them by this skill - and produces a compact summary plus at most three proposals.
+`state.patterns_blocked` (all four in `proactive-router`'s shard, read by id) and
+`state.proposals` - all written by `proactive-router`, none of them by this skill - and
+produces a compact summary plus at most three proposals.
 
 ## Reading the tally
 
@@ -36,10 +37,10 @@ written when the fold is drafted, per `fold-proposals.md`; `mapping` is
 `proactive-router`'s.)
 
 Writing the record is what makes the board line mean anything: a tick on it dispatches
-`settle`, which finds the proposal by its `id` and marks it accepted (a lift is applied to
-`state.suppressions` there; a fold is never applied, only marked accepted for a human to
-make). A proposal that exists only as prose in the dream note can be read but never acted
-on.
+`settle`, which finds the proposal by its `id` and marks it accepted (a lift is then applied
+by `proactive-router`, which owns `state.suppressions`, on its next run; a fold is never
+applied, only marked accepted for a human to make). A proposal that exists only as prose
+in the dream note can be read but never acted on.
 
 Writing the record is not applying the proposal. The propose-only rule is unchanged: this
 skill writes a record that a change has been proposed, never the change itself.
