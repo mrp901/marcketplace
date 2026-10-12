@@ -14,9 +14,12 @@ git add .github/workflows/validate.yml && git commit -m "ci: enable validation w
 git push
 ```
 
-The workflow runs the same checks the wave gate runs locally: `scrub_check.py plugins/`,
-`line_budget.py --all` and `check_refs.py`. It does not run `claude plugin validate`, which
-needs the CLI.
+The workflow runs the checks the wave gate runs locally: `scrub_check.py plugins/`,
+`line_budget.py --all` and `check_refs.py`, then installs a pinned Claude Code release and
+runs `claude plugin validate --strict .` and `claude plugin test plugins/marcketplace`. The
+tests need no credentials. Type-checking the hooks module stays a local step (see
+`tsconfig.mods.json`), because the declarations it needs are written only when an
+interactive session loads the plugin.
 
 `scrub_check.py` loads the organisation-specific denylist from the `SCRUB_DENYLIST`
 repository secret (paste the contents of your local `scrub_denylist.local.txt` into it).

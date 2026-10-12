@@ -110,17 +110,20 @@ plugin exist because something went wrong once, and the history says what.
 ## Checks
 
 ```
-claude plugin validate .
+claude plugin validate --strict .
+claude plugin test plugins/marcketplace
 python3 plugins/marcketplace/scripts/scrub_check.py plugins/
 python3 plugins/marcketplace/scripts/line_budget.py --all
 python3 plugins/marcketplace/scripts/check_refs.py
 ```
 
-The first validates the manifests. The second fails if any organisation-specific literal
-reaches the plugin, which is what keeps it portable. It checks organisation-neutral shapes
-on its own; the organisation's actual names, ids and keys load from a gitignored
+The first validates the manifests and the hooks module. The second runs the module's
+tests, offline. The third fails if any organisation-specific literal reaches the plugin,
+which is what keeps it portable. It checks organisation-neutral shapes on its own; the
+organisation's actual names, ids and keys load from a gitignored
 `scripts/scrub_denylist.local.txt` (format in `scrub_denylist.example.txt`), so the
-denylist is itself never committed. CI supplies it from a repository secret. The third enforces the line cap that
-keeps the always-loaded part of each skill small. The fourth checks that every path a skill
+denylist is itself never committed. CI supplies it from a repository secret. The fourth
+enforces the line cap that keeps the always-loaded part of each skill small. The fifth
+checks that every path a skill
 points at resolves from the file it is written in, which is the easiest thing here to get
 wrong by exactly one directory level.
