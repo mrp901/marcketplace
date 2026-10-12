@@ -33,6 +33,12 @@ EM_DASH = chr(0x2014)
 # Directories skipped while walking a path.
 SKIP_DIRS = {".git", "source", "profiles", "__pycache__"}
 
+# The TypeScript declarations Claude Code writes beside a plugin it loads with
+# --plugin-dir (.claude-plugin/types/). They are the engine's, not this repo's,
+# gitignored, and full of em dashes. Matched as a parent/child pair, so the
+# plugin's own types/ folder is still scanned.
+SKIP_DIR_PAIRS = {(".claude-plugin", "types")}
+
 # Skipped when walking: this script (the pattern table below necessarily contains the
 # shapes it looks for) and the denylist files (which hold the literals themselves).
 SKIP_BASENAMES = {"scrub_check.py", "scrub_denylist.local.txt", "scrub_denylist.example.txt"}
@@ -151,7 +157,11 @@ def iter_files(paths):
             yield p
         elif os.path.isdir(p):
             for root, dirs, files in os.walk(p):
-                dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
+                parent = os.path.basename(os.path.normpath(root))
+                dirs[:] = [
+                    d for d in dirs
+                    if d not in SKIP_DIRS and (parent, d) not in SKIP_DIR_PAIRS
+                ]
                 for fname in files:
                     if fname in SKIP_BASENAMES:
                         continue
