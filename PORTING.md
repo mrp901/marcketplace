@@ -119,7 +119,8 @@ under `source/<old-name>/`, and one already-ported exemplar (`briefing`, after w
 
 11. **QA.** Run, in order:
     ```
-    claude plugin validate .
+    claude plugin validate --strict .
+    claude plugin test plugins/marcketplace
     python3 plugins/marcketplace/scripts/scrub_check.py plugins/
     python3 plugins/marcketplace/scripts/line_budget.py --all
     python3 plugins/marcketplace/scripts/check_refs.py
@@ -170,7 +171,7 @@ exempt a genuinely fictional token that happens to match a WARN-class shape.
 
 ## Definition of done
 
-- [ ] `claude plugin validate .` passes.
+- [ ] `claude plugin validate --strict .` and `claude plugin test plugins/marcketplace` pass.
 - [ ] `scrub_check.py plugins/` reports zero FAIL, and every WARN on this skill's files has
       been reviewed (not just passed through).
 - [ ] `check_refs.py` exits 0: every `references/`, `scripts/` and `../../../shared/` path you

@@ -13,3 +13,6 @@ PLAN.md
 .claude/hillclimb/**/state.json
 .claude/hillclimb/**/trajectory/
 .claude/hillclimb/**/runs/
+
+# TypeScript declarations Claude Code writes beside a plugin loaded with --plugin-dir
+plugins/marcketplace/.claude-plugin/types/
