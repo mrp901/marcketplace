@@ -14,8 +14,18 @@ jobs:
         with:
           python-version: "3.11"
 
+      # The organisation-specific denylist is private data and is not in the repo.
+      # Store the contents of your scrub_denylist.local.txt in the SCRUB_DENYLIST
+      # repository secret; without it the check runs on the built-in shapes only.
       - name: Scrub check (organisation literals)
-        run: python3 plugins/marcketplace/scripts/scrub_check.py plugins/
+        env:
+          SCRUB_DENYLIST_CONTENT: ${{ secrets.SCRUB_DENYLIST }}
+        run: |
+          if [ -n "$SCRUB_DENYLIST_CONTENT" ]; then
+            printf '%s\n' "$SCRUB_DENYLIST_CONTENT" > "$RUNNER_TEMP/scrub_denylist.txt"
+            export SCRUB_DENYLIST="$RUNNER_TEMP/scrub_denylist.txt"
+          fi
+          python3 plugins/marcketplace/scripts/scrub_check.py plugins/
 
       - name: Line budget check (SKILL.md 150-line cap)
         run: python3 plugins/marcketplace/scripts/line_budget.py --all
