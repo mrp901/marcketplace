@@ -1,10 +1,10 @@
 # Porting a skill into marcketplace
 
-This is the procedure for one Sonnet subagent porting one Bluewater skill (or building one
-new skill) into `plugins/marcketplace/skills/<new-name>/`. Follow it in order. It assumes no
-context beyond this file, `plugins/marcketplace/shared/`, `profiles/example.md`, your source
-skill folder under `source/<old-name>/`, and one already-ported exemplar (`briefing`, after
-wave 1).
+This is the procedure for one Sonnet subagent porting one skill from a private,
+organisation-specific source (or building one new skill) into
+`plugins/marcketplace/skills/<new-name>/`. Follow it in order. It assumes no context beyond
+this file, `plugins/marcketplace/shared/`, `profiles/example.md`, your source skill folder
+under `source/<old-name>/`, and one already-ported exemplar (`briefing`, after wave 1).
 
 ## Read first
 
@@ -41,16 +41,19 @@ wave 1).
    ```
    python3 plugins/marcketplace/scripts/scrub_check.py --report source/<old-name>/SKILL.md
    ```
-   Classify every reported hit as one of: a profile key (look up the Bluewater ("BW") source
-   column in `shared/profile-schema.md` to find the matching key), a state key, drop
-   (Bluewater-specific behaviour that does not generalise), or fictionalise (keep the shape,
-   replace the value). Do the same for any other file in the source skill folder that scrub
-   flags.
+   The report is only as good as the denylist it loads (see "Scrub regexes" below): make
+   sure `scripts/scrub_denylist.local.txt` holds the source organisation's names, ids and
+   keys before you run it, and read the first line of the output to confirm it loaded.
+   Classify every reported hit as one of: a profile key (look up the "Where the current
+   values come from" table in `shared/profile-schema.md` to find the matching key), a state
+   key, drop (organisation-specific behaviour that does not generalise), or fictionalise
+   (keep the shape, replace the value). Do the same for any other file in the source skill
+   folder that scrub flags.
 
 2. **Extract.** Write `profiles/extract/<new-name>.local.md`: a YAML fragment holding the
-   actual Bluewater values found in step 1, each annotated with the source file and line it
-   came from. Do not touch `profiles/bluewater.local.md` directly - the orchestrator merges
-   `profiles/extract/*` into it in wave 5.
+   actual organisation values found in step 1, each annotated with the source file and line
+   it came from. Do not touch `profiles/<org>.local.md` directly - the orchestrator merges
+   `profiles/extract/*` into it at the final wave. Both paths are gitignored.
 
 3. **Skeleton.** Build the new `SKILL.md` in this order:
    - frontmatter (`name`, `description`)
@@ -77,7 +80,7 @@ wave 1).
    content to shrink the file; never compress sentences together to hit the cap - that is a
    `line_budget.py` failure. See "Common mistakes" below.
 
-5. **Fixed facts to profile/state.** Replace every Bluewater-specific fixed value with
+5. **Fixed facts to profile/state.** Replace every organisation-specific fixed value with
    `` `profile.<path>` `` or `` `state.<path>` `` in backticks, using the keys from
    `shared/profile-schema.md` and `shared/state-schema.md`. No "Fixed facts" heading may
    survive the port - its content becomes `## Needs` plus profile-driven rules in `## Flow`.
@@ -102,7 +105,7 @@ wave 1).
    budget, a required field), add a deterministic checker script.
 
 9. **HISTORY.md.** Rewrite inherited entries using role words instead of literals (e.g. "the
-   chat surface" not "#marc-briefing"), keeping dates and lessons intact. Append a new
+   chat surface" not "#<user>-briefing"), keeping dates and lessons intact. Append a new
    section:
    ```
    ## <date> port to marcketplace
@@ -111,7 +114,7 @@ wave 1).
    the source skill was silent, and open questions for the orchestrator.
 
 10. **Evals.** Keep the source skill's eval cases. Re-fictionalise every mock and grader
-    against `profiles/example.md` so no Bluewater literal survives. Prompts use
+    against `profiles/example.md` so no organisation literal survives. Prompts use
     `profile=<example ref> unattended`.
 
 11. **QA.** Run, in order:
@@ -148,9 +151,22 @@ Do not re-derive the pattern table by hand - run:
 ```
 python3 plugins/marcketplace/scripts/scrub_check.py --list-patterns
 ```
-to see every FAIL and WARN pattern with its name, severity, and case sensitivity. The
-allowlist file `plugins/marcketplace/scripts/scrub_allowlist.txt` documents how to exempt a
-genuinely fictional token that happens to match a WARN-class shape.
+to see every FAIL and WARN pattern with its name, severity, case sensitivity and where it
+came from. Two sources feed it:
+
+- **Built-in shapes**, committed in `scrub_check.py`: things that look like a service id,
+  a cloud id, a webhook trigger URL, a service hostname, an em dash. Organisation-neutral.
+- **The denylist**, `plugins/marcketplace/scripts/scrub_denylist.local.txt`: the source
+  organisation's real names, ids, keys, vendors and codenames. These are private data, so
+  the file is gitignored and never committed; `scrub_denylist.example.txt` beside it shows
+  the format. The orchestrator writes it once from the source skills before wave 1 and
+  every subagent runs with it in place. CI loads the same file from a repository secret
+  (see `ci/validate.yml`). The check prints which denylist it loaded, or that none did, as
+  its first line of output: a run with no denylist checks shapes only, which is not enough
+  to pass a port.
+
+The allowlist file `plugins/marcketplace/scripts/scrub_allowlist.txt` documents how to
+exempt a genuinely fictional token that happens to match a WARN-class shape.
 
 ## Definition of done
 
@@ -184,7 +200,7 @@ genuinely fictional token that happens to match a WARN-class shape.
   example's steps, or cutting a caveat to save lines defeats the point of the cap - it is
   supposed to force content out of the model's always-loaded context, not out of existence.
   Relocate to `references/` instead; never compress.
-- **Inventing profile keys.** If a Bluewater value doesn't map cleanly onto an existing key in
+- **Inventing profile keys.** If an organisation value doesn't map cleanly onto an existing key in
   `shared/profile-schema.md`, do not invent a new key on your own initiative. Flag it in the
   HISTORY.md port entry's "open questions for the orchestrator" list and use the closest
   existing key or a placeholder in the meantime.

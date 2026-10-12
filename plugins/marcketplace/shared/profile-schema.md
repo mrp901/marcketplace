@@ -296,8 +296,8 @@ the value itself.
 not hold what it said:
 
 - `people_confusions` was cited in PLAN.md as "session-log L308-315". The actual heading
-  ("Names - check before you write them") starts at L302, and the Daves/Aleksandrs/Granola
-  paragraph it points at runs L308-312, not to L315 - L313-315 is blank line plus the start
+  ("Names - check before you write them") starts at L302, and the paragraph it points at
+  (same-first-name colleagues and notetaker misrenderings) runs L308-312, not to L315 - L313-315 is blank line plus the start
   of the next paragraph on ambiguous names, which does not carry the fixed facts. Corrected
   above to L302 (heading) / L308-312 (paragraph).
 - The plan's YAML comment for `known_fact_errors` did not name a source at all; added the

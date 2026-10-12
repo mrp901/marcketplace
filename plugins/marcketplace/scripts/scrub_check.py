@@ -1,10 +1,25 @@
 #!/usr/bin/env python3
-"""Scrub check: find Bluewater-specific literals that should not live under plugins/.
+"""Scrub check: find organisation-specific literals that should not live under plugins/.
 
-Two modes:
+Two kinds of pattern are checked:
+
+  built-in shapes   committed in this file: things that look like a service id, a cloud
+                    id, a webhook trigger URL, a service hostname, or an em dash. These
+                    are organisation-neutral and catch most leaks by shape alone.
+  the denylist      the real names, ids, keys and codenames of the organisation this
+                    install runs for. They are themselves private data, so they never
+                    live in the repository: they load from
+                    `scrub_denylist.local.txt` next to this script (gitignored), or from
+                    the file named by the SCRUB_DENYLIST environment variable. See
+                    `scrub_denylist.example.txt` for the format.
+
+Without a denylist the check still runs on the built-in shapes and says so in its
+output. CI can supply the denylist from a secret (see ci/validate.yml).
+
+Modes:
   scrub_check.py <path...>       walk paths, print FAIL/WARN hits, exit 1 on any FAIL
   scrub_check.py --report <file> print every hit in one file grouped by pattern, exit 0 always
-  scrub_check.py --list-patterns print the pattern table and exit 0
+  scrub_check.py --list-patterns print the pattern table (built-in plus denylist) and exit 0
 
 stdlib only, no third-party dependencies.
 """
@@ -18,38 +33,20 @@ EM_DASH = chr(0x2014)
 # Directories skipped while walking a path.
 SKIP_DIRS = {".git", "source", "profiles", "__pycache__"}
 
-# This script itself is skipped when walking, since the pattern table below
-# necessarily contains the literals it is looking for.
-SELF_BASENAME = "scrub_check.py"
+# Skipped when walking: this script (the pattern table below necessarily contains the
+# shapes it looks for) and the denylist files (which hold the literals themselves).
+SKIP_BASENAMES = {"scrub_check.py", "scrub_denylist.local.txt", "scrub_denylist.example.txt"}
 
-DEFAULT_ALLOWLIST = os.path.join(os.path.dirname(os.path.abspath(__file__)), "scrub_allowlist.txt")
+HERE = os.path.dirname(os.path.abspath(__file__))
+DEFAULT_ALLOWLIST = os.path.join(HERE, "scrub_allowlist.txt")
+DEFAULT_DENYLIST = os.path.join(HERE, "scrub_denylist.local.txt")
+DENYLIST_ENV = "SCRUB_DENYLIST"
 
-# (name, pattern, severity, ignorecase)
+# Built-in, organisation-neutral patterns: (name, pattern, severity, ignorecase).
+# Anything that names a specific organisation, person, vendor, product, id or key
+# belongs in the denylist file, never here.
 PATTERNS = [
-    ("company-name", r"[Bb]luewater|bluewatercontrol", "FAIL", True),
-    ("user-name", r"\bMarc\b|Pizzinato", "FAIL", True),
-    (
-        "colleague-surnames",
-        r"\b(Burkett|Wong|Giang|Angelov|Beninski|Lim|Stoykov|Hoo|Ho|Jade)\b",
-        "FAIL",
-        True,
-    ),
-    ("vendor-names", r"Fournines|Dicker Data|Decadata|ConnectWise|Bw\.Connect", "FAIL", True),
-    ("product-codenames", r"\bCEM\b|Cloud Expense|Idea Garden", "FAIL", True),
-    ("bw-cloud-id", r"d9adde8c-ac08-42d5-a730-c39fbd5f3799", "FAIL", False),
-    ("bw-state-page-key", r"712020:46176f39", "FAIL", False),
-    ("bw-confluence-page-ids", r"3404890113|3370024963|3404857345", "FAIL", False),
-    (
-        "bw-slack-ids",
-        r"U0BNWMX90JF|F0BUY7W6WBH|T040N6GAV4K|C0BVBTUBTHU|D0BP4T1PGV7"
-        r"|U054D2JQH1A|U04KE1302GL|U04KBDAEFUK|U04K8JFB269|U064BLS4JUB",
-        "FAIL",
-        False,
-    ),
     ("slack-webhook-trigger", r"hooks\.slack\.com/triggers/", "FAIL", False),
-    ("bw-onedrive-path", r"OneDrive - BLUEWATER|MarcPizzinato", "FAIL", True),
-    ("bw-ticket-keys", r"\bENG-\d+\b|\bIG-\d+\b", "FAIL", False),
-    ("bw-custom-fields", r"cf\[110(54|67)\]|\b(10372|11067|11054)\b", "FAIL", False),
     ("em-dash", re.escape(EM_DASH), "FAIL", False),
     (
         "uuid",
@@ -60,6 +57,8 @@ PATTERNS = [
     ("slack-id-shape", r"\b[UCDTFG]0[0-9A-Z]{7,10}\b", "WARN", False),
     ("confluence-key-shape", r"\d{6}:[0-9a-f-]{36}", "WARN", False),
     ("service-url", r"https?://[a-z0-9-]+\.(slack|atlassian)\.com", "WARN", True),
+    ("onedrive-path", r"OneDrive - [A-Za-z][A-Za-z0-9 ]*", "WARN", False),
+    ("tracker-custom-field", r"cf\[\d+\]|customfield_\d+", "WARN", False),
 ]
 
 # Special-cased WARN: two capitalised words on a line that also mentions
@@ -67,10 +66,65 @@ PATTERNS = [
 NAME_PAIR_RE = re.compile(r"\b[A-Z][a-z]+ [A-Z][a-z]+\b")
 CONTEXT_RE = re.compile(r"nicknames|people", re.IGNORECASE)
 
+SEVERITIES = {"FAIL", "WARN"}
+CASE_FLAGS = {"ci": True, "cs": False}
 
-def compiled_patterns():
+
+def denylist_path():
+    """The denylist file to load: $SCRUB_DENYLIST if set, else the default next to this script."""
+    return os.environ.get(DENYLIST_ENV) or DEFAULT_DENYLIST
+
+
+def load_denylist(path):
+    """Parse a denylist file into (name, pattern, severity, ignorecase) tuples.
+
+    One pattern per line: `<severity> <ci|cs> <name> <regex>`, whitespace separated,
+    the regex being everything after the name. Blank lines and `#` comments are
+    ignored. A malformed line is a hard error: a silently dropped pattern is exactly
+    the failure this check exists to prevent.
+    """
     out = []
-    for name, pattern, severity, ignorecase in PATTERNS:
+    with open(path, "r", encoding="utf-8") as f:
+        for line_no, raw in enumerate(f, start=1):
+            line = raw.strip()
+            if not line or line.startswith("#"):
+                continue
+            parts = line.split(None, 3)
+            if len(parts) != 4:
+                raise ValueError(f"{path}:{line_no}: expected '<FAIL|WARN> <ci|cs> <name> <regex>'")
+            severity, case, name, pattern = parts
+            if severity not in SEVERITIES:
+                raise ValueError(f"{path}:{line_no}: severity must be FAIL or WARN, got {severity!r}")
+            if case not in CASE_FLAGS:
+                raise ValueError(f"{path}:{line_no}: case must be ci or cs, got {case!r}")
+            try:
+                re.compile(pattern)
+            except re.error as e:
+                raise ValueError(f"{path}:{line_no}: bad regex {pattern!r}: {e}") from None
+            out.append((name, pattern, severity, CASE_FLAGS[case]))
+    return out
+
+
+def resolve_denylist():
+    """Return (entries, status_line). Exits 2 if a denylist was named but is unusable."""
+    path = denylist_path()
+    explicit = bool(os.environ.get(DENYLIST_ENV))
+    if not os.path.isfile(path):
+        if explicit:
+            print(f"error: {DENYLIST_ENV}={path} does not exist", file=sys.stderr)
+            sys.exit(2)
+        return [], "denylist: none loaded (built-in shape patterns only)"
+    try:
+        entries = load_denylist(path)
+    except ValueError as e:
+        print(f"error: {e}", file=sys.stderr)
+        sys.exit(2)
+    return entries, f"denylist: {path} ({len(entries)} pattern{'s' if len(entries) != 1 else ''})"
+
+
+def compiled_patterns(extra=()):
+    out = []
+    for name, pattern, severity, ignorecase in list(PATTERNS) + list(extra):
         flags = re.IGNORECASE if ignorecase else 0
         out.append((name, re.compile(pattern, flags), severity))
     return out
@@ -92,14 +146,14 @@ def load_allowlist(path):
 def iter_files(paths):
     for p in paths:
         if os.path.isfile(p):
-            if os.path.basename(p) == SELF_BASENAME:
+            if os.path.basename(p) in SKIP_BASENAMES:
                 continue
             yield p
         elif os.path.isdir(p):
             for root, dirs, files in os.walk(p):
                 dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
                 for fname in files:
-                    if fname == SELF_BASENAME:
+                    if fname in SKIP_BASENAMES:
                         continue
                     yield os.path.join(root, fname)
 
@@ -127,8 +181,10 @@ def scan_file(path, patterns, allowlist):
 
 
 def mode_scan(paths):
-    patterns = compiled_patterns()
+    extra, status = resolve_denylist()
+    patterns = compiled_patterns(extra)
     allowlist = load_allowlist(DEFAULT_ALLOWLIST)
+    print(status)
     fail_count = 0
     warn_count = 0
     for path in sorted(iter_files(paths)):
@@ -143,8 +199,10 @@ def mode_scan(paths):
 
 
 def mode_report(path):
-    patterns = compiled_patterns()
+    extra, status = resolve_denylist()
+    patterns = compiled_patterns(extra)
     allowlist = load_allowlist(DEFAULT_ALLOWLIST)
+    print(status)
     by_pattern = {}
     for line_no, name, severity, text in scan_file(path, patterns, allowlist):
         by_pattern.setdefault(name, []).append((line_no, severity, text))
@@ -160,10 +218,17 @@ def mode_report(path):
 
 
 def mode_list_patterns():
-    print(f"{'name':<28} {'severity':<6} {'case':<6} pattern")
+    extra, status = resolve_denylist()
+    print(status)
+    print(f"{'name':<28} {'severity':<6} {'case':<6} {'from':<9} pattern")
     for name, pattern, severity, ignorecase in PATTERNS:
-        print(f"{name:<28} {severity:<6} {'ci' if ignorecase else 'cs':<6} {pattern}")
-    print(f"{'name-pair-on-people-line':<28} {'WARN':<6} {'special':<6} two capitalised words on a nicknames/people line")
+        print(f"{name:<28} {severity:<6} {'ci' if ignorecase else 'cs':<6} {'built-in':<9} {pattern}")
+    for name, pattern, severity, ignorecase in extra:
+        print(f"{name:<28} {severity:<6} {'ci' if ignorecase else 'cs':<6} {'denylist':<9} {pattern}")
+    print(
+        f"{'name-pair-on-people-line':<28} {'WARN':<6} {'special':<6} {'built-in':<9} "
+        "two capitalised words on a nicknames/people line"
+    )
     return 0
 
 
