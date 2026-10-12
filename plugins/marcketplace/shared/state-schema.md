@@ -245,6 +245,7 @@ the board has nothing to race and runs as normal.
 | 1.3.0 | 1.3.1 | No state change (the size guard gains its shrinking-write exception). `briefing` writes `installed_version` 1.3.1 |
 | 1.3.1 | 1.3.2 | No state change (action-sweep's tracker-tag detection and routing change). `briefing` writes `installed_version` 1.3.2 |
 | 1.3.2 | 1.4.0 | No state change. `cursors.kb-dream.last_voice_review_at` now advances only when a voice re-sample completes (ledger promotion keeps its markers in the knowledge base), and session-log's transcript sweep keeps its cursor in a local file beside `pending/`, not here. `briefing` writes `installed_version` 1.4.0 |
+| 1.4.0 | 1.4.1 | No state change (the plugin gains an observe-only hooks module; it keeps its own session state, never this document). `briefing` writes `installed_version` 1.4.1 |
 
 A migration is always **additive**: it may add a new key with its default value, or
 reshape a key it explicitly names, but it never deletes a key it does not understand.

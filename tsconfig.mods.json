@@ -1,0 +1,35 @@
+// Type-checks the plugin's hooks module. Not used by CI.
+//
+// The declarations for 'claude-code' are written by Claude Code itself, into
+// plugins/marcketplace/.claude-plugin/types/ (gitignored), the first time an
+// interactive session loads the plugin from this folder:
+//
+//   claude --plugin-dir plugins/marcketplace
+//
+// then, from the repo root:
+//
+//   tsc -p tsconfig.mods.json
+//
+// Compiler options follow the header of the engine's own declaration file.
+{
+  "compilerOptions": {
+    "target": "es2023",
+    "lib": ["es2023"],
+    "types": [],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "jsx": "react",
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment"
+  },
+  "include": [
+    "plugins/marcketplace/.claude-plugin/types/**/*.d.ts",
+    "plugins/marcketplace/hooks/**/*.ts",
+    "plugins/marcketplace/types/**/*.d.ts"
+  ]
+}
