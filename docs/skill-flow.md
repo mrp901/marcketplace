@@ -72,6 +72,7 @@ flowchart TB
     subgraph manual["Your day, direct or hook-driven"]
         direction TB
         sessionlog["session-log"]
+        actionlist["action-list\n(build, then work)"]
         ideaticketdirect["idea-ticket\n(direct)"]
         sparsession["idea-spar\n(session: challenge, reality,\nmarket, sketch, pack it)"]
         skilleval["skill-eval\n(manual only)"]
@@ -79,6 +80,8 @@ flowchart TB
 
     sessionhook(["SessionEnd / SessionStart hooks"])
     sessionhook --> sessionlog
+    board -.->|"read only, backlog"| actionlist
+    actionlist -.->|"offered on close"| sessionlog
     roadmap(["You move an idea into Next"])
     roadmap -.-> sparwatch
 
