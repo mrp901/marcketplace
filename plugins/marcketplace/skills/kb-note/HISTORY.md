@@ -93,7 +93,7 @@ leaking from the cloud-routine machine. Nothing in the template or worked exampl
 which clock to use. `generated.at` and the log date heading now take the current time in
 `org.timezone` with its offset, as session-log and kb-dream already do.
 
-## 2026-10-13 shared lists to their writers' shards (1.5.0)
+## 2026-10-13 shared lists to their writers' shards (1.6.0)
 
 After the 1.3.0 shards, `items` and `outcomes` still sat in a 27 KB main state page, so
 every run that posted a board line had to re-type all of it through a full-body-replace

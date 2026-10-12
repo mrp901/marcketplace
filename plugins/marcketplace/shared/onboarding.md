@@ -93,9 +93,11 @@ result. Otherwise, and only if this run has a shell tool, run `twg whoami -o jso
 `$LOCALAPPDATA/Programs/twg/bin/twg.exe`). Record `cli.<category>: <path to twg>` only
 if it exits 0 and the returned `accountId` equals `profile.user.tracker_account_id`
 (when that key is set); in every other case record nothing for that category. Write
-`cli_probed_at` either way. The probe never asks, never fast-fails, and never runs
-login, setup or install, so an unattended run on a machine without the CLI loses
-nothing but the probe call.
+`cli_probed_at` either way. For `codehost` on GitHub the probe is `gh auth status`
+instead, and `cli.codehost: <path to gh>` is recorded only if it exits 0; `codehost` has
+no connector, so without the CLI the category is simply unresolved and degrades. The
+probe never asks, never fast-fails, and never runs login, setup or install, so an
+unattended run on a machine without the CLI loses nothing but the probe call.
 
 ## Step 5 - Voice check
 

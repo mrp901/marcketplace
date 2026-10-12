@@ -6,10 +6,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-10-13
+
+A new direct skill, `action-list`, for the stretch of a day the board does not cover:
+sitting down to clear a block of work. It builds a ranked, time-boxed list with ready
+drafts into the knowledge base inbox, works a list item by item with the user, and closes
+it on their word. This release also carries the organisation-literal clean-up below.
+
 The repository carried its source organisation's private data in two places that the scrub
 check could not see: the check's own pattern table, and the notify guard's hardcoded
 deny-list. This release moves both out of the repository without weakening either check,
 and finishes generalising the porting notes.
+
+### Added
+- `skills/action-list/` - `SKILL.md`, `HISTORY.md` and four references (list format,
+  working an item, closing a list, a worked example against `profiles/example.md`).
+  Direct only: no `## Handler mode`, never writes to the board, never dispatches a handler,
+  never sends a message, and gates every tracker write, push and pull request on its own
+  yes. Lists are transient drafts under `kb.paths.drafts`, so inbox triage leaves them be.
+- A `codehost` tool category with one read verb, `codehost: list merged pull requests`
+  (`shared/tool-capabilities.md`, `shared/profile-schema.md`, `profiles/example.md`).
+  Optional. Served by the `gh` CLI, added to "Local CLI first" and to the onboarding probe
+  (`gh auth status`); there is no connector, so without `gh` it degrades.
+- Built-in WARN shapes `onedrive-path` (`OneDrive - <org>`) and `tracker-custom-field`
+  (`cf[...]`, `customfield_...`), replacing the organisation-specific FAIL patterns that
+  covered the same ground.
+- `cursors.action-list` in `shared/state-schema.md`, and a 1.4.0 to 1.5.0 migration row
+  (no change to the main document; the skill creates its own shard).
+- README skill table row and a node in `docs/skill-flow.md`'s "your day" band.
 
 ### Changed
 - `scrub_check.py` keeps only organisation-neutral shape patterns in the repository. The
@@ -28,11 +52,7 @@ and finishes generalising the porting notes.
 - `PORTING.md`, `docs/plans/canvas-redesign-issues.md`, `shared/profile-schema.md` and
   `skills/briefing/HISTORY.md` speak of "the source organisation" and role words; no
   organisation, repository, product or person name from the source install remains.
-
-### Added
-- Built-in WARN shapes `onedrive-path` (`OneDrive - <org>`) and `tracker-custom-field`
-  (`cf[...]`, `customfield_...`), replacing the organisation-specific FAIL patterns that
-  covered the same ground.
+- `shared/onboarding.md` probes for `gh` alongside `twg`.
 
 ## [1.5.0] - 2026-10-13
 
@@ -58,7 +78,7 @@ skill's own board line risked being read as a request the user added.
   `suppressions`. One writer per document, bar kb-dream's existing monthly `ideas` prune.
 
 ### Added
-- The 1.4.0 to 1.5.0 migration, run by briefing: owners seed their own shards on their
+- The 1.6.0 to 1.6.0 migration, run by briefing: owners seed their own shards on their
   first write; briefing creates missing shards (shard first), then adds their pointers and
   removes everything now held in a shard in one shrinking write (pointer and cleanup
   together). It never re-types more than it removes, except on a page under 10 KB, and is

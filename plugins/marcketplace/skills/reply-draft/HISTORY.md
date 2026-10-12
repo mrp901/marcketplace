@@ -133,7 +133,7 @@ Accepts `chat-reply` alongside `email`: a chat thread or mention waiting on the 
 by the Router's sweep or by `action-sweep`'s new chat sources. Same `draft` mode, same
 register selection from the audience, and still never a `send` mode.
 
-## 2026-10-13 shared lists to their writers' shards (1.5.0)
+## 2026-10-13 shared lists to their writers' shards (1.6.0)
 
 After the 1.3.0 shards, `items` and `outcomes` still sat in a 27 KB main state page, so
 every run that posted a board line had to re-type all of it through a full-body-replace

@@ -92,11 +92,11 @@ guard's exception allows it; re-read and compare it as the exception requires. A
 already exists for a skill (one a run created before the pointer could land) is reused
 rather than duplicated, and its values win over the main document's older copy.
 
-## 1.4.0 to 1.5.0: shared lists to their writers' shards
+## 1.6.0 to 1.6.0: shared lists to their writers' shards
 
 No board change. 1.3.0 sharded `runs` and `cursors`, but `items`, `outcomes` and the hub's
 counters stayed in the main document, so every run that posted a board line had to re-type
-all of it, and runs skipped that write instead. From 1.5.0 each of these lives in its
+all of it, and runs skipped that write instead. From 1.6.0 each of these lives in its
 writer's shard (`../../../shared/state-schema.md`, "Shards"):
 
 | In the main document | Moves to the shard of |
@@ -110,7 +110,7 @@ writer's shard (`../../../shared/state-schema.md`, "Shards"):
 An entry with no installed owner (a retired skill's tag, a `voice_edits` entry no outcome
 names) stays where it is; every reader still unions it, and no step deletes it.
 
-Owners do most of this themselves: from 1.5.0 a skill seeds a key its shard lacks from its
+Owners do most of this themselves: from 1.6.0 a skill seeds a key its shard lacks from its
 own entries in the main document on its first write, and from then on writes only its
 shard (onboarding step 6). This migration does the rest, inside a run's ordinary state
 write, on every briefing run until the main document holds no owned entry:
@@ -131,7 +131,7 @@ write, on every briefing run until the main document holds no owned entry:
    document. Never write into a shard that already exists: its owner seeds it.
 3. **Pointer and cleanup, one write.** Re-read the main document, add `shards.<skill>` for
    each shard step 2 confirmed, remove every ready entry, and once no owned entry is left,
-   write `installed_version` = 1.5.0. This write shrinks the document, so the size guard's
+   write `installed_version` = 1.6.0. This write shrinks the document, so the size guard's
    exception allows it at any size; re-read and compare it as the exception requires and,
    on a mismatch, restore the copy read at run start.
 4. **Idempotent.** An entry already gone from the main document, or an owner that already
@@ -140,5 +140,5 @@ write, on every briefing run until the main document holds no owned entry:
    so the user can delete it, and create a fresh one next run.
 
 A fresh instance has no owned entries in the main document and nothing to move: step 1
-finds nothing, and `installed_version` = 1.5.0 is written to the main document, which is
+finds nothing, and `installed_version` = 1.6.0 is written to the main document, which is
 small enough to re-type, in the same run.

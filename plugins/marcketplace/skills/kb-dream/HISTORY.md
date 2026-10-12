@@ -253,7 +253,7 @@ Also: registers beyond the base four are discovered, not listed, and a new one i
 once 3+ entries fit none; tone feedback in session notes now routes to the ledger, not
 memory, so preferences about the user's writing stop landing where nothing steers drafts.
 
-## 2026-10-13 shared lists to their writers' shards (1.5.0)
+## 2026-10-13 shared lists to their writers' shards (1.6.0)
 
 After the 1.3.0 shards, `items` and `outcomes` still sat in a 27 KB main state page, so
 every run that posted a board line had to re-type all of it through a full-body-replace
