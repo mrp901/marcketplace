@@ -43,6 +43,7 @@ tools:
   notetaker: {service: granola, tested: false}
   kb: {service: sharepoint}
   codebase: {service: device_bridge}
+  codehost: {service: github}
   web: {service: websearch}
   page: {service: claude_artifact}
 
