@@ -60,7 +60,7 @@ here.
 * [Multi-yard allocation deferred this quarter (22 Sep 2026)](2026-09-22-multi-yard-allocation-deferred.md) - Dock-scheduling will not support multi-yard allocation this quarter, deferred to protect the single-yard rewrite.
 ```
 
-**Log line**, `log.md` under today's heading:
+**Log line**, `log.md` under today's heading (today in `org.timezone`, not UTC):
 
 ```markdown
 * **Creation**: [Multi-yard allocation deferred](Inbox/2026-09-22-multi-yard-allocation-deferred.md) - captured from #freight-ops-eng, roadmap-relevant.

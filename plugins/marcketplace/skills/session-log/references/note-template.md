@@ -37,7 +37,7 @@ trust tier the kb has never used (`kb-conventions.md`'s provenance rule).
 
 ## Body
 
-Four sections, in this order; drop any that are genuinely empty rather than padding them:
+Five sections, in this order; drop any that are genuinely empty rather than padding them:
 
 ```markdown
 # Session - <title>
@@ -59,6 +59,11 @@ Four sections, in this order; drop any that are genuinely empty rather than padd
 - **Corrected:** <what was wrong>, <what's true now>. <what superseded it>.
 - **Learned:** <fact>, from <source>.
 
+## Voice and tone feedback
+
+- **<register or shape of writing>:** "<the user's correction, verbatim>" - <what it was
+  about, one clause>.
+
 ## Open threads
 
 - [ ] <What's unresolved, and what would resolve it.>
@@ -68,6 +73,14 @@ Give corrections their own bullet prefix; never fold one silently into "facts" a
 it were always the case. A knowledge base's own history is only useful if what it used to
 believe, and why that changed, stays visible - that is exactly what a **Corrected** line
 records and a smoothed-over "fact" line destroys.
+
+**Voice and tone feedback** is the user's own words about how their writing should read -
+"too sales-focused", "don't over-articulate", a cut they made to a draft in their voice -
+quoted verbatim, never paraphrased into a rule, one bullet each. It is its own section, not
+a Decision, because `kb-dream` routes it to `Voice/edits-ledger.md` rather than memory. Where
+the session already wrote the user's before/after pairs into the ledger, say so in one
+bullet and link the entry instead of repeating them. Feedback on the substance (a wrong
+figure, a missing step) is a Correction, not tone.
 
 ## When the session changed an existing note
 

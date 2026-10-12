@@ -16,9 +16,9 @@ else.
 
 ## Needs
 
-- Profile: `kb.name`, `kb.kind`, `kb.conventions_file`, `kb.types_registry`,
-  `kb.link_style`, `kb.frontmatter_required`, `kb.paths.inbox`, `kb.paths.log`,
-  `voice.registers` (optional if unset - see `../../shared/voice.md`)
+- Profile: `org.timezone`, `kb.name`, `kb.kind`, `kb.conventions_file`,
+  `kb.types_registry`, `kb.link_style`, `kb.frontmatter_required`, `kb.paths.inbox`,
+  `kb.paths.log`, `voice.registers` (optional if unset - see `../../shared/voice.md`)
 - Tool categories: `kb` (search, read, write), `wiki` (get/update page, only where
   `kb.kind: confluence`)
 - State: `state.voice_edits` (append only)
@@ -56,7 +56,9 @@ retries beyond the onboarding tool-resolution allowance. Guidelines in
    dated-file convention if the note is anchored to an occasion or a short descriptive
    slug otherwise.
 7. **Index and log lines**, same write batch, per `kb-conventions.md`'s maintenance
-   contract. `generated.by` names this skill; never write `verified`.
+   contract. `generated.by` names this skill; never write `verified`. `generated.at` and
+   the log's date heading take the current time from the system clock in `org.timezone`,
+   with that zone's offset - never a UTC date, never a placeholder midnight.
 8. **Voice self-check.** Load only the register the source's audience calls for (default
    `ticket_prose` unless the source reads as an internal note, in which case
    `teammate_chat`), run the draft against `Voice/ai-patterns-to-avoid.md`, revise, then
