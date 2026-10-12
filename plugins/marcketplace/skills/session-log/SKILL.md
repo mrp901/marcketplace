@@ -39,7 +39,8 @@ one-off command, or was spent reading without concluding anything should not bec
 note - a note nobody links to, or that pads the log, works against the knowledge base's
 own maintenance contract. Write one when the session produced at least one of: a decision
 or position taken; a change to knowledge-base or working files; a fact learned, or better,
-a fact corrected; an open thread worth resuming. If none apply, say so and offer a
+a fact corrected; a correction to how the user's writing should read; an open thread
+worth resuming. If none apply, say so and offer a
 one-line `kb.paths.log` entry instead of a note.
 
 ## Flow
@@ -91,6 +92,9 @@ to link just because a note happens to exist).
 ## Pending archived sessions
 A `SessionEnd` hook cannot summarise anything itself, so it archives the transcript and
 leaves a marker; a `SessionStart` hook reports the backlog at the top of the next session.
+That same hook first sweeps recent transcripts for substantive sessions the archive never
+caught (a killed window, a broken hook) and queues them too, so the queue is the whole
+week, not only what `SessionEnd` saved. A swept file is worked like any other.
 See `references/pending-sessions.md` for processing the queue and
 `references/hooks-setup.md` for how the two hooks are wired and why the work is split
 across them rather than done in one.

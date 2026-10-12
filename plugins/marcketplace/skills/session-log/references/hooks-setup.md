@@ -24,7 +24,7 @@ Split it in two:
 | Hook | Job | Why it can do it |
 |---|---|---|
 | `SessionEnd` | copy the transcript to `pending/`, write a metadata sidecar | a file copy fits comfortably in the budget |
-| `SessionStart` | count `pending/` and tell Claude the backlog exists | `SessionStart` does support `additionalContext` |
+| `SessionStart` | sweep recent transcripts for sessions `SessionEnd` missed (`pending-sessions.md`), then count `pending/` and tell Claude the backlog exists | `SessionStart` does support `additionalContext`; the sweep is capped and cursored |
 
 The write-up then happens inside a real session, with a real model and full tool access -
 either because the user asked, or because the `SessionStart` nudge offered. That trades

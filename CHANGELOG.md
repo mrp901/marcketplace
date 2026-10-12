@@ -6,7 +6,35 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-## [1.3.3] - 2026-10-11
+The repository carried its source organisation's private data in two places that the scrub
+check could not see: the check's own pattern table, and the notify guard's hardcoded
+deny-list. This release moves both out of the repository without weakening either check,
+and finishes generalising the porting notes.
+
+### Changed
+- `scrub_check.py` keeps only organisation-neutral shape patterns in the repository. The
+  organisation's real names, ids, keys, vendors and codenames load from a gitignored
+  `scripts/scrub_denylist.local.txt` (or the file named by `SCRUB_DENYLIST`), with
+  `scrub_denylist.example.txt` documenting the format. The first line of output says which
+  denylist loaded, or that none did; a named-but-missing or malformed denylist exits 2
+  rather than silently checking less. `--list-patterns` shows each pattern's source.
+- `guard_notify_channel.py` takes the blocked channel ids as trailing arguments (the caller
+  passes every `profile.chat.tracker_feed_channels.*` id, per `shared/notify.md`) plus an
+  optional `NOTIFY_BLOCKED_CHANNEL_IDS` environment variable, instead of two channel ids
+  written into the script. Check order is unchanged: deny-list first, then exact allowlist
+  match. See `skills/briefing/HISTORY.md`, 2026-10-12.
+- CI (`ci/validate.yml`, `.github/workflows/validate.yml`) loads the denylist from the
+  `SCRUB_DENYLIST` repository secret when it is set.
+- `PORTING.md`, `docs/plans/canvas-redesign-issues.md`, `shared/profile-schema.md` and
+  `skills/briefing/HISTORY.md` speak of "the source organisation" and role words; no
+  organisation, repository, product or person name from the source install remains.
+
+### Added
+- Built-in WARN shapes `onedrive-path` (`OneDrive - <org>`) and `tracker-custom-field`
+  (`cf[...]`, `customfield_...`), replacing the organisation-specific FAIL patterns that
+  covered the same ground.
+
+## [1.4.1] - 2026-10-11
 
 ### Added
 - A hooks module (`hooks/register.ts`) beside the two classic session-log hooks. In this
@@ -16,7 +44,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   keys. It says what it saw in transcript notices the model never reads, beginning
   `marcketplace observer`, so a routine's transcript shows the module loaded. A failure in
   the observer is reported once per hook and never blocks a call. The guards that act on
-  what it learns arrive in 1.4.0 (`docs/plans/guards-mod-build-plan.md`).
+  what it learns arrive in a later release (`docs/plans/guards-mod-build-plan.md`).
 - `MARCKETPLACE_GUARDS` environment variable: `off` stops all observation except the load
   notice; `on` is the default. `warn` and `strict` are accepted and do nothing different
   until 1.4.0.
@@ -27,6 +55,49 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 - `scrub_check.py` skips the TypeScript declarations Claude Code writes into
   `.claude-plugin/types/` when it loads the plugin from a folder; the folder is gitignored.
+
+## [1.4.0] - 2026-10-09
+
+A week of voice corrections and working sessions was mostly never captured: 39 ledger pairs
+sat unpromoted, the monthly voice review failed and then waited a month, and about six
+substantive sessions never reached the session queue. This release closes each route.
+
+### Changed
+- kb-dream promotes from `Voice/edits-ledger.md` on every non-quiet dream, unattended and
+  from the knowledge base alone: a pattern recurring in 2+ ledger entries goes into its
+  register note (or the avoid-list) automatically, citing the entries; a singleton becomes a
+  `dream:` line, applied on tick. The chat and mail re-sample stays attended-only, falls due
+  when `last_voice_review_at` is 30 days old and retries on every dream until done, instead
+  of only on the first full dream of a month. See
+  `skills/kb-dream/references/voice-review.md`.
+- The voice register set is open-ended: the four in `voice.registers` are a floor, further
+  register notes are discovered from `kb.paths.voice`, and kb-dream proposes a new register
+  when 3+ ledger entries fit none. `shared/voice.md` now defines the edits ledger's writers
+  and entry shape (compatible with existing entries, plus a `Said:` form and kb-dream's
+  `Promoted:`/`Proposed:` markers).
+- Session notes gain a `## Voice and tone feedback` section (verbatim corrections to how the
+  user's writing reads), which kb-dream's extraction routes to the edits ledger, never to
+  memory.
+
+### Added
+- The `SessionStart` hook sweeps recent Claude Code transcripts for substantive sessions the
+  `SessionEnd` archive missed and queues them in `pending/` (conservative threshold, 2-hour
+  idle rule, capped and cursored, `SESSION_LOG_SWEEP=0` to disable,
+  `pending_sessions.py --dry-run` to preview). See
+  `skills/session-log/references/pending-sessions.md`.
+
+### Fixed
+- action-sweep: a ticket's Open questions holds only other people's unaddressed mentions on
+  the source issue and is omitted when there is none. The drafter's own doubts stay in the
+  draft's own Open questions and are settled before the push tick (a ticket was filed with
+  them).
+- Timestamps: `generated.at`, the log date heading, `runs.<skill>.last_run_at` and cursors
+  use the current time in `org.timezone` with its offset, not a UTC date or a placeholder
+  midnight (kb-note, and the action-sweep, briefing and router state writes). See
+  `shared/kb-conventions.md` and `shared/state-schema.md`.
+- Size guard: measure the document just read instead of carrying "over the guard" forward
+  from an earlier run's note. Skills kept skipping their `items` and `outcomes` writes after
+  state had fallen well under 45 KB.
 
 ## [1.3.2] - 2026-10-09
 

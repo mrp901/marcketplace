@@ -16,7 +16,7 @@ The user wants these fixed. They also want loose token-spend guidelines that don
 ## Hard rules for the instance that files the issues
 1. **Only file on `mrp901/marcketplace`.** Check `owner=mrp901`, `repo=marcketplace` on every create call.
    - Never create issues, comments or anything else on any other repo.
-   - This especially covers any Bluewater repo (for example anything under `pizzi-bluewater`, or `Bw.Connect.All`).
+   - This especially covers any repository belonging to the user's employer (the organisation whose private skills this plugin was ported from).
    - If a tool defaults to, or suggests, another repo, stop.
 2. Search open issues first (`search_issues` on `repo:mrp901/marcketplace`), so issues aren't duplicated if the plan is re-run.
 3. Issue text must contain no organisation IDs, webhook URLs, Slack/Confluence IDs, real ticket keys or people's names. Use `PRJ-164` as the example idea key, and "the user" for the person. Implementers will copy issue text into `plugins/`, where `scrub_check.py` fails on those literals and on em dashes.

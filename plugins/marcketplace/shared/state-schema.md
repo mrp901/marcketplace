@@ -78,7 +78,11 @@ in its own small sibling document (a skill that writes only shared keys, such as
   record `partial` in is the oversized one itself, it records nothing and says so in its
   run output instead (briefing names it in its message), so the stall is never silent. The
   main document, with only shared keys left, should sit well under the limit; a shard that
-  nears it means that skill's own subtree needs pruning.
+  nears it means that skill's own subtree needs pruning. **Measure, don't assume:** the
+  size is the byte length of the document body read this run, taken fresh each time. Never
+  carry "over the guard" forward from an earlier run's note: after the reference instance's
+  state fell to 27 KB, three later runs still reported it over the guard and skipped their
+  `items` and `outcomes` writes. Under the guard, a rewrite is expected, not optional.
 
 ## The commented YAML
 
@@ -171,7 +175,7 @@ a tracker label on an idea.
 | `items.<tag>` | whichever skill wrote the surface line | proactive-router, briefing, action-sweep (dedupe) | pruned when the line reaches Closed |
 | `items.<tag>.status`, `.blocked_reason`, `.blocked_on`, `.blocked_at`, `.retried_for` | proactive-router, on its own `pr:` lines only, when a dispatch returns `blocked` | proactive-router (blocked-line retry) | cleared on retry; pruned with the item |
 | `outcomes` | proactive-router, after each dispatch or inline action; skill-eval, when a manual run finishes | briefing (handler outcome summary and the manual close) | ring buffer, max 50, newest first |
-| `voice_edits` | reply-draft, kb-note (append); reply-draft, kb-dream (set `edited`) | kb-dream (monthly voice review), skill-health-check | ring buffer, max 30 |
+| `voice_edits` | reply-draft, kb-note (append); reply-draft, kb-dream (set `edited`) | kb-dream (voice re-sample), skill-health-check | ring buffer, max 30 |
 | `machines.<machine_id>` | onboarding, on tool discovery | every skill (reads its own machine's prefixes) | permanent, one entry per machine, re-resolved on failure |
 | `machines.<machine_id>.cli`, `.cli_probed_at` | onboarding step 4 (local CLI probe); any skill clears `cli.<category>` when a CLI read fails and it falls back | every skill using a tracker or ideas read verb | re-probed after 7 days; absent on machines without the CLI |
 
@@ -202,6 +206,10 @@ a tracker label on an idea.
   read or update does not parse as expected, do not attempt to repair or replace it.
   Treat it the same as a missing key: fast-fail per `onboarding.md`, naming the block,
   and leave the document untouched.
+- **Stamp the real local time.** `runs.<skill>.last_run_at`, every cursor and every `at:`
+  is the current time in `org.timezone` with its offset, read from the clock at write time
+  (`date`), never a UTC date reinterpreted as local and never a placeholder midnight. A
+  cursor stamped before the real run time repeats a window; one stamped after skips it.
 
 ## Retention
 
@@ -236,7 +244,8 @@ the board has nothing to race and runs as normal.
 | 1.2.0 | 1.3.0 | Add `shards: {}` to the main document. Each skill that owns subtrees then creates its own shard on its next run, per **Shards**; until it does, it keeps using the main document. `briefing` runs this row and writes `installed_version` 1.3.0. If the main document is already over the size guard, `briefing` instead shards every skill in this one run, per `skills/briefing/references/migration.md` |
 | 1.3.0 | 1.3.1 | No state change (the size guard gains its shrinking-write exception). `briefing` writes `installed_version` 1.3.1 |
 | 1.3.1 | 1.3.2 | No state change (action-sweep's tracker-tag detection and routing change). `briefing` writes `installed_version` 1.3.2 |
-| 1.3.2 | 1.3.3 | No state change (the plugin gains an observe-only hooks module; it keeps its own session state, never this document). `briefing` writes `installed_version` 1.3.3 |
+| 1.3.2 | 1.4.0 | No state change. `cursors.kb-dream.last_voice_review_at` now advances only when a voice re-sample completes (ledger promotion keeps its markers in the knowledge base), and session-log's transcript sweep keeps its cursor in a local file beside `pending/`, not here. `briefing` writes `installed_version` 1.4.0 |
+| 1.4.0 | 1.4.1 | No state change (the plugin gains an observe-only hooks module; it keeps its own session state, never this document). `briefing` writes `installed_version` 1.4.1 |
 
 A migration is always **additive**: it may add a new key with its default value, or
 reshape a key it explicitly names, but it never deletes a key it does not understand.

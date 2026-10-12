@@ -20,3 +20,8 @@ runs `claude plugin validate --strict .` and `claude plugin test plugins/marcket
 tests need no credentials. Type-checking the hooks module stays a local step (see
 `tsconfig.mods.json`), because the declarations it needs are written only when an
 interactive session loads the plugin.
+
+`scrub_check.py` loads the organisation-specific denylist from the `SCRUB_DENYLIST`
+repository secret (paste the contents of your local `scrub_denylist.local.txt` into it).
+Without the secret the check still runs, on its built-in shape patterns only, and says so
+in its first line of output.

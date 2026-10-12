@@ -1,7 +1,7 @@
 source/
-profiles/bluewater.local.md
 profiles/extract/
 profiles/*.local.md
+plugins/marcketplace/scripts/scrub_denylist.local.txt
 **/evals/**/results/
 __pycache__/
 .DS_Store
