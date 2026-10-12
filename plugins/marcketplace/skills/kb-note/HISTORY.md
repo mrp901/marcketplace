@@ -84,3 +84,11 @@ kb-conventions.md), reported per the task brief:
 No behaviour change. It reads `item.category` (`kb-doc` or `summarise`) explicitly, since
 `summarise` dropped the star from its emoji when FYIs left the board, and its Budget links
 the shared token discipline.
+
+## 2026-10-09 timestamps in the user's timezone
+
+A note written at 01:10 local time carried `generated.at` of the previous day at a
+placeholder midnight, and its log line went under the previous day's heading: a UTC date
+leaking from the cloud-routine machine. Nothing in the template or worked example said
+which clock to use. `generated.at` and the log date heading now take the current time in
+`org.timezone` with its offset, as session-log and kb-dream already do.

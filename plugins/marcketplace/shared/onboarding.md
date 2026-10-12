@@ -111,7 +111,8 @@ filled in) - otherwise leave it untouched, since the profile is low-frequency by
 (see `state-schema.md`'s "Why two documents"). Write `state.machines` only when this run
 resolved or changed a tool prefix, and always write `state.runs[<skill>]` (this run's
 outcome). Write `runs` and the skill's own keys to its shard, and `machines` to the main state
-document. If the document to be written is over 45 KB, do not rewrite it: apply the size
+document. If the document to be written is over 45 KB (measure the body just read; see
+`state-schema.md`), do not rewrite it: apply the size
 guard in `state-schema.md` instead (a write that shrinks it back under 45 KB is the guard's
 one allowed exception).
 

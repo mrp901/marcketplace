@@ -9,7 +9,7 @@ title: <human title, dated notes carry a parenthetical readable date, e.g. (24 A
 description: <one sentence, used by the index and log>
 tags: [kb-doc, <two or three from kb.tag_hints or existing vocabulary>]
 status: draft
-generated: { by: kb-note, at: <ISO 8601> }
+generated: { by: kb-note, at: <ISO 8601, now in org.timezone with its offset> }
 ---
 ```
 

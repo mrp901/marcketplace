@@ -143,3 +143,19 @@ No behaviour change beyond linking the shared token discipline from its Budget.
 ## 2026-10-07 state shards
 
 The state page passed 49 KB and a full-body-replace write became unsafe to re-type, so `cursors` move to its own shard. See `shared/state-schema.md`, "Shards".
+
+## 2026-10-09 skill-eval (red health): sweep for unlogged sessions, capture tone (1.4.0)
+
+A capture audit of one week found about six substantive sessions with no note and no
+archived transcript: the `SessionEnd` hook was broken for part of the week, and sessions
+closed by killing the window never fired it. The queue only ever held what the hook saved,
+and nothing looked for the rest. `pending_sessions.py` now sweeps recent transcripts on
+`SessionStart` and queues substantive, uncovered ones (`references/pending-sessions.md`).
+The threshold is deliberately conservative (6 typed messages and a write, or 15 typed) so
+the queue doesn't fill with lookups; the dry run against that week queued every session the
+audit named and skipped the trivial ones. The sweep's cursor is a local file, not state,
+so the hook stays a bare script with no connector access.
+
+The same audit found tone corrections the user gave in sessions filed under Decisions, or
+nowhere, and so never reaching the voice registers. The note gains a fifth section, Voice
+and tone feedback, verbatim, which kb-dream routes to the edits ledger.

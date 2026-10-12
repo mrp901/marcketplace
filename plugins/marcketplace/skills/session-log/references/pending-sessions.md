@@ -21,6 +21,32 @@ Several small sessions on one day are often better as one note covering the day 
 note per session - use judgement; the goal is a useful record, not one note per process
 lifetime.
 
+## The transcript sweep
+
+`SessionEnd` misses sessions: a window closed by killing it, a hook broken by the
+environment, a session that never ended cleanly. So `pending_sessions.py`, on every
+`SessionStart`, first scans the local Claude Code transcripts
+(`~/.claude/projects/*/*.jsonl`, or under `CLAUDE_CONFIG_DIR`) and copies any substantive
+one with no queued or archived copy into `pending/`, with a sidecar whose `reason` is
+`swept`. Then it counts the queue as before.
+
+- **Substantive, conservatively:** at least 6 typed user messages and at least one write
+  (a file edit or a connector create/update/send), or at least 15 typed messages with no
+  write. Tool results, slash-command echoes, hook output and subagent turns never count.
+  A trivial session stays out; the "is this worth a note?" gate still applies to what gets
+  in.
+- **Already covered:** a copy of the same session in `pending/` or `archive/` at least as
+  new as the transcript, or a `session-log` run inside the transcript itself. A session
+  resumed after either is judged on its tail alone, and the sidecar's `tail_after` says
+  where the uncovered part starts - write up only that part, updating the earlier note in
+  place when it is the same piece of work.
+- **Cheap:** transcripts touched in the last 2 hours are left alone (they may still be
+  open), files under 64 KB are skipped unread, at most 20 are read and 8 queued per start,
+  and `sweep-cursor.json` beside `pending/` carries the rest to the next start. The first
+  run looks back 7 days.
+- `SESSION_LOG_SWEEP=0` turns it off. `pending_sessions.py --dry-run` prints what it would
+  queue and writes nothing.
+
 ## Transcript reading
 
 `read_transcript.py` treats unknown line shapes as skippable rather than fatal, because

@@ -226,3 +226,29 @@ A skill-health-check run scored two skills amber for gaps that belonged to this 
 ## 2026-10-07 state shards
 
 The state page passed 49 KB and a full-body-replace write became unsafe to re-type, so `cursors` and `runs` move to its own shard; the monthly `ideas` prune writes idea-spar's shard. See `shared/state-schema.md`, "Shards".
+
+## 2026-10-09 skill-eval (red health): voice capture runs every dream (1.4.0)
+
+A capture audit found a week of the user's voice corrections stranded: four ledger entries
+(39 before/after pairs) never promoted, registers untouched for ten days. Three causes, all
+in this skill's text:
+
+- **The review could not run unattended.** Its first step re-sampled chat and mail, which
+  is calibration and forbidden unattended, so the vault-only part - promoting from the
+  ledger - never ran either. Split into Part A (ledger promotion, every non-quiet dream,
+  knowledge-base reads only) and Part B (re-sample, attended).
+- **A failed month waited for the next month.** The trigger was "first full dream of the
+  month", and the failed run had already advanced `last_full_dream_at`, so three dreams
+  in a row wrote "not due, next November" over a promise to retry. Part B now triggers on
+  `last_voice_review_at` being 30+ days old and retries every dream; an unattended run
+  flags it and, after 7 days due, raises one `dream:` line.
+- **Nothing read the ledger.** The review read `state.voice_edits`, which holds hashes, not
+  text. The ledger is now the primary input. The user's ruling sets the bar: auto-promote a
+  pattern recurring in 2+ entries, propose singletons for a tick. That makes the
+  auto-apply split's first named exception - justified because the evidence is the user's
+  own edits - while a verified voice note stays propose-only. `Promoted:`/`Proposed:`
+  markers on ledger items keep runs idempotent without a new state key.
+
+Also: registers beyond the base four are discovered, not listed, and a new one is proposed
+once 3+ entries fit none; tone feedback in session notes now routes to the ledger, not
+memory, so preferences about the user's writing stop landing where nothing steers drafts.
