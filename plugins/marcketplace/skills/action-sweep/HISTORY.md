@@ -180,3 +180,12 @@ Same day, the user's answers on scope and edges: the tag scan covers issues the 
 ## 2026-10-09 the drafter's own questions stay out of the ticket
 
 A Task drafted from a ticked line with no source issue carried the drafter's own design guesses (which other reports, truncate where, fixed or relative width) in the Ticket block's Open questions, so the push filed them. The user deleted the subsection the same day and rewrote AC1 to hand the width choice to the developer. That subsection was only ever meant for other people's unaddressed mentions on the source issue. Now the rule says so outright: it is omitted when there is no source issue, and the drafter's own doubts go in the draft's own Open questions, to be settled or written into an AC before the push tick. The user also raised the priority and unassigned themself on the same ticket; one instance, so no default changes yet.
+
+## 2026-10-13 shared lists to their writers' shards (1.6.0)
+
+After the 1.3.0 shards, `items` and `outcomes` still sat in a 27 KB main state page, so
+every run that posted a board line had to re-type all of it through a full-body-replace
+connector. Runs judged that too risky and skipped it (four unattended runs, 10-12 Oct),
+freezing the ledger the hub reads ticks against. Its `sweep:` items now live in its own
+shard, pruned of tags in briefing's `closed`; dedupe reads every shard's `items`. A sweep
+run writes one small page. See `shared/state-schema.md`, "Shards".

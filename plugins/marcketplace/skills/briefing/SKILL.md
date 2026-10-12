@@ -6,9 +6,9 @@ description: "Use when the user asks to be briefed, wants a status catch-up, inv
 # Briefing
 
 Unattended, scheduled, cheap, and the plugin's reporter. Each run it refreshes the Today
-snapshots, closes lines the hub has finished with, prunes `state.items`, trims Closed,
-reports what every skill did since last time, and posts the one message the plugin ever
-sends. Briefing never dispatches and never acts on a tick: the Router acts, briefing
+snapshots, closes lines the hub has finished with, records each close in `closed`, trims
+Closed, reports what every skill did since last time, and posts the one message the plugin
+ever sends. Briefing never dispatches and never acts on a tick: the Router acts, briefing
 closes and reports. A run that finds pre-1.1.0 headings on the board migrates it first;
 one whose `installed_version` is 1.1.0 retires the old idea lines first.
 
@@ -25,7 +25,8 @@ one whose `installed_version` is 1.1.0 retires the old idea lines first.
   cross-check), `notetaker` (list meetings, transcript), optional, only called when
   `notetaker.prep_lines` is true.
 - State: `cursors.briefing`, `glossary`, `nicknames`, `items`, `outcomes`, `runs` (every
-  skill's, from the main document and every shard), `shards`, `installed_version`.
+  skill's, from the main document and every shard), `closed` and its own `items` (in its
+  shard), `shards`, `installed_version`.
 - Writes: the board header, the Today snapshots, lines tagged `rb:`, `term:` and `feed:`
   in For you, Closed, and the migration.
 
@@ -59,8 +60,9 @@ Fires more than once a day on a changing schedule; never assume a time of day.
    write. Reading is silent. If the board still carries any pre-1.1.0 heading, run `references/migration.md` first, as the
    only write of this run, and stop after writing state. If `installed_version` is 1.1.0,
    run that file's "1.1.0 to 1.2.0" steps inside this run's one write, then carry on. If it
-   is 1.2.0 or 1.3.0, apply `../../shared/state-schema.md`'s rows from it up the same way. Read
-   `runs` from the main document and every shard named in `shards`, by id.
+   is 1.2.0 to 1.4.0, apply `../../shared/state-schema.md`'s rows from it up the same way.
+   Read `runs`, `items` and `outcomes` from the main document and every shard named in
+   `shards`, by id.
 2. **Close.** For every line on the board, apply the closing rule in
    `../../shared/surface-protocol.md`'s "Closing": a `done` sub-line closes the line; a
    ticked To-do line closes as done by you; an option whose sibling closed closes as `not
@@ -69,8 +71,10 @@ Fires more than once a day on a changing schedule; never assume a time of day.
    `partial`, `blocked` or unresolved `needs your tick` sub-line leaves the line open. An
    idea block with no open lines left is removed. Closing is a move into Closed, never an
    edit of another skill's wording. See `references/closed-and-outcomes.md`.
-3. **Prune state.items.** For every tag just closed in step 2, delete its
-   `state.items.<tag>` entry.
+3. **Record closures.** Add every tag closed or removed in step 2 to `closed` in this
+   skill's shard and prune its own `rb:`, `term:`, `feed:` entries for them; each other
+   owner prunes its own on its next write. Drop a `closed` tag that no document's `items`
+   still holds.
 4. **Connector calls, together.** Calendar (`calendar: list today`, `org.timezone` window).
    Chat (`chat: search messages`, since each channel's `last_seen`, excluding this skill's own
    past posts and the feed channels). Tracker (`tracker: search issues (JQL)`,
@@ -101,7 +105,7 @@ Fires more than once a day on a changing schedule; never assume a time of day.
    left it.
 7. **Write state back.** `last_run_ts` = now, `last_seen` per channel touched (a feed
    channel's cursor moves only as far as the cross-check processed it), `nicknames` carried
-   and added to, `items` with this run's prunes and new lines applied, `installed_version`,
+   and added to, its own `items` and `closed` (step 3) in its shard, `installed_version`,
    `runs.briefing` (`note` = one line on what closed and what was reported, `ref` =
    `surface.url`).
 
@@ -124,7 +128,6 @@ investigate, and a ticked `term:` line is the hub's to promote). Ownership is by
   thread replies, no calendar, tracker or ticket edits.
 - Every send is gated, no exceptions. `notify.md`'s "Hard channel gate" runs
   `scripts/guard_notify_channel.py` before any `chat: send message` call and blocks it
-  unconditionally on a non-zero exit. Pass it every `profile.chat.tracker_feed_channels.*`
-  id: the feed channels this skill reads (`references/feed-cross-check.md`) are permanently
-  blocked send targets; briefing posts to `profile.notify.fallback_channel_id` and nowhere
-  else, ever.
+  unconditionally on a non-zero exit. The tracker-feed channels this skill reads
+  (`references/feed-cross-check.md`) are permanently hard-blocked send targets; briefing
+  posts to `profile.notify.fallback_channel_id` and nowhere else, ever.

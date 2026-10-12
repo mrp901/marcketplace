@@ -26,9 +26,10 @@ else.
   `budgets.kb-dream`.
 - Tools: `chat` (read canvas, update canvas; scheduled run only), `kb` (search, read,
   write), `wiki` (get/update page, only where `kb.kind: confluence`).
-- State: `cursors.kb-dream`, `tally`, `proposals`, `suppressions`, `outcomes`,
-  `voice_edits`, `ideas` (monthly prune, in idea-spar's shard), `items` (its own `dream:` lines),
-  `runs.kb-dream` (`cursors` and `runs` in its shard).
+- State: `cursors.kb-dream`, `tally`, `suppressions`, `outcomes` (the hub's shard),
+  `proposals`, `voice_edits` (reply-draft's and kb-note's shards), `ideas` (monthly prune, in
+  idea-spar's shard), briefing's `closed`, `runs.kb-dream` (`cursors`, `runs`, its own
+  `dream:` items and `voice_verdicts` in its shard).
 - Writes lines tagged `dream:` in For you.
 
 ## Budget
@@ -87,10 +88,11 @@ defers its log line adds no entry, so an oversized log otherwise looks unchanged
     dream note as `ref`. No post, no webhook.
 11. **Write state back.** `cursors.kb-dream` (`last_dream_at`, `last_full_dream_at` if
     full, `last_registry_review_at` if run, `last_voice_review_at` only when the re-sample
-    completed, `open_followups` every non-quiet run), `items` with
-    this run's `dream:` tags, `voice.sample_counts` if the re-sample completed, `proposals`
-    for any 60-day dismissals, `ideas` pruned of ideas no longer anywhere (monthly only),
-    `runs.kb-dream`.
+    completed, `open_followups` every non-quiet run), its own `items` with this run's
+    `dream:` tags (tags in briefing's `closed` pruned), `voice_verdicts`, `runs.kb-dream`,
+    all in its shard; `voice.sample_counts` if the re-sample completed; `proposals` (main
+    document) only for a 60-day dismissal or a new proposal; `ideas` pruned of ideas no
+    longer anywhere (monthly only).
 
 ## Surface
 Owns `dream:` lines in For you, every one of them category `kb-maintenance`, in the

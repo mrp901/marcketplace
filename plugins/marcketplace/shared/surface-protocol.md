@@ -83,7 +83,7 @@ One table, every section, with To-do as the sole exception:
 | Ticked, text unchanged | Yes, do this | The hub dispatches or performs the line's action on its next run |
 | Edited, then ticked | Do it my way | Same as ticked, using the edited text as the instruction |
 | Edited, not ticked | Nothing happens yet; the wording is kept | `tally.edited += 1`; the edited text is the new baseline and is never rewritten by the owner |
-| Deleted (tag in `state.items`, line gone) | No; suppress it | Never re-add it. `state.suppressions` gains an entry; `tally.deleted += 1` |
+| Deleted (tag in `state.items`, line gone, tag not in briefing's `closed`) | No; suppress it | Never re-add it. `state.suppressions` gains an entry; `tally.deleted += 1` |
 | Added a line anywhere | A new request | The hub classifies it on its next run like a swept message; a line added inside an idea block takes that idea as its context |
 
 **To-do is the exception.** It is the user's own list. A tick there means "done" and briefing moves the line to Closed on its next run. Nothing dispatches from To-do, and no skill writes into it except the hub's `inline:to-do` action, which adds a line the user asked for.
@@ -222,7 +222,7 @@ The first `briefing` run that finds any pre-1.1.0 heading on the board migrates 
 ## Never
 
 - Never rewrite another skill's line, or a user's edited wording. The hub's sub-line and briefing's close are the only cross-owner writes.
-- Never re-add a deleted line. A tag in `state.items` with no matching surface line was deleted by the user, and re-adding it defeats the learning mechanism.
+- Never re-add a deleted line. A tag in `state.items` with no matching surface line was deleted by the user, unless briefing's `closed` lists it (closed, awaiting its owner's prune; see `state-schema.md`'s "Shards"), and re-adding it defeats the learning mechanism.
 - Never invent a section id. A missing section is handled by each skill's documented degradation, never a guessed id.
 - Never leave two dated blocks under one heading.
 - Never write to the surface from a handler subagent.

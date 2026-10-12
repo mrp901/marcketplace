@@ -21,9 +21,10 @@ else.
   document are the only stores this skill writes to. It additionally resolves, but never
   itself uses, whatever tool categories a handler it is about to dispatch declares in that
   handler's `## Needs`; see `references/dispatch.md`.
-- State: `cursors.proactive-router`, `items`, `registry`, `tally`, `outcomes`,
-  `suppressions`, `patterns_blocked`, `proposals`, `glossary` (`inline:promote` writes),
-  `runs.proactive-router` (`cursors` and `runs` in its shard),
+- State: `cursors.proactive-router`, `items` (every shard's, plus briefing's `closed`),
+  `registry`, `tally`, `outcomes`, `suppressions`, `patterns_blocked`, `proposals`,
+  `glossary` (`inline:promote` writes), `runs.proactive-router` (`cursors`, `runs`, its own
+  `pr:` items, `outcomes`, `tally`, `suppressions` and `patterns_blocked` in its shard),
   `machines` (tool categories resolved for a handler about to be dispatched).
 - Writes lines tagged `pr:`; adds sub-lines under any ticked line; adds a To-do line on
   `inline:to-do`.
@@ -91,14 +92,16 @@ the board differs from its `state.items` text, write the cursor and
    so briefing can report it.
 8. **Deletions.** Add `state.suppressions` `{source_id, category, pattern, added_at}` and
    `tally.<category>.deleted += 1`. Three deletions of the same `<channel>:<category>`
-   pattern add it to `state.patterns_blocked`.
+   pattern add it to `state.patterns_blocked`. A `suppression_lift` proposal `kb-dream`
+   marked accepted removes its pattern from both.
 9. **Proposals.** Each category ticked unmapped this run with no open proposal gets the
    propose line in For you and a `state.proposals` record (`kind: mapping`), candidate
    from `references/categories.md`'s fixed table, never invented at run time.
 10. **One write.** Batch every staged surface change (steps 3, 6, 7, 9) into the single
-    `chat: update canvas` call this run makes. Then write state: cursor, tally, items,
-    registry, outcomes, suppressions, patterns_blocked, proposals, glossary, ideas,
-    `runs.proactive-router` (with `fyi` and the queued count in `note`), `machines`.
+    `chat: update canvas` call this run makes. Then write its shard: cursor, tally, its own
+    `pr:` items (pruned of tags in briefing's `closed`), outcomes, suppressions,
+    patterns_blocked, `runs.proactive-router` (with `fyi` and the queued count in `note`).
+    Write the main document only if registry, proposals, glossary or `machines` changed.
 
 ## Surface
 

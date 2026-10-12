@@ -145,3 +145,16 @@ place, once that key is filled in (`references/dispatch.md`, "Retrying blocked l
 ## 2026-10-07 state shards
 
 The state page passed 49 KB and a full-body-replace write became unsafe to re-type, so `cursors` and `runs` move to its own shard. See `shared/state-schema.md`, "Shards".
+
+## 2026-10-13 shared lists to their writers' shards (1.6.0)
+
+After the 1.3.0 shards, `items` and `outcomes` still sat in a 27 KB main state page, so
+every run that posted a board line had to re-type all of it through a full-body-replace
+connector. Runs judged that too risky and skipped it (four unattended runs, 10-12 Oct),
+freezing the ledger the hub reads ticks against. The hub keeps its `pr:` items,
+`outcomes`, `tally`, `suppressions` and `patterns_blocked` in its own shard and reads
+every shard's `items` plus briefing's `closed`, so a closed line awaiting its owner's
+prune is never mistaken for a deletion. It writes the main page only when `registry`,
+`proposals`, `glossary` or `machines` changed, and it applies an accepted suppression lift
+itself, since it now owns `suppressions`. The stray `ideas` in its state-write list is
+gone: only idea-spar writes `ideas`. See `shared/state-schema.md`, "Shards".

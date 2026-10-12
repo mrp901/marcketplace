@@ -21,7 +21,7 @@ else.
   `kb.paths.log`, `voice.registers` (optional if unset - see `../../shared/voice.md`)
 - Tool categories: `kb` (search, read, write), `wiki` (get/update page, only where
   `kb.kind: confluence`)
-- State: `state.voice_edits` (append only)
+- State: `state.voice_edits` (append only, in this skill's own shard; `runs` there too)
 
 ## Budget
 

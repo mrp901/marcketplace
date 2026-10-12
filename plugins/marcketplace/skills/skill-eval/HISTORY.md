@@ -108,3 +108,12 @@ settles the port's two open questions above (no taxonomy row was needed because 
 no dispatch, and no proposal id needs carrying because there is no proposal) by removing
 the mechanism rather than completing it. Synthesis on the critic tier is unchanged and is
 never traded away under the new token discipline.
+
+## 2026-10-13 shared lists to their writers' shards (1.6.0)
+
+After the 1.3.0 shards, `items` and `outcomes` still sat in a 27 KB main state page, so
+every run that posted a board line had to re-type all of it through a full-body-replace
+connector. Runs judged that too risky and skipped it (four unattended runs, 10-12 Oct),
+freezing the ledger the hub reads ticks against. The one `outcomes` entry a queued run
+appends now goes in this skill's own shard (every skill has one from 1.6.0), not the main
+page; briefing reads it there to close the line. See `shared/state-schema.md`, "Shards".
