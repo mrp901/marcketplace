@@ -161,6 +161,7 @@ a tracker label on an idea.
 | `cursors.idea-spar` | idea-spar (Next watch) | idea-spar | permanent, overwritten each run |
 | `cursors.kb-dream` | kb-dream | kb-dream | permanent, overwritten each run; `open_followups` drops an entry once it resolves or its escalated line is deleted |
 | `cursors.session-log` | session-log | session-log | permanent, overwritten each run |
+| `cursors.action-list` | action-list (`build`) | action-list | permanent, overwritten each run; `last_window_end` is where the next build opens |
 | `cursors.skill-health-check` | skill-health-check | skill-health-check | permanent, one entry per skill checked |
 | `ideas.<key>.roadmap_last_seen` | idea-spar (Next watch) | idea-spar | permanent, overwritten when the slot changes |
 | `ideas.<key>.pack_ref` | idea-spar, whenever it publishes a pack for a keyed idea | idea-spar (`decide`, the decision log's sources), briefing (via `runs.idea-spar.ref`) | overwritten by the next pack |
@@ -246,6 +247,7 @@ the board has nothing to race and runs as normal.
 | 1.3.1 | 1.3.2 | No state change (action-sweep's tracker-tag detection and routing change). `briefing` writes `installed_version` 1.3.2 |
 | 1.3.2 | 1.4.0 | No state change. `cursors.kb-dream.last_voice_review_at` now advances only when a voice re-sample completes (ledger promotion keeps its markers in the knowledge base), and session-log's transcript sweep keeps its cursor in a local file beside `pending/`, not here. `briefing` writes `installed_version` 1.4.0 |
 | 1.4.0 | 1.4.1 | No state change (the plugin gains an observe-only hooks module; it keeps its own session state, never this document). `briefing` writes `installed_version` 1.4.1 |
+| 1.4.1 | 1.5.0 | No state change to the main document. `action-list` creates its own shard (`runs.action-list`, `cursors.action-list`) on its first run, per **Shards**. `briefing` writes `installed_version` 1.5.0 |
 
 A migration is always **additive**: it may add a new key with its default value, or
 reshape a key it explicitly names, but it never deletes a key it does not understand.

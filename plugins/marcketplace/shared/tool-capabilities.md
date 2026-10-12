@@ -8,31 +8,32 @@ The starting set below is not exhaustive on its own; it is extended with every v
 
 | Verb | What it does | Typical tool names (hints only) | Used by |
 |---|---|---|---|
-| `chat: read canvas` | Read the surface's current content and section addressing | `slack_read_canvas` | briefing, proactive-router, idea-spar, kb-dream, action-sweep, skill-health-check |
+| `chat: read canvas` | Read the surface's current content and section addressing | `slack_read_canvas` | briefing, proactive-router, idea-spar, kb-dream, action-sweep, skill-health-check, action-list |
 | `chat: update canvas` | Write one batch of operations against a surface addressing snapshot | `slack_update_canvas` | briefing, proactive-router, idea-spar, kb-dream, action-sweep, skill-health-check |
-| `chat: search messages` | Search reactions, saved items, DMs and channel history; see the search forms below | `slack_search_public_and_private` | briefing, proactive-router, action-sweep |
-| `chat: read thread` | Fetch one specific thread or message by its permalink, when a reference already names it | `slack_read_thread`, `slack_get_permalink` | reply-draft, kb-note, action-sweep |
+| `chat: search messages` | Search reactions, saved items, DMs and channel history; see the search forms below | `slack_search_public_and_private` | briefing, proactive-router, action-sweep, action-list |
+| `chat: read thread` | Fetch one specific thread or message by its permalink, when a reference already names it | `slack_read_thread`, `slack_get_permalink` | reply-draft, kb-note, action-sweep, action-list |
 | `chat: search users` | Resolve a name to a user id when not already known | `slack_search_users` | briefing |
 | `chat: send message` | Post directly to a channel - the `chat_message` notify fallback | `slack_send_message` | briefing, kb-dream, notify fallback (any skill) |
-| `tracker: search issues (JQL)` | Query the issue tracker for a candidate set | `searchJiraIssuesUsingJql` | briefing, action-sweep, idea-ticket |
-| `tracker: get issue` | Fetch one issue's full fields, comments, links | `getJiraIssue` | action-sweep, idea-ticket |
-| `tracker: create issue` | File a new issue | `createJiraIssue` | action-sweep (push), idea-ticket (file) |
-| `tracker: add comment` | Post a non-destructive comment to an existing issue | `addCommentToJiraIssue` | action-sweep (push) |
+| `tracker: search issues (JQL)` | Query the issue tracker for a candidate set | `searchJiraIssuesUsingJql` | briefing, action-sweep, idea-ticket, action-list |
+| `tracker: get issue` | Fetch one issue's full fields, comments, links | `getJiraIssue` | action-sweep, idea-ticket, action-list |
+| `tracker: create issue` | File a new issue | `createJiraIssue` | action-sweep (push), idea-ticket (file), action-list |
+| `tracker: add comment` | Post a non-destructive comment to an existing issue | `addCommentToJiraIssue` | action-sweep (push), action-list |
 | `ideas: search issues (JQL)` | Query the ideas board for a candidate | `searchJiraIssuesUsingJql` (ideas project) | idea-spar |
 | `ideas: get issue` | Fetch one idea's full fields and comments | `getJiraIssue` (ideas project) | idea-spar |
 | `ideas: create issue` | File a new idea, unlabelled | `createJiraIssue` (ideas project) | idea-ticket (file) |
 | `wiki: get page by id` | Fetch a page by its id - never search | `getConfluencePage` | onboarding (profile/state docs), any skill reading a wiki-hosted kb |
 | `wiki: update page` | Full-replace or patch a page | update-page equivalent | onboarding (profile/state docs), kb-note, kb-dream when `kb.kind: confluence` |
-| `kb: search` | Search the knowledge base connector for matching files | `sharepoint_search` | action-sweep, idea-spar, kb-dream, session-log |
-| `kb: read` | Read one kb file by path or resource id | `read_resource` | idea-spar, kb-dream, session-log, kb-note |
-| `kb: write` | Create or full-replace a kb file, byte-checked where the connector requires it | `sharepoint_upload_file` | idea-spar, kb-dream, session-log, kb-note |
-| `calendar: list today` | Today's events only, local timezone window | `outlook_calendar_search` | briefing |
-| `email: search` | Search mail for threads/mentions | mail-search equivalent | reply-draft, action-sweep |
+| `kb: search` | Search the knowledge base connector for matching files | `sharepoint_search` | action-sweep, idea-spar, kb-dream, session-log, action-list |
+| `kb: read` | Read one kb file by path or resource id | `read_resource` | idea-spar, kb-dream, session-log, kb-note, action-list |
+| `kb: write` | Create or full-replace a kb file, byte-checked where the connector requires it | `sharepoint_upload_file` | idea-spar, kb-dream, session-log, kb-note, action-list |
+| `calendar: list today` | Today's events only, local timezone window | `outlook_calendar_search` | briefing, action-list |
+| `email: search` | Search mail for threads/mentions | mail-search equivalent | reply-draft, action-sweep, action-list |
 | `email: sent` | List the user's own sent mail, for voice calibration | mail-sent equivalent | voice calibration |
-| `notetaker: list meetings` | List recent recorded meetings | meetings-list equivalent | action-sweep (fourth source), briefing (prep lines) |
-| `notetaker: transcript` | Fetch one meeting's transcript | transcript-fetch equivalent | action-sweep |
-| `codebase: search` | Search the connected codebase for a term or symbol | device-bridge or filesystem search | idea-spar (reality lens) |
-| `codebase: read` | Read one file from the connected codebase | device-bridge or filesystem read | idea-spar (reality lens) |
+| `notetaker: list meetings` | List recent recorded meetings | meetings-list equivalent | action-sweep (fourth source), briefing (prep lines), action-list |
+| `notetaker: transcript` | Fetch one meeting's transcript | transcript-fetch equivalent | action-sweep, action-list |
+| `codebase: search` | Search the connected codebase for a term or symbol | device-bridge or filesystem search | idea-spar (reality lens), action-list |
+| `codebase: read` | Read one file from the connected codebase | device-bridge or filesystem read | idea-spar (reality lens), action-list (work) |
+| `codehost: list merged pull requests` | List pull requests merged in a window that involve the user; read only | `gh` local CLI only - see "Local CLI first" | action-list (build) |
 | `web: search` | General web search for market/competitor research | web-search equivalent | idea-spar (market lens), idea-ticket |
 | `page: publish` | Publish (or republish in place) one self-contained HTML page and return a shareable link | an artifact or doc publisher | idea-spar (the pack) |
 
@@ -58,12 +59,13 @@ Every category resolves to a concrete tool prefix through `state.machines[<machi
 
 ## Local CLI first, for tracker reads
 
-When a run is local, a machine with a shell may also have the service's own command-line client installed and signed in. Its output is usually smaller than a connector's (it returns a summarised view and writes the full payload to a file instead of into context), so for the read verbs below the runtime calls the CLI first and keeps the connector for everything else. Today that means one CLI: Atlassian's Teamwork Graph CLI (`twg`), for `tracker` and `ideas` when their `service` is a Jira flavour.
+When a run is local, a machine with a shell may also have the service's own command-line client installed and signed in. Its output is usually smaller than a connector's (it returns a summarised view and writes the full payload to a file instead of into context), so for the read verbs below the runtime calls the CLI first and keeps the connector for everything else. Today that means two CLIs: Atlassian's Teamwork Graph CLI (`twg`), for `tracker` and `ideas` when their `service` is a Jira flavour, and GitHub's CLI (`gh`), for `codehost` when its `service` is `github`. `codehost` has no connector, so for it the CLI is the only route and the fallback is degradation.
 
 | Verb | CLI call (`twg`) | Notes |
 |---|---|---|
 | `tracker: search issues (JQL)` / `ideas: search issues (JQL)` | `twg jira workitem query --jql "<jql>" --limit <n> -o json --agent-fields @compact` | add `--fields <a,b,...>` when the skill needs fields beyond the compact set |
 | `tracker: get issue` / `ideas: get issue` | `twg jira workitem get <key> [<key> ...] -o json --agent-fields @compact` | batches keys in one call; add `--comments`, `--remote-links` or `--full` only when the step reads them |
+| `codehost: list merged pull requests` (`gh`) | `gh search prs --merged --involves @me --merged-at ">=<window start>" --json number,title,url,repository,closedAt` | read only; never a write from this verb |
 
 Rules:
 
