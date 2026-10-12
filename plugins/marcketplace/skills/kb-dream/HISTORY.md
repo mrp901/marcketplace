@@ -252,3 +252,16 @@ in this skill's text:
 Also: registers beyond the base four are discovered, not listed, and a new one is proposed
 once 3+ entries fit none; tone feedback in session notes now routes to the ledger, not
 memory, so preferences about the user's writing stop landing where nothing steers drafts.
+
+## 2026-10-13 shared lists to their writers' shards (1.5.0)
+
+After the 1.3.0 shards, `items` and `outcomes` still sat in a 27 KB main state page, so
+every run that posted a board line had to re-type all of it through a full-body-replace
+connector. Runs judged that too risky and skipped it (four unattended runs, 10-12 Oct),
+freezing the ledger the hub reads ticks against. Its `dream:` items live in its own shard,
+pruned of tags in briefing's `closed`. Its voice-settle verdict on a `reply-draft` or
+`kb-note` entry goes into its own shard's `voice_verdicts` rather than onto the other
+skill's entry, so each document keeps one writer; an accepted suppression lift is applied
+by the hub, which owns `suppressions`. The registry review reads `tally`, `outcomes`,
+`suppressions` and `patterns_blocked` from the hub's shard. See `shared/state-schema.md`,
+"Shards".

@@ -27,8 +27,9 @@ else.
   `tool-capabilities.md`, `web` (search), `page` (publish) - degrades to a kb file,
   `chat` (read canvas, update canvas; Next watch only).
 - State: `cursors.idea-spar` (`roadmap_checked_at`), `ideas.<key>` (`roadmap_last_seen`,
-  `pack_ref`, `pack_pending`), `items` (its own `<key>/d…` lines), `runs.idea-spar`
-  (`cursors`, `ideas` and `runs` in its shard).
+  `pack_ref`, `pack_pending`), `items` (its own `<key>/d…` lines), briefing's `closed`,
+  `runs.idea-spar` (`cursors`, `ideas`, `runs` and its items in its shard; it prunes items
+  whose tag is in `closed` on each write).
 - Writes lines tagged `<key>/d<n><letter>` inside idea blocks (Next watch only).
 
 ## Budget

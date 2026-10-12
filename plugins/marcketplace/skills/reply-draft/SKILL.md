@@ -21,7 +21,7 @@ else.
   `kb.conventions_file`
 - Tool categories: `email` (search), `chat` (search messages, for a chat-sourced item),
   `kb` (search, read, write)
-- State: `state.voice_edits` (append only)
+- State: `state.voice_edits` (append only, in this skill's own shard; `runs` there too)
 
 ## Budget
 

@@ -17,6 +17,9 @@ this file covers the shapes.
 | A line with a `no handler` sub-line | `acknowledged, no handler` | you |
 | A `term:` line with a `done` sub-line | removed from the board, no Closed line | (nothing logged) |
 
+Every tag closed or removed here also goes into `closed` in briefing's shard (`SKILL.md`
+step 3); that is how the owner, and the hub, tell a closed line from a deleted one.
+
 Everything else stays: an unticked line, a ticked line with no sub-line (queued), a
 `partial` or `blocked` sub-line, a `needs your tick` whose fresh line is still open, a
 `blocked · pick one` group. An idea block whose every line has closed is removed with its
@@ -37,8 +40,8 @@ step fires, even when nothing new closed this run.
 
 ## Handler outcomes since last run
 
-Read `state.outcomes` (ring buffer, newest first) and keep every entry whose `recorded_at`
-falls inside `last_run_ts -> now`. For each one, one line:
+Read `state.outcomes` (the hub's and `skill-eval`'s rings, each in its own shard, merged
+newest first) and keep every entry whose `recorded_at` falls inside `last_run_ts -> now`. For each one, one line:
 
 ```
 * {handler} {outcome}: {report_line's one sentence} · {ref}

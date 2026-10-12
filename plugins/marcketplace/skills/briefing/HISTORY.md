@@ -224,3 +224,17 @@ have and none of the ones it does.
 ## 2026-10-07 state shards
 
 The state page passed 49 KB and a full-body-replace write became unsafe to re-type, so reads `runs` from every shard; owns the 1.2.0 to 1.3.0 migration. See `shared/state-schema.md`, "Shards".
+
+## 2026-10-13 shared lists to their writers' shards (1.5.0)
+
+After the 1.3.0 shards, `items` and `outcomes` still sat in a 27 KB main state page, so
+every run that posted a board line had to re-type all of it through a full-body-replace
+connector. Runs judged that too risky and skipped it (four unattended runs, 10-12 Oct),
+freezing the ledger the hub reads ticks against. Briefing no longer prunes other skills'
+`items`: it records every tag it closes or removes in `closed` in its own shard, each
+owner prunes its own entries on its next write, and briefing drops a `closed` tag once no
+shard holds it. Considered and rejected: a cross-shard prune by briefing, which would make
+it a second writer on every shard and multiply its writes per run. Reads `items` and
+`outcomes` from every shard; owns the 1.4.0 to 1.5.0 migration (create missing shards,
+then one shrinking main write, never re-typing more than it removes). See
+`shared/state-schema.md`, "Shards".

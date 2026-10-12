@@ -20,9 +20,10 @@ else.
 - Tool categories: `chat` (read canvas; only when run with no target, to list queued
   `shc:` lines). The skill itself reads the installed skill and hands back a file,
   touching no connected service.
-- State: `state.outcomes` (append one entry when a run started from a queued `shc:` line
-  finishes), `state.tally.<category>` and `state.voice_edits` (read, as evidence a red
-  score points at).
+- State: `state.outcomes` (append one entry, in this skill's own shard, when a run started
+  from a queued `shc:` line finishes), `state.tally.<category>` (the hub's shard) and
+  `state.voice_edits` (reply-draft's and kb-note's shards) (read, as evidence a red score
+  points at).
 
 ## Budget
 

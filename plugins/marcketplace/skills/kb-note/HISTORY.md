@@ -92,3 +92,12 @@ placeholder midnight, and its log line went under the previous day's heading: a 
 leaking from the cloud-routine machine. Nothing in the template or worked example said
 which clock to use. `generated.at` and the log date heading now take the current time in
 `org.timezone` with its offset, as session-log and kb-dream already do.
+
+## 2026-10-13 shared lists to their writers' shards (1.5.0)
+
+After the 1.3.0 shards, `items` and `outcomes` still sat in a 27 KB main state page, so
+every run that posted a board line had to re-type all of it through a full-body-replace
+connector. Runs judged that too risky and skipped it (four unattended runs, 10-12 Oct),
+freezing the ledger the hub reads ticks against. Its `voice_edits` entries and `runs` now
+live in its own shard (it had none before), so a capture writes one small page; kb-dream's
+later verdict goes in kb-dream's own shard. See `shared/state-schema.md`, "Shards".

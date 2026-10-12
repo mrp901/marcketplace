@@ -56,7 +56,9 @@ condition in unattended mode, or ask in interactive mode before creating one sil
 
 Then read this skill's shard, named by `shards.<skill>` in the state document, by id. If
 `shards.<skill>` is absent, create the shard per `state-schema.md`'s "Shards" - this is
-routine after the 1.3.0 migration and never asks or fast-fails.
+routine after the 1.3.0 migration and never asks or fast-fails. A skill that owns a tag
+prefix also reads `briefing`'s shard for `closed`, and a skill that reads every skill's
+`runs` or `items` reads every shard named in `shards`, per "Which write touches which page".
 
 ## Step 3 - Diff Needs against the profile
 
@@ -110,8 +112,10 @@ Write the profile only if something changed in it this run (a discovered or aske
 filled in) - otherwise leave it untouched, since the profile is low-frequency by design
 (see `state-schema.md`'s "Why two documents"). Write `state.machines` only when this run
 resolved or changed a tool prefix, and always write `state.runs[<skill>]` (this run's
-outcome). Write `runs` and the skill's own keys to its shard, and `machines` to the main state
-document. If the document to be written is over 45 KB (measure the body just read; see
+outcome). Write `runs` and the skill's own keys to its shard, including its own `items`,
+`outcomes` and `voice_edits` entries (first copying in any of its own entries the main
+document still holds and its shard lacks, per "Shards"), and `machines` to the main state document. A routine run's state write
+is its shard alone. If the document to be written is over 45 KB (measure the body just read; see
 `state-schema.md`), do not rewrite it: apply the size
 guard in `state-schema.md` instead (a write that shrinks it back under 45 KB is the guard's
 one allowed exception).

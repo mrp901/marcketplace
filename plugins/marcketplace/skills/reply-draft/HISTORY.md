@@ -132,3 +132,13 @@ next handler producing a long draft does not re-derive the answer.
 Accepts `chat-reply` alongside `email`: a chat thread or mention waiting on the user, found
 by the Router's sweep or by `action-sweep`'s new chat sources. Same `draft` mode, same
 register selection from the audience, and still never a `send` mode.
+
+## 2026-10-13 shared lists to their writers' shards (1.5.0)
+
+After the 1.3.0 shards, `items` and `outcomes` still sat in a 27 KB main state page, so
+every run that posted a board line had to re-type all of it through a full-body-replace
+connector. Runs judged that too risky and skipped it (four unattended runs, 10-12 Oct),
+freezing the ledger the hub reads ticks against. Its `voice_edits` entries and `runs` now
+live in its own shard (it had none before), so a draft writes one small page. It still
+sets `edited` on its own entries; kb-dream's verdicts on the rest go in kb-dream's shard.
+See `shared/state-schema.md`, "Shards".

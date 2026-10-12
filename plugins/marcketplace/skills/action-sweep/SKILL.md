@@ -29,9 +29,9 @@ it never sends anything. Resolve profile, state and tools per
   mode only, never from a handler mode), `tracker` (search issues by JQL, get issue,
   create issue, add comment; the last two only in `push` mode), `kb` (search, read,
   write), `notetaker` (list meetings, transcript).
-- State: `cursors.action-sweep` (`scanned_through`, `chat_since`), `items` (dedupe and
-  its own `sweep:` lines), `runs.action-sweep`
-  (`cursors` and `runs` in its shard).
+- State: `cursors.action-sweep` (`scanned_through`, `chat_since`), `items` (dedupe against
+  every shard's; its own `sweep:` lines), briefing's `closed`, `runs.action-sweep`
+  (`cursors`, `runs` and its `sweep:` items in its shard).
 - Writes lines tagged `sweep:` in For you.
 
 ## Budget
@@ -69,7 +69,8 @@ and `runs.action-sweep.status: quiet` and stop, with no thread read and no board
    line per find in the protocol grammar, tag `(sweep:<yymmdd>-N)`, reading as the action
    a tick causes, `ref` the permalink, ticket or meeting. Shapes and worked examples in
    `references/output-format.md`. No note is written; the line is the record.
-6. **Stop.** Write `cursors.action-sweep` (both cursors = this run's start time), `items`,
+6. **Stop.** Write its shard: `cursors.action-sweep` (both cursors = this run's start
+   time), its own `sweep:` items (this run's added, tags in briefing's `closed` pruned),
    `runs.action-sweep` (`note`: finds by source; `ref`: `surface.url`).
 
 ## Handler mode
