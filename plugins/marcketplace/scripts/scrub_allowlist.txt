@@ -13,3 +13,7 @@
 
 # The example organisation's fictional chat workspace URL, used in worked examples.
 https://northwindlogistics.slack.com
+
+# The example organisation's fictional tracker custom-field ids in the router's eval mocks.
+cf[20054]
+cf[20067]

@@ -1,0 +1,38 @@
+# scrub_denylist.example.txt
+#
+# Template for `scrub_denylist.local.txt`, the organisation-specific denylist that
+# `scrub_check.py` loads from beside itself (or from the file named by the
+# SCRUB_DENYLIST environment variable). The local file is gitignored: it holds the
+# real names, ids and keys of the organisation this install runs for, which are
+# private data and must never be committed. Copy this file, replace every value with
+# your own, and keep it out of the repository.
+#
+# One pattern per line, whitespace separated:
+#
+#   <FAIL|WARN> <ci|cs> <name> <regex>
+#
+# severity  FAIL fails the build; WARN is printed for review and never fails it.
+# case      ci = case-insensitive, cs = case-sensitive.
+# name      a short slug printed with every hit; anything without spaces.
+# regex     a Python regular expression; everything after the name, spaces included.
+#
+# Blank lines and lines starting with # are ignored. A malformed line stops the check
+# with an error rather than being skipped. Full matched text that is legitimately
+# fictional goes in scrub_allowlist.txt, not here.
+#
+# Suggested entries, one per kind of literal the plugin must never carry. The values
+# below are invented placeholders chosen so they match nothing in this repository;
+# `scrub_check.py` skips this file and the local file when it walks a path.
+
+FAIL ci company-name       \bZephyrholm\b|zephyrholmgroup
+FAIL ci user-name          \bQuillan\b|Vosberg
+FAIL ci colleague-surnames \b(Tremaine|Halloway|Okonedo)\b
+FAIL ci vendor-names       Kestrel Distribution|Marlowe Supply Co
+FAIL ci product-codenames  \bZPH\b|Project Lantern
+FAIL cs cloud-id           0f1e2d3c-4b5a-4968-8777-66554433aabb
+FAIL cs state-page-key     604800:0f1e2d3c-4b5a-4968-8777-66554433aabb
+FAIL cs wiki-page-ids      4123456789|4123456790
+FAIL cs chat-ids           U0ZEPHUSR001|C0ZEPHCHN001|T0ZEPHTEAM01
+FAIL ci drive-path         OneDrive - ZEPHYRHOLM
+FAIL cs ticket-keys        \bZPH-\d+\b|\bZIDEA-\d+\b
+FAIL cs custom-fields      cf\[10987\]|\b10987\b

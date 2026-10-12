@@ -165,12 +165,12 @@ changed) against the live tracker and to flag where they disagree. See
 
 ## 2026-09-29 hard channel gate on the one notify send
 
-Onboarding this install surfaced the two feed channels this run: `work_started` is
-`C0BJVFV1T8E` (epic-start automation), `fix_version` is `C089X3K4CT0` (fix-version/sprint
-automation). The user's standing instruction: briefing must never post to either of
-these, or to any channel but the home channel (`profile.notify.fallback_channel_id`) - and
-that has to be a hard, deterministic block, not a documentation convention a run could
-read past.
+Onboarding this install surfaced the two feed channels this run: `work_started` (an
+epic-start automation) and `fix_version` (a fix-version/sprint automation), each a chat
+channel id now held in `profile.chat.tracker_feed_channels`. The user's standing
+instruction: briefing must never post to either of these, or to any channel but the home
+channel (`profile.notify.fallback_channel_id`) - and that has to be a hard, deterministic
+block, not a documentation convention a run could read past.
 
 - **Why a script and not just prose.** Every other rule in this plugin is enforced by an
   LLM reading `SKILL.md` and its references correctly, run after run. That's normally fine,
@@ -183,18 +183,43 @@ read past.
   `chat: send message` this skill ever makes (chat_message mode, the egress-failure
   fallback, and the fast-fail line alike) and treating a non-zero exit as an unconditional
   block.
-- **Allowlist, plus a hardcoded deny-list, not just a deny-list.** The correct rule is
+- **Allowlist, plus a deny-list, not just a deny-list.** The correct rule is
   narrower than "don't post to these two channels" - it's "post only to the one home
   channel, full stop" - so the script checks that first. The two feed-channel ids are
-  additionally hardcoded into the script as a standing deny-list, named explicitly, so the
-  block holds even in the scenario the user was actually worried about: a future profile
-  edit accidentally pointing `fallback_channel_id` at one of them, which the allowlist
-  check alone wouldn't catch.
+  additionally given to the script as a standing deny-list, so the block holds even in
+  the scenario the user was actually worried about: a future profile edit accidentally
+  pointing `fallback_channel_id` at one of them, which the allowlist check alone wouldn't
+  catch. (As first written the two ids were hardcoded in the script; see the 2026-10-12
+  entry for why they moved.)
 - **Lives with briefing, not in `shared/`.** Briefing is the only skill that ever sends
   (`notify.md`'s "Who posts" table), so the guard has one caller and belongs next to
   `trim_closed.py` in `skills/briefing/scripts/`, referenced by relative path from
   `shared/notify.md` the same way `SKILL.md` already references `trim_closed.py` from
   `shared/surface-protocol.md`'s neighbourhood.
+
+## 2026-10-12 feed-channel deny-list comes from the profile, not the script
+
+The hard channel gate's deny-list was two literal chat channel ids written into
+`scripts/guard_notify_channel.py`. They were this install's ids, which made the script
+the one file under `plugins/` carrying organisation data, and made the gate silently
+useless for any other install: it would block two channels that organisation does not
+have and none of the ones it does.
+
+- **What changed.** The script now takes the blocked ids as trailing arguments after the
+  target and allowed ids; `notify.md`'s "Hard channel gate" has the caller pass every
+  configured `profile.chat.tracker_feed_channels.*` id (ones set to `none` are ignored).
+  An install can add standing blocks in `NOTIFY_BLOCKED_CHANNEL_IDS` for anything outside
+  the profile. The order of checks is unchanged: deny-list first, then exact allowlist
+  match.
+- **What the move costs.** The 2026-09-29 worry was a profile edit pointing
+  `fallback_channel_id` at a feed channel. That is still caught, because the feed ids
+  arrive from a different profile key than the allowed id. The only case now uncaught is
+  both keys being edited to the same channel in one go, which is a deliberate act, not a
+  slip. The environment variable exists for an install that wants a block the profile
+  cannot undo.
+- **Why not a profile key for the deny-list.** `tracker_feed_channels` already is the
+  list of channels briefing reads and must never write; a second key naming the same ids
+  would drift from the first. The caller passes the one list for both purposes.
 
 ## 2026-10-07 state shards
 

@@ -7,7 +7,8 @@ tracker call, and puts one `feed:` line in For you for each claim the tracker co
 It reports only. It never edits an issue and never replies in the channel: these channels
 are read-only sources, never a send target, hard-enforced by
 `../../../shared/notify.md`'s "Hard channel gate" (`../scripts/guard_notify_channel.py`
-hard-blocks both configured feed-channel ids from ever being a notify destination).
+is passed every configured feed-channel id and blocks each from ever being a notify
+destination).
 
 ## Which channels
 

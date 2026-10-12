@@ -6,6 +6,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+The repository carried its source organisation's private data in two places that the scrub
+check could not see: the check's own pattern table, and the notify guard's hardcoded
+deny-list. This release moves both out of the repository without weakening either check,
+and finishes generalising the porting notes.
+
+### Changed
+- `scrub_check.py` keeps only organisation-neutral shape patterns in the repository. The
+  organisation's real names, ids, keys, vendors and codenames load from a gitignored
+  `scripts/scrub_denylist.local.txt` (or the file named by `SCRUB_DENYLIST`), with
+  `scrub_denylist.example.txt` documenting the format. The first line of output says which
+  denylist loaded, or that none did; a named-but-missing or malformed denylist exits 2
+  rather than silently checking less. `--list-patterns` shows each pattern's source.
+- `guard_notify_channel.py` takes the blocked channel ids as trailing arguments (the caller
+  passes every `profile.chat.tracker_feed_channels.*` id, per `shared/notify.md`) plus an
+  optional `NOTIFY_BLOCKED_CHANNEL_IDS` environment variable, instead of two channel ids
+  written into the script. Check order is unchanged: deny-list first, then exact allowlist
+  match. See `skills/briefing/HISTORY.md`, 2026-10-12.
+- CI (`ci/validate.yml`, `.github/workflows/validate.yml`) loads the denylist from the
+  `SCRUB_DENYLIST` repository secret when it is set.
+- `PORTING.md`, `docs/plans/canvas-redesign-issues.md`, `shared/profile-schema.md` and
+  `skills/briefing/HISTORY.md` speak of "the source organisation" and role words; no
+  organisation, repository, product or person name from the source install remains.
+
+### Added
+- Built-in WARN shapes `onedrive-path` (`OneDrive - <org>`) and `tracker-custom-field`
+  (`cf[...]`, `customfield_...`), replacing the organisation-specific FAIL patterns that
+  covered the same ground.
+
 ## [1.4.0] - 2026-10-09
 
 A week of voice corrections and working sessions was mostly never captured: 39 ledger pairs

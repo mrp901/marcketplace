@@ -117,7 +117,10 @@ python3 plugins/marcketplace/scripts/check_refs.py
 ```
 
 The first validates the manifests. The second fails if any organisation-specific literal
-reaches the plugin, which is what keeps it portable. The third enforces the line cap that
+reaches the plugin, which is what keeps it portable. It checks organisation-neutral shapes
+on its own; the organisation's actual names, ids and keys load from a gitignored
+`scripts/scrub_denylist.local.txt` (format in `scrub_denylist.example.txt`), so the
+denylist is itself never committed. CI supplies it from a repository secret. The third enforces the line cap that
 keeps the always-loaded part of each skill small. The fourth checks that every path a skill
 points at resolves from the file it is written in, which is the easiest thing here to get
 wrong by exactly one directory level.

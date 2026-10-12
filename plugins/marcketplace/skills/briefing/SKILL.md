@@ -124,6 +124,7 @@ investigate, and a ticked `term:` line is the hub's to promote). Ownership is by
   thread replies, no calendar, tracker or ticket edits.
 - Every send is gated, no exceptions. `notify.md`'s "Hard channel gate" runs
   `scripts/guard_notify_channel.py` before any `chat: send message` call and blocks it
-  unconditionally on a non-zero exit. The tracker-feed channels this skill reads
-  (`references/feed-cross-check.md`) are permanently hard-blocked send targets; briefing
-  posts to `profile.notify.fallback_channel_id` and nowhere else, ever.
+  unconditionally on a non-zero exit. Pass it every `profile.chat.tracker_feed_channels.*`
+  id: the feed channels this skill reads (`references/feed-cross-check.md`) are permanently
+  blocked send targets; briefing posts to `profile.notify.fallback_channel_id` and nowhere
+  else, ever.
