@@ -172,7 +172,7 @@ budgets:
 | `org.product_scope` | all skills | ask | |
 | `org.product_tag` | idea-spar, idea-ticket, proactive-router | ask | used by `ideas.qualifiers: summary_has_product_tag` |
 | `org.modules_context` | briefing, idea-spar | ask | one line, quoted verbatim, not summarised |
-| `org.timezone` | briefing, kb-dream, action-sweep, session-log | discover (system clock) | |
+| `org.timezone` | briefing, kb-dream, action-sweep, session-log, kb-note | discover (system clock) | |
 | `user.name` | briefing, kb-dream, reply-draft, kb-note, session-log | ask | |
 | `user.email` | reply-draft, kb-note, kb-dream (voice calibration) | discover (chat auth test) | |
 | `user.chat_user_id` | briefing, proactive-router, action-sweep, kb-dream | discover (chat auth test) | |
@@ -233,7 +233,7 @@ budgets:
 | `people_confusions` | kb-dream, session-log | optional, starts empty | |
 | `known_fact_errors` | kb-dream, session-log | optional, starts empty | |
 | `voice.guide_path` | reply-draft, kb-note, idea-ticket, kb-dream | default | |
-| `voice.registers` | reply-draft, kb-note, idea-ticket, kb-dream | default | |
+| `voice.registers` | reply-draft, kb-note, idea-ticket, kb-dream | default | the base four; further registers are discovered from `kb.paths.voice`, per `voice.md` |
 | `voice.calibrated_at` | reply-draft, kb-note, idea-ticket, kb-dream | default (empty until first calibration) | never asked, never defaulted to a fake date |
 | `voice.calibration_refs` | idea-ticket | optional | Tracker keys whose prose is the strongest reference for the `ticket_prose` register. Weighted above general samples during calibration |
 | `voice.sample_counts` | kb-dream | default | |

@@ -8,9 +8,10 @@ grep - this skill never reads a session transcript directly.
 
 Every `kb.paths.sessions` note written since `state.cursors.kb-dream.last_dream_at`
 (incremental) or all of them (full), up to `budgets.kb-dream.sessions_incremental` /
-`.sessions_full`. Read each note's `## Decisions`, `## Facts and corrections` and
-`## Open threads` sections - these are session-log's own distillation, already filtered
-for signal, so this pass reads them rather than re-deriving signal from source material a
+`.sessions_full`. Read each note's `## Decisions`, `## Facts and corrections`,
+`## Voice and tone feedback` and `## Open threads` sections - these are session-log's own
+distillation, already filtered for signal, so this pass reads them rather than
+re-deriving signal from source material a
 second time. `../scripts/signal_grep.py` runs a deterministic first pass over the same notes
 for the four signal shapes below and hands back match context only (never full notes) to
 narrow what needs a close read; it degrades to "no local read available, work from the
@@ -30,6 +31,18 @@ connector read alone" when the knowledge base is remote-only.
 For each finding, record: the fact, the date (the session note's own date, never today's),
 confidence (explicit instruction is high, implied is medium), and any conflict with an
 existing `kb.paths.memory` entry.
+
+## Tone feedback goes to the voice ledger, not memory
+
+A `## Voice and tone feedback` bullet, or any preference whose subject is how the user's
+own writing should read (tone, register, cadence, what to cut from a draft in their voice),
+is appended to `Voice/edits-ledger.md` per `shared/voice.md`'s "The edits ledger" - one
+entry per session note, dated with the note's date, `Register:` naming the register it
+concerns, each bullet an item with its `Said:` quote (or Before/After where the note has
+them) and the note as source. Never write it as a memory entry: memory steers nothing,
+and the ledger is what the voice review promotes from. Skip a bullet already in the ledger
+(a session that recorded its pairs there directly). A bullet that is also a process rule
+(who to tag, where a page goes) is split: the voice half to the ledger, the rest here.
 
 ## Writing the memory entry (auto-apply zone)
 

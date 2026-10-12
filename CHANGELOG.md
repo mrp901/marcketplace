@@ -6,6 +6,49 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-10-09
+
+A week of voice corrections and working sessions was mostly never captured: 39 ledger pairs
+sat unpromoted, the monthly voice review failed and then waited a month, and about six
+substantive sessions never reached the session queue. This release closes each route.
+
+### Changed
+- kb-dream promotes from `Voice/edits-ledger.md` on every non-quiet dream, unattended and
+  from the knowledge base alone: a pattern recurring in 2+ ledger entries goes into its
+  register note (or the avoid-list) automatically, citing the entries; a singleton becomes a
+  `dream:` line, applied on tick. The chat and mail re-sample stays attended-only, falls due
+  when `last_voice_review_at` is 30 days old and retries on every dream until done, instead
+  of only on the first full dream of a month. See
+  `skills/kb-dream/references/voice-review.md`.
+- The voice register set is open-ended: the four in `voice.registers` are a floor, further
+  register notes are discovered from `kb.paths.voice`, and kb-dream proposes a new register
+  when 3+ ledger entries fit none. `shared/voice.md` now defines the edits ledger's writers
+  and entry shape (compatible with existing entries, plus a `Said:` form and kb-dream's
+  `Promoted:`/`Proposed:` markers).
+- Session notes gain a `## Voice and tone feedback` section (verbatim corrections to how the
+  user's writing reads), which kb-dream's extraction routes to the edits ledger, never to
+  memory.
+
+### Added
+- The `SessionStart` hook sweeps recent Claude Code transcripts for substantive sessions the
+  `SessionEnd` archive missed and queues them in `pending/` (conservative threshold, 2-hour
+  idle rule, capped and cursored, `SESSION_LOG_SWEEP=0` to disable,
+  `pending_sessions.py --dry-run` to preview). See
+  `skills/session-log/references/pending-sessions.md`.
+
+### Fixed
+- action-sweep: a ticket's Open questions holds only other people's unaddressed mentions on
+  the source issue and is omitted when there is none. The drafter's own doubts stay in the
+  draft's own Open questions and are settled before the push tick (a ticket was filed with
+  them).
+- Timestamps: `generated.at`, the log date heading, `runs.<skill>.last_run_at` and cursors
+  use the current time in `org.timezone` with its offset, not a UTC date or a placeholder
+  midnight (kb-note, and the action-sweep, briefing and router state writes). See
+  `shared/kb-conventions.md` and `shared/state-schema.md`.
+- Size guard: measure the document just read instead of carrying "over the guard" forward
+  from an earlier run's note. Skills kept skipping their `items` and `outcomes` writes after
+  state had fallen well under 45 KB.
+
 ## [1.3.2] - 2026-10-09
 
 ### Fixed

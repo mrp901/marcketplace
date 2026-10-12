@@ -12,15 +12,15 @@ Rooted at `profile.kb.paths.voice`:
 
 | File | Contents |
 |---|---|
-| `Voice/index.md` | Pointer index into the register notes below, no frontmatter |
+| `Voice/index.md` | Pointer index into the register notes below, no frontmatter; lists every register, including any added later |
 | `Voice/teammate-chat.md` | Register note - see shape below |
 | `Voice/exec-update.md` | Register note |
 | `Voice/customer-facing.md` | Register note |
 | `Voice/ticket-prose.md` | Register note |
 | `Voice/ai-patterns-to-avoid.md` | One shared list, not per-register |
-| `Voice/edits-ledger.md` | Dated before/after pairs |
+| `Voice/edits-ledger.md` | Dated before/after pairs - see "The edits ledger" below for who writes it and its entry shape |
 
-`profile.voice.registers` names the four registers above; a kb may add a register by extending that list and creating the matching note, following the same shape.
+The register set is open-ended. `profile.voice.registers` names the four base registers above, which every install has and which drafting skills select by name (`reply-draft`'s table, for one); it is a floor, not a ceiling. Any further register note under `profile.kb.paths.voice`, listed in `Voice/index.md`, is a register too: its name is its filename stem with hyphens as underscores (`design-doc.md` is `design_doc`). A skill that needs the list discovers it from the folder and index, never from a hardcoded four. New registers are proposed by `kb-dream` from the edits ledger (see "Compounding mechanism") and created once the user accepts, following the same shape.
 
 **Each register note** carries:
 - 3 to 5 verbatim exemplars, each with a source reference (the message, email or note it came from)
@@ -45,11 +45,11 @@ Built by contrasting the user's own samples against typical model output, plus t
 
 ## Calibration procedure
 
-Runs interactively on the first run of any voice-listing skill, and is re-run by `kb-dream`'s monthly voice review.
+Runs interactively on the first run of any voice-listing skill, and is re-run by `kb-dream`'s voice re-sample on an attended dream (step 3 of the compounding mechanism).
 
 **Sampling sources:** up to 200 of the user's own chat messages (excluding bot posts and one-word replies), 50 sent emails, and kb notes carrying `generated.by: human:<user>` (see `kb-conventions.md`'s provenance rule - these are the human-verified equivalent for voice purposes, the clearest evidence of the user's own written register).
 
-**Per-register classification:** each sample is classified into the register it best represents (teammate-chat, exec-update, customer-facing, ticket-prose) before being used - a sample never informs a register it wasn't written in. A sample that doesn't fit any of the four is left unclassified and not used.
+**Per-register classification:** each sample is classified into the register it best represents (teammate-chat, exec-update, customer-facing, ticket-prose) before being used - a sample never informs a register it wasn't written in. A sample that doesn't fit any register is left unclassified and not used.
 
 **Budget:** 6 connector calls, one kb write batch for the whole calibration pass - not one write per register.
 
@@ -62,7 +62,29 @@ Unattended runs never calibrate - calibration is interactive only (see the risk 
 Voice matching is a system that improves with use, not a one-time setup:
 
 1. **Per-draft recording.** `reply-draft` and `kb-note` record one entry in `state.voice_edits` (ring buffer, max 30) for every draft. A later comparison against the user's kept or sent version sets the entry's `edited` to `true` or `false`; until then it is absent, and the entry is a record of a draft, not evidence of an edit. Who performs the comparison differs by handler: `reply-draft` compares on a later dispatch against the same source, by re-reading the thread or sent mail; "the same source" means a matching `item.ref`. Where no later dispatch ever names that ref again, no comparison happens from this side and `kb-dream`'s pass picks the draft up as it does for `kb-note`, so nothing is lost, it just arrives later. `kb-note` never compares, because a ticked item dispatches once and it has no second run; `kb-dream` does that comparison for it during its own pass over the note. In both cases the handler's only job at draft time is to append the ledger entry. Each entry: `{tag, register, draft_hash, sent_ref, recorded_at, edited}`.
-2. **Periodic review.** `kb-dream`'s monthly voice review re-samples everything since `profile.voice.registers`' `last_voice_review_at`, refreshes the exemplars in each register note, and looks across the `state.voice_edits` entries marked `edited: true` for a recurring edit pattern - the same kind of change made more than once. A recurring pattern is promoted: either into a new observed trait on the relevant register note, or into the shared avoid-list if it matches an AI-tell shape rather than a register-specific preference. What changed is written to that run's dream note, same as any other curation action.
+2. **Ledger promotion, every dream.** `kb-dream` reads `Voice/edits-ledger.md` on every non-quiet run, unattended, from the knowledge base alone - no chat or mail read, so it never needs calibration. A pattern that recurs in 2 or more dated ledger entries is promoted automatically: a new observed trait on the relevant register note, or a line in the shared avoid-list if it matches an AI-tell shape rather than a register-specific preference, citing the ledger entries it came from (the user's own edits are the human evidence). A pattern seen in one entry only is proposed, not applied, as a `dream:` line the user can tick. When 3 or more entries fit no existing register, `kb-dream` proposes a new register the same way. A human-verified voice note is never auto-edited (see below). Mechanics: `skills/kb-dream/references/voice-review.md`.
+3. **Periodic re-sample.** `kb-dream`'s voice review also re-samples everything since `state.cursors.kb-dream.last_voice_review_at`, refreshes the exemplars in each register note, and settles any `state.voice_edits` entry still missing `edited`. Re-sampling chat and mail is calibration, so it runs only on an attended dream; it is due once that cursor is 30 days old and is retried on every dream until it completes, never parked until the next month. What changed in either step is written to that run's dream note, same as any other curation action.
+
+## The edits ledger
+
+`Voice/edits-ledger.md` is the one place real before/after text lives (`state.voice_edits` holds only hashes), so it is the review's primary input.
+
+**Who appends.** Any skill or session holding the user's own evidence about their writing - a before/after pair, or their verbatim words: a session where the user edits a draft and asks for it recorded; `reply-draft` or `kb-dream` when a comparison sets `edited: true` and the drafted and kept texts are both readable; and `kb-dream`'s signal extraction, routing a session note's `## Voice and tone feedback` bullets here rather than to memory. Appending is additive and needs no confirmation; every append carries the usual index and log lines, which is also what wakes the next dream.
+
+**Entry shape**, newest first, one `##` section per occasion:
+
+```markdown
+## YYYY-MM-DD - <shape of writing> (<subject>)
+
+Register: <existing register name, or the shape in words if none fits>. <Who drafted, who edited, where it went.>
+
+1. **<The change, as a short title>.**
+   - Before: <drafted text, verbatim or closely trimmed>
+   - After: <what the user sent or kept, verbatim>
+   - Rule: <the pattern the pair implies, in one line>
+```
+
+A stated instruction with no pair (a session's verbatim tone correction) takes `- Said: "<verbatim>"` in place of Before/After. `Rule` is optional where the pair speaks for itself. `kb-dream` alone adds a `- Promoted: <date> to <register note link>` or `- Proposed: <date> (<dream tag>)` sub-bullet under an item it has acted on, which is what stops a second run re-promoting or re-proposing it; nobody else edits an existing entry.
 
 ## Machine-generated but curatable; human-verified is untouchable
 
@@ -72,6 +94,6 @@ Voice notes are `generated.by: <the calibrating or reviewing skill>` by default 
 
 A handler drafting prose:
 
-1. **Loads only the register it needs** for the item at hand - never all four, and never the full avoid-list plus every register note when one register note and the shared avoid-list will do.
+1. **Loads only the register it needs** for the item at hand - never all of them, and never the full avoid-list plus every register note when one register note and the shared avoid-list will do.
 2. **Self-checks against the avoid-list before returning** - reads its own draft against every line in `Voice/ai-patterns-to-avoid.md` and revises anything that matches, before the draft ever reaches the surface or a report line.
 3. **States the register in its report sub-line** - the `handler-contract.md` report line names which register it drafted in (e.g. "drafted a reply · teammate-chat · ..."), so the user can see at a glance whether the right voice was applied without opening the draft.

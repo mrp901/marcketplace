@@ -1,6 +1,6 @@
 ---
 name: kb-dream
-description: "Use when this skill's schedule fires, when the user says \"dream\" or \"tidy the knowledge base\", or when the hub dispatches a ticked dream: line (category kb-maintenance). Curates the inbox, fixes conformance/links/duplicates, catches name-collision and fact errors, flags machine-voice in machine-authored notes only, extracts corrections/preferences/decisions from recent session notes into memory, proposes (never applies) skill-behaviour folds, runs the monthly registry and voice reviews, and reaps stale transient drafts."
+description: "Use when this skill's schedule fires, when the user says \"dream\" or \"tidy the knowledge base\", or when the hub dispatches a ticked dream: line (category kb-maintenance). Curates the inbox, fixes conformance/links/duplicates, catches name-collision and fact errors, flags machine-voice in machine-authored notes only, extracts corrections/preferences/decisions from recent session notes into memory (tone feedback into the voice ledger), promotes recurring voice edits from the edits ledger every run, proposes (never applies) skill-behaviour folds, runs the monthly registry review and voice re-sample, and reaps stale transient drafts."
 ---
 
 # KB dream
@@ -68,12 +68,16 @@ defers its log line adds no entry, so an oversized log otherwise looks unchanged
    `references/followup-escalation.md`.
 4. **Extract signal** from the session notes read in step 2, per
    `references/signal-extraction.md` - dated single-fact memory entries under
-   `kb.paths.memory`, absolute dates, source attribution, the contradiction rule.
+   `kb.paths.memory`, absolute dates, source attribution, the contradiction rule. Tone and
+   writing-voice feedback goes to `Voice/edits-ledger.md` instead, never to memory.
 5. **Draft fold proposals** for settled corrections, per `references/fold-proposals.md`.
    Never applied, only proposed.
 6. **Run the link pass** over every note this run changed, per `references/link-pass.md`.
-7. **On a full monthly-first-fire dream**, also run `references/registry-review.md` and
-   `references/voice-review.md`.
+7. **Voice and registry.** Every non-quiet run: ledger promotion, per
+   `references/voice-review.md` Part A - unattended, knowledge-base reads only. Whenever
+   `last_voice_review_at` is 30+ days old, whatever the mode: the re-sample, Part B (it
+   needs an attended run, so an unattended one flags it and retries next dream). On a full
+   monthly-first-fire dream, also `references/registry-review.md`.
 8. **Reap transient drafts**, per `references/draft-reaping.md`.
 9. **Write the dream note** per `references/dream-note-format.md`, then the maintenance
    contract (index/log lines) it describes.
@@ -82,9 +86,9 @@ defers its log line adds no entry, so an oversized log otherwise looks unchanged
     `dream:` lines in For you, and write `runs.kb-dream` with a two-line note and the
     dream note as `ref`. No post, no webhook.
 11. **Write state back.** `cursors.kb-dream` (`last_dream_at`, `last_full_dream_at` if
-    full, `last_registry_review_at`/`last_voice_review_at` if run this pass,
-    `open_followups` every non-quiet run), `items` with
-    this run's `dream:` tags, `voice.sample_counts` if the voice review ran, `proposals`
+    full, `last_registry_review_at` if run, `last_voice_review_at` only when the re-sample
+    completed, `open_followups` every non-quiet run), `items` with
+    this run's `dream:` tags, `voice.sample_counts` if the re-sample completed, `proposals`
     for any 60-day dismissals, `ideas` pruned of ideas no longer anywhere (monthly only),
     `runs.kb-dream`.
 
@@ -112,10 +116,14 @@ action is additive/reversible per the five-rule contract), so it never returns
   destroy an input, never flatten history, never overrule a human silently, the human's
   file is the current one, the dream note is the reviewable output.
 - **The auto-apply / propose-only split is absolute.** `kb.paths.memory` is the only place
-  this skill writes freely and unattended. Anything that changes another skill's output -
-  a fold proposal, a suppression lift, a voice-note change on a verified note - is written
-  only into the dream note and the canvas, never into the target file, with no exception
-  for an unattended run or a ticked item.
+  this skill writes freely and unattended, with one named exception: promoting a voice
+  pattern that recurs in 2+ edits-ledger entries into an unverified register note, because
+  the evidence is the user's own edits (`references/voice-review.md`). Anything else that
+  changes another skill's output - a fold proposal, a suppression lift, a voice-note change
+  on a verified note - is written only into the dream note and the canvas, never into the
+  target file, with no exception for an unattended run or a ticked item. A singleton voice
+  pattern or a new register is proposed the same way, but its tick is the user's own
+  evidence, so `settle` applies it.
 - Who reads what: the briefing's Runs line and the `dream:` lines are the only things the
   user reliably reads - prose budget lives there, per `references/notification-shape.md`.
   `log.md` and the dream note are write-once, read-rarely - optimise for complete and
