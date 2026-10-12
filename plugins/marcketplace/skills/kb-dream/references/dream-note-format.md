@@ -33,8 +33,8 @@ session notes + inbox + <scope> · **Access:** <how this run reached the knowled
 - **Stale:** ... · **Open follow-ups:** ... · **Name/fact watch:** clean | ... ·
   **Provenance timestamps:** clean | ... · **Failed writes:** ... (single occurrences;
   escalate on repeat, see `repetition-bar.md`) · **Machine-voice:** clean | N sentences
-  rewritten · **Drafts reaped:** N · **Registry review:** (monthly only) · **Voice
-  review:** (monthly only)
+  rewritten · **Drafts reaped:** N · **Registry review:** (monthly only) · **Voice:**
+  ledger N promoted, N proposed | nothing new · re-sample done | due since <date>
 ```
 
 "What I curated" is a table because it is a ledger, not a narrative: one row per change,
