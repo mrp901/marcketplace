@@ -5,6 +5,7 @@
   "author": {
     "name": "mrp901"
   },
+  "types": "./types/index.d.ts",
   "experimental": {
     "evals": "evals/"
   }
