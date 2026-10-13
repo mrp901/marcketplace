@@ -14,9 +14,11 @@ The starting set below is not exhaustive on its own; it is extended with every v
 | `chat: read thread` | Fetch one specific thread or message by its permalink, when a reference already names it | `slack_read_thread`, `slack_get_permalink` | reply-draft, kb-note, action-sweep, action-list |
 | `chat: search users` | Resolve a name to a user id when not already known | `slack_search_users` | briefing |
 | `chat: send message` | Post directly to a channel - the `chat_message` notify fallback | `slack_send_message` | briefing, kb-dream, notify fallback (any skill) |
-| `tracker: search issues (JQL)` | Query the issue tracker for a candidate set | `searchJiraIssuesUsingJql` | briefing, action-sweep, idea-ticket, action-list |
-| `tracker: get issue` | Fetch one issue's full fields, comments, links | `getJiraIssue` | action-sweep, idea-ticket, action-list |
-| `tracker: create issue` | File a new issue | `createJiraIssue` | action-sweep (push), idea-ticket (file), action-list |
+| `tracker: search issues (JQL)` | Query the issue tracker for a candidate set | `searchJiraIssuesUsingJql` | briefing, action-sweep, idea-ticket, action-list, jira-story |
+| `tracker: get issue` | Fetch one issue's full fields, comments, links | `getJiraIssue` | action-sweep, idea-ticket, action-list, jira-story |
+| `tracker: create issue` | File a new issue | `createJiraIssue` | action-sweep (push), idea-ticket (file), action-list, jira-story (new mode) |
+| `tracker: edit issue` | Update fields on an existing issue; a description edit replaces the whole text | `editJiraIssue` | jira-story |
+| `tracker: link issues` | Create a real link between two issues | `createIssueLink` | jira-story |
 | `tracker: add comment` | Post a non-destructive comment to an existing issue | `addCommentToJiraIssue` | action-sweep (push), action-list |
 | `ideas: search issues (JQL)` | Query the ideas board for a candidate | `searchJiraIssuesUsingJql` (ideas project) | idea-spar |
 | `ideas: get issue` | Fetch one idea's full fields and comments | `getJiraIssue` (ideas project) | idea-spar |
@@ -24,8 +26,8 @@ The starting set below is not exhaustive on its own; it is extended with every v
 | `wiki: get page by id` | Fetch a page by its id - never search | `getConfluencePage` | onboarding (profile/state docs), any skill reading a wiki-hosted kb |
 | `wiki: update page` | Full-replace or patch a page | update-page equivalent | onboarding (profile/state docs), kb-note, kb-dream when `kb.kind: confluence` |
 | `kb: search` | Search the knowledge base connector for matching files | `sharepoint_search` | action-sweep, idea-spar, kb-dream, session-log, action-list |
-| `kb: read` | Read one kb file by path or resource id | `read_resource` | idea-spar, kb-dream, session-log, kb-note, action-list |
-| `kb: write` | Create or full-replace a kb file, byte-checked where the connector requires it | `sharepoint_upload_file` | idea-spar, kb-dream, session-log, kb-note, action-list |
+| `kb: read` | Read one kb file by path or resource id | `read_resource` | idea-spar, kb-dream, session-log, kb-note, action-list, jira-story |
+| `kb: write` | Create or full-replace a kb file, byte-checked where the connector requires it | `sharepoint_upload_file` | idea-spar, kb-dream, session-log, kb-note, action-list, jira-story (destination only) |
 | `calendar: list today` | Today's events only, local timezone window | `outlook_calendar_search` | briefing, action-list |
 | `email: search` | Search mail for threads/mentions | mail-search equivalent | reply-draft, action-sweep, action-list |
 | `email: sent` | List the user's own sent mail, for voice calibration | mail-sent equivalent | voice calibration |
@@ -35,6 +37,14 @@ The starting set below is not exhaustive on its own; it is extended with every v
 | `codebase: read` | Read one file from the connected codebase | device-bridge or filesystem read | idea-spar (reality lens), action-list (work) |
 | `codehost: list merged pull requests` | List pull requests merged in a window that involve the user; read only | `gh` local CLI only - see "Local CLI first" | action-list (build) |
 | `web: search` | General web search for market/competitor research | web-search equivalent | idea-spar (market lens), idea-ticket |
+| `browser: list tabs` | List the user's own signed-in browser tabs, creating one if none exist, and return a tab id | `tabs_context_mcp` (Chrome browser tools) | transcript |
+| `browser: navigate` | Point one tab id at a URL | `navigate` | transcript |
+| `browser: run page script` | Run a JavaScript expression inside a tab and return its value | `javascript_tool` | transcript |
+| `browser: batch calls` | Run several browser calls in one round trip | `browser_batch` | transcript |
+| `browser: read page` | Read the page's accessibility tree; the transcript skill forbids it on the recording page | `read_page` | transcript (forbidden use only) |
+| `browser: page text` | Read the page's visible text; the transcript skill forbids it on the recording page | `get_page_text` | transcript (forbidden use only) |
+| `shell: run command` | Run a local shell command, for example to append to a file | a shell or bash tool | transcript |
+| `deliver file to user` | Hand a finished local file to the user | a file-delivery or present-files tool | transcript |
 | `page: publish` | Publish (or republish in place) one self-contained HTML page and return a shareable link | an artifact or doc publisher | idea-spar (the pack) |
 
 A category a skill doesn't use is simply absent from its `## Needs` - this table is the full catalogue across all the skills, not a per-skill checklist.

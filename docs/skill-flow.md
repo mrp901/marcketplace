@@ -74,6 +74,8 @@ flowchart TB
         sessionlog["session-log"]
         actionlist["action-list\n(build, then work)"]
         ideaticketdirect["idea-ticket\n(direct)"]
+        jirastory["jira-story\n(refine or draft)"]
+        transcriptskill["transcript\n(recording link to text)"]
         sparsession["idea-spar\n(session: challenge, reality,\nmarket, sketch, pack it)"]
         skilleval["skill-eval\n(manual only)"]
     end

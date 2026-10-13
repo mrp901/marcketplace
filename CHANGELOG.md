@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-10-13
+
+Two new direct skills, ported from standalone skills and made organisation-neutral.
+
+### Added
+- `skills/jira-story/` - refines an existing story's acceptance criteria, or drafts a new
+  story from a one-line idea, using a context-blind review pass filtered against what is
+  already decided so only genuinely open questions reach the user. It inspects the connected
+  tracker for the ticket conventions in use (summary style, labels, fields, acceptance
+  criteria format) instead of hardcoding any. Direct only.
+- `skills/transcript/` - extracts the full text transcript of a Teams meeting recording
+  from a SharePoint or Stream link through the user's signed-in browser. Direct only.
+
 ## [1.6.0] - 2026-10-13
 
 A new direct skill, `action-list`, for the stretch of a day the board does not cover:
