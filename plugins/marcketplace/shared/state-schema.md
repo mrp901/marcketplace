@@ -124,6 +124,7 @@ the events in the last column, and with only rare keys left in it, it stays smal
 | action-sweep | main + every shard (dedupe) | its shard (`items` for `sweep:`) | never |
 | kb-dream | main, its shard, briefing's, the hub's (registry review), reply-draft's and kb-note's (voice) | its shard (`items` for `dream:`, `voice_verdicts`); idea-spar's shard (monthly prune) | it records or dismisses a proposal |
 | idea-spar, skill-health-check | main, its shard, briefing's (skill-health-check: every shard) | its shard (`items` for its own lines) | never |
+| vault-pulse | main + every shard (`runs` for the heartbeats, kb-dream's `open_followups`) | its shard (`runs`, `cursors`) | never |
 | reply-draft, kb-note | main, its shard | its shard (`voice_edits`) | never |
 | skill-eval | main, the hub's, reply-draft's and kb-note's | its shard (one `outcomes` entry) | never |
 | idea-ticket, session-log | main, its shard | its shard | never |
@@ -144,6 +145,7 @@ runs:
   # note: one line on what the run did (or why it stopped); ref: a link to the run's artefact
   # proactive-router adds fyi: [<one line each, max 10>]
   # skill-health-check adds scores: {<skill>: {tag: green | amber | red, why, ref, checked_at}}
+  # vault-pulse: note is "<overall tag>: <headline>", under 200 characters, written to read alone in a chat message
 
 cursors:
   briefing: {last_run_ts, last_seen: {<channel_id>: <ts>}}   # every channel briefing reads, feed channels included
@@ -154,6 +156,7 @@ cursors:
              open_followups: {<note path>#<slug>: {text, first_flagged_at, dreams_open, escalated_tag}}}
   session-log: {last_pending_processed}
   skill-health-check: {last_checked: {<skill>: <date>}}
+  vault-pulse: {last_values: {<signal key>: <number>}}   # last run's scored values, the next run's trend
 
 ideas:
   <idea key>: {roadmap_last_seen, pack_ref, pack_pending: false}
@@ -213,6 +216,7 @@ a tracker label on an idea.
 | `cursors.session-log` | session-log | session-log | permanent, overwritten each run |
 | `cursors.action-list` | action-list (`build`) | action-list | permanent, overwritten each run; `last_window_end` is where the next build opens |
 | `cursors.skill-health-check` | skill-health-check | skill-health-check | permanent, one entry per skill checked |
+| `cursors.vault-pulse` | vault-pulse | vault-pulse | permanent, overwritten each run |
 | `ideas.<key>.roadmap_last_seen` | idea-spar (Next watch) | idea-spar | permanent, overwritten when the slot changes |
 | `ideas.<key>.pack_ref` | idea-spar, whenever it publishes a pack for a keyed idea | idea-spar (`decide`, the decision log's sources), briefing (via `runs.idea-spar.ref`) | overwritten by the next pack |
 | `ideas.<key>.pack_pending` | idea-spar (Next watch sets on a move into Next, clears once the pack is published) | idea-spar | until cleared |
@@ -306,6 +310,7 @@ the board has nothing to race and runs as normal.
 | 1.4.0 | 1.4.1 | No state change (the plugin gains an observe-only hooks module; it keeps its own session state, never this document). `briefing` writes `installed_version` 1.4.1 |
 | 1.4.1 | 1.5.0 | No state change to the main document. `action-list` creates its own shard (`runs.action-list`, `cursors.action-list`) on its first run, per **Shards**. `briefing` writes `installed_version` 1.5.0 |
 | 1.5.0 | 1.6.0 | `items`, `outcomes` and `voice_edits` entries, and `tally`, `suppressions` and `patterns_blocked`, move from the main document to their writers' shards, per **Shards**; every skill gets a shard. Each skill seeds its own shard on its first write; `briefing` creates the shards that do not exist yet and removes from the main document what now lives in a shard, in one shrinking write, per `skills/briefing/references/migration.md`. Entries with no installed owner stay where they are. `briefing` writes `installed_version` 1.6.0 when nothing owned is left in the main document |
+| 1.6.0 | 1.7.0 | No state change to the main document. `vault-pulse` creates its own shard (`runs.vault-pulse`, `cursors.vault-pulse`) on its first run, per **Shards**. `briefing` writes `installed_version` 1.7.0 |
 
 A migration is always **additive**: it may add a new key with its default value, or
 reshape a key it explicitly names, but it never deletes a key it does not understand.

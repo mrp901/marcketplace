@@ -73,6 +73,7 @@ Runs
 * {skill} {status}: {runs.<skill>.note} · {runs.<skill>.ref}
 * {skill} fast-fail: {runs.<skill>.note}
 * health: {skill} green · {skill} amber ({why}) · …          (from runs.skill-health-check.scores; red is on the board, not here)
+* pulse {tag}: {runs.vault-pulse.note} · {runs.vault-pulse.ref}   (the knowledge base's compounding verdict; see the rule below)
 * fyi: {one line} · {permalink}                               (from runs.proactive-router.fyi, one line each)
 * overdue: {skill} last ran {n} days ago (expected every {max_gap_days})
 ```
@@ -87,6 +88,10 @@ Rules:
 - Health: a red score is a `shc:` line on the board and is not repeated in the message;
   amber and green appear here only, from `runs.skill-health-check.scores`, and only for
   skills scored inside the window.
+- Pulse: `runs.vault-pulse` is reported once, on the first briefing after it ran, and again on
+  every briefing while its last verdict is amber or red, so a bad reading cannot be missed by
+  skipping one message. A green reading is reported once and then drops out. The pulse never
+  writes to the board, so this line is the only place the user sees it.
 - FYIs come from `runs.proactive-router.fyi` written by the last Router run in the window.
   They are never written to the board.
 - A fast-fail line is the only place the user sees it, so it carries the note verbatim.
