@@ -48,6 +48,8 @@ as the eval fixture.
 | `idea-ticket` | Writes an ideas-board ticket in your voice, audited before you see it | Direct, and a handler |
 | `idea-spar` | A sparring partner while you work an idea: challenge, codebase reality, market, 2-3 option sketches, and a shareable pack; packs an idea when it moves into Next | Direct, schedule, and a handler |
 | `action-list` | Builds a ranked, time-boxed action list with ready drafts for a stretch of your day, and works a list item by item until you call it done | Direct only |
+| `jira-story` | Refines an existing story's acceptance criteria, or drafts a new story from a one-line idea, following the ticket conventions it finds in your tracker | Direct only |
+| `transcript` | Extracts the full text transcript of a Teams meeting recording from a SharePoint or Stream link, through your signed-in browser | Direct only |
 | `session-log` | Writes a working session up as a durable note | Direct, plus hooks |
 | `kb-dream` | Curates the knowledge base, consolidates memory, reviews the learning loop | Schedule, and a handler |
 | `skill-eval` | Turns feedback on one run into an amended skill | Direct only |
