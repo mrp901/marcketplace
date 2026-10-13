@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-## [1.7.0] - 2026-10-13
+## [1.8.0] - 2026-10-13
 
 A new skill, `vault-pulse`, that answers the question no other skill asks: is the knowledge
 base still compounding? The user runs `session-log` all the time and rarely opens the vault,
@@ -30,7 +30,20 @@ the briefing carries the verdict, so the user does not have to look.
 - `briefing.expected_runs` gains `vault-pulse: 9` in the example profile and the schema, so a
   pulse that stops is named overdue; `budgets.vault-pulse` is optional.
 - State: `cursors.vault-pulse.last_values` (the trend) and the `vault-pulse` shard; a
-  1.6.0 to 1.7.0 migration row records that nothing in the main document changes.
+  1.7.0 to 1.8.0 migration row records that nothing in the main document changes.
+
+## [1.7.0] - 2026-10-13
+
+Two new direct skills, ported from standalone skills and made organisation-neutral.
+
+### Added
+- `skills/jira-story/` - refines an existing story's acceptance criteria, or drafts a new
+  story from a one-line idea, using a context-blind review pass filtered against what is
+  already decided so only genuinely open questions reach the user. It inspects the connected
+  tracker for the ticket conventions in use (summary style, labels, fields, acceptance
+  criteria format) instead of hardcoding any. Direct only.
+- `skills/transcript/` - extracts the full text transcript of a Teams meeting recording
+  from a SharePoint or Stream link through the user's signed-in browser. Direct only.
 
 ## [1.6.0] - 2026-10-13
 

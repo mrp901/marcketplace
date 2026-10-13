@@ -1,6 +1,6 @@
 # vault-pulse - design rationale (for editors; not loaded at runtime)
 
-## 2026-10-13 new skill (1.7.0)
+## 2026-10-13 new skill (1.8.0)
 
 **Why it exists.** The user runs `session-log` constantly and rarely opens the knowledge
 base. Every skill that touches it measures hygiene (conformance, links, curation); none

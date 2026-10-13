@@ -310,7 +310,8 @@ the board has nothing to race and runs as normal.
 | 1.4.0 | 1.4.1 | No state change (the plugin gains an observe-only hooks module; it keeps its own session state, never this document). `briefing` writes `installed_version` 1.4.1 |
 | 1.4.1 | 1.5.0 | No state change to the main document. `action-list` creates its own shard (`runs.action-list`, `cursors.action-list`) on its first run, per **Shards**. `briefing` writes `installed_version` 1.5.0 |
 | 1.5.0 | 1.6.0 | `items`, `outcomes` and `voice_edits` entries, and `tally`, `suppressions` and `patterns_blocked`, move from the main document to their writers' shards, per **Shards**; every skill gets a shard. Each skill seeds its own shard on its first write; `briefing` creates the shards that do not exist yet and removes from the main document what now lives in a shard, in one shrinking write, per `skills/briefing/references/migration.md`. Entries with no installed owner stay where they are. `briefing` writes `installed_version` 1.6.0 when nothing owned is left in the main document |
-| 1.6.0 | 1.7.0 | No state change to the main document. `vault-pulse` creates its own shard (`runs.vault-pulse`, `cursors.vault-pulse`) on its first run, per **Shards**. `briefing` writes `installed_version` 1.7.0 |
+| 1.6.0 | 1.7.0 | No state change (two direct skills added, neither writes state). briefing writes installed_version 1.7.0 |
+| 1.7.0 | 1.8.0 | No state change to the main document. `vault-pulse` creates its own shard (`runs.vault-pulse`, `cursors.vault-pulse`) on its first run, per **Shards**. `briefing` writes `installed_version` 1.8.0 |
 
 A migration is always **additive**: it may add a new key with its default value, or
 reshape a key it explicitly names, but it never deletes a key it does not understand.
