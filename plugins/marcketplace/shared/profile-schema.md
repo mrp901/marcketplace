@@ -190,11 +190,11 @@ budgets:
 | `briefing.expected_runs` | briefing | default | one entry per scheduled skill; a skill missing from the map is never called overdue |
 | `tracker.cloud_id` | briefing, action-sweep, idea-spar, idea-ticket, skill-health-check, action-list | discover (accessible-resources) | |
 | `tracker.site_url` | same as `tracker.cloud_id` | discover (accessible-resources) | |
-| `tracker.project_key` | action-sweep, idea-ticket, action-list | ask | |
-| `tracker.issue_types` | action-sweep, idea-ticket, action-list | discover (create-metadata) | |
+| `tracker.project_key` | action-sweep, idea-ticket, action-list, jira-story | ask | |
+| `tracker.issue_types` | action-sweep, idea-ticket, action-list, jira-story | discover (create-metadata) | |
 | `tracker.component` | action-sweep, idea-ticket, action-list | default (may be empty) | |
-| `tracker.default_parent_epic` | action-sweep | ask | |
-| `tracker.ticket_template` | idea-ticket, action-sweep | default | |
+| `tracker.default_parent_epic` | action-sweep, jira-story | ask | |
+| `tracker.ticket_template` | idea-ticket, action-sweep, jira-story | default | |
 | `tracker.parked_prefix` | action-sweep | default | |
 | `tracker.my_work_jql` | briefing, action-sweep, action-list | default | |
 | `ideas.project_key` | idea-spar, idea-ticket | ask | |
@@ -207,16 +207,16 @@ budgets:
 | `notetaker.lookback_days` | action-sweep, briefing, action-list | default | |
 | `notetaker.prep_lines` | briefing | default | |
 | `kb.name` | kb-note, session-log, kb-dream, idea-spar, action-sweep, action-list | ask | |
-| `kb.kind` | kb-note, session-log, kb-dream, action-list | ask | |
+| `kb.kind` | kb-note, session-log, kb-dream, action-list, jira-story | ask | |
 | `kb.local_root` | kb-note, session-log, kb-dream, action-list | default (empty until a device bridge is linked) | |
 | `kb.remote` | kb-note, session-log, kb-dream, action-list | default | |
-| `kb.conventions_file` | session-log, kb-dream, kb-note, action-list | default | |
+| `kb.conventions_file` | session-log, kb-dream, kb-note, action-list, jira-story | default | |
 | `kb.types_registry` | session-log, kb-dream, action-list | default | |
 | `kb.people_file` | session-log, kb-dream, action-sweep, action-list | ask | name-collision key |
-| `kb.link_style` | kb-note, session-log, kb-dream, idea-spar, action-list | ask | |
-| `kb.frontmatter_required` | kb-note, session-log, kb-dream, action-list | default | |
+| `kb.link_style` | kb-note, session-log, kb-dream, idea-spar, action-list, jira-story | ask | |
+| `kb.frontmatter_required` | kb-note, session-log, kb-dream, action-list, jira-story | default | |
 | `kb.tag_hints` | kb-note, session-log | default | |
-| `kb.paths.*` | kb-note, session-log, kb-dream, idea-spar, action-sweep, reply-draft (voice), action-list | default (asked only for `inbox`/`sessions` if the org has no convention) | |
+| `kb.paths.*` | kb-note, session-log, kb-dream, idea-spar, action-sweep, reply-draft (voice), action-list, jira-story | default (asked only for `inbox`/`sessions` if the org has no convention) | |
 | `kb.log_size_cap_kb` | session-log, kb-dream, idea-spar, action-list | default | |
 | `kb.sweep_queries` | kb-dream | default | |
 | `codebase.path` | idea-spar (reality lens) | optional | only asked if `codebase.access != none` |
@@ -234,12 +234,12 @@ budgets:
 | `people_confusions` | kb-dream, session-log, action-list | optional, starts empty | |
 | `known_fact_errors` | kb-dream, session-log | optional, starts empty | |
 | `voice.guide_path` | reply-draft, kb-note, idea-ticket, kb-dream | default | |
-| `voice.registers` | reply-draft, kb-note, idea-ticket, kb-dream, action-list | default | the base four; further registers are discovered from `kb.paths.voice`, per `voice.md` |
+| `voice.registers` | reply-draft, kb-note, idea-ticket, kb-dream, action-list, jira-story | default | the base four; further registers are discovered from `kb.paths.voice`, per `voice.md` |
 | `voice.calibrated_at` | reply-draft, kb-note, idea-ticket, kb-dream | default (empty until first calibration) | never asked, never defaulted to a fake date |
 | `voice.calibration_refs` | idea-ticket | optional | Tracker keys whose prose is the strongest reference for the `ticket_prose` register. Weighted above general samples during calibration |
 | `voice.sample_counts` | kb-dream | default | |
 | `budgets.<skill>` | that skill only | default | a skill only ever reads its own subtree |
-| `budgets.models` | idea-ticket, idea-spar, skill-eval, action-list | default | see `model-tiers.md` |
+| `budgets.models` | idea-ticket, idea-spar, skill-eval, action-list, jira-story | default | see `model-tiers.md` |
 
 ## Where the current values come from
 
