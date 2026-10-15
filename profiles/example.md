@@ -66,6 +66,7 @@ briefing:
     idea-spar: 8
     kb-dream: 8
     skill-health-check: 8
+    vault-pulse: 9
 
 tracker:
   cloud_id: 8f2e4a91-3c7d-4b2e-9a11-example000fc
@@ -166,6 +167,7 @@ budgets:
   idea-spar: {web_searches: 4, code_reads: 8, kb_reads: 3, findings_per_lens: 5, sketch_options: 3, next_per_run: 1}
   kb-dream: {incremental_reads: 25, sessions_incremental: 5, sessions_full: 10, reviews: monthly}
   skill-health-check: {kb_reads: 15}
+  vault-pulse: {window_days: 7}   # optional: lookup_pattern (regex), thresholds {<signal key>: [green_edge, amber_edge]}
   models: {worker: sonnet, search: haiku, critic: opus}
 ```
 

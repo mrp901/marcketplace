@@ -6,6 +6,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-10-13
+
+A new skill, `vault-pulse`, that answers the question no other skill asks: is the knowledge
+base still compounding? The user runs `session-log` all the time and rarely opens the vault,
+and every silent failure so far (the broken archive hook, the unpromoted voice ledger, a gap
+in dream runs) was found by an audit, not an alert. The pulse measures behaviour weekly and
+the briefing carries the verdict, so the user does not have to look.
+
+### Added
+- `skills/vault-pulse/` - `SKILL.md`, `HISTORY.md`, three references (signals, scoring, log
+  format) and two stdlib scripts: `pulse_metrics.py` (read-only measurement of freshness,
+  capture, reuse, consultation, unapplied learning and backlog) and `score_pulse.py`
+  (table-driven scoring, thresholds overridable in the profile). A signal that cannot be
+  measured is never green. It writes one log entry under `kb.paths.utility/vault-pulse/` and
+  one `runs.vault-pulse` record; it never posts, never writes to the board and never edits a
+  note. Its capture audit reuses `scripts/pending_sessions.py`'s own definition of a
+  substantive session.
+
+### Changed
+- The briefing's Runs block reports `runs.vault-pulse` once after each run, and on every
+  briefing while the verdict is amber or red (`skills/briefing/references/`).
+- `briefing.expected_runs` gains `vault-pulse: 9` in the example profile and the schema, so a
+  pulse that stops is named overdue; `budgets.vault-pulse` is optional.
+- State: `cursors.vault-pulse.last_values` (the trend) and the `vault-pulse` shard; a
+  1.7.0 to 1.8.0 migration row records that nothing in the main document changes.
+
 ## [1.7.0] - 2026-10-13
 
 Two new direct skills, ported from standalone skills and made organisation-neutral.
