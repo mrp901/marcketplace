@@ -71,16 +71,20 @@ cheap, and silence is exactly what this skill exists to catch. Fast-fail instead
 Nothing here posts. The briefing's Runs block reports `runs.vault-pulse` once, on the first
 briefing after each run, and again on every briefing while the last verdict is amber or red
 (`../briefing/references/message-format.md`). Add `vault-pulse` to `briefing.expected_runs`
-(9 for a weekly schedule) so the briefing names the pulse itself overdue if it stops.
+(9 for a weekly schedule, 3 for weekdays) so the briefing names the pulse itself overdue if it
+stops.
 
 ## Where and when it runs
 **On the machine that holds the knowledge base and the Claude transcripts**, not as a cloud
 routine: capture and consultation read local session transcripts, and every signal reads
-`kb.local_root`. A cloud run has neither and fast-fails. Weekly is the cadence: the window
-is the last seven days, and `briefing.expected_runs.vault-pulse` is 9. Run it after the
-nightly `kb-dream` and before the first briefing of the week, at a time the machine is
-awake, with `Run /marcketplace:vault-pulse profile=<ref> unattended`. Scheduling is the
-user's, as for every skill; this one never schedules itself.
+`kb.local_root`. A cloud run has neither and fast-fails. The window is the last seven days, so
+weekly is the slowest useful cadence and weekdays is fine. Run it after the nightly `kb-dream`
+and before the first briefing of the day, at a time the machine is awake, with
+`Run /marcketplace:vault-pulse profile=<ref> unattended`. `scripts/run_pulse.py` wraps that for a
+scheduler and records the outcome in `last-run.txt`; the plugin's SessionStart hook
+(`../../scripts/pulse_reminder.py`) tells the user in a session when a run was missed. Setup, the
+`expected_runs` value per cadence and the one-time shard step: `references/scheduling.md`.
+Scheduling is the user's, as for every skill; this one never schedules itself.
 
 ## Ground rules
 - Read-only against the knowledge base's notes; the only writes are the log entry and state.
