@@ -68,6 +68,10 @@ def count_lines(path, cap=200):
 
 def main():
     raw = sys.stdin.read()
+    if os.environ.get("VAULT_PULSE_RUN") == "1":
+        # The scheduled vault-pulse run (scripts/run_pulse.py sets this) is a measurement, not a
+        # working session; archiving it would queue a non-session for write-up every run.
+        return 0
     try:
         payload = json.loads(raw) if raw.strip() else {}
     except json.JSONDecodeError:

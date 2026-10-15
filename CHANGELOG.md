@@ -6,6 +6,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.9.0] - 2026-10-16
+
+`vault-pulse` can now be scheduled and its misses noticed. The first real unattended run, on the
+machine it was built for, worked end to end (exit 0 in 94 seconds, a log entry and its own state
+shard) and exposed three gaps this release closes: nothing to run it headless, nothing to tell
+the user in a session when a run was missed, and the run's own session being archived into the
+write-up queue.
+
+### Added
+- `skills/vault-pulse/scripts/run_pulse.py` - runs the skill headless from cron, launchd or Windows
+  Task Scheduler. Resolves the profile ref the way onboarding does, takes the allowed tools from
+  `--allowed-tools` or `VAULT_PULSE_ALLOWED_TOOLS`, and writes the outcome (exit code, duration,
+  output) to `last-run.txt` beside the pulse log so a failed run leaves evidence.
+- `scripts/pulse_reminder.py` and a second SessionStart entry in `hooks/hooks.json` - reminds the
+  user in a session when no pulse log entry is dated today. Opt-in: silent unless
+  `VAULT_PULSE_REMIND_AFTER` is set; configurable days; throttled to once every two hours; quotes
+  `last-run.txt` when the scheduled run failed. Reads the log, not state, so it works when state
+  is unreachable.
+- `skills/vault-pulse/references/scheduling.md` - cadence and the matching `expected_runs` value,
+  the Task Scheduler and cron setup, the headless permission list, and the one-time shard step.
+
+### Changed
+- `scripts/archive_session.py` skips a session started with `VAULT_PULSE_RUN=1` (the scheduled
+  pulse), so it is no longer queued for write-up on every run.
+- `vault-pulse/SKILL.md` and the profile schema note weekdays as a supported cadence, with
+  `expected_runs.vault-pulse` of 3 (9 stays right for weekly).
+
 ## [1.8.0] - 2026-10-13
 
 A new skill, `vault-pulse`, that answers the question no other skill asks: is the knowledge

@@ -69,7 +69,7 @@ briefing:
     idea-spar: 8
     kb-dream: 8
     skill-health-check: 8
-    vault-pulse: 9
+    vault-pulse: 9               # weekly run; 3 for a weekday run (see skills/vault-pulse/references/scheduling.md)
 
 tracker:
   cloud_id:                 # tracker's cloud/site id
