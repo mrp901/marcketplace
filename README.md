@@ -54,6 +54,7 @@ as the eval fixture.
 | `kb-dream` | Curates the knowledge base, consolidates memory, reviews the learning loop | Schedule, and a handler |
 | `skill-eval` | Turns feedback on one run into an amended skill | Direct only |
 | `skill-health-check` | Scores recent skill output against real evidence | Direct or schedule |
+| `vault-pulse` | Measures whether the knowledge base is compounding (freshness, capture, reuse, consultation, unapplied learning, backlog); the briefing carries the verdict, so you never have to open the vault to check | Schedule (weekly), or direct |
 
 Every skill takes `profile=<ref>` and, when scheduled, `unattended`:
 

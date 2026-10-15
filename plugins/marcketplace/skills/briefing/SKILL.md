@@ -88,7 +88,7 @@ Fires more than once a day on a changing schedule; never assume a time of day.
 5. **Compose the report and the message.** The "Since last briefing" block: handler
    outcomes from `state.outcomes` in the window, the count of ticked lines with no sub-line
    (queued behind the hub's cap), then the Runs block from `state.runs`: what each scheduled
-   skill did, with its link; fast-fails; amber and green health scores; FYIs the Router
+   skill did, with its link; fast-fails; amber and green health scores; the vault-pulse verdict; FYIs the Router
    recorded; and any skill overdue against `briefing.expected_runs`. See
    `references/closed-and-outcomes.md`. Check every unfamiliar term against
    `state.glossary`/`state.nicknames` before writing it; genuine new jargon becomes a `term:`

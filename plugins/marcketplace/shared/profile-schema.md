@@ -69,6 +69,7 @@ briefing:
     idea-spar: 8
     kb-dream: 8
     skill-health-check: 8
+    vault-pulse: 9
 
 tracker:
   cloud_id:                 # tracker's cloud/site id
@@ -160,6 +161,7 @@ budgets:
   idea-spar: {web_searches: 4, code_reads: 8, kb_reads: 3, findings_per_lens: 5, sketch_options: 3, next_per_run: 1}
   kb-dream: {incremental_reads: 25, sessions_incremental: 5, sessions_full: 10, reviews: monthly}
   skill-health-check: {kb_reads: 15}
+  vault-pulse: {window_days: 7}   # optional: lookup_pattern (regex), thresholds {<signal key>: [green_edge, amber_edge]}
   models: {worker: sonnet, search: haiku, critic: opus}
 ```
 
@@ -216,7 +218,7 @@ budgets:
 | `kb.link_style` | kb-note, session-log, kb-dream, idea-spar, action-list, jira-story | ask | |
 | `kb.frontmatter_required` | kb-note, session-log, kb-dream, action-list, jira-story | default | |
 | `kb.tag_hints` | kb-note, session-log | default | |
-| `kb.paths.*` | kb-note, session-log, kb-dream, idea-spar, action-sweep, reply-draft (voice), action-list, jira-story | default (asked only for `inbox`/`sessions` if the org has no convention) | |
+| `kb.paths.*` | kb-note, session-log, kb-dream, idea-spar, action-sweep, reply-draft (voice), action-list, jira-story, vault-pulse | default (asked only for `inbox`/`sessions` if the org has no convention) | |
 | `kb.log_size_cap_kb` | session-log, kb-dream, idea-spar, action-list | default | |
 | `kb.sweep_queries` | kb-dream | default | |
 | `codebase.path` | idea-spar (reality lens) | optional | only asked if `codebase.access != none` |

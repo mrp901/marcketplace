@@ -90,10 +90,12 @@ flowchart TB
     subgraph weekly["Weekly band, each on its own schedule"]
         direction TB
         healthcheck["skill-health-check"]
+        pulse["vault-pulse"]
     end
 
     healthcheck -->|"red score only"| board
     healthcheck -.->|"amber, green"| message
+    pulse -.->|"verdict via runs"| message
 
     subgraph feedback["Feedback loops"]
         direction TB
