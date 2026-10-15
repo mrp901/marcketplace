@@ -47,3 +47,31 @@ suggests pairs by title and misses a repeat worded differently. `signals.md` lis
 **Rejected.** Reading the vault's own session notes with a model to judge "usefulness":
 subjective, expensive, and the part most likely to flatter itself. A dashboard note in the
 bundle: it would be one more thing to open, which is the problem being solved.
+
+## 2026-10-16 scheduling and the missed-run reminder
+
+First run on the machine it was built for: a weekday 10:00 task calling a headless session, exit
+0 in 94 seconds, one log entry, one new state shard. The user asked for a daily run and a hook
+that reminds them when it is missed.
+
+- **A runner and a reminder, both stdlib Python.** `run_pulse.py` wraps the headless call and
+  records `last-run.txt`; `pulse_reminder.py` is a plugin SessionStart hook. Python, not a
+  platform script, so the same files serve cron, launchd and Task Scheduler.
+- **The reminder reads the log, not state.** A reminder that needs state fails exactly when state
+  is unreachable, which is when the user most needs telling. A log entry dated today is the proof
+  of a run; no entry means missed or failed, and the two are the same to the user.
+- **Opt-in.** Unset `VAULT_PULSE_REMIND_AFTER` and the hook prints nothing, so installing the
+  plugin changes nothing for a user who runs the pulse by hand. No profile key was added: the
+  settings are environment variables, like `SESSION_LOG_DIR`.
+- **The run must not nag or be archived.** The runner sets `VAULT_PULSE_RUN=1`; the reminder and
+  `archive_session.py` both honour it. The first scheduled run had queued its own 1 MB session
+  for write-up, which would have added a non-session to `pending/` every weekday and tripped the
+  pulse's own capture signal.
+- **Weekdays, `expected_runs` 3.** Friday to Monday is the longest healthy gap.
+- **Learned.** A headless session needs its wiki tools allowed by name; the default list covers
+  files and Python only, so the user adds theirs. On a work-account Windows login,
+  `Register-ScheduledTask` rejected an explicit `-UserId` principal; the default principal works.
+  The skill declined to rewrite a large main state page to add its `shards:` pointer, so the first
+  run reports one line to add by hand; skipping it makes the second run create a duplicate shard.
+- **Open question for the orchestrator.** Should the pointer be written by a small, checked
+  script rather than by hand? Rewriting the main page by model is the risk the skill declined.
