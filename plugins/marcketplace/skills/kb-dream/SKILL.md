@@ -50,14 +50,17 @@ quiet` and stop, before any curation read. The size check matters because a writ
 defers its log line adds no entry, so an oversized log otherwise looks unchanged.
 
 ## Flow
-1. **Wake up.** Real timestamp from the system clock in `org.timezone`, never from memory.
+1. **Wake up.** Real timestamp from the system clock in `org.timezone`, never from memory,
+   and read the clock again for every `generated.at` at the moment of that write - never a
+   round or planned time (bad: `14:10` typed at 14:04; good: the clock's `14:04:37`).
    Read `kb.conventions_file` and the live `kb.types_registry` and `kb.people_file` -
    never assert a type or a name pair from a cached snapshot. Determine mode: incremental
    unless the user asked for "full dream" or this is the first fire of the calendar month
    (checked against `state.cursors.kb-dream.last_full_dream_at`).
 2. **Read the recent past.** `kb.paths.log` newest first (what's already corrected, don't
    re-flag); session notes since the last dream, especially their Open threads and
-   Proposed follow-ups; a count-only check of any pending-session backlog. Distinguish
+   Proposed follow-ups; a count-only check of any pending-session backlog, one per
+   `.jsonl` transcript in `<utility>/sessions/pending/`, never its `.meta.json`. Distinguish
    discussed from done. If `log.md` is over `kb.log_size_cap_kb.writers` (not only this
    skill's own `dream` cap), rotate it this run, whatever the mode, per
    `references/log-rotation.md`: writers defer their log lines above that cap, and waiting
@@ -139,5 +142,9 @@ action is additive/reversible per the five-rule contract), so it never returns
   quiet run (stops before any read, records `status: quiet`), and a pass that read the
   knowledge base and found nothing to curate, surface or follow up, which writes one
   `log.md` line saying so and records `status: done`.
+- **A full-replace write must hit the file you meant, and be undoable.** Where the
+  connector writes by item id, take the id from a lookup of the target path and confirm
+  its name and folder - never an id from a folder listing. Never full-replace a file this
+  run hasn't read; keep the read until the write reads back right, and restore from it if not.
 - If there's no write path to the knowledge base at all, still curate-read and put the
   findings in `runs.kb-dream.note`; a read-only dream still reports, never nothing.

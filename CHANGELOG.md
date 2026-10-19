@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.9.1] - 2026-10-19
+
+`kb-dream` write safety, from a skill-eval on its red health check. Voice promotion and follow-up
+escalation are unchanged.
+
+### Changed
+- `skills/kb-dream/SKILL.md`: a ground rule that a full-replace write takes its target from a path
+  lookup (never an item id from a folder listing), never replaces a file the run has not read, and
+  is restored from that read in the same run if it does not read back right.
+- `skills/kb-dream/SKILL.md`: step 1 reads the clock again for every `generated.at` at the moment of
+  the write, never a round or planned time; step 2 counts pending sessions as one per `.jsonl`
+  transcript, not its `.meta.json` sidecar.
+
 ## [1.9.0] - 2026-10-16
 
 `vault-pulse` can now be scheduled and its misses noticed. The first real unattended run, on the
