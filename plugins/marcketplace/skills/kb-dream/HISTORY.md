@@ -265,3 +265,22 @@ skill's entry, so each document keeps one writer; an accepted suppression lift i
 by the hub, which owns `suppressions`. The registry review reads `tally`, `outcomes`,
 `suppressions` and `patterns_blocked` from the hub's shard. See `shared/state-schema.md`,
 "Shards".
+
+## 2026-10-19 write targeting, clock stamps, pending count (1.9.1)
+
+A skill-eval on a red health check (18 Oct) found three corrections across the 15 and 16 Oct
+dreams. Voice promotion and follow-up escalation, which the same check credited, are untouched.
+
+- **A root `index.md` was overwritten.** The 15 Oct run took an item id from a folder listing,
+  wrote `log.md` text through it onto the root `index.md`, and had never read that file, so it
+  could only leave a placeholder and ask for a Version History restore. The same wrong-target
+  shape put log text into an archive file on 11 Sep. The skill had no rule against touching the
+  root index (that ground rule belongs to `skill-health-check`, not this skill) and needs none,
+  since it writes folder indexes every run. The fix is at the cause: a ground rule that a
+  full-replace write takes its target from a path lookup and never replaces a file the run
+  has not read.
+- **`generated.at` ran ahead of the clock** on four runs (16 Oct by 2 to 4 minutes, 19 Oct by
+  one), each a round, planned time typed instead of read. Step 1 read the clock once at
+  wake-up; it now reads it again for every stamp.
+- **"10 pending sessions" where there were 5.** Step 2 named no unit, and the queue holds a
+  `.meta.json` sidecar beside each `.jsonl` transcript. It now counts transcripts.
