@@ -169,10 +169,15 @@ briefing the next morning counted 55 ticked lines with no hub sub-line. SKILL.md
 
 - Step 1 now reads every shard by id as an explicit step and names the shard and item count
   in the run summary, so a skipped read shows.
-- Step 7 says the hub acts on every tick whatever its prefix, only a sub-line on the board
-  settles one, and a previous run's note is never evidence. A ticked line with no entry
-  anywhere is "ticked, text unchanged" and acted on from its board text.
-- The quiet exit no longer fires while a ticked line lacks a sub-line.
+- Step 7 says the hub acts on every tick outside To-do whatever its prefix. A sub-line, or
+  an `outcomes` entry for the tag, settles one (the second writes the missing sub-line
+  rather than dispatching twice when a canvas write failed); a previous run's note never
+  does. A ticked line with no entry anywhere is classified as user-added, per the tick
+  table, then acted on.
+- A tick on a line whose tag date is over 14 days old gets a `needs your tick` confirm line
+  instead of a dispatch, so a two-week-old draft request isn't acted on blind.
+- The quiet exit no longer fires while a ticked line outside To-do lacks a sub-line.
 
-The first runs after this will work through the backlog oldest first, within
-`budgets.proactive-router.dispatches` per run; irreversible steps still stop at a second tick.
+The first runs after this work through the backlog oldest first, within
+`budgets.proactive-router.dispatches` per run; most of the 55 are older than 14 days and get
+a confirm line rather than a dispatch.

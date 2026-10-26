@@ -35,13 +35,14 @@ Per run: one `chat: search messages` per `chat.starter_emoji` entry, plus one `i
 search when `chat.include_saved_items` (`budgets.proactive-router.searches`). Thread
 reads capped at `.thread_reads`, each a `search`-tier subagent. Dispatches capped at
 `.dispatches`; inline actions are free. One surface read and one surface write batch;
-one state read and one state write. The blocked-line retry (step 7) is state-only: it
+one read of state and every shard (step 1) and one state write. The blocked-line retry (step 7) is state-only: it
 checks the profile already read at onboarding and makes no connector call, and a
 re-dispatch it releases counts against `.dispatches`. Guidelines in
 `../../shared/token-discipline.md`.
 
 **Quiet exit:** if every sweep search returns nothing new since the cursor, no line on
-the board differs from its `state.items` text, and no ticked line lacks a hub sub-line,
+the board differs from its `state.items` text, and no ticked line outside To-do lacks a
+hub sub-line,
 write the cursor and `runs.proactive-router.status: quiet` and stop before reading a single
 thread.
 
@@ -77,12 +78,13 @@ thread.
 6. **Resolve option groups** before dispatching: exactly one ticked option proceeds; two
    or more get `  - ↳ router: blocked · pick one` under the question and nothing happens.
    See `references/dispatch.md`.
-7. **Act on ticked lines**, oldest first, whatever their prefix (the hub acts on every
-   tick; ownership decides who posts a line, not who dispatches its tick), skipping any that
-   already carry a sub-line from an earlier run, with one exception. Only a sub-line on the
-   board settles a tick: never treat one as settled because a previous run's note said so,
-   and a ticked line with no `state.items` entry after every shard is read is "ticked, text
-   unchanged", acted on from its board text. A `pr:` line whose `state.items` entry is
+7. **Act on ticked lines** outside To-do, oldest first, whatever their prefix (ownership
+   decides who posts a line, not who dispatches its tick), skipping any that already carry a
+   sub-line from an earlier run, with one exception. A sub-line, or an `outcomes` entry for
+   the tag (write its missing sub-line, don't re-dispatch), settles a tick; a previous run's
+   note never does. A ticked line with no `state.items` entry after every shard is read is
+   classified as user-added (step 5), then acted on. A tick on a line whose tag date is over
+   14 days old gets a `needs your tick` confirm line instead of a dispatch. A `pr:` line whose `state.items` entry is
    `status: blocked` on a named profile key is retried once that key is present and
    non-empty in the profile already in hand. Its block clears, it is acted on again, and
    the new sub-line lands under the old one. The line is settled in place and never

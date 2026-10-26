@@ -147,8 +147,10 @@ nobody reads a scheduled run's session output: the platform marks the run succee
 way (the 23 Oct 2026 `kb-dream` run stopped in 12 seconds with no wiki connector loaded and
 no one heard). So before concluding the wiki tool is absent, search for it once more by its
 connector's name. If it is still missing, write the failure to session output and, when the
-run has a push-notification tool, send one line - `<skill> did not run: <what was missing>`
-- then stop the same way.
+profile was read and a `chat` tool resolved, post one line - `<skill> did not run: <what was
+missing>` - to `profile.notify.fallback_channel_id`, the route `briefing`'s own fast-fail uses
+(`notify.md`); then stop the same way. With neither, session output is all there is, and the
+next `briefing`'s Runs block shows the skill as not having run.
 
 ## Pointer files for bare scripts
 

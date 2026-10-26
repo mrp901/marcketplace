@@ -101,9 +101,32 @@ def emit(context):
 
 
 def session_stems(names):
-    """Distinct sessions among `<stamp>-<session id[:12]>.jsonl` names (stamp has 4 dashes)."""
-    return {n[: -len(".jsonl")].split("-", 4)[-1]
-            for n in names if n.endswith(".jsonl") and n.count("-") >= 5}
+    """Distinct sessions among queued `.jsonl` names (`<YYYY-MM-DD-HHMMSS>-<session id[:12]>`).
+    A name that doesn't fit the pattern counts as its own session rather than vanishing."""
+    out = set()
+    for n in names:
+        if not n.endswith(".jsonl"):
+            continue
+        stem = n[: -len(".jsonl")]
+        parts = stem.split("-", 4)
+        out.add(parts[4] if len(parts) == 5 else stem)
+    return out
+
+
+def queued_age_days(pending, name):
+    """Days since this session first entered the queue (`queued_since`), else since the copy."""
+    path = os.path.join(pending, name)
+    try:
+        with open(path[: -len(".jsonl")] + ".meta.json", "r", encoding="utf-8") as fh:
+            since = json.load(fh).get("queued_since")
+        if since:
+            return (time.time() - datetime.fromisoformat(since).timestamp()) / 86400
+    except (OSError, ValueError, AttributeError, TypeError):
+        pass
+    try:
+        return (time.time() - os.path.getmtime(path)) / 86400
+    except OSError:
+        return 0.0
 
 
 def describe_age(path):
@@ -276,7 +299,9 @@ def sweep(base, dry_run=False, current_session=""):
         if ok and not dry_run:
             stem = os.path.join(pending, f"{stamp}-{sid[:12]}")
             os.makedirs(pending, exist_ok=True)
-            superseded, _ = older_copies(pending, sid[:12])
+            # The tail is rebuilt from archive/ above, so a carried one is not needed; the
+            # queue age is carried so a long session's backlog does not look fresh.
+            superseded, _, queued_since = older_copies(pending, sid[:12])
             shutil.copy2(p, stem + ".jsonl")
             meta = {
                 "session_id": sid,
@@ -285,6 +310,7 @@ def sweep(base, dry_run=False, current_session=""):
                 "ended_at": datetime.fromtimestamp(m).astimezone().isoformat(timespec="seconds"),
                 "source_transcript": p,
             }
+            meta["queued_since"] = queued_since or meta["ended_at"]
             if tail_after:
                 meta["tail_after"] = datetime.fromtimestamp(tail_after).astimezone().isoformat(
                     timespec="seconds"
@@ -366,7 +392,7 @@ def main():
             f"{swept} of these were just queued by the transcript sweep: substantive "
             "sessions the SessionEnd hook never archived.",
         ]
-    oldest_days = (time.time() - os.path.getmtime(os.path.join(pending, files[0]))) / 86400
+    oldest_days = max((queued_age_days(pending, f) for f in files), default=0.0)
     how = ("use the session-log skill to write these up (oldest first, one note per session from "
            "its newest copy) and move every processed file from pending/ to archive/.")
     if (sessions or len(files)) >= NUDGE_SESSIONS or oldest_days >= NUDGE_DAYS:

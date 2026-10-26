@@ -175,11 +175,15 @@ Four causes, each fixed where it starts:
 - **One file per end, not per session.** A worktree or background session ends many times
   and every copy was the full transcript: 38 files held 10 sessions, about 135 MB in a
   synced folder. `archive_session.py` and the sweep now replace an older pending copy of
-  the same session, carrying `tail_after` forward. The sweep takes a tail only from
-  `archive/`: a pending copy is about to be replaced, so content only it held has to stay
-  in the new copy's tail.
+  the same session. `archive_session.py` carries the *earliest* `tail_after` of the copies
+  it replaces, or none if any had none (a review caught a first draft that kept the latest,
+  which would have dropped an older copy's unwritten content); the sweep rebuilds its tail
+  from `archive/` only. `queued_since` survives replacement, so a long session's backlog
+  age doesn't reset on every end.
 - **Re-opening an old session re-queued it.** SessionEnd fires again with a few bytes of
   bookkeeping and no new message; one 28 Sep session was archived six times. The archiver
-  now skips a session whose newest copy has as many user turns. It counts turns rather than
-  comparing timestamps, so a transcript-format change can only cause an extra copy.
+  now skips a session when the bytes appended since its newest copy hold no user turn. It
+  counts turns in the appended part only (never reading the copy, which may be cloud-only
+  in a synced folder) rather than comparing timestamps, so a format change can only cause
+  an extra copy.
 - **`read_transcript.py` died on emoji** under a Windows cp1252 console. It now writes UTF-8.

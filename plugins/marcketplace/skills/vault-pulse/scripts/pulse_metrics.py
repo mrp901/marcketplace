@@ -153,6 +153,9 @@ def capture(now, days):
     if helpers is None:
         return {"measured": False, "why": "scripts/pending_sessions.py not found beside the plugin"}
     assess = helpers.assess
+    # Age from when each session first entered the queue (1.10.0 `queued_since`), so a long
+    # session that keeps ending does not reset the backlog's age.
+    ages = [helpers.queued_age_days(pend, os.path.basename(p)) for p in pending]
     cutoff = now - timedelta(days=days)
     orphans = []
     for p in glob.glob(os.path.join(projects_dir(), "*", "*.jsonl")):

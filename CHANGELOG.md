@@ -20,18 +20,20 @@ failed without anyone hearing. Each fix is at the cause.
 ### Changed
 - `scripts/archive_session.py`, `scripts/pending_sessions.py`: one pending copy per session (a
   newer copy replaces the older, carrying `tail_after`); the sweep's tail starts at the last
-  `archive/` copy only; SessionEnd skips a re-opened session with no new user turn; headless
-  `/marcketplace:<skill> ... unattended` runs are never queued.
+  `archive/` copy only; SessionEnd skips a re-opened session with no new user turn; a run with
+  `MARCKETPLACE_HEADLESS=1` is not archived, and the sweep skips headless
+  `/marcketplace:<skill> ... unattended` sessions. Each queued copy keeps `queued_since`.
 - `scripts/pending_sessions.py`: the backlog nudge counts sessions and, past 5 sessions or 3
   days, tells the session to offer the drain instead of waiting to be asked.
 - `skills/vault-pulse`: `capture.pending` counts sessions, with the file count beside it.
 - `skills/proactive-router/SKILL.md`: reads every state shard as an explicit step, acts on every
-  tick whatever its prefix, never treats a tick as settled on a previous run's word, and does
-  not take the quiet exit while a ticked line lacks a sub-line.
+  tick outside To-do whatever its prefix, settles a tick by its sub-line or `outcomes` entry and
+  never on a previous run's word, asks to confirm ticks older than 14 days, and does not take the
+  quiet exit while a ticked line lacks a sub-line.
 - `skills/kb-dream/SKILL.md`: the full-replace target rule names routes the connector supports
   (write by name, or an id verified by reading it back); 1.9.1's "path lookup" returned no id.
 - `shared/onboarding.md`: a run that cannot reach its state document re-checks for the wiki tool
-  and, when it can, sends a push notification instead of failing silently.
+  and, when the profile and a chat tool are available, posts the failure to the fallback channel.
 - `skills/briefing/references/migration.md`: a deferred 1.6.0 migration records its numbers.
 
 ### Fixed

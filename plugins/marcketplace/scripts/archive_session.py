@@ -68,24 +68,36 @@ def count_lines(path, cap=200):
 
 
 def older_copies(pending, session_stem):
-    """Earlier pending copies of this session, and the newest `tail_after` they carry.
+    """Earlier pending copies of this session, the tail a replacement may carry, and when
+    the session first entered the queue.
 
     A long-lived session ends (or is swept) many times, and every copy is a full
     transcript, so a newer copy holds everything an older one does. Without this the
     queue held one full copy per end: 38 files for 10 sessions on 26 Oct 2026.
+
+    The carried `tail_after` is the *earliest* across the copies, and none if any copy has
+    none: an older copy's content may not be written up yet, and the replacement must still
+    start early enough to hold it. `queued_since` is the earliest too, so the backlog's age
+    does not reset every time a long session ends again.
     """
-    stems, tail = [], None
+    stems, tails, since = [], [], []
     for p in glob.glob(os.path.join(pending, f"*-{session_stem}.jsonl")):
         stem = p[: -len(".jsonl")]
         stems.append(stem)
+        meta = {}
         try:
             with open(stem + ".meta.json", "r", encoding="utf-8") as fh:
-                t = json.load(fh).get("tail_after")
-            if t and (tail is None or t > tail):
-                tail = t
-        except (OSError, ValueError, AttributeError):
+                meta = json.load(fh) or {}
+        except (OSError, ValueError):
             pass
-    return stems, tail
+        if not isinstance(meta, dict):
+            meta = {}
+        tails.append(meta.get("tail_after"))
+        first = meta.get("queued_since") or meta.get("ended_at")
+        if first:
+            since.append(first)
+    tail = min(tails) if tails and all(tails) else None
+    return stems, tail, (min(since) if since else None)
 
 
 def remove_copies(stems, keep):
@@ -100,17 +112,21 @@ def remove_copies(stems, keep):
                 pass
 
 
-def user_turns(path):
+def appended_user_turns(path, offset):
+    """User turns in the bytes past `offset`. A transcript only grows, so the part an existing
+    copy of `offset` bytes already holds never needs reading - and neither does the copy, which
+    in a synced folder may be cloud-only and slow to fetch inside the hook's budget."""
     n = 0
-    with open(path, "r", encoding="utf-8", errors="ignore") as fh:
+    with open(path, "rb") as fh:
+        fh.seek(offset)
         for line in fh:
-            if '"type":"user"' in line or '"type": "user"' in line:
+            if b'"type":"user"' in line or b'"type": "user"' in line:
                 n += 1
     return n
 
 
 def nothing_new(transcript, session_stem, dirs):
-    """True when an existing copy already holds every typed user message in the transcript.
+    """True when an existing copy already holds every user turn in the transcript.
 
     Re-opening an old session and closing it fires SessionEnd again with a few bytes of
     bookkeeping appended; before 1.10.0 each one queued a fresh full copy (one 28 Sep session
@@ -123,9 +139,12 @@ def nothing_new(transcript, session_stem, dirs):
         newest = max(copies, key=os.path.getmtime)
         if os.path.getmtime(transcript) <= os.path.getmtime(newest) + 1:  # copy2 keeps the mtime
             return True
+        size = os.path.getsize(newest)
+        if os.path.getsize(transcript) < size:  # not the same append-only file: unsure
+            return False
         # Count user turns rather than compare timestamps, so a transcript-format change can only
         # ever cause an extra copy, never a missed one. Reopen bookkeeping adds no user turn.
-        return user_turns(transcript) == user_turns(newest)
+        return appended_user_turns(transcript, size) == 0
     except Exception:
         return False
 
@@ -165,7 +184,8 @@ def main():
 
     stamp = datetime.now().strftime("%Y-%m-%d-%H%M%S")
     stem = os.path.join(pending, f"{stamp}-{session_id}")
-    superseded, tail_after = older_copies(pending, session_id)
+    superseded, tail_after, queued_since = older_copies(pending, session_id)
+    now = datetime.now().astimezone().isoformat(timespec="seconds")
 
     try:
         shutil.copy2(transcript, stem + ".jsonl")
@@ -173,7 +193,8 @@ def main():
             "session_id": payload.get("session_id"),
             "cwd": cwd,
             "reason": reason,
-            "ended_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+            "ended_at": now,
+            "queued_since": queued_since or now,
             "source_transcript": transcript,
         }
         if tail_after:

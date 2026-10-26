@@ -24,9 +24,13 @@ lifetime.
 **One copy per session.** A long-lived session (a worktree job, a resumed or background
 session) ends many times, and each copy is the full transcript so far. Since 1.10.0, both
 `archive_session.py` and the sweep replace any older `pending/` copy of the same session
-when they queue a newer one, carrying the older copy's `tail_after` forward. A queue left
-over from before that may still hold several copies of one session (the session id is the
-last part of the filename): work from the newest, and move every copy to `archive/` with it.
+when they queue a newer one, and keep `queued_since` (when the session first entered the
+queue). `archive_session.py` carries the earliest `tail_after` across the copies it
+replaces, or none if any had none; the sweep rebuilds the tail from `archive/` instead. A
+queue left over from before that may still hold several copies of one session (the session
+id is the last part of the filename): read the newest, start from the earliest `tail_after`
+across the copies (from the beginning if any copy lacks one), and move every copy to
+`archive/` with it.
 
 **Nothing drains the queue on its own.** The hooks only fill it. If nobody runs this skill,
 it grows by a session or more a day; schedule an unattended run (`hooks-setup.md`,
