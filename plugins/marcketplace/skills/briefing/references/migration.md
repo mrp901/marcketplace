@@ -122,7 +122,10 @@ write, on every briefing run until the main document holds no owned entry:
    document as it would stand with every ready entry removed and a pointer added for each
    shard step 2 creates. If that keeps more bytes than it removes and would still be over
    10 KB, change nothing this run and say so in `runs.briefing.note`; a later run, after
-   more owners have seeded, tries again. So the migration never re-types more than it
+   more owners have seeded, tries again. The note carries this run's own numbers: bytes
+   kept and removed, and each owner with entries not yet ready, with a count. Redo the plan
+   every run; "deferred, same reasoning as before" is not a plan, and six such runs (19 to
+   26 Oct 2026) left nobody able to say which owner was holding it up. So the migration never re-types more than it
    removes, except on a document small enough to re-type safely.
 2. **Shard first.** For each owner with no shard, briefing among them, create its shard
    holding its `runs`, `cursors` and owned entries, copied verbatim by cutting text, never

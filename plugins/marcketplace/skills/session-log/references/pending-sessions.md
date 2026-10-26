@@ -21,6 +21,21 @@ Several small sessions on one day are often better as one note covering the day 
 note per session - use judgement; the goal is a useful record, not one note per process
 lifetime.
 
+**One copy per session.** A long-lived session (a worktree job, a resumed or background
+session) ends many times, and each copy is the full transcript so far. Since 1.10.0, both
+`archive_session.py` and the sweep replace any older `pending/` copy of the same session
+when they queue a newer one, and keep `queued_since` (when the session first entered the
+queue). `archive_session.py` carries the earliest `tail_after` across the copies it
+replaces, or none if any had none; the sweep rebuilds the tail from `archive/` instead. A
+queue left over from before that may still hold several copies of one session (the session
+id is the last part of the filename): read the newest, start from the earliest `tail_after`
+across the copies (from the beginning if any copy lacks one), and move every copy to
+`archive/` with it.
+
+**Nothing drains the queue on its own.** The hooks only fill it. If nobody runs this skill,
+it grows by a session or more a day; schedule an unattended run (`hooks-setup.md`,
+"Draining on a schedule") rather than relying on someone remembering.
+
 ## The transcript sweep
 
 `SessionEnd` misses sessions: a window closed by killing it, a hook broken by the
@@ -37,8 +52,9 @@ one with no queued or archived copy into `pending/`, with a sidecar whose `reaso
   in.
 - **Already covered:** a copy of the same session in `pending/` or `archive/` at least as
   new as the transcript, or a `session-log` run inside the transcript itself. A session
-  resumed after either is judged on its tail alone, and the sidecar's `tail_after` says
-  where the uncovered part starts - write up only that part, updating the earlier note in
+  resumed after an `archive/` copy or a `session-log` run is judged on its tail alone (a
+  `pending/` copy is replaced, not built on, so it never starts a tail), and the sidecar's
+  `tail_after` says where the uncovered part starts - write up only that part, updating the earlier note in
   place when it is the same piece of work.
 - **Cheap:** transcripts touched in the last 2 hours are left alone (they may still be
   open), files under 64 KB are skipped unread, at most 20 are read and 8 queued per start,
