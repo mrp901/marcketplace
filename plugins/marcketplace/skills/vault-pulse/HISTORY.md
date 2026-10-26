@@ -75,3 +75,11 @@ that reminds them when it is missed.
   run reports one line to add by hand; skipping it makes the second run create a duplicate shard.
 - **Open question for the orchestrator.** Should the pointer be written by a small, checked
   script rather than by hand? Rewriting the main page by model is the risk the skill declined.
+
+## 2026-10-26 capture.pending counts sessions (1.10.0)
+
+`capture.pending` counted `.jsonl` files, and the queue held one full copy per end of a
+long-lived session: 38 files were 10 sessions on 26 Oct, so the signal read four times the
+real backlog. It now counts sessions (via `pending_sessions.py`'s `session_stems`, defined
+once) and reports the file count beside it. The queue keeps one copy per session from 1.10.0,
+so the two numbers converge.

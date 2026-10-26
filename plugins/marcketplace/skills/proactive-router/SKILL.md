@@ -40,13 +40,20 @@ checks the profile already read at onboarding and makes no connector call, and a
 re-dispatch it releases counts against `.dispatches`. Guidelines in
 `../../shared/token-discipline.md`.
 
-**Quiet exit:** if every sweep search returns nothing new since the cursor and no line on
-the board differs from its `state.items` text, write the cursor and
-`runs.proactive-router.status: quiet` and stop before reading a single thread.
+**Quiet exit:** if every sweep search returns nothing new since the cursor, no line on
+the board differs from its `state.items` text, and no ticked line lacks a hub sub-line,
+write the cursor and `runs.proactive-router.status: quiet` and stop before reading a single
+thread.
 
 ## Flow
 
-1. Onboarding (above), then read `state.cursors.proactive-router.last_scanned`. Absent
+1. Onboarding (above), then **read every shard** named in the main document's `shards`, by
+   id, before anything else: `state.items` is the union of the main document's entries and
+   every shard's (`../../shared/state-schema.md`, "Reading a list"), and most lines posted
+   since the shards exist live only in their owner's shard. Name in the run summary how many
+   shards were read and how many `items` the union holds. A shard that will not read is
+   `runs: unreadable` for its owner, and its ticked lines wait for a run that can read it.
+   Then read `state.cursors.proactive-router.last_scanned`. Absent
    (first run): default to a 24-hour lookback and say so in the run summary. If the board
    still carries the pre-1.1.0 headings, record `status: quiet`, note `awaiting
    migration`, and stop; `briefing` migrates it.
@@ -70,8 +77,12 @@ the board differs from its `state.items` text, write the cursor and
 6. **Resolve option groups** before dispatching: exactly one ticked option proceeds; two
    or more get `  - ↳ router: blocked · pick one` under the question and nothing happens.
    See `references/dispatch.md`.
-7. **Act on ticked lines**, oldest first, skipping any that already carry a sub-line from
-   an earlier run, with one exception. A `pr:` line whose `state.items` entry is
+7. **Act on ticked lines**, oldest first, whatever their prefix (the hub acts on every
+   tick; ownership decides who posts a line, not who dispatches its tick), skipping any that
+   already carry a sub-line from an earlier run, with one exception. Only a sub-line on the
+   board settles a tick: never treat one as settled because a previous run's note said so,
+   and a ticked line with no `state.items` entry after every shard is read is "ticked, text
+   unchanged", acted on from its board text. A `pr:` line whose `state.items` entry is
    `status: blocked` on a named profile key is retried once that key is present and
    non-empty in the profile already in hand. Its block clears, it is acted on again, and
    the new sub-line lands under the old one. The line is settled in place and never

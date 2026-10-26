@@ -6,6 +6,37 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-10-26
+
+From a whole-system troubleshoot: the session queue had stopped draining (no session note since
+20 Oct, vault-pulse red four runs), the Router was dropping ticks, and two scheduled runs had
+failed without anyone hearing. Each fix is at the cause.
+
+### Added
+- `skills/session-log/scripts/run_session_log.py` - drains the pending queue headless for a
+  scheduler; skips when the queue is empty, records each run in `last-drain.txt`, sets
+  `MARCKETPLACE_HEADLESS=1`. `references/hooks-setup.md` gains "Draining on a schedule".
+
+### Changed
+- `scripts/archive_session.py`, `scripts/pending_sessions.py`: one pending copy per session (a
+  newer copy replaces the older, carrying `tail_after`); the sweep's tail starts at the last
+  `archive/` copy only; SessionEnd skips a re-opened session with no new user turn; headless
+  `/marcketplace:<skill> ... unattended` runs are never queued.
+- `scripts/pending_sessions.py`: the backlog nudge counts sessions and, past 5 sessions or 3
+  days, tells the session to offer the drain instead of waiting to be asked.
+- `skills/vault-pulse`: `capture.pending` counts sessions, with the file count beside it.
+- `skills/proactive-router/SKILL.md`: reads every state shard as an explicit step, acts on every
+  tick whatever its prefix, never treats a tick as settled on a previous run's word, and does
+  not take the quiet exit while a ticked line lacks a sub-line.
+- `skills/kb-dream/SKILL.md`: the full-replace target rule names routes the connector supports
+  (write by name, or an id verified by reading it back); 1.9.1's "path lookup" returned no id.
+- `shared/onboarding.md`: a run that cannot reach its state document re-checks for the wiki tool
+  and, when it can, sends a push notification instead of failing silently.
+- `skills/briefing/references/migration.md`: a deferred 1.6.0 migration records its numbers.
+
+### Fixed
+- `scripts/read_transcript.py`: writes UTF-8, so a Windows console no longer crashes it.
+
 ## [1.9.1] - 2026-10-19
 
 `kb-dream` write safety, from a skill-eval on its red health check. Voice promotion and follow-up

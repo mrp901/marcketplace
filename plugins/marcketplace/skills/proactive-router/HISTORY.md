@@ -158,3 +158,21 @@ prune is never mistaken for a deletion. It writes the main page only when `regis
 `proposals`, `glossary` or `machines` changed, and it applies an accepted suppression lift
 itself, since it now owns `suppressions`. The stray `ideas` in its state-write list is
 gone: only idea-spar writes `ideas`. See `shared/state-schema.md`, "Shards".
+
+## 2026-10-26 every shard read, every tick acted on (1.10.0)
+
+The 25 Oct run read the main state document and its own shard, found no `state.items` entry
+for `dream:` and `sweep:` lines posted after 10 Oct, and "treated them as already settled, as
+the 20 Oct run did". Those entries live in their owners' shards, which it never opened; the
+briefing the next morning counted 55 ticked lines with no hub sub-line. SKILL.md already said
+`items` was every shard's, in the State bullet, and the run skimmed past it.
+
+- Step 1 now reads every shard by id as an explicit step and names the shard and item count
+  in the run summary, so a skipped read shows.
+- Step 7 says the hub acts on every tick whatever its prefix, only a sub-line on the board
+  settles one, and a previous run's note is never evidence. A ticked line with no entry
+  anywhere is "ticked, text unchanged" and acted on from its board text.
+- The quiet exit no longer fires while a ticked line lacks a sub-line.
+
+The first runs after this will work through the backlog oldest first, within
+`budgets.proactive-router.dispatches` per run; irreversible steps still stop at a second tick.

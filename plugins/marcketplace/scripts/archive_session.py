@@ -24,6 +24,7 @@ access of its own, so it cannot resolve a profile's kb.local_root directly:
   3. ~/.claude/session-log as a last-resort local default.
 """
 
+import glob
 import json
 import os
 import shutil
@@ -66,11 +67,74 @@ def count_lines(path, cap=200):
     return n
 
 
+def older_copies(pending, session_stem):
+    """Earlier pending copies of this session, and the newest `tail_after` they carry.
+
+    A long-lived session ends (or is swept) many times, and every copy is a full
+    transcript, so a newer copy holds everything an older one does. Without this the
+    queue held one full copy per end: 38 files for 10 sessions on 26 Oct 2026.
+    """
+    stems, tail = [], None
+    for p in glob.glob(os.path.join(pending, f"*-{session_stem}.jsonl")):
+        stem = p[: -len(".jsonl")]
+        stems.append(stem)
+        try:
+            with open(stem + ".meta.json", "r", encoding="utf-8") as fh:
+                t = json.load(fh).get("tail_after")
+            if t and (tail is None or t > tail):
+                tail = t
+        except (OSError, ValueError, AttributeError):
+            pass
+    return stems, tail
+
+
+def remove_copies(stems, keep):
+    """Delete superseded pending copies, never the one just written."""
+    for stem in stems:
+        if stem == keep:
+            continue
+        for ext in (".jsonl", ".meta.json"):
+            try:
+                os.remove(stem + ext)
+            except OSError:
+                pass
+
+
+def user_turns(path):
+    n = 0
+    with open(path, "r", encoding="utf-8", errors="ignore") as fh:
+        for line in fh:
+            if '"type":"user"' in line or '"type": "user"' in line:
+                n += 1
+    return n
+
+
+def nothing_new(transcript, session_stem, dirs):
+    """True when an existing copy already holds every typed user message in the transcript.
+
+    Re-opening an old session and closing it fires SessionEnd again with a few bytes of
+    bookkeeping appended; before 1.10.0 each one queued a fresh full copy (one 28 Sep session
+    was archived six times by 26 Oct, never with a new message). Unsure means queue it.
+    """
+    try:
+        copies = [p for d in dirs for p in glob.glob(os.path.join(d, f"*-{session_stem}.jsonl"))]
+        if not copies:
+            return False
+        newest = max(copies, key=os.path.getmtime)
+        if os.path.getmtime(transcript) <= os.path.getmtime(newest) + 1:  # copy2 keeps the mtime
+            return True
+        # Count user turns rather than compare timestamps, so a transcript-format change can only
+        # ever cause an extra copy, never a missed one. Reopen bookkeeping adds no user turn.
+        return user_turns(transcript) == user_turns(newest)
+    except Exception:
+        return False
+
+
 def main():
     raw = sys.stdin.read()
-    if os.environ.get("VAULT_PULSE_RUN") == "1":
-        # The scheduled vault-pulse run (scripts/run_pulse.py sets this) is a measurement, not a
-        # working session; archiving it would queue a non-session for write-up every run.
+    if os.environ.get("VAULT_PULSE_RUN") == "1" or os.environ.get("MARCKETPLACE_HEADLESS") == "1":
+        # A scheduled unattended run (run_pulse.py, run_session_log.py) is not a working session;
+        # archiving it would queue a non-session for write-up every run.
         return 0
     try:
         payload = json.loads(raw) if raw.strip() else {}
@@ -91,6 +155,8 @@ def main():
     cwd = payload.get("cwd") or ""
 
     pending = os.path.join(base_dir(), "pending")
+    if nothing_new(transcript, session_id, (pending, os.path.join(base_dir(), "archive"))):
+        return 0
     try:
         os.makedirs(pending, exist_ok=True)
     except OSError as e:
@@ -99,23 +165,27 @@ def main():
 
     stamp = datetime.now().strftime("%Y-%m-%d-%H%M%S")
     stem = os.path.join(pending, f"{stamp}-{session_id}")
+    superseded, tail_after = older_copies(pending, session_id)
 
     try:
         shutil.copy2(transcript, stem + ".jsonl")
+        meta = {
+            "session_id": payload.get("session_id"),
+            "cwd": cwd,
+            "reason": reason,
+            "ended_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+            "source_transcript": transcript,
+        }
+        if tail_after:
+            meta["tail_after"] = tail_after
         with open(stem + ".meta.json", "w", encoding="utf-8") as fh:
-            json.dump(
-                {
-                    "session_id": payload.get("session_id"),
-                    "cwd": cwd,
-                    "reason": reason,
-                    "ended_at": datetime.now().astimezone().isoformat(timespec="seconds"),
-                    "source_transcript": transcript,
-                },
-                fh,
-                indent=2,
-            )
+            json.dump(meta, fh, indent=2)
     except OSError as e:
         print(f"session-log: archive failed: {e}", file=sys.stderr)
+        return 0
+
+    # Only once the new copy is safely written: no moment with zero copies queued.
+    remove_copies(superseded, keep=stem)
 
     return 0
 

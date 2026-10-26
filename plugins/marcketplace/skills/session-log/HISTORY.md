@@ -159,3 +159,27 @@ so the hook stays a bare script with no connector access.
 The same audit found tone corrections the user gave in sessions filed under Decisions, or
 nowhere, and so never reaching the voice registers. The note gains a fifth section, Voice
 and tone feedback, verbatim, which kb-dream routes to the edits ledger.
+
+## 2026-10-26 a queue nothing drained (1.10.0)
+
+A whole-system troubleshoot on 26 Oct found the queue at 38 files and no session note since
+20 Oct, so the 24 Oct dream had nothing to curate and vault-pulse had been red four runs.
+Four causes, each fixed where it starts:
+
+- **Nobody drains it.** The hooks only fill the queue, and the SessionStart nudge said not to
+  raise it "unless large or old" without defining either, so no session ever offered. The
+  nudge now names its edges (5 sessions or 3 days, vault-pulse's amber) and past them tells
+  the session to offer the drain once. `scripts/run_session_log.py` runs the skill headless
+  for a scheduler, so the queue no longer depends on anyone remembering; hooks-setup.md,
+  "Draining on a schedule".
+- **One file per end, not per session.** A worktree or background session ends many times
+  and every copy was the full transcript: 38 files held 10 sessions, about 135 MB in a
+  synced folder. `archive_session.py` and the sweep now replace an older pending copy of
+  the same session, carrying `tail_after` forward. The sweep takes a tail only from
+  `archive/`: a pending copy is about to be replaced, so content only it held has to stay
+  in the new copy's tail.
+- **Re-opening an old session re-queued it.** SessionEnd fires again with a few bytes of
+  bookkeeping and no new message; one 28 Sep session was archived six times. The archiver
+  now skips a session whose newest copy has as many user turns. It counts turns rather than
+  comparing timestamps, so a transcript-format change can only cause an extra copy.
+- **`read_transcript.py` died on emoji** under a Windows cp1252 console. It now writes UTF-8.

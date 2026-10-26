@@ -142,9 +142,9 @@ action is additive/reversible per the five-rule contract), so it never returns
   quiet run (stops before any read, records `status: quiet`), and a pass that read the
   knowledge base and found nothing to curate, surface or follow up, which writes one
   `log.md` line saying so and records `status: done`.
-- **A full-replace write must hit the file you meant, and be undoable.** Where the
-  connector writes by item id, take the id from a lookup of the target path and confirm
-  its name and folder - never an id from a folder listing. Never full-replace a file this
-  run hasn't read; keep the read until the write reads back right, and restore from it if not.
+- **A full-replace write must hit the file you meant, and be undoable.** Write by name where
+  the connector can (into the target's folder, by filename, replacing on conflict); else use an
+  item id only once reading that id returns the same text this run read by path. Never
+  full-replace a file this run hasn't read; keep the read until it reads back right, or restore.
 - If there's no write path to the knowledge base at all, still curate-read and put the
   findings in `runs.kb-dream.note`; a read-only dream still reports, never nothing.
