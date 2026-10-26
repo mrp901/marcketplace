@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.10.1] - 2026-10-26
+
+Two folds `kb-dream` proposed from the knowledge base's memory and the user accepted on the
+board (`dream:261015-4`, `dream:261026-1`).
+
+### Changed
+- `shared/voice.md` "The edits ledger": an entry's After side is the artefact the user actually
+  sent or kept, read from where it landed (Sent Items, the posted message, the saved file), never
+  an intermediate paste, and the entry names it. Can't read it: a `Said:` item or nothing.
+- `skills/transcript/SKILL.md` Step 5: after each batch the file's character count must equal
+  `min(chars, 8550 * batches)`; a shortfall is re-pulled by offset and patched. A Haiku subagent
+  dropped 16 characters on 8 Oct that the timestamp check missed. The heredoc's trailing
+  newline per append is named as a defect.
+
 ## [1.10.0] - 2026-10-26
 
 From a whole-system troubleshoot: the session queue had stopped draining (no session note since

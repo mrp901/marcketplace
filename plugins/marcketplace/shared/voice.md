@@ -84,6 +84,8 @@ Register: <existing register name, or the shape in words if none fits>. <Who dra
    - Rule: <the pattern the pair implies, in one line>
 ```
 
+**The After side is the real artefact.** `After` is what the user actually sent or kept, read from where it landed: Sent Items for email, the posted message for chat, the saved file or page for a document. Never an intermediate paste, a draft the user handed back mid-edit, or a version Claude reviewed after them, and the entry's intro names the artefact and where it was read ("read from Sent Items, 15 Oct 17:19"). Where the sent artefact can't be read, record the user's words as a `Said:` item, or nothing; never diff against a stand-in. A 15 Oct 2026 entry diffed an unlabelled paste the user then said was not entirely their voice, and had to be rebuilt from Sent Items; until it was, its rules would have taught every drafting skill the wrong lesson.
+
 A stated instruction with no pair (a session's verbatim tone correction) takes `- Said: "<verbatim>"` in place of Before/After. `Rule` is optional where the pair speaks for itself. `kb-dream` alone adds a `- Promoted: <date> to <register note link>` or `- Proposed: <date> (<dream tag>)` sub-bullet under an item it has acted on, which is what stops a second run re-promoting or re-proposing it; nobody else edits an existing entry.
 
 ## Machine-generated but curatable; human-verified is untouchable

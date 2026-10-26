@@ -1,5 +1,11 @@
 # History
 
+## 2026-10-26 Step 5 checks the assembled length (1.10.1)
+
+On 8 Oct 2026 a Haiku subagent running this skill dropped 16 characters across three long blocks while hand-concatenating the 950-character slices, and reported the file as "roughly" the right length. The timestamp self-check passed; a per-block length diff against `window.__TX` in the live tab found the three short blocks, which were re-pulled and patched. The finding stood in the knowledge base's memory from 8 Oct and was proposed as a fold by `kb-dream` on 15 Oct (`dream:261015-4`); the user accepted it on 26 Oct.
+
+Step 5 now checks the file's character count after every batch against `min(chars, 8550 * batches)`, which localises a loss to one batch and costs one local command per batch rather than any extra page-script call. It also names the heredoc's trailing newline, which the existing "concatenate with nothing between" rule already forbade but the append instruction quietly reintroduced at every batch boundary.
+
 ## 2026-10-13 port to marcketplace
 
 Ported from a private `transcript` skill that was already generic in method; this was a conformance pass, not a redesign. The working technique (probe, time-boxed resumable in-page harvest, 950-character slice pull, nine slices per batch) is unchanged.
