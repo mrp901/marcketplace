@@ -78,7 +78,9 @@ queue, for cron, launchd or Windows Task Scheduler. It exits without starting a 
 
 - **When:** once a working day, after the day's sessions end and before the overnight
   `kb-dream`, so the dream curates fresh notes. Run it on the machine whose `pending/` it
-  drains - the transcripts are local files no cloud routine can read.
+  drains. A cloud routine could reach `pending/` only when it sits in a synced folder, and
+  then only page by page through the kb connector - megabytes per transcript, with no local
+  `read_transcript.py` digest - so a local scheduler is the practical home for this run.
 - **Allowed tools:** a headless session cannot ask for permission, so pass every tool the
   skill touches by name in `--allowed-tools` or `SESSION_LOG_ALLOWED_TOOLS`: file tools and
   `python`, the file move from `pending/` to `archive/`, the wiki read and write tools for
