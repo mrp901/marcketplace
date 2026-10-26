@@ -11,6 +11,7 @@ never goes out twice.
 |---|---|---|
 | briefing | the one briefing message, per `profile.notify` below | yes |
 | every other skill | nothing | yes: `status`, one-line `note`, `ref` to its artefact |
+| any skill whose state document cannot be reached | one line, `<skill> did not run: <what was missing>`, to `fallback_channel_id`, only when the profile was read and `chat` resolved (`onboarding.md`, "Fast-fail") | no - it can't; that is why it posts |
 
 A skill that used to fire its own webhook (the retired idea pipeline, kb-dream,
 skill-health-check) no longer does. Its `runs.<skill>` entry, written every run

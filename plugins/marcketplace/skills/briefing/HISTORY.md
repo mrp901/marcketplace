@@ -238,3 +238,10 @@ it a second writer on every shard and multiply its writes per run. Reads `items`
 `outcomes` from every shard; owns the 1.6.0 to 1.6.0 migration (create missing shards,
 then one shrinking main write, never re-typing more than it removes). See
 `shared/state-schema.md`, "Shards".
+
+## 2026-10-26 a deferred migration says why, in numbers (1.10.0)
+
+The 1.6.0 shared-list migration was deferred on six runs, 19 to 26 Oct, each note saying
+"same reasoning as" the last. None recorded the plan's numbers, so nobody could tell which
+owner's unseeded entries were holding it. Step 1 now writes bytes kept and removed and each
+owner still unseeded, and redoes the plan every run.

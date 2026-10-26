@@ -142,8 +142,15 @@ sweeps five channels and then fast-fails on a missing key has spent the sweep fo
 is always a fast-fail or an interactive ask - it is never inferred, defaulted or left
 blank and proceeded past.
 
-A skill whose state document cannot be resolved has nowhere to record the fast-fail. In
-that case it writes to its own session output only, and stops the same way.
+A skill whose state document cannot be resolved has nowhere to record the fast-fail, and
+nobody reads a scheduled run's session output: the platform marks the run succeeded either
+way (the 23 Oct 2026 `kb-dream` run stopped in 12 seconds with no wiki connector loaded and
+no one heard). So before concluding the wiki tool is absent, search for it once more by its
+connector's name. If it is still missing, write the failure to session output and, when the
+profile was read and a `chat` tool resolved, post one line - `<skill> did not run: <what was
+missing>` - to `profile.notify.fallback_channel_id`, the route `briefing`'s own fast-fail uses
+(`notify.md`); then stop the same way. With neither, session output is all there is, and the
+next `briefing`'s Runs block shows the skill as not having run.
 
 ## Pointer files for bare scripts
 

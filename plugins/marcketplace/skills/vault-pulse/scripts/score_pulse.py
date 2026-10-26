@@ -103,7 +103,7 @@ def main():
     c = m.get("capture") or {}
     if c.get("measured"):
         put("capture.oldest_pending_days", c["oldest_pending_days"],
-            f"{c['pending']} transcript(s) pending, oldest {c['oldest_pending_days']} d")
+            f"{c['pending']} session(s) pending ({c.get('pending_files', c['pending'])} file(s)), oldest {c['oldest_pending_days']} d")
         put("capture.pending", c["pending"], f"{c['pending']} pending")
         put("capture.unarchived_ended_sessions", c["unarchived_ended_sessions"],
             f"{c['unarchived_ended_sessions']} ended substantive session(s) with no pending or archive copy")

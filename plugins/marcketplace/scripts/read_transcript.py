@@ -227,6 +227,13 @@ def list_pending(d):
 
 
 def main():
+    # Transcripts carry emoji and other non-ASCII; a Windows console defaults stdout to cp1252
+    # and the digest died with UnicodeEncodeError on the first one (26 Oct 2026).
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     args = [a for a in sys.argv[1:]]
     full = "--full" in args
     args = [a for a in args if a != "--full"]

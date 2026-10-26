@@ -284,3 +284,13 @@ dreams. Voice promotion and follow-up escalation, which the same check credited,
   wake-up; it now reads it again for every stamp.
 - **"10 pending sessions" where there were 5.** Step 2 named no unit, and the queue holds a
   `.meta.json` sidecar beside each `.jsonl` transcript. It now counts transcripts.
+
+## 2026-10-26 a write rule the connector can meet (1.10.0)
+
+1.9.1 said to take an item id "from a lookup of the target path". The SharePoint connector's
+path read returns the file's text and no id, so the rule could never be met, and the 24 Oct
+run skipped its `log.md` line for exactly that reason; any run with real changes would have
+deferred every log line. The rule now names two routes the connector does have: write by
+name into the target's folder (replace on conflict), or use an id only after reading that id
+returns the same text the run read by path. Same intent as 1.9.1 (never hit a file the run
+did not mean), same line count.

@@ -158,3 +158,26 @@ prune is never mistaken for a deletion. It writes the main page only when `regis
 `proposals`, `glossary` or `machines` changed, and it applies an accepted suppression lift
 itself, since it now owns `suppressions`. The stray `ideas` in its state-write list is
 gone: only idea-spar writes `ideas`. See `shared/state-schema.md`, "Shards".
+
+## 2026-10-26 every shard read, every tick acted on (1.10.0)
+
+The 25 Oct run read the main state document and its own shard, found no `state.items` entry
+for `dream:` and `sweep:` lines posted after 10 Oct, and "treated them as already settled, as
+the 20 Oct run did". Those entries live in their owners' shards, which it never opened; the
+briefing the next morning counted 55 ticked lines with no hub sub-line. SKILL.md already said
+`items` was every shard's, in the State bullet, and the run skimmed past it.
+
+- Step 1 now reads every shard by id as an explicit step and names the shard and item count
+  in the run summary, so a skipped read shows.
+- Step 7 says the hub acts on every tick outside To-do whatever its prefix. A sub-line, or
+  an `outcomes` entry for the tag, settles one (the second writes the missing sub-line
+  rather than dispatching twice when a canvas write failed); a previous run's note never
+  does. A ticked line with no entry anywhere is classified as user-added, per the tick
+  table, then acted on.
+- A tick on a line whose tag date is over 14 days old gets a `needs your tick` confirm line
+  instead of a dispatch, so a two-week-old draft request isn't acted on blind.
+- The quiet exit no longer fires while a ticked line outside To-do lacks a sub-line.
+
+The first runs after this work through the backlog oldest first, within
+`budgets.proactive-router.dispatches` per run; most of the 55 are older than 14 days and get
+a confirm line rather than a dispatch.

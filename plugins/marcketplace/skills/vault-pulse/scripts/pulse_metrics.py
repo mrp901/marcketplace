@@ -126,8 +126,8 @@ def projects_dir():
     return os.path.join(root, "projects")
 
 
-def load_assess():
-    """The plugin's own definition of a substantive session, so it is defined once."""
+def load_pending_sessions():
+    """The plugin's own session helpers (what is substantive, what is one session), defined once."""
     import importlib.util
     here = os.path.dirname(os.path.abspath(__file__))
     path = os.path.normpath(os.path.join(here, "..", "..", "..", "scripts", "pending_sessions.py"))
@@ -136,7 +136,7 @@ def load_assess():
     spec = importlib.util.spec_from_file_location("pending_sessions", path)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    return mod.assess
+    return mod
 
 
 def capture(now, days):
@@ -149,9 +149,13 @@ def capture(now, days):
     ages = [(now - datetime.fromtimestamp(os.path.getmtime(p))).total_seconds() / 86400 for p in pending]
     held = " ".join(os.listdir(pend) if os.path.isdir(pend) else []) + " " + \
            " ".join(os.listdir(arch) if os.path.isdir(arch) else [])
-    assess = load_assess()
-    if assess is None:
+    helpers = load_pending_sessions()
+    if helpers is None:
         return {"measured": False, "why": "scripts/pending_sessions.py not found beside the plugin"}
+    assess = helpers.assess
+    # Age from when each session first entered the queue (1.10.0 `queued_since`), so a long
+    # session that keeps ending does not reset the backlog's age.
+    ages = [helpers.queued_age_days(pend, os.path.basename(p)) for p in pending]
     cutoff = now - timedelta(days=days)
     orphans = []
     for p in glob.glob(os.path.join(projects_dir(), "*", "*.jsonl")):
@@ -169,7 +173,10 @@ def capture(now, days):
         if substantive:
             orphans.append({"session": stem, "typed": typed, "writes": writes,
                             "ended": mt.isoformat(timespec="minutes")})
-    return {"measured": True, "pending": len(pending),
+    # One per session, not per file: before 1.10.0 every end of a long-lived session queued another
+    # full copy, and 38 files held 10 sessions (26 Oct 2026).
+    sessions = helpers.session_stems(os.path.basename(p) for p in pending)
+    return {"measured": True, "pending": len(sessions), "pending_files": len(pending),
             "oldest_pending_days": round(max(ages), 1) if ages else 0.0,
             "unarchived_ended_sessions": len(orphans), "unarchived": orphans[:10]}
 
