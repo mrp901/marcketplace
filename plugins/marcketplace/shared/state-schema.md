@@ -314,6 +314,7 @@ the board has nothing to race and runs as normal.
 | 1.7.0 | 1.8.0 | No state change to the main document. `vault-pulse` creates its own shard (`runs.vault-pulse`, `cursors.vault-pulse`) on its first run, per **Shards**. `briefing` writes `installed_version` 1.8.0 |
 | 1.8.0 | 1.9.0 | No state change. A runner script and a session-start reminder were added for `vault-pulse`; both read files, neither writes state. `briefing` writes `installed_version` 1.9.0 |
 | 1.9.0 | 1.10.0 | No state change. `session-log` gains a headless runner and the queue keeps one copy per session; both are local files, neither touches state. `briefing` writes `installed_version` 1.10.0 |
+| 1.10.0 | 1.10.1 | No state change (two instruction folds: `voice.md`'s edits-ledger After side, `transcript`'s Step 5 length check). `briefing` writes `installed_version` 1.10.1 |
 
 A migration is always **additive**: it may add a new key with its default value, or
 reshape a key it explicitly names, but it never deletes a key it does not understand.
