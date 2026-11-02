@@ -7,9 +7,20 @@ never summarise, and for how the pointer file below gets written.
 ## Working the queue
 
 ```bash
-python3 ${CLAUDE_PLUGIN_ROOT}/scripts/read_transcript.py --list      # what's waiting
-python3 ${CLAUDE_PLUGIN_ROOT}/scripts/read_transcript.py <file>      # digest one
+P=python3; $P -c '' 2>/dev/null || P=python   # python3 can be the Windows Store stub; the hooks probe the same way
+$P ${CLAUDE_PLUGIN_ROOT}/scripts/read_transcript.py --list      # what's waiting
+$P ${CLAUDE_PLUGIN_ROOT}/scripts/read_transcript.py <file>      # digest one
 ```
+
+**Check for a coverage block first.** When a digest carries a "Session-log coverage" section, a
+session-log run inside that session (a Skill call, or the user's `/session-log` slash command)
+already wrote up everything before it. If the section says the tail is below the sweep's
+threshold, confirm the live run's `kb.paths.sessions` note and index line exist and archive the
+session without writing another note; if the tail is substantive, write up the tail only and
+update the earlier note in place. Since 1.10.2 both hooks apply the same test, so a session
+that covered itself is archived straight to `archive/` and never reaches `pending/`; a
+queue from before that may still hold some. On 2 Nov 2026, two of three queued sessions
+were already covered.
 
 Work through them oldest first, writing one note each per the main flow, then move the
 processed file from `pending/` to `archive/` so it isn't picked up again - set
@@ -51,7 +62,9 @@ one with no queued or archived copy into `pending/`, with a sidecar whose `reaso
   A trivial session stays out; the "is this worth a note?" gate still applies to what gets
   in.
 - **Already covered:** a copy of the same session in `pending/` or `archive/` at least as
-  new as the transcript, or a `session-log` run inside the transcript itself. A session
+  new as the transcript, or a `session-log` run inside the transcript itself (a Skill call or
+  the `/session-log` slash command, which appears as a `<command-name>` echo in a user message
+  and not as a tool call; before 1.10.2 only the Skill call counted). A session
   resumed after an `archive/` copy or a `session-log` run is judged on its tail alone (a
   `pending/` copy is replaced, not built on, so it never starts a tail), and the sidecar's
   `tail_after` says where the uncovered part starts - write up only that part, updating the earlier note in

@@ -1,5 +1,12 @@
 # session-log - design rationale (for editors; not loaded at runtime)
 
+- 1.10.2: a session that ran session-log inside itself is not queued for a second write-up.
+  On 2 Nov 2026, two of the three queued sessions had written their own notes; one was queued
+  because the sweep only counted a `Skill` tool call and not the `/session-log` slash command,
+  the other because SessionEnd checked nothing. Both hooks now share the sweep's `assess`, and
+  the digest prints a coverage block so a queue left from before still resolves in one look.
+  `python3` can be the Windows Store stub, so the skill's commands probe as the hooks do.
+
 - The "is this worth a note" gate exists because the source vault's own conventions warn
   against notes nobody links to and against letting capture accumulate. Unchanged in the
   port.

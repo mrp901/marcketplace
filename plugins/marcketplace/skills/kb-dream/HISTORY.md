@@ -1,5 +1,11 @@
 # kb-dream - design rationale (for editors; not loaded at runtime)
 
+- 1.10.2: pass 1 also fills missing frontmatter on inbox notes it leaves in place (`fold-261002-1`).
+  The user's standing instruction (`pr:260927-2`, 30 Sep) was to always fill YAML into inbox files
+  that lack it, but pass 1 only filled it when filing, so ambiguous inbox notes stayed bare. The
+  edit is the one the 2 Oct dream drafted; it stays inside pass 1's act rule (mechanical, reversible,
+  never a `verified` note) and leaves filename, body and location alone.
+
 Carried from `source/vault-dream/HISTORY.md`, generalised past the one vault it names:
 
 - Modelled on the idea of a periodic "dream" over a knowledge base - read the recent past
