@@ -123,6 +123,35 @@ def _files_from(inp):
     return found
 
 
+def coverage_note(path):
+    """Say whether a session-log run inside this transcript already wrote the session up.
+
+    Uses the sweep's own `assess` (same scripts directory), so the answer matches what the hooks
+    decided. Best effort: any failure prints nothing, as a digest without it is still a digest.
+    """
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import pending_sessions as ps
+
+        substantive, typed, writes, _first, _cwd, after = ps.assess(path, 0)
+    except Exception:
+        return
+    if not after:
+        return
+    from datetime import datetime
+
+    when = datetime.fromtimestamp(after).astimezone().isoformat(timespec="seconds")
+    print("\n## Session-log coverage")
+    print(f"  A session-log run is inside this transcript (last at {when}), so what came before")
+    print("  it is already written up live. Since then: "
+          f"{typed} typed user messages, {writes} writes.")
+    if substantive:
+        print("  That tail is substantive: write up the tail only, updating the earlier note.")
+    else:
+        print("  That tail is below the sweep's threshold: check the live run's Sessions/ note and")
+        print("  index line exist, then archive without writing a new note.")
+
+
 def digest(path, full=False):
     limit = None if full else TRUNCATE
     turns = []
@@ -191,6 +220,8 @@ def digest(path, full=False):
                 print(f"  {f}   [{', '.join(sorted(via))}]")
         print("\n  Only the CHANGED list belongs in a session note's 'Changes to the")
         print("  knowledge base' table. Reading a file is not a change to it.")
+
+    coverage_note(path)
 
     print("\n## Conversation")
     for role, text in turns:

@@ -149,6 +149,25 @@ def nothing_new(transcript, session_stem, dirs):
         return False
 
 
+def covered_by_session_log(transcript, session_stem, archive):
+    """True when a session-log run inside the transcript already wrote up everything worth
+    writing up: the run was found, and what came after it is below the sweep's threshold.
+
+    Without this, SessionEnd queued every session it saw, including ones that had written their
+    own note, and each cost a drain pass to rediscover that (two of three on 2 Nov 2026). The
+    judgement is the sweep's own `assess`, so the two hooks cannot disagree. Unsure queues it.
+    """
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import pending_sessions as ps
+
+        handled = ps._covered_until(session_stem, (archive,))
+        ok, _typed, _writes, _first, _cwd, after = ps.assess(transcript, handled)
+        return after > handled and not ok
+    except Exception:
+        return False
+
+
 def main():
     raw = sys.stdin.read()
     if os.environ.get("VAULT_PULSE_RUN") == "1" or os.environ.get("MARCKETPLACE_HEADLESS") == "1":
@@ -182,8 +201,18 @@ def main():
         print(f"session-log: cannot create {pending}: {e}", file=sys.stderr)
         return 0
 
+    archive = os.path.join(base_dir(), "archive")
+    covered = covered_by_session_log(transcript, session_id, archive)
+    target = pending
+    if covered:
+        try:
+            os.makedirs(archive, exist_ok=True)
+            target = archive
+        except OSError:
+            covered = False  # cannot archive it: queue it, as before
+
     stamp = datetime.now().strftime("%Y-%m-%d-%H%M%S")
-    stem = os.path.join(pending, f"{stamp}-{session_id}")
+    stem = os.path.join(target, f"{stamp}-{session_id}")
     superseded, tail_after, queued_since = older_copies(pending, session_id)
     now = datetime.now().astimezone().isoformat(timespec="seconds")
 
@@ -197,7 +226,9 @@ def main():
             "queued_since": queued_since or now,
             "source_transcript": transcript,
         }
-        if tail_after:
+        if covered:
+            meta["covered_by"] = "session-log run inside the transcript"
+        elif tail_after:
             meta["tail_after"] = tail_after
         with open(stem + ".meta.json", "w", encoding="utf-8") as fh:
             json.dump(meta, fh, indent=2)

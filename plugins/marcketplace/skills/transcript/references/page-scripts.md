@@ -1,6 +1,6 @@
 # Page scripts
 
-The three snippets the Flow runs inside the recording page, verbatim from the working method. Run each with `browser: run page script` against the tab recorded in Step 1. Never edit them; the selectors and timings are deliberate (see the end of this file).
+The snippets the Flow runs inside the recording page (probe, harvest, resume check, checksum check), verbatim from the working method. Run each with `browser: run page script` against the tab recorded in Step 1. Never edit them; the selectors and timings are deliberate (see the end of this file).
 
 ## Probe (Step 3)
 
@@ -84,6 +84,30 @@ blocks.forEach(b => { if (b.sp) sp[b.sp] = (sp[b.sp] || 0) + 1; });
 ```js
 ({ store: window.__STORE ? window.__STORE.size : 0, tx: window.__TX ? window.__TX.length : 0 })
 ```
+
+## Checksum check (Step 5, after each batch)
+
+Run in the page with the batch's first offset as `START` (0, 8550, 17100, ...) and its slice count as `N` (9, or fewer for the last batch). It returns the checksum of each prefix of the batch at the 950-character boundaries.
+
+```js
+const h = s => { let a = 0; for (let i = 0; i < s.length; i++) a = (a * 31 + s.charCodeAt(i)) % 1000000007; return a; };
+const START = 0, N = 9;
+Array.from({ length: N }, (_, k) => h(window.__TX.slice(START, START + 950 * (k + 1)))).join(',')
+```
+
+Run the same sum over the batch file locally and compare. The page hashes UTF-16 code units, so the local side must too (it matters only for characters outside the Basic Multilingual Plane, such as emoji):
+
+```python
+def h(t):
+    a, b = 0, t.encode('utf-16-le')
+    for i in range(0, len(b), 2):
+        a = (a * 31 + (b[i] | b[i + 1] << 8)) % 1000000007
+    return a
+# s is the batch file's text; k is the same 1..N as the page side
+print(','.join(str(h(s[:950 * k])) for k in range(1, N + 1)))
+```
+
+The first position where the two lists differ is the 950-character slice to re-pull and patch; the earlier positions are known good.
 
 ## Why the fragile-looking bits are that way
 
