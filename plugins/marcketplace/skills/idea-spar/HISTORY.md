@@ -1,5 +1,15 @@
 # idea-spar - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-03 local stamps; seed the shard (1.10.3)
+
+The health check found `runs.idea-spar.last_run_at` and `cursors.idea-spar.roadmap_checked_at`
+stamped `+00:00`. `state-schema.md` says every stamp is the current time in `org.timezone`
+with its offset, so the Next watch's state write now says so. The JQL `updated >=` clause is
+built from the cursor as wall-clock time in `org.timezone` (`"yyyy-MM-dd HH:mm"`), because
+Jira reads JQL dates in the user's profile timezone. Past UTC cursors only widened the window
+by the offset (harmless overlap), so no state conversion is needed. The state write also
+names the shard seed (shard created at 1.3.0, before seeding existed).
+
 ## 2026-10-02 replaces idea-scout, idea-deep-dive and idea-wireframe
 
 The three skills ran as a pipeline on their own schedule: scout picked the next

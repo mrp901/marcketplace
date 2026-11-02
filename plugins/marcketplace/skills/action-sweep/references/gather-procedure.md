@@ -42,6 +42,9 @@ line; the rest are the briefing's Tracker snapshot's job, not this skill's.
 
 ## 4. Notetaker action items
 
+Skip this source silently when `notetaker.service` is `none`: no ToolSearch, no "couldn't
+reach" note. A one-word "notetaker: none" in the run note is enough.
+
 `notetaker: list meetings` within `notetaker.lookback_days`, then `notetaker: transcript`
 per meeting (via the subagent) to pull action items the user committed to in that
 meeting. Often the highest-signal source and the easiest to lose: a spoken commitment has
@@ -51,7 +54,8 @@ discipline as every other source.
 ## 5. Commitments the user made in chat (since `chat_since`)
 
 `chat: search messages` with `from:me after:<chat_since>` (the form is documented in
-`../../../shared/tool-capabilities.md`). The subagent reads each hit and returns only
+`../../../shared/tool-capabilities.md`), paged per "Paging the chat searches" below. The
+subagent reads each hit and returns only
 first-person promises with a concrete object: "I'll send the figures Friday", "leave the
 rollback with me", "I'll raise a ticket for that". An acknowledgement ("sounds good",
 "will do" with no object) is not a commitment. Each commitment routes to `to-do` unless
@@ -71,6 +75,15 @@ something, or answers a question the user asked and now awaits their reply. Rout
 mentions the user has neither replied to nor reacted to. A bare "cc" mention with no ask
 is dropped, not listed. Routes to `chat-reply`, or `to-do` when the mention hands the user
 a task rather than a question.
+
+## Paging the chat searches (sources 5, 6 and 7)
+
+A search returns one page. Read further pages until a hit is older than `chat_since` or
+`budgets.action-sweep.chat_pages` (default 3) pages have been read, per search. If the cap
+is hit with hits on the last page still unread, do not advance
+`cursors.action-sweep.chat_since` past the unread range: leave it where it was and write "chat capped at N
+pages" in `runs.action-sweep.note`, so the next run retries them rather than losing them
+silently. A source that ran to its end advances as normal.
 
 ## Dedupe across every source
 

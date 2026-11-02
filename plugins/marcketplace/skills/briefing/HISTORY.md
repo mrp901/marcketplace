@@ -1,5 +1,13 @@
 # briefing - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-03 notetaker none; migration seeds on every write (1.10.3)
+
+`notetaker.service: none` turns the prep lines off silently (no ToolSearch, no failure note).
+`references/migration.md` said an owner seeds its shard "on its first write"; `state-schema.md`
+and `onboarding.md` say every write. The 1.3.0 shard owners never seeded, so the plan deferred
+every run. The text now says every write, and each of those four skills names the step in its
+own state write.
+
 - The user's chat identity was confirmed by asking the chat connector for its own
   authenticated identity (no user id passed) and matching the returned email against the
   configured `user.email`. Treat as certain once resolved by onboarding step 4.

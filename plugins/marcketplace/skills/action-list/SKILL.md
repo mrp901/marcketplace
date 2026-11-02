@@ -28,7 +28,8 @@ else. Any `unattended` invocation fast-fails: both modes need the user.
   see `../../shared/voice.md`), `budgets.models.search`, `budgets.models.worker`,
   `budgets.models.critic`.
 - Tool categories: `chat` (search messages, read thread, read canvas), `email` (search),
-  `calendar` (list today), `notetaker` (list meetings, transcript), `tracker` (search
+  `calendar` (list today), `notetaker` (list meetings, transcript; skipped when
+  `notetaker.service` is `none`), `tracker` (search
   issues, get issue; add comment and create issue in `work` only, each on its own yes),
   `kb` (search, read, write), `codehost` (list merged pull requests; optional),
   `codebase` (search, read; optional, `work` only).
@@ -66,8 +67,8 @@ one does.
    calendar for the free time between now and the next commitment; size the list to it.
 2. **Extract.** One search-tier subagent per source, in parallel: the user's own chat
    commitments, unanswered mentions and threads; email addressed to them; their open
-   tracker work and tickets that mention them; today's meeting transcripts; the kb inbox
-   and the open threads of recent `kb.paths.sessions` notes; merged pull requests that
+   tracker work and tickets that mention them; today's meeting transcripts (none when
+   `notetaker.service` is `none`); the kb inbox and the open threads of recent `kb.paths.sessions` notes; merged pull requests that
    involve them. Each returns every candidate, quoted, with a link and a timestamp.
 3. **Verify before ranking.** Check each candidate's source is still open. A later reply,
    a closed ticket or a sent email moves it to "Dropped" with the evidence.

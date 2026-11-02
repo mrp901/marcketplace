@@ -21,14 +21,15 @@ it never sends anything. Resolve profile, state and tools per
   `tracker.my_work_jql`, `ideas.project_key`, `ideas.issue_type`, `ideas.area_field`,
   `ideas.area_value`, `kb.name`, `kb.kind`, `kb.conventions_file`, `kb.types_registry`,
   `kb.link_style`, `kb.frontmatter_required`, `kb.paths.drafts`, `kb.paths.log`,
-  `notetaker.lookback_days`, `surface.id`, `surface.url`, `budgets.action-sweep`
+  `notetaker.service` (none skips the source), `notetaker.lookback_days`, `surface.id`,
+  `surface.url`, `budgets.action-sweep`
   (`canvas_guard`, `cold_start_days`, `targeted_search_per_todo`, and `thread_reads`,
-  optional, default 6),
+  optional, default 6, and `chat_pages`, optional, default 3),
   `budgets.models.search`.
 - Tools: `chat` (search messages, read thread; `read canvas`/`update canvas` in sweep
   mode only, never from a handler mode), `tracker` (search issues by JQL, get issue,
   create issue, add comment; the last two only in `push` mode), `kb` (search, read,
-  write), `notetaker` (list meetings, transcript).
+  write), `notetaker` (list meetings, transcript; skipped when `notetaker.service` is `none`).
 - State: `cursors.action-sweep` (`scanned_through`, `chat_since`), `items` (dedupe against
   every shard's; its own `sweep:` lines), briefing's `closed`, `runs.action-sweep`
   (`cursors`, `runs` and its `sweep:` items in its shard).
@@ -39,7 +40,8 @@ it never sends anything. Resolve profile, state and tools per
 Per sweep run: one canvas search plus up to `budgets.action-sweep.canvas_guard` canvas
 reads, one mention-search JQL call plus its per-issue comment scans
 (`references/mention-search-method.md`), one assigned-tickets JQL call, three chat
-searches (`references/gather-procedure.md`), one notetaker list call plus one transcript
+searches, each read up to `budgets.action-sweep.chat_pages` pages
+(`references/gather-procedure.md`), one notetaker list call plus one transcript
 per meeting in `notetaker.lookback_days`. Every thread or transcript body is read by a
 `budgets.models.search`-tier subagent, capped at `budgets.action-sweep.thread_reads`
 reads per run; at most `targeted_search_per_todo` chase-search per to-do. One surface
@@ -70,8 +72,13 @@ and `runs.action-sweep.status: quiet` and stop, with no thread read and no board
    a tick causes, `ref` the permalink, ticket or meeting. Shapes and worked examples in
    `references/output-format.md`. No note is written; the line is the record.
 6. **Stop.** Write its shard: `cursors.action-sweep` (both cursors = this run's start
-   time), its own `sweep:` items (this run's added, tags in briefing's `closed` pruned),
-   `runs.action-sweep` (`note`: finds by source; `ref`: `surface.url`).
+   time, except `chat_since` stays put when a chat search hit the `chat_pages` cap with
+   hits unread; see `references/gather-procedure.md`), its own `sweep:` items (this run's
+   added, tags in briefing's `closed` pruned),
+   `runs.action-sweep` (`note`: finds by source; `ref`: `surface.url`). The write first
+   copies in any of its own `sweep:` items the main document still holds and its shard
+   lacks (bar tags in `closed`), per `../../shared/state-schema.md` "Shards"; the shared
+   rule alone has been skipped.
 
 ## Handler mode
 

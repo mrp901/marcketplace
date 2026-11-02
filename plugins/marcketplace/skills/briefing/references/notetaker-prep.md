@@ -6,7 +6,8 @@ budget beyond what's already allowed.
 
 ## When it fires
 
-Only when `profile.notetaker.prep_lines` is true. If false or unset, skip this step entirely
+Only when `profile.notetaker.prep_lines` is true and `profile.tools.notetaker.service` is
+not `none`. If false, unset or `none`, skip this step entirely, silently
 - no notetaker call, no `prep:` lines, and step 4's calendar sub-bullet for prep never
 appears.
 

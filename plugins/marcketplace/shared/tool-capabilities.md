@@ -49,6 +49,11 @@ The starting set below is not exhaustive on its own; it is extended with every v
 
 A category a skill doesn't use is simply absent from its `## Needs` - this table is the full catalogue across all the skills, not a per-skill checklist.
 
+`notetaker` may be `service: none` (the user pulls transcripts by hand). That is "no such
+source", not a failure: a skill skips every notetaker step silently, with no `ToolSearch`
+and no "couldn't reach" note, and onboarding never fast-fails or asks on it. A one-word
+"notetaker: none" in the run note is fine.
+
 ## Chat search forms
 
 `chat: search messages` takes a free-text query plus filters. The forms the plugin relies on, in the reference (Slack-shaped) syntax; another chat service's connector maps them to its own equivalents at resolution time, and a form the connector cannot express degrades to "not searched" for that source, never to a guess:

@@ -42,7 +42,10 @@ pages or files in this context. Caps are per lens, per session or run. Guideline
 
 **Quiet exit (Next watch):** no idea newly in a `next_roadmap_values` slot since
 `roadmap_checked_at` and none with `pack_pending` means write the cursor,
-`runs.idea-spar.status: quiet`, and stop before any kb, code or web read.
+`runs.idea-spar.status: quiet`, and stop before any kb, code or web read. Every stamp
+(`last_run_at`, `roadmap_checked_at`) is the current time in `org.timezone` with its
+offset, never UTC (`references/next-watch.md` step 6); the same write seeds its shard per
+`state-schema.md` "Shards" (`references/next-watch.md` step 6).
 
 ## The known packet
 

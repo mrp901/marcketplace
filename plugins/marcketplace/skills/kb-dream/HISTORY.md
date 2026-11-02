@@ -1,5 +1,12 @@
 # kb-dream - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-03 name the shard seed in the state write (1.10.3)
+
+Same cause as proactive-router: shard created at 1.3.0, before seeding existed, so its own
+`dream:` items, `tally`, `suppressions`, `outcomes` and `voice_verdicts` were never copied
+across and briefing's 1.6.0 migration deferred every run. Step 11 now says the write seeds
+first, per `state-schema.md` "Shards".
+
 - 1.10.2: pass 1 also fills missing frontmatter on inbox notes it leaves in place (`fold-261002-1`).
   The user's standing instruction (`pr:260927-2`, 30 Sep) was to always fill YAML into inbox files
   that lack it, but pass 1 only filled it when filing, so ambiguous inbox notes stayed bare. The

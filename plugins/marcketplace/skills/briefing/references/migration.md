@@ -111,7 +111,7 @@ An entry with no installed owner (a retired skill's tag, a `voice_edits` entry n
 names) stays where it is; every reader still unions it, and no step deletes it.
 
 Owners do most of this themselves: from 1.6.0 a skill seeds a key its shard lacks from its
-own entries in the main document on its first write, and from then on writes only its
+own entries in the main document on every write, and from then on writes only its
 shard (onboarding step 6). This migration does the rest, inside a run's ordinary state
 write, on every briefing run until the main document holds no owned entry:
 

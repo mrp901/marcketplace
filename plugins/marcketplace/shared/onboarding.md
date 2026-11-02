@@ -75,6 +75,10 @@ key or tool category still missing:
 
 ## Step 4 - Tool discovery
 
+A category whose `profile.tools.<category>.service` is `none` is resolved by that value:
+skip it here, with no `ToolSearch`, and do not count it as missing in step 3 or as a
+fast-fail (today this is `notetaker`; `tool-capabilities.md` says how a skill treats it).
+
 For each tool category this skill needs: if `profile.tools.<category>.service` names a
 service, `ToolSearch` with `+<service> <verb>` (the verb from `tool-capabilities.md`) to
 find and cache the concrete tool prefix in `state.machines[<machine_id>].tools`. If no
