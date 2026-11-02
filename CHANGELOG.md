@@ -6,6 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.10.3] - 2026-11-03
+
+From a skill-health-check run. State shape is unchanged; one optional budget key is new.
+
+### Fixed
+- `action-sweep`: the three chat sources read page 1 only. They now read until a hit predates
+  `chat_since` or `budgets.action-sweep.chat_pages` (new, default 3) pages; a capped run leaves
+  `chat_since` where it was and notes "chat capped at N pages" so the next run retries.
+- `proactive-router`, `action-sweep`, `kb-dream`, `idea-spar`: shards created at 1.3.0 never
+  seeded, so briefing's 1.6.0 migration deferred every run. Each skill's state write now names
+  the seed step, and `briefing`'s `references/migration.md` says "on every write", matching
+  `state-schema.md`.
+- `idea-spar`: stamped `last_run_at` and `roadmap_checked_at` as UTC. Now `org.timezone` with
+  its offset, and the JQL `updated >=` date is wall-clock time in `org.timezone`.
+- `session-log`: never wrote `runs.session-log`. Step 8 now writes it every run in the standard
+  shape.
+
+### Changed
+- `notetaker.service` may be `none` (`shared/profile-schema.md`, `tool-capabilities.md`,
+  `onboarding.md` step 4). `action-sweep`, `briefing` prep lines and `action-list` skip the
+  source silently: no ToolSearch, no "couldn't reach" note, no fast-fail or ask.
+
 ## [1.10.2] - 2026-11-02
 
 From the 2 Nov 2026 queue drain (a Teams recording transcribed, then three queued sessions written

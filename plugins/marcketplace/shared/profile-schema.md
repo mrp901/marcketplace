@@ -43,7 +43,7 @@ tools:                     # which SERVICE serves each category; prefixes live i
   tracker: {service: jira}
   ideas: {service: jira_product_discovery}
   wiki: {service: confluence | sharepoint}
-  notetaker: {service: granola | otter | fireflies | teams, tested: false}
+  notetaker: {service: granola | otter | fireflies | teams | none, tested: false}
   kb: {service: sharepoint | device_bridge | filesystem}
   codebase: {service: device_bridge | filesystem | none}
   codehost: {service: github | none}                     # optional; action-list reads merged pull requests
@@ -156,7 +156,7 @@ voice:
 budgets:
   briefing: {connector_calls: 3, notetaker_calls: 1, surface_reads: 1, surface_writes: 1, feed_issue_keys: 20}
   proactive-router: {searches: 5, thread_reads: 6, dispatches: 3}
-  action-sweep: {canvas_guard: 5, cold_start_days: 7, targeted_search_per_todo: 1, thread_reads: 6}
+  action-sweep: {canvas_guard: 5, cold_start_days: 7, targeted_search_per_todo: 1, thread_reads: 6, chat_pages: 3}
   idea-ticket:    {investigation_calls: 4, web_searches: 1, audit_rounds: 2}
   idea-spar: {web_searches: 4, code_reads: 8, kb_reads: 3, findings_per_lens: 5, sketch_options: 3, next_per_run: 1}
   kb-dream: {incremental_reads: 25, sessions_incremental: 5, sessions_full: 10, reviews: monthly}
@@ -206,7 +206,7 @@ budgets:
 | `ideas.roadmap_field` | idea-spar (Next watch) | discover (create-metadata) | the trigger, never a qualifier |
 | `ideas.qualifiers` | idea-spar (Next watch), idea-ticket | default | first-match gate, generalised from the source's single hardcoded gate |
 | `ideas.next_roadmap_values` | idea-spar (Next watch) | default | the slots that mean "about to be worked"; moving into one is the only roadmap change that produces a pack |
-| `notetaker.lookback_days` | action-sweep, briefing, action-list | default | |
+| `notetaker.lookback_days` | action-sweep, briefing, action-list | default | not read when `tools.notetaker.service` is `none` |
 | `notetaker.prep_lines` | briefing | default | |
 | `kb.name` | kb-note, session-log, kb-dream, idea-spar, action-sweep, action-list | ask | |
 | `kb.kind` | kb-note, session-log, kb-dream, action-list, jira-story | ask | |

@@ -1,5 +1,13 @@
 # session-log - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-03 write runs.session-log (1.10.3)
+
+Step 8 wrote only `cursors.session-log.last_pending_processed`, so the skill never recorded a
+run. Its shard ended up with an improvised `{status, at, note}` that readers keyed on
+`last_run_at` (briefing's Runs block, vault-pulse heartbeats) could not see. Step 8 now
+writes `runs.session-log: {last_run_at, status, machine, note, ref}` every run, per
+`state-schema.md`, as `onboarding.md` step 6 already required.
+
 - 1.10.2: a session that ran session-log inside itself is not queued for a second write-up.
   On 2 Nov 2026, two of the three queued sessions had written their own notes; one was queued
   because the sweep only counted a `Skill` tool call and not the `/session-log` slash command,

@@ -1,5 +1,10 @@
 # action-list - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-03 notetaker none (1.10.3)
+
+The user has no notetaker. With `notetaker.service: none` the transcript source is skipped
+silently, not reported as unreachable.
+
 ## 2026-10-13 built from a working afternoon
 
 The user had Claude build a ranked "post-lunch" action list with ready drafts into the
