@@ -57,7 +57,10 @@ one-line `kb.paths.log` entry instead of a note.
    abandoned branches (a tried-and-reverted approach is more useful recorded than smoothed
    away). For an archived transcript: run
    `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/read_transcript.py <path>` rather than parsing
-   the JSONL by hand - see `references/pending-sessions.md`. Distinguish what was
+   the JSONL by hand (on Windows `python3` can be the Microsoft Store stub, which prints
+   "Python was not found": probe first with `P=python3; $P -c '' 2>/dev/null || P=python`,
+   as the hooks do) - see `references/pending-sessions.md`. A "Session-log coverage" block
+   in the digest means the session already wrote itself up: act on it as that block says. Distinguish what was
    *discussed* from what was *done*: a file only read is not a change, a plan described
    but not executed is an open thread, not an outcome.
 3. **Check the live type registry**, not a cached one. `kb.types_registry`'s live file is

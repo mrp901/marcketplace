@@ -6,6 +6,37 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.10.2] - 2026-11-02
+
+From the 2 Nov 2026 queue drain (a Teams recording transcribed, then three queued sessions written
+up) and the open `kb-dream` fold. Nothing here changes state.
+
+### Fixed
+- `scripts/pending_sessions.py`, `scripts/archive_session.py`: a `/marcketplace:session-log` typed
+  as a slash command is a `<command-name>` echo in a user message, not a Skill tool call, and the
+  sweep only counted the tool call, so a session that had written itself up was queued again.
+  `assess` now counts both. SessionEnd had no coverage check at all: it now runs the same
+  `assess` and, when a session-log run covers everything substantive, archives straight to
+  `archive/` (sidecar `covered_by`) instead of `pending/`. Unsure still queues it. Two of three
+  sessions drained on 2 Nov were already covered.
+- `skills/session-log` (`SKILL.md`, `references/pending-sessions.md`): `python3` can be the
+  Windows Store stub ("Python was not found"), so the read-transcript commands failed on that
+  machine. They now probe as the hooks do (`P=python3; $P -c '' 2>/dev/null || P=python`).
+
+### Changed
+- `scripts/read_transcript.py`: a "Session-log coverage" block in the digest says when a
+  session-log run is inside the session, how much came after it, and what to do (archive without a
+  note, or write the tail only). Silent when there is no run.
+- `skills/transcript/SKILL.md` Step 5, `references/page-scripts.md`: each batch is written with the
+  file-write tool, not a shell heredoc (apostrophes broke the heredoc in two runs); the tool's own
+  label between batch results is named and stripped; each batch is checked by prefix checksum at
+  every 950-character boundary as well as by length, which finds the bad slice (a 4-character
+  error on 2 Nov); Step 4 says the page can lose `window.__TX` mid-run and a re-harvest rebuilds
+  the same text.
+- `skills/kb-dream/references/curation-passes.md` pass 1: also fill missing
+  `kb.frontmatter_required` keys on every other inbox note, never a `verified` one. This is
+  `fold-261002-1`, drafted in the 2 Oct dream from the user's standing instruction (`pr:260927-2`).
+
 ## [1.10.1] - 2026-10-26
 
 Two folds `kb-dream` proposed from the knowledge base's memory and the user accepted on the

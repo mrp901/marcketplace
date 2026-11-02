@@ -59,6 +59,9 @@ MUTATING = {"Edit", "Write", "MultiEdit", "NotebookEdit"}
 WRITE_VERBS = ("create", "update", "edit", "send", "commit", "publish", "add", "transition")
 NOT_TYPED = ("<", "Caveat:", "[Request interrupted")
 HEADLESS_RE = re.compile(r"^/marcketplace:[\w-]+\b.*\bunattended\b")
+# A session-log run typed as a slash command shows up in the transcript as a user message
+# carrying this echo, not as a Skill tool call; both mean the work before it is written up.
+SLASH_RUN_RE = re.compile(r"<command-name>/?(?:[\w-]+:)?session-log</command-name>")
 
 # ---- backlog nudge: past either edge the session is told to offer the drain, not wait to be
 # asked. The same edges vault-pulse scores amber (capture.pending, capture.oldest_pending_days).
@@ -179,8 +182,9 @@ def _covered_until(session_id, dirs):
 def assess(path, after):
     """Count typed user messages and writes made after `after` (epoch).
 
-    A session-log Skill call inside the transcript moves `after` forward: what
-    came before it was written up live. Only lines that can matter are parsed.
+    A session-log run inside the transcript (a Skill call, or the user's
+    /session-log slash command) moves `after` forward: what came before it was
+    written up live. Only lines that can matter are parsed.
     """
     typed = writes = 0
     first_text = ""
@@ -226,6 +230,12 @@ def assess(path, after):
             else:
                 text = content if isinstance(content, str) else ""
             text = text.strip()
+            if SLASH_RUN_RE.search(text):
+                if ts:
+                    after = max(after, ts)
+                    typed = writes = 0
+                    first_text = ""
+                continue
             if not typed and HEADLESS_RE.match(text):
                 # A scheduled unattended run (run_pulse.py, run_session_log.py), not a working session.
                 return False, 0, 0, "", cwd, after
