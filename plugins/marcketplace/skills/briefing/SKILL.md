@@ -23,7 +23,7 @@ one whose `installed_version` is 1.1.0 retires the old idea lines first.
 - Tools: `chat` (read canvas, update canvas, search messages, search users, send message),
   `calendar` (list today), `tracker` (search issues by JQL, also for the feed
   cross-check), `notetaker` (list meetings, transcript), optional, only called when
-  `notetaker.prep_lines` is true.
+  `notetaker.prep_lines` is true and `notetaker.service` is not `none`.
 - State: `cursors.briefing`, `glossary`, `nicknames`, `items`, `outcomes`, `runs` (every
   skill's, from the main document and every shard), `closed` and its own `items` (in its
   shard), `shards`, `installed_version`.
@@ -79,8 +79,8 @@ Fires more than once a day on a changing schedule; never assume a time of day.
    Chat (`chat: search messages`, since each channel's `last_seen`, excluding this skill's own
    past posts and the feed channels). Tracker (`tracker: search issues (JQL)`,
    `tracker.my_work_jql`, `updated >= last_run_ts`). Any auth/scope failure leaves that snapshot `Signed out` and the
-   run continues. If `notetaker.prep_lines` is true, spend the one notetaker call on prep
-   lines for today's events; see `references/notetaker-prep.md`. Then the **feed
+   run continues. If `notetaker.prep_lines` is true and `notetaker.service` is not `none`,
+   spend the one notetaker call on prep lines for today's events; see `references/notetaker-prep.md`. Then the **feed
    cross-check**: read each configured `chat.tracker_feed_channels` channel since its own
    `last_seen`, check the claimed changes against the live issues in one batched tracker
    call, and stage one `feed:` line per contradicted claim; see

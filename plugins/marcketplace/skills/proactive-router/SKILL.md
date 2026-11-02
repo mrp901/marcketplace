@@ -115,6 +115,10 @@ thread.
     `pr:` items (pruned of tags in briefing's `closed`), outcomes, suppressions,
     patterns_blocked, `runs.proactive-router` (with `fyi` and the queued count in `note`).
     Write the main document only if registry, proposals, glossary or `machines` changed.
+    That shard write first copies in any of its own `pr:` items, `outcomes`, `tally`,
+    `suppressions` and `patterns_blocked` entries the main document still holds and its
+    shard lacks (bar tags in `closed`), per `../../shared/state-schema.md` "Shards"; the
+    shared rule alone has been skipped.
 
 ## Surface
 

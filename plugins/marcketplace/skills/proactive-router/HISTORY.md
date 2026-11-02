@@ -1,5 +1,12 @@
 # proactive-router - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-03 name the shard seed in the state write (1.10.3)
+
+This skill got its shard at 1.3.0, before owners seeded, and never copied its own `pr:` items,
+`outcomes`, `tally`, `suppressions` and `patterns_blocked` across from the main document, so
+briefing's 1.6.0 migration deferred every run. Step 10 now says the write seeds first, per
+`state-schema.md` "Shards"; the shared rule alone had been skipped.
+
 - The chat user id was confirmed by asking the chat connector for its own authenticated
   identity (no user id passed) and matching the returned email. Treat as certain.
 - The daily-sweep cadence (rather than firing per-reaction) exists because the reference

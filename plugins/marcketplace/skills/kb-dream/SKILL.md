@@ -89,13 +89,9 @@ defers its log line adds no entry, so an oversized log otherwise looks unchanged
     own `dream:` lines (never act on a tick), append this run's Surfaced items as new
     `dream:` lines in For you, and write `runs.kb-dream` with a two-line note and the
     dream note as `ref`. No post, no webhook.
-11. **Write state back.** `cursors.kb-dream` (`last_dream_at`, `last_full_dream_at` if
-    full, `last_registry_review_at` if run, `last_voice_review_at` only when the re-sample
-    completed, `open_followups` every non-quiet run), its own `items` with this run's
-    `dream:` tags (tags in briefing's `closed` pruned), `voice_verdicts`, `runs.kb-dream`,
-    all in its shard; `voice.sample_counts` if the re-sample completed; `proposals` (main
-    document) only for a 60-day dismissal or a new proposal; `ideas` pruned of ideas no
-    longer anywhere (monthly only).
+11. **Write state back**, per `references/state-write.md`. First seed the shard: copy in any
+    of its own entries the main document still holds and its shard lacks, per
+    `../../shared/state-schema.md` "Shards"; the shared rule alone has been skipped.
 
 ## Surface
 Owns `dream:` lines in For you, every one of them category `kb-maintenance`, in the

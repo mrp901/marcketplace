@@ -9,7 +9,9 @@ any other reason.
 
 1. One `ideas: search issues (JQL)` for ideas in `profile.ideas.project_key` updated since
    `cursors.idea-spar.roadmap_checked_at`, with fields covering `ideas.roadmap_field`,
-   summary, assignee and `ideas.area_field`.
+   summary, assignee and `ideas.area_field`. Format the cursor in the `updated >=` clause as
+   wall-clock time in `org.timezone`, `"yyyy-MM-dd HH:mm"`, with no offset: Jira reads a
+   JQL date in the user's profile timezone, so a UTC clock time would be read as local.
 2. For each result, compare the current slot with `state.ideas.<key>.roadmap_last_seen`.
    An idea whose current slot is in `profile.ideas.next_roadmap_values` and whose stored
    slot exists and is not has **moved into Next**. Store every current slot.
@@ -50,6 +52,12 @@ the rest wait for the next run.
 6. State: `cursors.idea-spar.roadmap_checked_at`, `ideas.<key>`, `items` (each option with
    `group: <key>/d<n>` and `idea_key`), `runs.idea-spar` with `note: "pack for <key>: <the
    question>"` and `ref: <pack link>`. Briefing reads `runs.idea-spar` and reports the pack.
+   Stamp `runs.idea-spar.last_run_at` and the cursor with the current time in `org.timezone`
+   and its offset, read from the clock at write time, never `+00:00`
+   (`../../../shared/state-schema.md`, "Stamp the real local time"). The write first copies
+   in any of its own `items` and `ideas` entries the main document still holds and its shard
+   lacks (bar tags in `closed`), per `state-schema.md` "Shards"; the shared rule alone has
+   been skipped.
 
 **Order matters: pack, then board, then state.** The pack can't be published or saved:
 leave `pack_pending` set so the next run retries, write no board line, and say so in

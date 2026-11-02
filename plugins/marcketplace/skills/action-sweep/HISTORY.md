@@ -1,5 +1,17 @@
 # action-sweep - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-03 chat searches page; notetaker none; seed the shard (1.10.3)
+
+The health check found the three chat sources read page 1 of each search and nothing more, so
+a busy day lost hits past the first page with the cursor advanced over them. They now read
+until a hit predates `chat_since` or `budgets.action-sweep.chat_pages` (default 3) pages, and
+when the cap leaves hits unread `chat_since` stays where it was and the note says "chat capped
+at N pages", so the next run retries instead of losing them. The notetaker source is skipped
+silently when `notetaker.service` is `none` (the user has none and pulls Teams transcripts by
+hand). The shard write now names the seeding step: this skill got its shard at 1.3.0, before
+seeding existed, and never copied its own `sweep:` items across, so briefing's 1.6.0
+migration deferred every run.
+
 - The full-text tracker mention search (`comment ~ "<name>"` JQL) was tested directly
   against the reference instance and does not reliably return results. The
   assignee/watcher/reporter-plus-comment-scan method that replaces it is load-bearing;

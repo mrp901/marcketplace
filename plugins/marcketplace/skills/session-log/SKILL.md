@@ -22,7 +22,8 @@ before, and what's still open. Ninety seconds to read, clear on where things sta
   `kb.paths.utility`, `kb.paths.log`, `kb.log_size_cap_kb`, `people`,
   `people_confusions` (optional), `known_fact_errors` (optional - see HISTORY.md).
 - Tools: `kb` (search, read, write).
-- State: `cursors.session-log` (`last_pending_processed`), in its shard.
+- State: `cursors.session-log` (`last_pending_processed`) and `runs.session-log`, in its
+  shard.
 
 Resolve profile, state and tools per `../../shared/onboarding.md` before doing anything else.
 
@@ -84,7 +85,10 @@ one-line `kb.paths.log` entry instead of a note.
    name - see `references/linking-and-names.md`.
 7. **Propose, don't make, topic-note edits.** See `references/proposed-followups.md`.
 8. **Write state back.** `cursors.session-log.last_pending_processed` when a pending
-   transcript was processed this run.
+   transcript was processed this run. Every run, also `runs.session-log: {last_run_at,
+   status, machine, note, ref}` in the shape `../../shared/state-schema.md` gives `runs`
+   (`last_run_at` the current local time in `org.timezone`; `ref` the note written, empty
+   when none). Readers key on `last_run_at`.
 
 ## Linking
 Relative markdown links only, labels are readable prose, broken links to not-yet-written
