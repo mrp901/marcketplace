@@ -10,9 +10,9 @@ dispatched; capture is a handler for those two categories only.
 
 - **`voice_edits` owner: `session-log`.** The capture mode drafts the note, so it appends the
   entry (`{tag, register, draft_hash, sent_ref, recorded_at}`) in its own shard, exactly as
-  `kb-note` did; `kb-dream` stays the one that compares and records `voice_verdicts`. On its
-  first capture write it seeds from the retired `kb-note` shard (state-schema's 1.10.4 to
-  1.11.0 row). `kb-dream` was the alternative, but it never drafts, and "one document, one
+  `kb-note` did; `kb-dream` stays the one that compares and records `voice_verdicts`. Old
+  entries are not copied: the `kb-note` shard is frozen and readers read it alongside this one,
+  deduplicated by `tag` (state-schema's 1.10.4 to 1.11.0 row). `kb-dream` was the alternative, but it never drafts, and "one document, one
   writer, a drafter writes its own entry" is the rule the ledger already follows.
 - Carried from the retired `kb-note` HISTORY (22 Sep 2026): a dead or empty source returns
   `blocked` and never a note built from the tick's wording; decision-shaped versus

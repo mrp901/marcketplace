@@ -32,7 +32,7 @@ Since last briefing
 Runs
 * {skill} {status}: {note} · {link}
 * health: {skill} green · {skill} amber ({why})
-* pulse {tag}: {note} · {link}
+* kb health {tag}: {health.why} · {link}
 * fyi: {one line} · {permalink}
 * overdue: {skill} last ran {n} days ago (expected every {max_gap_days})
 (or "Nothing to report" if there are no outcomes, nothing queued and no runs in the window)

@@ -58,9 +58,8 @@ beyond the onboarding tool-resolution allowance. Guidelines in
 9. **Record for the voice ledger.** Append one entry to `state.voice_edits`: `{tag,
    register, draft_hash, sent_ref: <note path>, recorded_at}`, in this skill's shard. It
    records what was written, not a comparison; `kb-dream`'s pass makes the comparison, per
-   `voice.md`'s compounding mechanism. On the first capture write after 1.11.0, seed the
-   shard first from the retired `kb-note` shard's `voice_edits` (state-schema's 1.10.4 to
-   1.11.0 row).
+   `voice.md`'s compounding mechanism. Write only to this shard: the retired `kb-note`
+   shard is frozen, never written again, and its old entries are not copied.
 10. **Return the handler contract JSON** (see Handler mode).
 
 `capture-note-template.md` has the frontmatter and body shapes;

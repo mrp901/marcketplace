@@ -21,12 +21,21 @@ added (state).
   health verdict (green, amber or red, and why) in `runs.kb-dream.health`. Final HISTORY note: its
   measures (freshness, capture, reuse, consultation, unapplied learning) moved to
   `kb-dream/references/kb-health.md` with the two scripts, ported as `kb_health_metrics.py` and
-  `kb_health_score.py`; the open-follow-ups and Inbox-age signals, the heartbeats, the log file,
-  `run_pulse.py` and the SessionStart reminder `pulse_reminder.py` (and its `hooks.json` entry and
-  `VAULT_PULSE_*` settings) are gone. The briefing's `pulse` line is now `kb health`. Retired keys:
-  `budgets.vault-pulse` (moved to `budgets.kb-dream.health`), `briefing.expected_runs.vault-pulse`.
-  Its shard (`runs.vault-pulse`, `cursors.vault-pulse`) is ignored; no need to delete the page,
-  or the scheduled task that ran `run_pulse.py`.
+  `kb_health_score.py`, plus the Inbox-age signal; the open-follow-ups signal, the heartbeats,
+  the log file, `run_pulse.py` and the SessionStart reminder `pulse_reminder.py` (and its
+  `hooks.json` entry) are gone. The briefing's `pulse` line is now `kb health`. Retired keys:
+  `budgets.vault-pulse` (read as an alias of `budgets.kb-dream.health`) and
+  `briefing.expected_runs.vault-pulse` (the overdue rule skips a key naming a skill that is not
+  installed). Its shard (`runs.vault-pulse`, `cursors.vault-pulse`) is ignored; no need to delete
+  the page.
+  - **`kb-dream health`.** The scheduled dream is a cloud routine with no `kb.local_root`, so the
+    verdict comes from a new health-only invocation, `/marcketplace:kb-dream health profile=<ref>
+    unattended` (measure and record only; no curation, board lines or dream note). **The local
+    scheduled task must be repointed:** `~/.claude/scripts/vault-pulse/run-vault-pulse.ps1` must
+    call `/marcketplace:kb-dream health ...` instead of `/marcketplace:vault-pulse`, and should set
+    `MARCKETPLACE_HEADLESS=1` so the run's own session is not archived. `remind-vault-pulse.ps1`
+    and the `VAULT_PULSE_REMIND_*` settings can be removed. `VAULT_PULSE_RUN=1` is still honoured
+    by `scripts/archive_session.py` for one release, deprecated.
 - **`idea-ticket`** folds into `jira-story` as **idea mode**. Final HISTORY note: its ideas-board
   ticket format, "Cut the AI tells" list, audit rubric, worked example and seven-step flow moved
   to `jira-story/references/idea-ticket-*.md`; the hub category `ticket-idea` dispatches to
@@ -54,11 +63,13 @@ added (state).
   `shared/state-schema.md`, `shared/profile-schema.md`, `shared/tool-capabilities.md`,
   `shared/voice.md`, `shared/model-tiers.md`, `README.md`, `docs/skill-flow.md`,
   `profiles/example.md` and `skill-health-check`'s evidence notes follow the new names.
-- **State migration 1.10.4 to 1.11.0** (`shared/state-schema.md`): `voice_edits` moves from
-  `kb-note`'s shard to `session-log`'s, which seeds it from the `kb-note` shard on its first write
-  in capture mode (copy the entries its shard lacks, by `tag`, up to the ring cap of 30);
-  `briefing` rewrites any `registry` handler naming `idea-ticket` or `kb-note` to `jira-story`
-  (`draft`) or `session-log` (`capture`), and the hub applies the same substitution until it has.
+- **State migration 1.10.4 to 1.11.0** (`shared/state-schema.md`): `session-log` writes new
+  `voice_edits` entries only to its own shard; the `kb-note` shard is frozen (read-only, never
+  written again) and readers read `reply-draft`'s, `session-log`'s and that shard, deduplicated by
+  `tag`. `briefing` rewrites any `registry` handler naming `idea-ticket` or `kb-note` to
+  `jira-story` or `session-log`, keeping `mode`; until it has, any handler name in the registry,
+  a sub-line or `outcomes` that names a retired skill reads as its replacement, so an in-flight
+  `file` second tick still files.
   `kb-dream` drops `open_followups` and adds `last_health_values` on its next shard write.
 
 ## [1.10.4] - 2026-11-03

@@ -103,7 +103,7 @@ writer's shard (`../../../shared/state-schema.md`, "Shards"):
 |---|---|
 | `items.<tag>` | the owner of the tag's prefix (`../../../shared/surface-protocol.md`'s prefix table) |
 | `outcomes` entries | `skill-eval` where `handler: skill-eval`, else `proactive-router` |
-| `voice_edits` entries | `reply-draft`, or `session-log` where an `outcomes` entry with the same tag names `kb-note` (its successor) as handler |
+| `voice_edits` entries | `reply-draft`, or the frozen `kb-note` shard where an `outcomes` entry with the same tag names `kb-note` as handler (its successor `session-log` never receives old entries) |
 | `tally`, `suppressions`, `patterns_blocked` | `proactive-router` |
 | `runs.<skill>`, `cursors.<skill>` of a skill with no shard | that skill (the 1.3.0 rule) |
 
@@ -153,15 +153,15 @@ longer sweeps chat (`../../../shared/state-schema.md`, 1.10.4 to 1.11.0 row, has
 list). The only write that is briefing's is in the main document, inside the run's
 ordinary state write:
 
-1. In `registry`, every `<category>.handler` that names `idea-ticket` becomes `jira-story`
-   with `mode: draft`, and every one that names `kb-note` becomes `session-log` with
-   `mode: capture`. `set_by` and `since` stay as they are. A registry with no such entry
-   needs no write.
+1. In `registry`, every `<category>.handler` that names `idea-ticket` becomes `jira-story`,
+   and every one that names `kb-note` becomes `session-log`. `mode`, `set_by` and `since`
+   stay as they are (so an in-flight `file` second tick still files). A registry with no
+   such entry needs no write.
 2. Write `installed_version` = 1.11.0.
 
-Everything else is the owners' own: `session-log` seeds its `voice_edits` from the `kb-note`
-shard on its first capture write, and `kb-dream` writes its health fields and drops its
-follow-up ledger. A retired shard (`vault-pulse`, `kb-note`, `idea-ticket`) is never read
+Everything else is the owners' own: `session-log` writes new `voice_edits` entries only to
+its own shard (the `kb-note` shard is frozen and still read, not copied), and `kb-dream`
+writes its health fields and drops its follow-up ledger. A retired shard (`vault-pulse`, `kb-note`, `idea-ticket`) is never read
 for `runs` or `items` and never deleted by briefing; leave a `shards` pointer to it in
 place. `dream:` lines the cut follow-up escalation already wrote close as usual by
 sub-line, or expire per `briefing.stale_after_business_days`; the three retired skills

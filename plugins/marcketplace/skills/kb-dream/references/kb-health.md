@@ -13,17 +13,37 @@ measure it, never the model's impression, and it never edits a note, never write
 
 Flow step 10, on every pass that can measure: the non-quiet ones, and the quiet ones too,
 because a stalled capture is exactly what a quiet dream sees. It reads local files and the
-Claude session transcripts, so it needs a shell and `kb.local_root`. A run without them (a
-cloud routine) skips it: `runs.kb-dream.health` stays as the last run that could measure
-left it, and Flags says `Health: not measured (no local access)`. Never estimate a number
-the scripts did not produce.
+Claude session transcripts, so it needs a shell and `kb.local_root`.
+
+**The scheduled dream is a cloud routine with neither**, so on its own it never produces a
+verdict. The verdict is produced by the **health-only invocation**, which a scheduler on the
+machine that holds the knowledge base and the transcripts runs (the job `vault-pulse` used
+to be):
+
+    /marcketplace:kb-dream health profile=<ref> unattended
+
+It does step 10 and writes `runs.kb-dream.health` and `cursors.kb-dream.last_health_values`;
+it must not move `runs.kb-dream.last_run_at` or `status`, which belong to curation runs. No curation, no board lines, no dream note, no canvas call. Budget:
+one state read, one state write, the two scripts. Weekdays after the nightly dream and before
+the first briefing is the cadence; the machine must be awake. Set `MARCKETPLACE_HEADLESS=1`
+in the scheduled command's environment so `archive_session.py` does not queue the run's own
+transcript (the old `VAULT_PULSE_RUN=1` is still honoured for one release, deprecated).
+Scheduling is the user's; this skill never schedules itself.
+
+**Not measured.** A missing or unreadable `kb.local_root`, no shell, a non-zero exit from
+either script, or an `{"error": ...}` object on stdout all mean *not measured*: leave
+`runs.kb-dream.health` and `last_health_values` exactly as they were, write nothing in their
+place, and say why in the run note (`health: not measured, <reason>`) and, on a full pass,
+in Flags (`Health: not measured, <reason>`). Never estimate a number the scripts did not
+produce.
 
 ## Steps
 
 1. **Measure.** `../scripts/kb_health_metrics.py --kb-root <kb.local_root> --days <window_days,
    default 7> --dreams <kb.paths.dreams> --sessions <kb.paths.sessions> --memory
    <kb.paths.memory> --ledger <kb.paths.voice>/edits-ledger.md`, plus `--lookup-pattern` if
-   `budgets.kb-dream.health.lookup_pattern` is set. Read-only JSON out. A signal it cannot
+   `budgets.kb-dream.health.lookup_pattern` is set (the pre-1.11.0 `budgets.vault-pulse`
+   keys are read as aliases), and `--inbox <kb.paths.inbox>`. Read-only JSON out. A signal it cannot
    measure comes back `measured: false` with the reason; carry that through.
 2. **Adjudicate repeats** (non-quiet runs only). `learning.memory.repeat_candidates` are
    title-overlap pairs, not verdicts. Read both entries of each (at most 5). A **repeat** is
@@ -60,6 +80,7 @@ measures instead.
 | `learning.stuck_at_none` | 0 / 3 | memory entries over 14 days old still at `fold_status: none`. The fold step closes these within a cycle or two; a pile means it has stalled |
 | `learning.unmarked_ledger` | 0 / 5 | voice-ledger items over 7 days old with no `Promoted:` or `Proposed:` marker. 39 sat unpromoted for nine days once. Action: check `voice-review.md` Part A |
 | `learning.confirmed_repeats` | 0 / 2 | a correction recorded twice means the first did not take effect. Zero is the goal; each pair names a memory that is not landing |
+| `backlog.inbox_oldest_days` | 14 / 60 | age of the oldest file in `kb.paths.inbox`. Inbox is for triage, not storage; two months means pass 1 is not clearing it. Action: triage the oldest item |
 
 ## Blind spots, by design
 
@@ -68,5 +89,7 @@ consultation count credits a lookup anywhere in a session, not only before the f
 The repeat test suggests pairs by title and misses a repeat worded differently. It does not
 measure whether a note is correct (the name and fact passes own that), whether the user
 agrees with it (only a human verification says so) or voice quality (`skill-health-check`
-and the voice review). Whether `kb-dream` itself is still running belongs to
-`briefing.expected_runs`; the open-follow-ups count was dropped with the escalation pass.
+and the voice review). The old heartbeat signals (is each skill still running) were
+dropped because `briefing.expected_runs` already calls any skill overdue and
+`skill-health-check` reads every `runs` entry, so a second copy here only duplicated
+them. The open-follow-ups count was dropped with the escalation pass.

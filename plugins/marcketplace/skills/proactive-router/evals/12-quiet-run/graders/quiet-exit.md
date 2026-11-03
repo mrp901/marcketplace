@@ -10,5 +10,5 @@ and nothing was added, edited or deleted. A good run:
 - Makes NO `update_canvas` call, because there is nothing to write.
 - Reads no thread context and dispatches nothing.
 
-Fail this if the run writes to the canvas, invents a candidate action from nothing,
+Fail this if the run makes any `search_public_and_private` call (the router no longer searches chat), writes to the canvas, invents a candidate action from nothing,
 re-classifies the untouched line, or skips the `runs.proactive-router` write.

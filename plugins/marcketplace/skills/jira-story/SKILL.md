@@ -24,7 +24,8 @@ else. Resolve tools via onboarding step 4; prefixes come from `state.machines`.
   only: `kb.kind`, `kb.conventions_file`, `kb.link_style`, `kb.frontmatter_required`,
   `kb.paths.drafts`, `kb.paths.voice`
 - Tool categories: `tracker` (search issues, get issue, create issue, edit issue, link
-  issues), `kb` (read, write; knowledge-base destination and voice ledger only)
+  issues), `kb` (read, write; knowledge-base destination and voice ledger only), `ideas`
+  (search issues JQL, get issue, create issue; idea mode), `web` (optional; idea mode)
 - Caps: none for Refine and New (see Budget); idea mode reads `budgets.jira-story`.
 - Idea mode adds ideas-board keys and tools: `references/idea-ticket-flow.md`, "Needs".
 

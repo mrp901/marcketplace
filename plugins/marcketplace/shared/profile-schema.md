@@ -237,9 +237,9 @@ budgets:
 | `voice.calibration_refs` | jira-story (idea mode) | optional | Tracker keys whose prose is the strongest reference for the `ticket_prose` register. Weighted above general samples during calibration |
 | `voice.sample_counts` | kb-dream | default | |
 | `budgets.<skill>` | that skill only | default | a skill only ever reads its own subtree |
-| `budgets.kb-dream.health` | kb-dream | default | optional: `window_days` (default 7), `lookup_pattern` (regex for the consultation signal), `thresholds` (`{<signal key>: [green_edge, amber_edge]}`); moved here from `budgets.vault-pulse` in 1.11.0 |
+| `budgets.kb-dream.health` | kb-dream | default | optional: `window_days` (default 7), `lookup_pattern` (regex for the consultation signal), `thresholds` (`{<signal key>: [green_edge, amber_edge]}`); moved here from `budgets.vault-pulse` in 1.11.0, which is still read as an alias for `window_days`, `lookup_pattern` and `thresholds` |
 | `budgets.jira-story` | jira-story (idea mode) | default | `{investigation_calls, web_searches, audit_rounds}`; the pre-1.11.0 `budgets.idea-ticket` is read as this key |
-| *Retired in 1.11.0* | none | none | `chat.starter_emoji`, `chat.include_saved_items`, `budgets.proactive-router.searches` (the reaction and saved-message sweep is gone), `budgets.vault-pulse` and `briefing.expected_runs.vault-pulse` (`vault-pulse` folded into `kb-dream`). An old profile that still carries them parses; nothing reads them and they may be deleted |
+| *Retired in 1.11.0* | none | none | `chat.starter_emoji`, `chat.include_saved_items`, `budgets.proactive-router.searches` (the reaction and saved-message sweep is gone), `briefing.expected_runs.vault-pulse` (`vault-pulse` folded into `kb-dream`; the briefing's overdue rule skips an `expected_runs` key that names a skill not installed, so it is never called overdue) and `budgets.vault-pulse` (read as an alias of `budgets.kb-dream.health`, see above). An old profile that still carries them parses and they may be deleted |
 | `budgets.models` | idea-spar, skill-eval, action-list, jira-story | default | see `model-tiers.md` |
 
 ## Where the current values come from

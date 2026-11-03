@@ -2,11 +2,12 @@
 """Measure whether a knowledge base is compounding. Prints one JSON object, writes nothing.
 
 kb-dream's health verdict (references/kb-health.md) runs this, then kb_health_score.py.
-Ported from the retired vault-pulse skill (1.11.0), minus its backlog signal.
+Ported from the retired vault-pulse skill (1.11.0), minus its open-follow-ups count.
+Exits 2 with {"error": ...} on stdout when --kb-root is not a directory.
 
 Usage:
     kb_health_metrics.py --kb-root <dir> [--days 7] [--dreams <rel>] [--sessions <rel>]
-                         [--memory <rel>] [--ledger <rel>]
+                         [--memory <rel>] [--inbox <rel>] [--ledger <rel>]
                          [--lookup-pattern <regex>] [--matured-from 35] [--matured-to 7]
                          [--stale-memory-days 14] [--stale-ledger-days 7] [--now <iso>]
 
@@ -21,6 +22,7 @@ Signals, in the order of references/kb-health.md:
   lookups    share of recent sessions that consulted the knowledge base through a tool
   learning   Memory entries stuck at fold_status none; ledger items with no Promoted marker;
              candidate repeat pairs for the skill to adjudicate
+  backlog    Inbox depth and age
 
 stdlib only, read-only. Time is the local clock unless --now is given (ISO 8601).
 """
@@ -314,6 +316,15 @@ def learning(root, now, memory, ledger, mem_days, led_days, days):
     return out
 
 
+def backlog(root, now, inbox):
+    d = os.path.join(root, inbox) if inbox else ""
+    if not d or not os.path.isdir(d):
+        return {"measured": False, "why": "inbox not configured or absent"}
+    files = [p for p in glob.glob(os.path.join(d, "*")) if os.path.isfile(p) and not NOT_NOTES.match(os.path.basename(p))]
+    ages = [(now - datetime.fromtimestamp(os.path.getmtime(p))).days for p in files]
+    return {"measured": True, "inbox": len(files), "oldest_inbox_days": max(ages) if ages else 0}
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--kb-root", required=True)
@@ -321,6 +332,7 @@ def main():
     ap.add_argument("--dreams", default="")
     ap.add_argument("--sessions", default="")
     ap.add_argument("--memory", default="")
+    ap.add_argument("--inbox", default="")
     ap.add_argument("--ledger", default="")
     ap.add_argument("--lookup-pattern", default=r"(?i)vault|bwdocs|codemap|knowledge|(^|__)kb[-_]")
     ap.add_argument("--matured-from", type=int, default=35)
@@ -341,6 +353,7 @@ def main():
         "reuse": reuse(root, now, a.matured_from, a.matured_to),
         "lookups": lookups(root, now, a.days, a.lookup_pattern),
         "learning": learning(root, now, a.memory, a.ledger, a.stale_memory_days, a.stale_ledger_days, a.days),
+        "backlog": backlog(root, now, a.inbox),
     }
     print(json.dumps(out, indent=2))
     return 0

@@ -21,8 +21,8 @@ cost with no input.
   nothing to act on; briefing still lists them, though they will now be rare.
 - Evals `01-sweep-classification` and `21`-`25-sweep-real-w*`, plus the root `evals/mocks/`
   first-run world, tested only the sweep and were deleted; `12-quiet-run` was reworded (quiet
-  now means no line changed). The `.claude/hillclimb/proactive-router-sweep/` harness is
-  left in place as a record of how the sweep was tuned.
+  now means no line changed, and any `search_public_and_private` call fails it). The orphaned
+  `.claude/hillclimb/proactive-router-sweep/` harness was deleted.
 - The 22 Sep and 13 Oct rationale below about the daily sweep, five searches and `is:saved` is
   history, superseded by this entry.
 

@@ -27,7 +27,7 @@ The dispatch contract between `proactive-router` (the hub) and every skill that 
 
 Every row names whether its mode is **single-shot** (runs once on the tick and is done) or the first half of a **two-tick** flow (produces a draft, then waits for a second tick on a fresh line before the irreversible step). A mode with no annotation is single-shot.
 
-A registry entry that names a skill retired in 1.11.0 reads as its replacement: `idea-ticket` as `jira-story` (idea mode), `kb-note` as `session-log` (`capture`). `briefing`'s 1.10.4 to 1.11.0 migration rewrites them; until it runs, the hub applies the same substitution.
+Any handler name that names a skill retired in 1.11.0 reads as its replacement: `idea-ticket` as `jira-story` (idea mode), `kb-note` as `session-log` (`capture`), keeping the mode (an in-flight `file` second tick stays `file`). That covers `state.registry`, a report sub-line and a `state.outcomes` entry. `briefing`'s 1.10.4 to 1.11.0 migration rewrites the registry; until it runs, and for sub-lines and outcomes that are never rewritten, readers apply the same substitution.
 
 `fyi` is a classification outcome, not a surface line. The hub records an FYI in `state.runs.proactive-router.fyi` (one line each, at most 10 per run) and briefing lists them in its message. There is nothing to tick because there is nothing to do.
 

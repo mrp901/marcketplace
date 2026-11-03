@@ -23,7 +23,8 @@ before, and what's still open. Ninety seconds to read, clear on where things sta
   `kb.frontmatter_required`, `kb.tag_hints`, `kb.paths.sessions`, `kb.paths.decisions`,
   `kb.paths.utility`, `kb.paths.log`, `kb.log_size_cap_kb`, `people`,
   `people_confusions` (optional), `known_fact_errors` (optional - see HISTORY.md).
-- Tools: `kb` (search, read, write).
+- Tools: `kb` (search, read, write); `chat: read thread` and `wiki` (get/update page, only
+  where `kb.kind: confluence`) for capture mode.
 - State: `cursors.session-log` (`last_pending_processed`) and `runs.session-log`, in its
   shard; capture mode also appends `voice_edits` there.
 - Capture mode needs more profile keys and a source fetch: see `references/capture-mode.md`.

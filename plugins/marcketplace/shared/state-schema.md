@@ -47,7 +47,7 @@ main document.**
   `proactive-router`; `closed` for `briefing`; `voice_verdicts` for `kb-dream`), and the
   writer's own entries of the three shared lists: `items` (the lines it owns by tag prefix),
   `outcomes` (`proactive-router`'s, and `skill-eval`'s one per run) and `voice_edits`
-  (`reply-draft`'s and `session-log`'s capture mode). Every skill has a shard.
+  (`reply-draft`'s and `session-log`'s capture mode; `kb-note`'s shard is frozen). Every skill has a shard.
 - **What stays in the main state document.** Only keys written on a rare, user-driven
   event: `state_version`, `installed_version`, `profile_ref`, `shards`, `glossary` (a ticked
   `term:` line), `nicknames` (a new one), `registry` (a ticked mapping), `proposals`,
@@ -68,8 +68,9 @@ main document.**
   entry once neither the main document nor any shard's `items` holds that tag.
 - **Retired shards.** A shard whose skill no longer exists (`vault-pulse`, `kb-note`,
   `idea-ticket`, retired in 1.11.0) is ignored by readers, and nothing requires deleting its
-  page. The one exception is `kb-note`'s `voice_edits`, still read until `session-log` has
-  seeded them (see the 1.10.4 to 1.11.0 migration row).
+  page. The one exception is `kb-note`'s `voice_edits`: that shard is frozen (read-only, never
+  written again) and still read, with `reply-draft`'s and `session-log`'s, deduplicated by
+  `tag` (see the 1.10.4 to 1.11.0 migration row).
 - **Pointer.** The main document carries `shards: {<skill>: <ref>}`, same ref format as
   `state_ref`; an absent `shards` key reads as `{}`. Onboarding step 2 reads this skill's shard by id.
 - **A shard document** holds `shard_version: 1`, `skill`, `state_ref` (pointer back to the
@@ -91,9 +92,9 @@ main document.**
   the original).
 - **Cross-shard access.** `kb-dream`'s monthly prune of `ideas.<key>` entries for ideas that
   no longer exist is the one routine write into another skill's shard (`idea-spar`'s); it
-  reads and writes that shard by id and touches nothing else in it. The only others are
-  `briefing` creating a shard during a migration, and `session-log` reading the retired
-  `kb-note` shard once, to seed its own `voice_edits` (it never writes there).
+  reads and writes that shard by id and touches nothing else in it. The only other is
+  `briefing` creating a shard during a migration. Readers of `voice_edits` also read the
+  frozen `kb-note` shard (see Retired shards); nothing writes there.
 - **Readers.** `briefing`, `proactive-router`, `action-sweep` and `skill-health-check` read
   every skill's `runs` or `items`, so each reads the main document plus every shard named
   in `shards`, by id. Every skill that owns a tag prefix also reads `briefing`'s shard for
@@ -129,7 +130,7 @@ the events in the last column, and with only rare keys left in it, it stays smal
 | action-sweep | main + every shard (dedupe) | its shard (`items` for `sweep:`) | never |
 | kb-dream | main, its shard, briefing's, the hub's (registry review), reply-draft's and session-log's (voice) | its shard (`items` for `dream:`, `voice_verdicts`); idea-spar's shard (monthly prune) | it records or dismisses a proposal |
 | idea-spar, skill-health-check | main, its shard, briefing's (skill-health-check: every shard) | its shard (`items` for its own lines) | never |
-| reply-draft, session-log (capture) | main, its shard (session-log also the retired `kb-note` shard, until it has seeded `voice_edits` from it) | its shard (`voice_edits`) | never |
+| reply-draft, session-log (capture) | main, its shard | its shard (`voice_edits`) | never |
 | skill-eval | main, the hub's, reply-draft's and session-log's | its shard (one `outcomes` entry) | never |
 | jira-story, session-log | main, its shard | its shard | never |
 | any skill, onboarding step 4 | | | it resolved or re-probed a tool prefix (`machines`) |
@@ -319,7 +320,7 @@ the board has nothing to race and runs as normal.
 | 1.10.1 | 1.10.2 | No state change (`transcript` Step 5 checksums and write-tool batches; both hooks recognise a session-log run inside a session; `kb-dream` pass 1 fills Inbox YAML). `briefing` writes `installed_version` 1.10.2 |
 | 1.10.2 | 1.10.3 | No state change (`profile.tools.notetaker.service` may be `none`; `budgets.action-sweep.chat_pages` is a new optional key with default 3; `idea-spar` stamps local time; `session-log` writes `runs.session-log` in the standard shape; the four 1.3.0 shard owners seed their shards on every write). `briefing` writes `installed_version` 1.10.3 |
 | 1.10.3 | 1.10.4 | No state change (`briefing` expires an open line whose latest sub-line is `partial`, `blocked` or a router `queued` note after `briefing.stale_after_business_days` business days, default 5; that profile key is new and optional). `briefing` writes `installed_version` 1.10.4 |
-| 1.10.4 | 1.11.0 | Skills are removed and no key is added to the main document. `vault-pulse` folds into `kb-dream`: its shard (`runs.vault-pulse`, `cursors.vault-pulse`) is retired and ignored, and `kb-dream` writes `runs.kb-dream.health` and `cursors.kb-dream.last_health_values` in its own shard on its next run. `kb-note` folds into `session-log` (capture mode): `session-log` seeds `voice_edits` from the `kb-note` shard on its first write in capture mode, copying the entries its own shard lacks, matched by `tag`, newest first up to the ring cap of 30, shard first as in **Creating a shard**; until then readers still read the `kb-note` shard's `voice_edits`, after it they take `session-log`'s copy and ignore that shard, and `kb-dream` records its `voice_verdicts` against the entry wherever it sits. `idea-ticket` folds into `jira-story` (idea mode); its shard held only `runs` and is ignored. `kb-dream` drops `cursors.kb-dream.open_followups` on its next shard write (the follow-up escalation is cut; an existing escalated `dream:` line closes like any other, and 1.10.4's expiry catches a stuck one). `proactive-router` no longer writes `cursors.proactive-router.last_scanned` (the chat sweep is cut); readers ignore it. In its main-document write `briefing` rewrites any `registry.<category>.handler` that names `idea-ticket` (`ticket-idea`) to `jira-story`, mode `draft`, and any that names `kb-note` (`kb-doc`, `summarise`) to `session-log`, mode `capture`, keeping `set_by`; then writes `installed_version` 1.11.0 |
+| 1.10.4 | 1.11.0 | Skills are removed and no key is added to the main document. `vault-pulse` folds into `kb-dream`: its shard (`runs.vault-pulse`, `cursors.vault-pulse`) is retired and ignored, and `kb-dream` writes `runs.kb-dream.health` and `cursors.kb-dream.last_health_values` in its own shard on its next run. `kb-note` folds into `session-log` (capture mode): `session-log` writes new `voice_edits` entries only to its own shard and does not copy the old ones; the `kb-note` shard is frozen (read-only, never written again), and readers (`kb-dream`, `skill-eval`, `skill-health-check`) read `reply-draft`'s shard, `session-log`'s shard and that frozen shard, deduplicated by `tag`; `kb-dream` records its `voice_verdicts` against the entry wherever it sits. `idea-ticket` folds into `jira-story` (idea mode); its shard held only `runs` and is ignored. `kb-dream` drops `cursors.kb-dream.open_followups` on its next shard write (the follow-up escalation is cut; an existing escalated `dream:` line closes like any other, and 1.10.4's expiry catches a stuck one). `proactive-router` no longer writes `cursors.proactive-router.last_scanned` (the chat sweep is cut); readers ignore it. In its main-document write `briefing` rewrites any `registry.<category>.handler` that names `idea-ticket` (`ticket-idea`) to `jira-story`, and any that names `kb-note` (`kb-doc`, `summarise`) to `session-log`, keeping `mode` and `set_by` (an in-flight `file` second tick stays `file`); until it has, any handler name in the registry, a sub-line or `outcomes` that names a retired skill reads as its replacement; then writes `installed_version` 1.11.0 |
 
 A migration is always **additive**: it may add a new key with its default value, or
 reshape a key it explicitly names, but it never deletes a key it does not understand.

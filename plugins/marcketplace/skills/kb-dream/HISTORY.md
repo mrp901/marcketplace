@@ -19,15 +19,16 @@ skill: "I just want to keep a second brain as a first port of call for the AI ha
   list, not on a board line this skill re-raises.
 - **`vault-pulse` folded in as flow step 10**, `references/kb-health.md`, two ported scripts
   (`scripts/kb_health_metrics.py`, `scripts/kb_health_score.py`). Kept: freshness, capture,
-  reuse, consultation, and the three learning signals. Dropped: the open-follow-ups and
-  Inbox-age backlog signals (the first with the escalation; the second because Inbox triage
-  is pass 1's own job and shows in the dream note), the heartbeats (`briefing.expected_runs`
+  reuse, consultation, the three learning signals and the Inbox-age backlog signal. Dropped:
+  the open-follow-ups count (with the escalation), the heartbeats (`briefing.expected_runs`
   and `skill-health-check` already watch whether this skill runs), the separate log file, the
   headless runner (`run_pulse.py`) and the SessionStart reminder (`pulse_reminder.py`). The
   verdict is `runs.kb-dream.health`; it never writes a board line.
 - **Where it runs.** The measure reads local files and Claude transcripts, so a run with no
-  shell or `kb.local_root` skips it and leaves the last verdict standing, instead of overwriting
-  a real reading with "unmeasured". A quiet run still measures: stalled capture is what a quiet
+  shell or `kb.local_root`, or a failing script, skips it and leaves the last verdict standing,
+  instead of overwriting a real reading with "unmeasured". The scheduled dream is a cloud
+  routine, so on its own it never measures: the `health` argument (`/marcketplace:kb-dream
+  health ...`) runs only the verdict, for the local scheduler `vault-pulse` used to have. A quiet run still measures: stalled capture is what a quiet
   dream sees, and the scripts cost no connector reads.
 - **Carried from the retired `vault-pulse` HISTORY** (13 Oct 2026, scheduling 16 Oct, session
   count fix 26 Oct): every earlier silent failure was found by an audit, not an alert (the

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Score kb-dream's health signals. Reads one JSON object on stdin, prints one JSON object.
 
-Ported from the retired vault-pulse skill (1.11.0), minus its heartbeat and backlog
+Ported from the retired vault-pulse skill (1.11.0), minus its heartbeat and open-follow-ups
 signals (the briefing's expected_runs and skill-health-check watch the heartbeats).
 
 Input:
@@ -10,6 +10,8 @@ Input:
    "thresholds": {"<signal key>": [green_edge, amber_edge]},   # profile overrides, optional
    "prior": {"<signal key>": value},                  # last verdict's values, for the trend
    "now": "<iso>"}
+
+Exits 2 with {"error": ...} when the input is unreadable or carries the metrics script's own error.
 
 Output: {"signals": {key: {tag, value, prev?, why}}, "overall": {tag, headline},
          "values": {key: value}}   # `values` is what the skill stores as the next verdict's prior.
@@ -35,6 +37,7 @@ DEFAULTS = {
     "learning.stuck_at_none": (0, 3, "low"),
     "learning.unmarked_ledger": (0, 5, "low"),
     "learning.confirmed_repeats": (0, 2, "low"),
+    "backlog.inbox_oldest_days": (14, 60, "low"),
 }
 
 
@@ -45,8 +48,16 @@ def grade(v, g, a, direction):
 
 
 def main():
-    d = json.load(sys.stdin)
+    try:
+        d = json.load(sys.stdin)
+    except json.JSONDecodeError as e:
+        print(json.dumps({"error": f"unreadable input: {e}"}))
+        return 2
     m = d.get("metrics") or {}
+    err = d.get("error") or m.get("error")
+    if err:
+        print(json.dumps({"error": err}))
+        return 2
     now = datetime.fromisoformat(d["now"]).replace(tzinfo=None) if d.get("now") else datetime.now()
     prior = d.get("prior") or {}
     T = dict(DEFAULTS)
@@ -109,6 +120,13 @@ def main():
             f"{led['unmarked_over_window']} of {led['items']} ledger items carry no Promoted or Proposed marker")
     else:
         unmeasured("learning.unmarked_ledger", led.get("why", "not measured"))
+
+    b = m.get("backlog") or {}
+    if b.get("measured"):
+        put("backlog.inbox_oldest_days", b["oldest_inbox_days"],
+            f"{b['inbox']} inbox item(s), oldest {b['oldest_inbox_days']} d")
+    else:
+        unmeasured("backlog.inbox_oldest_days", b.get("why", "not measured"))
 
     tags = [s["tag"] for s in sig.values()]
     red = [k for k, s in sig.items() if s["tag"] == "red"]

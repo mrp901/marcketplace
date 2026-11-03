@@ -9,9 +9,11 @@ and what each inline action does.
 
 One subagent per ticked line, model `budgets.models.worker`, told to invoke
 `/marcketplace:<handler>` itself; the handler's own `SKILL.md` never loads into the
-hub's context. A registry entry still naming `idea-ticket` or `kb-note` (retired in 1.11.0,
-before `briefing` has migrated it) dispatches `jira-story` with mode `draft`, or
-`session-log` with mode `capture`.
+hub's context. Any handler name that still names `idea-ticket` or `kb-note` (retired in
+1.11.0) reads as its replacement, keeping the mode: in the registry (before `briefing`
+has migrated it), in an earlier sub-line, or in `state.outcomes`. So a `draft` or `file`
+for `idea-ticket` goes to `jira-story` idea mode, a `capture` for `kb-note` to `session-log`,
+and an in-flight `file` second tick still files.
 
 ```
 profile=<profile ref>
