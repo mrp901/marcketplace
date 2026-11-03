@@ -60,6 +60,7 @@ calendar:
   day_window: "00:00-23:59 local"
 
 briefing:
+  stale_after_business_days: 5   # optional, default 5; 0 disables expiring stuck lines
   expected_runs:
     proactive-router: 2
     action-sweep: 8

@@ -15,7 +15,8 @@ one whose `installed_version` is 1.1.0 retires the old idea lines first.
 ## Needs
 - Profile: `org.timezone`, `user.name`, `user.chat_user_id`, `tracker.my_work_jql`,
   `chat.tracker_feed_channels.work_started`, `chat.tracker_feed_channels.fix_version`,
-  `notetaker.lookback_days`, `notetaker.prep_lines` (optional), `surface.id`, `surface.url`,
+  `notetaker.lookback_days`, `notetaker.prep_lines` (optional),
+  `briefing.stale_after_business_days` (optional; absent means 5, `0` disables expiry), `surface.id`, `surface.url`,
   `surface.home_channel_id`, `notify.mode`, `notify.fallback_channel_id`,
   `notify.webhooks.briefing`, `notify.mention_form`, `briefing.expected_runs` (optional;
   absent means no skill is ever called overdue), `people`,
@@ -67,8 +68,10 @@ Fires more than once a day on a changing schedule; never assume a time of day.
    `../../shared/surface-protocol.md`'s "Closing": a `done` sub-line closes the line; a
    ticked To-do line closes as done by you; an option whose sibling closed closes as `not
    chosen`; a `state.outcomes` entry with the tag and `status: done` closes the manual
-   `skill-eval` path; a `no handler` sub-line closes as `acknowledged, no handler`. A `term:` line with a `done` sub-line is removed, never logged. A
-   `partial`, `blocked` or unresolved `needs your tick` sub-line leaves the line open. An
+   `skill-eval` path; a `no handler` sub-line closes as `acknowledged, no handler`. A `term:` line with a `done` sub-line is removed, never logged. A line whose latest
+   sub-line is `partial`, `blocked` or a router `queued` note, with nothing newer for
+   `briefing.stale_after_business_days` business days, closes as `expired`. A younger
+   `partial` or `blocked`, or an unresolved `needs your tick`, leaves the line open. An
    idea block with no open lines left is removed. Closing is a move into Closed, never an
    edit of another skill's wording. See `references/closed-and-outcomes.md`.
 3. **Record closures.** Add every tag closed or removed in step 2 to `closed` in this
@@ -87,7 +90,7 @@ Fires more than once a day on a changing schedule; never assume a time of day.
    `references/feed-cross-check.md`.
 5. **Compose the report and the message.** The "Since last briefing" block: handler
    outcomes from `state.outcomes` in the window, the count of ticked lines with no sub-line
-   (queued behind the hub's cap), then the Runs block from `state.runs`: what each scheduled
+   (queued behind the hub's cap), the lines expired in step 2, then the Runs block from `state.runs`: what each scheduled
    skill did, with its link; fast-fails; amber and green health scores; the vault-pulse verdict; FYIs the Router
    recorded; and any skill overdue against `briefing.expected_runs`. See
    `references/closed-and-outcomes.md`. Check every unfamiliar term against

@@ -11,19 +11,41 @@ this file covers the shapes.
 |---|---|---|
 | Any line with a `done` sub-line from the hub or an inline action | the sub-line's outcome word (`done`, `filed PRJ-172`, `added to glossary`) | the handler named in the sub-line, or `router` |
 | A ticked To-do line | `done` | you |
-| An option whose sibling closed as `done` | `not chosen` | you |
+| An option whose sibling closed as `done` or `expired` | `not chosen` | you |
 | The chosen option | `chosen` | you, plus the handler's own outcome on the same line if it dispatched |
 | A line whose tag has a `state.outcomes` entry with `status: done` and no sub-line (the manual `skill-eval` path) | the outcome's `report_line` | skill-eval |
 | A line with a `no handler` sub-line | `acknowledged, no handler` | you |
+| A line whose latest sub-line is `partial`, `blocked` or a router `queued` note, with no newer sub-line for `briefing.stale_after_business_days` business days (below) | `expired · no activity for 5 business days` | you |
 | A `term:` line with a `done` sub-line | removed from the board, no Closed line | (nothing logged) |
 
 Every tag closed or removed here also goes into `closed` in briefing's shard (`SKILL.md`
 step 3); that is how the owner, and the hub, tell a closed line from a deleted one.
 
 Everything else stays: an unticked line, a ticked line with no sub-line (queued), a
-`partial` or `blocked` sub-line, a `needs your tick` whose fresh line is still open, a
+`partial` or `blocked` sub-line inside the expiry window, a `needs your tick` whose fresh line is still open, a
 `blocked · pick one` group. An idea block whose every line has closed is removed with its
 header in the same write; a block with any open line stays whole.
+
+## Expiry of stuck lines
+
+Nothing acts on a `partial`, `blocked` or router `queued` sub-line by itself, so without a
+limit the line sits open for ever. The threshold is `briefing.stale_after_business_days`:
+absent means 5, `0` disables expiry.
+
+- Look only at the line's **latest** sub-line (`↳ <handler> <date[ time]>: ...`). It must be
+  `partial`, `blocked` or a router `queued` note (`↳ router <date>: queued for ...`), and no
+  newer sub-line may follow it.
+- Business days are Mon-Fri in `org.timezone`, counted from the latest sub-line's date to the
+  run date (times of day ignored): the weekdays after the sub-line's date, up to and including
+  the run date. Expire when that count reaches the threshold. A `partial` dated Mon 28 Sep
+  expires on the run of Mon 5 Oct. Public holidays are not treated specially.
+- Never expire a `needs your tick` sub-line, a line with no sub-line, a To-do line or a `term:`
+  line. A `blocked · pick one` sub-line is waiting on the user and stays.
+- The Closed line reads `expired · no activity for N business days` (N is the threshold) and
+  the by-field is `by you`, like `not chosen`. The tag goes into `closed` (step 3).
+- Idea-decision option groups: an expired option closes like any close, so its siblings close
+  `not chosen` under the sibling rule above, and the question's block is removed once no open
+  line is left in it.
 
 ## Closed log line
 
@@ -62,6 +84,17 @@ these across the whole board and report the total as one line:
 
 Omit this line when the count is zero. This is what guarantees the user never has to open
 the board to learn that something they ticked has not been actioned yet.
+
+## Expired lines
+
+Every line closed as `expired` in this run is named in the "Since last briefing" block, so
+nothing leaves the board unseen: one line, the count then the tags.
+
+```
+* {n} line(s) expired, no activity for {N} business days: {tag}, {tag}, ...
+```
+
+Omit it when none expired. It counts toward "Nothing to report" like the queued line.
 
 ## The Runs block
 

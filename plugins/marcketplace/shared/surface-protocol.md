@@ -197,11 +197,12 @@ Briefing is the only skill that moves lines to Closed, and it closes a line only
 
 - A `done` sub-line sits under it (a handler or inline action finished).
 - It is a To-do line and it is ticked.
-- It is an option whose sibling closed as `done`; it closes as `not chosen`.
+- It is an option whose sibling closed as `done` or `expired`; it closes as `not chosen`.
 - A `state.outcomes` entry names its tag with `status: done` (the manual `skill-eval` path).
 - A `no handler` sub-line sits under it; it closes as `acknowledged, no handler` (the mapping proposal carries the request forward).
+- Its latest sub-line is `partial`, `blocked` or a router `queued` note, and no newer sub-line has followed for `briefing.stale_after_business_days` business days (default 5, `0` disables); it closes as `expired · no activity for 5 business days` (5 is the configured threshold). Business days are Mon-Fri in `org.timezone`, counted from the latest sub-line's date to the run date; public holidays are not treated specially. This never applies to a `needs your tick` sub-line, a line with no sub-line, a To-do line or a `term:` line.
 
-A `partial` or `blocked` sub-line, or a `needs your tick` sub-line whose fresh line is still open, keeps the parent open. A `term:` line whose sub-line is `done` is removed rather than logged: a confirmed term is vocabulary the system absorbed, not work anyone finished. That exception is deliberate; do not "fix" it.
+A `partial` or `blocked` sub-line inside the expiry window, or a `needs your tick` sub-line whose fresh line is still open, keeps the parent open. A `term:` line whose sub-line is `done` is removed rather than logged: a confirmed term is vocabulary the system absorbed, not work anyone finished. That exception is deliberate; do not "fix" it.
 
 ## The Closed log
 
@@ -211,7 +212,7 @@ Format, one line per closed item, newest first:
 - <date> (<tag>) <outcome> · <original text, 120 chars> · <by you | by <handler>>
 ```
 
-`<outcome>` is a short past-tense phrase (`done`, `filed PRJ-172`, `chosen`, `not chosen`, `acknowledged, no handler`). `<original text, 120 chars>` is the item as it stood when closed (post-edit if the user edited it), truncated. `<by you | by <handler>>` records who did the work.
+`<outcome>` is a short past-tense phrase (`done`, `filed PRJ-172`, `chosen`, `not chosen`, `acknowledged, no handler`, `expired · no activity for 5 business days`). `<original text, 120 chars>` is the item as it stood when closed (post-edit if the user edited it), truncated. `<by you | by <handler>>` records who did the work.
 
 **Retention: 5 days or 20 lines, whichever comes first.** Briefing trims the oldest lines past either bound on every run it writes Closed. This is a mechanical trim, not a judgement call, and it happens whether or not anything new closed this run.
 

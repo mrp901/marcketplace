@@ -63,6 +63,7 @@ calendar:
   day_window: "00:00-23:59 local"
 
 briefing:
+  stale_after_business_days: 5   # optional; business days of no activity before briefing expires a stuck line; 0 disables
   expected_runs:             # skill -> max days between runs before the Runs report calls it overdue
     proactive-router: 2
     action-sweep: 8
@@ -189,6 +190,7 @@ budgets:
 | `chat.tracker_feed_channels.work_started` | briefing | ask | identity-shaped: never defaulted. A channel id, or `none` if the install has no such feed |
 | `chat.tracker_feed_channels.fix_version` | briefing | ask | same as `work_started` |
 | `calendar.day_window` | briefing | default | |
+| `briefing.stale_after_business_days` | briefing | default | 5; `0` disables expiry. Mon-Fri in `org.timezone`, public holidays not excluded |
 | `briefing.expected_runs` | briefing | default | one entry per scheduled skill; a skill missing from the map is never called overdue |
 | `tracker.cloud_id` | briefing, action-sweep, idea-spar, idea-ticket, skill-health-check, action-list | discover (accessible-resources) | |
 | `tracker.site_url` | same as `tracker.cloud_id` | discover (accessible-resources) | |

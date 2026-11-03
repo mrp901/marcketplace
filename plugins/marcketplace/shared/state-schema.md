@@ -317,6 +317,7 @@ the board has nothing to race and runs as normal.
 | 1.10.0 | 1.10.1 | No state change (two instruction folds: `voice.md`'s edits-ledger After side, `transcript`'s Step 5 length check). `briefing` writes `installed_version` 1.10.1 |
 | 1.10.1 | 1.10.2 | No state change (`transcript` Step 5 checksums and write-tool batches; both hooks recognise a session-log run inside a session; `kb-dream` pass 1 fills Inbox YAML). `briefing` writes `installed_version` 1.10.2 |
 | 1.10.2 | 1.10.3 | No state change (`profile.tools.notetaker.service` may be `none`; `budgets.action-sweep.chat_pages` is a new optional key with default 3; `idea-spar` stamps local time; `session-log` writes `runs.session-log` in the standard shape; the four 1.3.0 shard owners seed their shards on every write). `briefing` writes `installed_version` 1.10.3 |
+| 1.10.3 | 1.10.4 | No state change (`briefing` expires an open line whose latest sub-line is `partial`, `blocked` or a router `queued` note after `briefing.stale_after_business_days` business days, default 5; that profile key is new and optional). `briefing` writes `installed_version` 1.10.4 |
 
 A migration is always **additive**: it may add a new key with its default value, or
 reshape a key it explicitly names, but it never deletes a key it does not understand.

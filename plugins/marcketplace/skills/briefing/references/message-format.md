@@ -28,6 +28,7 @@ Since last briefing
 
 * {handler} {outcome}: {one sentence} · {link}
 * {n} ticked item(s) queued, waiting on the next dispatch run
+* {n} line(s) expired, no activity for {N} business days: {tag}, {tag}
 Runs
 * {skill} {status}: {note} · {link}
 * health: {skill} green · {skill} amber ({why})
