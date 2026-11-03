@@ -1,5 +1,45 @@
 # kb-dream - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-03 fold vault-pulse in, cut follow-up escalation, state the purpose (1.11.0)
+
+Usage evidence (Oct-Nov 2026): the user works in attended sessions, not by ticking the board,
+`vault-pulse` scored red five runs on one number with no action, and the "settle the follow-up
+open N dreams" escalation was the main source of board bloat. The user's stated goal for this
+skill: "I just want to keep a second brain as a first port of call for the AI harness I use."
+
+- **Purpose first.** The opening paragraph and the description now say each pass is judged by
+  whether the vault is easier for an agent to find and trust. The passes themselves are
+  unchanged.
+- **Follow-up escalation cut.** `references/followup-escalation.md` and the
+  `cursors.kb-dream.open_followups` ledger are gone. Pass 5 still lists the open follow-ups it
+  sees in the session notes it reads, once, in Flags; nothing carries them across dreams and
+  nothing becomes a `dream:` line. Lines the old rule already wrote still settle (`## Handler
+  mode`) and expire (1.10.4). The 10 Sep rationale below (chronic follow-ups never reached the
+  user) is superseded: a follow-up that matters lives in its session note and the user's own
+  list, not on a board line this skill re-raises.
+- **`vault-pulse` folded in as flow step 10**, `references/kb-health.md`, two ported scripts
+  (`scripts/kb_health_metrics.py`, `scripts/kb_health_score.py`). Kept: freshness, capture,
+  reuse, consultation, and the three learning signals. Dropped: the open-follow-ups and
+  Inbox-age backlog signals (the first with the escalation; the second because Inbox triage
+  is pass 1's own job and shows in the dream note), the heartbeats (`briefing.expected_runs`
+  and `skill-health-check` already watch whether this skill runs), the separate log file, the
+  headless runner (`run_pulse.py`) and the SessionStart reminder (`pulse_reminder.py`). The
+  verdict is `runs.kb-dream.health`; it never writes a board line.
+- **Where it runs.** The measure reads local files and Claude transcripts, so a run with no
+  shell or `kb.local_root` skips it and leaves the last verdict standing, instead of overwriting
+  a real reading with "unmeasured". A quiet run still measures: stalled capture is what a quiet
+  dream sees, and the scripts cost no connector reads.
+- **Carried from the retired `vault-pulse` HISTORY** (13 Oct 2026, scheduling 16 Oct, session
+  count fix 26 Oct): every earlier silent failure was found by an audit, not an alert (the
+  SessionEnd hook broken until 7 Oct, about six sessions never captured, 39 ledger pairs
+  unpromoted for nine days, a monthly review failing unattended); behaviour beats hygiene as a
+  signal (links in, lookups, repeat corrections); numbers come from scripts, never a model
+  impression; a signal that cannot be measured is never green; "substantive" is defined once,
+  in `pending_sessions.py`; `capture.pending` counts sessions, not files. Rejected
+  then and now: a model judging "usefulness" of notes, and a dashboard note in the bundle.
+  First reading on the vault it was built for (13 Oct): amber on 2 unarchived sessions,
+  17 open follow-ups and a 38-day Inbox item; green on reuse 64% and consultation 78%.
+
 ## 2026-11-03 name the shard seed in the state write (1.10.3)
 
 Same cause as proactive-router: shard created at 1.3.0, before seeding existed, so its own

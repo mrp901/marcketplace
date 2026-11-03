@@ -9,7 +9,6 @@ runs:
   proactive-router: {last_run_at: 2026-09-21T23:30:00+10:00, status: ok, note: "1 dispatched", ref: ""}
 cursors:
   briefing: {last_run_ts: 2026-09-22T06:45:00+10:00}
-  proactive-router: {last_scanned: 2026-09-21T23:30:00+10:00}
 ideas: {}
 registry: {}          # shipped defaults apply
 tally: {}
@@ -18,7 +17,7 @@ suppressions: []
 patterns_blocked: []
 outcomes: []
 items:
-  shc:260921-1: {section: For you, written_by: skill-health-check, written_at: 2026-09-21T03:00:00+10:00, text: "🔴 kb-note scored red: two notes superseded by your own corrections this fortnight. Run skill-eval on it?", text_hash: h-shc1, ref: ".utility/skill-health/kb-note.md", category: skill-eval, group: "", idea_key: ""}
+  shc:260921-1: {section: For you, written_by: skill-health-check, written_at: 2026-09-21T03:00:00+10:00, text: "🔴 session-log scored red: two notes superseded by your own corrections this fortnight. Run skill-eval on it?", text_hash: h-shc1, ref: ".utility/skill-health/session-log.md", category: skill-eval, group: "", idea_key: ""}
 machines:
   eval-machine: {tools: {chat: "mcp__slack__"}, resolved_at: 2026-09-21T23:30:00+10:00}
 ```

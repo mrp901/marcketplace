@@ -13,10 +13,10 @@ category genuinely isn't here, the proposal names it `needs a new skill`.
 | `email` | ✉️ | Who to write to and what the message should accomplish (organise a call, follow up a lead, answer a question) | reply-draft `draft` |
 | `chat-reply` | 💬 | A chat thread waiting on the user, and what the reply needs to say | reply-draft `draft` |
 | `ticket-reply` | 🎫 | An existing ticket/thread with an open question addressed to the user, or a fix concrete enough to raise as a ticket | action-sweep `targeted` |
-| `ticket-idea` | 🎫 | A feature or capability worth its own ideas-board entry | idea-ticket `draft` (two-tick `file`) |
+| `ticket-idea` | 🎫 | A feature or capability worth its own ideas-board entry | jira-story idea mode `draft` (two-tick `file`) |
 | `ticket-minor` | 🎫 [minor] | A small, non-urgent fix or tweak: worth a ticket, not urgent | action-sweep `targeted` small tier (two-tick `push`) |
-| `kb-doc` | 📖 | A decision, process or piece of context worth capturing as a kb note | kb-note `capture` |
-| `summarise` | 📝 | The user's been handed something and the useful action is a summary to read | kb-note `capture` |
+| `kb-doc` | 📖 | A decision, process or piece of context worth capturing as a kb note | session-log `capture` |
+| `summarise` | 📝 | The user's been handed something and the useful action is a summary to read | session-log `capture` |
 | `meeting-followup` | 🗓️ | A commitment or action item surfaced in a recorded meeting | action-sweep `meeting` |
 | `sweep-push` | ⬆️ | A drafted action-sweep item ready for its confirming push | action-sweep `push` |
 | `to-do` | ☑️ | Something only the user can do, worth putting on their own list | `inline:to-do` |
@@ -35,11 +35,10 @@ message. `calendar` has no handler *yet*; a tick on it goes through the unmapped
 below exactly like a freeform category the user's own words produced, accumulating
 toward a proposal. Never collapse the two.
 
-The sweep (reactions and saved items) produces the first eight rows plus `to-do` and
-`fyi`. The other rows are written by their owning skills and only reach this skill as
-ticks to act on; the sweep never classifies a message as, say, `idea-decision`. A
-user-added line anywhere on the board is classified from the same first-eight-plus-two
-set, with one exception: a line added inside an idea block is `idea-decision` if it
+A line the user adds is classified from the first eight rows plus `to-do` and `fyi`
+(the set the retired reaction sweep also used). The other rows are written by their
+owning skills and only reach this skill as ticks to act on; a user-added line is never
+classified as, say, `skill-eval`, with one exception: a line added inside an idea block is `idea-decision` if it
 reads as an answer to a question in that block, else classified as usual with
 `idea_key` set.
 

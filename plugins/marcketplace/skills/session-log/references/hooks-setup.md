@@ -35,8 +35,8 @@ nothing at exactly the moment it matters, which is worse than a one-turn delay.
 That trade only holds if someone acts on the nudge. Until 1.10.0 the nudge told the session
 not to raise the backlog "unless it is large or old" without saying what large or old meant,
 so in practice nobody offered and the queue grew for days (10 sessions, five days, 26 Oct
-2026). The nudge now names its edges - 5 sessions or 3 days, the same edges `vault-pulse`
-scores amber - and past either one tells the session to offer the drain once. For a queue
+2026). The nudge now names its edges - 5 sessions or 3 days, the same edges `kb-dream`'s
+health verdict scores amber - and past either one tells the session to offer the drain once. For a queue
 that should never depend on a person, schedule it (below).
 
 ## Shipped as plugin hooks

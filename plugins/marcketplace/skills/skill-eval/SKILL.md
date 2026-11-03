@@ -22,7 +22,7 @@ else.
   touching no connected service.
 - State: `state.outcomes` (append one entry, in this skill's own shard, when a run started
   from a queued `shc:` line finishes), `state.tally.<category>` (the hub's shard) and
-  `state.voice_edits` (reply-draft's and kb-note's shards) (read, as evidence a red score
+  `state.voice_edits` (reply-draft's and session-log's shards) (read, as evidence a red score
   points at).
 
 ## Budget

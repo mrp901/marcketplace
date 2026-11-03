@@ -1,5 +1,31 @@
 # proactive-router - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-03 retire the reaction and saved-message sweep (1.11.0)
+
+Usage evidence (Oct-Nov 2026): the user does not emoji-react or save messages in Slack to
+hand work over; he works through `action-list` and `action-sweep` (messages involving him) and
+attended sessions. The daily sweep (five searches: one per starter emoji plus `is:saved`) was
+cost with no input.
+
+- Removed: flow step 2 (sweep) and step 3 (classify new hits), the `chat.starter_emoji` and
+  `chat.include_saved_items` profile keys, `budgets.proactive-router.searches`, the
+  `cursors.proactive-router.last_scanned` cursor (nothing reads a sweep cursor), the
+  `chat: search messages` need, and the `hasmy:` and `is:saved` search forms. Steps are
+  renumbered 1-8.
+- Kept unchanged: reading the board and acting on every tick (dispatch, inline actions,
+  option groups), blocked-line retry, deletions and suppressions, proposals. Classification of
+  a line the user adds in place is kept, with its `pr:` tag, and `references/classification.md`
+  still calibrates it (the examples came from the sweep, so its framing says so). Existing
+  `pr:` lines and ticks on them behave exactly as before; only new swept `pr:` lines stop.
+- `fyi` outcomes and `runs.proactive-router.fyi` stay, for a line the user adds that has
+  nothing to act on; briefing still lists them, though they will now be rare.
+- Evals `01-sweep-classification` and `21`-`25-sweep-real-w*`, plus the root `evals/mocks/`
+  first-run world, tested only the sweep and were deleted; `12-quiet-run` was reworded (quiet
+  now means no line changed). The `.claude/hillclimb/proactive-router-sweep/` harness is
+  left in place as a record of how the sweep was tuned.
+- The 22 Sep and 13 Oct rationale below about the daily sweep, five searches and `is:saved` is
+  history, superseded by this entry.
+
 ## 2026-11-03 name the shard seed in the state write (1.10.3)
 
 This skill got its shard at 1.3.0, before owners seeded, and never copied its own `pr:` items,

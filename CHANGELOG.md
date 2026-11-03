@@ -6,6 +6,61 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.11.0] - 2026-11-03
+
+Three skills and one router step are removed, following the usage evidence of Oct-Nov 2026: the
+user works in attended sessions and through `action-list` and `action-sweep`, not by emoji-reacting
+in Slack or ticking the board. `vault-pulse` scored red five runs on one number with no action,
+`idea-ticket` had not run since 28 Sep, `kb-note` had four runs in total, and `kb-dream`'s
+follow-up escalation was the main source of board bloat. Fifteen skills become twelve. Nothing is
+added to the profile or the main state document; keys are retired (profile) and a migration row is
+added (state).
+
+### Removed
+- **`vault-pulse`** folds into `kb-dream`, which now ends each pass with a one-line knowledge-base
+  health verdict (green, amber or red, and why) in `runs.kb-dream.health`. Final HISTORY note: its
+  measures (freshness, capture, reuse, consultation, unapplied learning) moved to
+  `kb-dream/references/kb-health.md` with the two scripts, ported as `kb_health_metrics.py` and
+  `kb_health_score.py`; the open-follow-ups and Inbox-age signals, the heartbeats, the log file,
+  `run_pulse.py` and the SessionStart reminder `pulse_reminder.py` (and its `hooks.json` entry and
+  `VAULT_PULSE_*` settings) are gone. The briefing's `pulse` line is now `kb health`. Retired keys:
+  `budgets.vault-pulse` (moved to `budgets.kb-dream.health`), `briefing.expected_runs.vault-pulse`.
+  Its shard (`runs.vault-pulse`, `cursors.vault-pulse`) is ignored; no need to delete the page,
+  or the scheduled task that ran `run_pulse.py`.
+- **`idea-ticket`** folds into `jira-story` as **idea mode**. Final HISTORY note: its ideas-board
+  ticket format, "Cut the AI tells" list, audit rubric, worked example and seven-step flow moved
+  to `jira-story/references/idea-ticket-*.md`; the hub category `ticket-idea` dispatches to
+  `jira-story` (`draft`, then `file` after a second tick). `budgets.idea-ticket` is now
+  `budgets.jira-story` (the old name is read as an alias).
+- **`kb-note`** folds into `session-log` as **capture mode**. Final HISTORY note: its one-note
+  capture flow, dead-source rule, decision-versus-reference rule, template and worked example moved
+  to `session-log/references/capture-*.md`; the hub categories `kb-doc` and `summarise` dispatch to
+  `session-log` (`capture`). `voice_edits` moves with it (see Changed).
+- **`proactive-router` no longer sweeps chat reactions or saved messages.** Removed: the sweep and
+  classify-new-hits steps, `chat.starter_emoji`, `chat.include_saved_items`,
+  `budgets.proactive-router.searches`, `cursors.proactive-router.last_scanned`, the `hasmy:` and
+  `is:saved` search forms, and the sweep-only evals (`01`, `21` to `25`). It still reads the board
+  and acts on every tick, and still classifies a line the user adds. Existing `pr:` lines and ticks
+  on them behave as before.
+- **`kb-dream` follow-up escalation** (the "settle the follow-up open N dreams since ..." `dream:`
+  line and the `cursors.kb-dream.open_followups` ledger). Pass 5 lists open follow-ups once, in
+  the dream note's Flags. Existing escalated lines still settle and still close or expire normally.
+
+### Changed
+- `kb-dream`'s description and opening paragraph state its purpose: the knowledge base is the first
+  port of call for the AI harness, and each pass is judged by whether it makes the vault easier for
+  an agent to find and trust. The passes that stay are untouched.
+- Handler tables (`shared/handler-contract.md`, the router's `references/categories.md`),
+  `shared/state-schema.md`, `shared/profile-schema.md`, `shared/tool-capabilities.md`,
+  `shared/voice.md`, `shared/model-tiers.md`, `README.md`, `docs/skill-flow.md`,
+  `profiles/example.md` and `skill-health-check`'s evidence notes follow the new names.
+- **State migration 1.10.4 to 1.11.0** (`shared/state-schema.md`): `voice_edits` moves from
+  `kb-note`'s shard to `session-log`'s, which seeds it from the `kb-note` shard on its first write
+  in capture mode (copy the entries its shard lacks, by `tag`, up to the ring cap of 30);
+  `briefing` rewrites any `registry` handler naming `idea-ticket` or `kb-note` to `jira-story`
+  (`draft`) or `session-log` (`capture`), and the hub applies the same substitution until it has.
+  `kb-dream` drops `open_followups` and adds `last_health_values` on its next shard write.
+
 ## [1.10.4] - 2026-11-03
 
 A line whose latest sub-line was `partial`, `blocked` or a router `queued` note stayed open for

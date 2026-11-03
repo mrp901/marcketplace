@@ -41,20 +41,17 @@ as the eval fixture.
 | Skill | What it does | How it runs |
 |---|---|---|
 | `briefing` | Calendar, chat and tracker snapshot; the reporter that closes finished lines, reports what every skill did, and posts the one message | Schedule |
-| `proactive-router` | The hub. Sweeps reactions and saved items, classifies them, and acts on every tick on the board | Schedule |
+| `proactive-router` | The hub. Classifies the lines you add, and acts on every tick on the board: dispatches a handler, does a small inline action, or resolves a choice | Schedule |
 | `reply-draft` | Drafts an email or chat reply in your voice. Never sends | Handler |
-| `kb-note` | Captures one decision or reference note into the knowledge base | Handler |
 | `action-sweep` | Sweeps canvases, mentions, assigned tickets, meeting actions and your own chat commitments into one line each | Schedule, and a handler |
-| `idea-ticket` | Writes an ideas-board ticket in your voice, audited before you see it | Direct, and a handler |
 | `idea-spar` | A sparring partner while you work an idea: challenge, codebase reality, market, 2-3 option sketches, and a shareable pack; packs an idea when it moves into Next | Direct, schedule, and a handler |
 | `action-list` | Builds a ranked, time-boxed action list with ready drafts for a stretch of your day, and works a list item by item until you call it done | Direct only |
-| `jira-story` | Refines an existing story's acceptance criteria, or drafts a new story from a one-line idea, following the ticket conventions it finds in your tracker | Direct only |
+| `jira-story` | Refines an existing story's acceptance criteria, drafts a new story from a one-line idea, or turns a rough problem into an audited ideas-board ticket in your voice, following the ticket conventions it finds in your tracker | Direct, and a handler (idea mode) |
 | `transcript` | Extracts the full text transcript of a Teams meeting recording from a SharePoint or Stream link, through your signed-in browser | Direct only |
-| `session-log` | Writes a working session up as a durable note | Direct, plus hooks |
-| `kb-dream` | Curates the knowledge base, consolidates memory, reviews the learning loop | Schedule, and a handler |
+| `session-log` | Writes a working session up as a durable note, or captures one decision or reference note from a ticked line | Direct, plus hooks, and a handler (capture mode) |
+| `kb-dream` | Keeps the knowledge base the first port of call for your AI harness: curates it, consolidates memory, reviews the learning loop, and ends each pass with a one-line health verdict the briefing carries | Schedule, and a handler |
 | `skill-eval` | Turns feedback on one run into an amended skill | Direct only |
 | `skill-health-check` | Scores recent skill output against real evidence | Direct or schedule |
-| `vault-pulse` | Measures whether the knowledge base is compounding (freshness, capture, reuse, consultation, unapplied learning, backlog); the briefing carries the verdict, so you never have to open the vault to check | Schedule (weekly), or direct |
 
 Every skill takes `profile=<ref>` and, when scheduled, `unattended`:
 

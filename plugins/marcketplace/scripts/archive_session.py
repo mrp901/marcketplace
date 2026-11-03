@@ -170,8 +170,8 @@ def covered_by_session_log(transcript, session_stem, archive):
 
 def main():
     raw = sys.stdin.read()
-    if os.environ.get("VAULT_PULSE_RUN") == "1" or os.environ.get("MARCKETPLACE_HEADLESS") == "1":
-        # A scheduled unattended run (run_pulse.py, run_session_log.py) is not a working session;
+    if os.environ.get("MARCKETPLACE_HEADLESS") == "1":
+        # A scheduled unattended run (run_session_log.py) is not a working session;
         # archiving it would queue a non-session for write-up every run.
         return 0
     try:

@@ -9,10 +9,10 @@ The dispatch contract between `proactive-router` (the hub) and every skill that 
 | email | ✉️ | reply-draft `draft` (single-shot; drafts only, never sends) |
 | chat-reply | 💬 | reply-draft `draft` (single-shot; drafts only, never sends) |
 | ticket-reply | 🎫 | action-sweep `targeted` (two-tick to `push`) |
-| ticket-idea | 🎫 | idea-ticket `draft` (two-tick to `file`) |
+| ticket-idea | 🎫 | jira-story idea mode `draft` (two-tick to `file`) |
 | ticket-minor | 🎫 [minor] | action-sweep `targeted` small tier (two-tick to `push`) |
-| kb-doc | 📖 | kb-note `capture` (single-shot; a knowledge-base write is additive and reversible) |
-| summarise | 📝 | kb-note `capture` (single-shot; the summary is captured as a reference-shaped note) |
+| kb-doc | 📖 | session-log `capture` (single-shot; a knowledge-base write is additive and reversible) |
+| summarise | 📝 | session-log `capture` (single-shot; the summary is captured as a reference-shaped note) |
 | meeting-followup | 🗓️ | action-sweep `meeting` (two-tick to `push`) |
 | sweep-push | ⬆️ | action-sweep `push` (confirming mode; this IS the second tick) |
 | to-do | ☑️ | `inline:to-do` |
@@ -26,6 +26,8 @@ The dispatch contract between `proactive-router` (the hub) and every skill that 
 | fyi | (none) | never on the board; reported in the briefing message only |
 
 Every row names whether its mode is **single-shot** (runs once on the tick and is done) or the first half of a **two-tick** flow (produces a draft, then waits for a second tick on a fresh line before the irreversible step). A mode with no annotation is single-shot.
+
+A registry entry that names a skill retired in 1.11.0 reads as its replacement: `idea-ticket` as `jira-story` (idea mode), `kb-note` as `session-log` (`capture`). `briefing`'s 1.10.4 to 1.11.0 migration rewrites them; until it runs, the hub applies the same substitution.
 
 `fyi` is a classification outcome, not a surface line. The hub records an FYI in `state.runs.proactive-router.fyi` (one line each, at most 10 per run) and briefing lists them in its message. There is nothing to tick because there is nothing to do.
 
@@ -165,4 +167,4 @@ A skill becomes a handler by declaring a `## Handler mode` heading in its `SKILL
 - What each mode is and is not allowed to do, in particular which modes (if any) are confirming modes permitted to perform an irreversible external write, per the rule above.
 - Its return contract: confirmation that it returns exactly the JSON shape above, with any mode-specific notes on what `artefacts` or `next_action` typically carry for that mode.
 
-A skill with no `## Handler mode` heading is never dispatched by the hub, regardless of what its description implies. `session-log` and `skill-eval` have none: the first runs on the user's request and its hooks, and `skill-eval` is manual by design.
+A skill with no `## Handler mode` heading is never dispatched by the hub, regardless of what its description implies. `skill-eval` has none: it is manual by design. `session-log` (mode `capture` only) and `jira-story` (idea mode, `draft` and `file`) declare one for the single category each handles; their other modes run on the user's request and, for `session-log`, its hooks, and the hub never dispatches those.

@@ -1,6 +1,6 @@
 ---
 name: jira-story
-description: Use when the user asks to refine, tighten, clean up or review a tracker story's or epic's acceptance criteria, says a ticket feels disjointed, messy or vague, or asks to draft a story or raise a ticket from a one-line idea.
+description: Use when the user asks to refine, tighten, clean up or review a tracker story's or epic's acceptance criteria, says a ticket feels disjointed, messy or vague, asks to draft a story or raise a ticket from a one-line idea, hands over a rough, half-formed problem to turn into an ideas-board ticket, or when the hub dispatches a ticked line classified ticket-idea.
 ---
 
 # Jira story
@@ -10,7 +10,7 @@ acceptance criteria. It catches what a same-context self-review cannot see (a co
 subagent pass), asks only the questions that are genuinely undecided, and holds every
 sentence to an anti-slop bar before it ships. It follows the ticket conventions the
 connected tracker already shows, rather than a fixed template. Runs as a directly invoked
-skill; it is not a hub handler.
+skill, and as a hub handler in idea mode only (`## Handler mode`).
 
 Resolve profile, state and tools per `../../shared/onboarding.md` before doing anything
 else. Resolve tools via onboarding step 4; prefixes come from `state.machines`.
@@ -25,7 +25,8 @@ else. Resolve tools via onboarding step 4; prefixes come from `state.machines`.
   `kb.paths.drafts`, `kb.paths.voice`
 - Tool categories: `tracker` (search issues, get issue, create issue, edit issue, link
   issues), `kb` (read, write; knowledge-base destination and voice ledger only)
-- Caps: none are configured for this skill; see Budget.
+- Caps: none for Refine and New (see Budget); idea mode reads `budgets.jira-story`.
+- Idea mode adds ideas-board keys and tools: `references/idea-ticket-flow.md`, "Needs".
 
 ## Budget
 
@@ -38,9 +39,13 @@ available and say so, per `../../shared/model-tiers.md`.
 
 ## Flow
 
-Two modes. **Refine**: the invocation carries an issue key. **New**: it carries a plain
+Three modes. **Refine**: the invocation carries an issue key. **New**: it carries a plain
 description, a one-liner, or `new`. New mode runs the same pipeline on your own first
-draft, because that draft is exactly what the blind pass exists to catch.
+draft, because that draft is exactly what the blind pass exists to catch. **Idea**: the
+invocation hands over a rough, half-formed problem to turn into an ideas-board ticket, or
+the hub dispatches a ticked `ticket-idea` line. Idea mode does not run the steps below:
+it follows `references/idea-ticket-flow.md` end to end, with its own format, audit and
+confirmation gate (`references/idea-ticket-format.md`, `idea-ticket-audit-rubric.md`).
 
 1. **Destination.** Take it from the invocation if stated (do not re-ask). Options: the
    tracker, a knowledge-base draft (write per `../../shared/kb-conventions.md`
@@ -86,7 +91,7 @@ draft, because that draft is exactly what the blind pass exists to catch.
 8. **Write, then hold every sentence to the bar.** Re-check each new sentence against
    `references/antipatterns.md`, on every ticket, not once per session. Voice: load the
    `ticket_prose` register per `../../shared/voice.md`; the AI-tells list in
-   `../idea-ticket/references/ticket-format.md` applies here too. Split by customer
+   `references/idea-ticket-format.md` applies here too. Split by customer
    value: each child story is the smallest shippable customer outcome, never a technical
    layer. Where an AC references another ticket, create a real link with `tracker: link
    issues`; never leave a bare key in prose.
@@ -105,6 +110,13 @@ draft, because that draft is exactly what the blind pass exists to catch.
     voice ledger, in its entry shape; a grade or general comment ends with the conversation.
 
 See `references/worked-example.md` for one filled-in pass against `profiles/example.md`.
+
+## Handler mode
+
+Handler for the `ticket-idea` category only: idea mode, modes `draft` and `file` (a
+two-tick flow; `file` is the only one that creates the ticket). The payload, both modes'
+returns and the direct-invocation path are in `references/idea-ticket-flow.md`, "Handler
+mode". Refine and New are never dispatched.
 
 ## Ground rules
 

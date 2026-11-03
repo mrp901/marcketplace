@@ -7,8 +7,8 @@ step; rule 7 says so and outranks the other six.
 1. **Quiet exit first.** Each skill starts with its cheapest "anything to do?" check and
    stops with `runs.<skill>.status: quiet` when there is nothing. Each skill writes its
    own condition into its `SKILL.md`'s `## Budget`. For example:
-   - proactive-router: no new reactions or saves since the cursor, and no surface line
-     differs from `state.items`.
+   - proactive-router: no surface line differs from `state.items` and no ticked line
+     lacks a hub sub-line.
    - idea-spar (Next watch): no idea newly moved into Next and no pack still pending.
    - kb-dream: nothing new in the inbox or the log since the last dream, and not a
      monthly run.

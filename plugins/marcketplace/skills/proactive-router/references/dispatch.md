@@ -9,7 +9,9 @@ and what each inline action does.
 
 One subagent per ticked line, model `budgets.models.worker`, told to invoke
 `/marcketplace:<handler>` itself; the handler's own `SKILL.md` never loads into the
-hub's context.
+hub's context. A registry entry still naming `idea-ticket` or `kb-note` (retired in 1.11.0,
+before `briefing` has migrated it) dispatches `jira-story` with mode `draft`, or
+`session-log` with mode `capture`.
 
 ```
 profile=<profile ref>
@@ -68,10 +70,10 @@ Every outcome, dispatched or inline, is appended to `state.outcomes` as
 
 ## Retrying blocked lines
 
-A ticked line that already carries a sub-line is skipped by flow step 7, which is right
+A ticked line that already carries a sub-line is skipped by flow step 5, which is right
 for a `done` or a queued line. A `blocked` line is different when its cause can clear. A
 handler blocked on a missing profile key is unblocked as soon as the user fills that key
-in, and without this rule nothing would ever look at the line again. Step 7 checks, once
+in, and without this rule nothing would ever look at the line again. Step 5 checks, once
 per run, before acting:
 
 1. **Scope.** Only `state.items` entries whose tag starts `pr:` and whose `status` is
@@ -83,12 +85,12 @@ per run, before acting:
    there is nothing cheap to check: leave the line blocked.
 3. **Check it** in the profile document read at onboarding. No connector call, no handler
    read. Still missing or empty: leave the line blocked.
-4. **Settle before acting**, using the line's step 5 classification:
-   - *Deleted:* handle it as a deletion (step 8). Never retry it.
+4. **Settle before acting**, using the line's step 3 classification:
+   - *Deleted:* handle it as a deletion (step 6). Never retry it.
    - *Unticked since:* the user withdrew the tick. Set `status: open`, clear the
      `blocked_*` fields, and act on nothing.
    - *Ticked, or edited and ticked:* set `status: open`, clear the `blocked_*` fields, set
-     `retried_for` to the key, and act on the line in step 7 with its original
+     `retried_for` to the key, and act on the line in step 5 with its original
      `ticked_at`, so it takes its oldest-first place within
      `budgets.proactive-router.dispatches`. If the user edited it, the edited text is the
      instruction. The new sub-line is written under the old `blocked` one. The line itself
@@ -129,7 +131,7 @@ handler name, and an `outcomes` entry.
 That read-only-or-state-only constraint is what makes an action eligible to be inline at
 all. An action whose output is a durable artefact outside state (a note, a ticket, a
 comment) is a dispatch to a handler instead. This is why `summarise` dispatches to
-`kb-note` rather than running inline: its output is a note in the knowledge base, and
+`session-log` (capture mode) rather than running inline: its output is a note in the knowledge base, and
 the hub holds no write access there.
 
 ## Unmapped categories
@@ -141,7 +143,7 @@ instead, with no subagent spawned.
 ## Lines added by the user
 
 A line the user added anywhere (no tag in `state.items`) is a new request. Classify it in
-place, exactly as a swept message would be: give it a `(pr:<yymmdd>-N)` tag in the same
+place, per `categories.md` and `classification.md`: give it a `(pr:<yymmdd>-N)` tag in the same
 write, record it in `state.items`, and if it is already ticked, act on it this run. A
 line added inside an idea block is read against that block's open questions first; if it
 answers one it is an `idea-decision` in that group, otherwise an ordinary request with

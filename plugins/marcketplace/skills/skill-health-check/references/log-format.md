@@ -11,7 +11,7 @@ Evidence window: 2026-08-24 to 2026-09-10 (4 kb notes, 1 tracker ticket)
 - FIG-164 deep-dive note: no correction found, links resolve, cited by the FIG-164 wireframe.
 - FIG-165 deep-dive note: superseded by the user's own addition on 2026-09-08 correcting the
   amortisation figure - the note used the old 8.5% instead of the July 13.4% update.
-- Ticket FIG-171 (idea-ticket): edited by the user 20 minutes after creation, priority changed.
+- Ticket FIG-171 (jira-story, idea mode): edited by the user 20 minutes after creation, priority changed.
 - Evidence sources available: kb frontmatter/links (full), tracker changelog (full), voice
   ledger (none - this skill drafts no prose).
 ```
@@ -30,7 +30,7 @@ Per `surface-protocol.md`'s line grammar, tag form `shc:<YYMMDD>-<n>`, category
 `skill-eval`, reading as the action a tick causes:
 
 ```
-- [ ] (shc:260910-1) 🔴 kb-note scored red: two notes superseded by your own corrections this fortnight. Run skill-eval on it? · .utility/skill-health/kb-note.md
+- [ ] (shc:260910-1) 🔴 session-log scored red: two notes superseded by your own corrections this fortnight. Run skill-eval on it? · .utility/skill-health/session-log.md
 ```
 
 The one or two things that drove the tag, not the full evidence list; the log file is the
@@ -45,9 +45,9 @@ No board line. Every score, whatever its colour, is written to
 
 ```yaml
 scores:
-  kb-note: {tag: red, why: "two notes superseded by your corrections", ref: ".utility/skill-health/kb-note.md", checked_at: 2026-09-10T03:00:00+10:00}
+  session-log: {tag: red, why: "two notes superseded by your corrections", ref: ".utility/skill-health/session-log.md", checked_at: 2026-09-10T03:00:00+10:00}
   reply-draft: {tag: amber, why: "2 of 3 drafts edited before sending", ref: ".utility/skill-health/reply-draft.md", checked_at: 2026-09-10T03:00:00+10:00}
-  kb-note: {tag: green, why: "3 notes verified as written", ref: ".utility/skill-health/kb-note.md", checked_at: 2026-09-10T03:00:00+10:00}
+  session-log: {tag: green, why: "3 notes verified as written", ref: ".utility/skill-health/session-log.md", checked_at: 2026-09-10T03:00:00+10:00}
 ```
 
 The briefing's Runs block reports amber and green from here in one `health:` line; red is

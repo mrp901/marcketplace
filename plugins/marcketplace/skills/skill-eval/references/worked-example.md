@@ -1,7 +1,7 @@
 # Worked example - interactive path
 
 Against `profiles/example.md` (Northwind Logistics, Freight Ops). The run being evaluated:
-`idea-ticket` produced an ideas-board ticket for a dock-scheduling dashboard problem.
+`jira-story` (idea mode) produced an ideas-board ticket for a dock-scheduling dashboard problem.
 
 ## Step 2 - captured eval
 
@@ -96,27 +96,27 @@ file-sending capability, name unchanged, for her to review and save herself.
 
 # Worked example - run with no target
 
-Sunday's `skill-health-check` scored `kb-note` red (`tally.kb-doc.edited` at 6 against 9
+Sunday's `skill-health-check` scored `session-log` red (`tally.kb-doc.edited` at 6 against 9
 ticked, three voice-ledger entries all in the `teammate_chat` register) and put one line
-on the board: `(shc:260921-2) 🔴 kb-note scored red: 6 of 9 notes edited before you kept
-them. Run skill-eval on it? · .utility/skill-health/kb-note.md`. Priya ticked it; the
+on the board: `(shc:260921-2) 🔴 session-log scored red: 6 of 9 notes edited before you kept
+them. Run skill-eval on it? · .utility/skill-health/session-log.md`. Priya ticked it; the
 Router wrote `↳ router: queued for your next skill-eval run`.
 
 On Tuesday Priya runs `/marcketplace:skill-eval` with no target. The skill reads the board
-once and lists one candidate: `kb-note · 6 of 9 notes edited before kept ·
-.utility/skill-health/kb-note.md`. Priya picks it.
+once and lists one candidate: `session-log · 6 of 9 notes edited before kept ·
+.utility/skill-health/session-log.md`. Priya picks it.
 
 **Starting feedback** is the health log entry plus the three ledger entries it cites, all
 diffing to the same shape: each kept version drops the note's closing restatement
 sentence. Step 2 reflects that back; Priya confirms and adds "and it keeps opening with
 'This note records…', which I always cut." Two patterns, both grounded.
 
-**Synthesis** sharpens `kb-note`'s existing "what this records" guidance rather than adding
+**Synthesis** sharpens `session-log`'s existing "what this records" guidance rather than adding
 a new rule, adds the opener as a good/bad pair, and names the sample size. Priya confirms
 the change summary; the revised `SKILL.md` is handed back as a file.
 
 **Closing the loop:** one `state.outcomes` entry, `{tag: shc:260921-2, handler:
-skill-eval, status: done, report_line: "skill-eval run on kb-note: dropped the closing
+skill-eval, status: done, report_line: "skill-eval run on session-log: dropped the closing
 restatement and the stock opener", recorded_at: 2026-09-23T10:40:00+10:00}`. The next
 briefing closes the `shc:` line as done by skill-eval. Nothing was installed by this
 skill.

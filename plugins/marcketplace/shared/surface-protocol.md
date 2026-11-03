@@ -84,7 +84,7 @@ One table, every section, with To-do as the sole exception:
 | Edited, then ticked | Do it my way | Same as ticked, using the edited text as the instruction |
 | Edited, not ticked | Nothing happens yet; the wording is kept | `tally.edited += 1`; the edited text is the new baseline and is never rewritten by the owner |
 | Deleted (tag in `state.items`, line gone, tag not in briefing's `closed`) | No; suppress it | Never re-add it. `state.suppressions` gains an entry; `tally.deleted += 1` |
-| Added a line anywhere | A new request | The hub classifies it on its next run like a swept message; a line added inside an idea block takes that idea as its context |
+| Added a line anywhere | A new request | The hub classifies it on its next run; a line added inside an idea block takes that idea as its context |
 
 **To-do is the exception.** It is the user's own list. A tick there means "done" and briefing moves the line to Closed on its next run. Nothing dispatches from To-do, and no skill writes into it except the hub's `inline:to-do` action, which adds a line the user asked for.
 

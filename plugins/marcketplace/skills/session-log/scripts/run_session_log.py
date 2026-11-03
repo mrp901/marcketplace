@@ -6,7 +6,7 @@
 
 The hooks only fill `pending/`; nothing empties it unless someone runs this skill. On 26 Oct 2026
 the queue had grown to 10 sessions over five days with no note written, and every downstream pass
-(kb-dream, vault-pulse) had nothing new to work with. This runner closes that gap: it starts one
+(kb-dream and its health verdict) had nothing new to work with. This runner closes that gap: it starts one
 headless Claude Code session with `/marcketplace:session-log profile=<ref> unattended` and records
 what happened in `last-drain.txt` beside `pending/`, so a failed run leaves evidence. It exits with
 the session's exit code (124 on timeout), and exits 0 without starting a session when the queue is
