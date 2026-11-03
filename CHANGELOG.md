@@ -6,6 +6,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.10.4] - 2026-11-03
+
+A line whose latest sub-line was `partial`, `blocked` or a router `queued` note stayed open for
+ever (lines from 24 Sep were still open on 3 Nov). State shape is unchanged; one optional
+profile key is new.
+
+### Added
+- `briefing` closes such a line as `expired · no activity for 5 business days` when no newer
+  sub-line has followed for `briefing.stale_after_business_days` (new, default 5, `0` disables)
+  business days: Mon-Fri in `org.timezone`, counted from the latest sub-line's date to the run
+  date, public holidays not treated specially. `needs your tick`, no-sub-line, To-do and `term:`
+  lines never expire. Expired tags go into `closed`; the "Since last briefing" block names them.
+  `shared/surface-protocol.md` "Closing" carries the rule.
+
+### Changed
+- An option whose sibling closed as `expired` closes `not chosen`, like one whose sibling closed
+  `done`, so an expired idea-decision option closes its group.
+
 ## [1.10.3] - 2026-11-03
 
 From a skill-health-check run. State shape is unchanged; one optional budget key is new.

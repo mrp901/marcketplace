@@ -1,5 +1,17 @@
 # briefing - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-03 expire stuck lines after 5 business days (1.10.4)
+
+A closing rule that waits for a `done` sub-line never fires for a `partial`, `blocked` or router
+`queued` sub-line, because nothing acts on those; lines from 24 Sep were still open on 3 Nov.
+The owner chose expiry after 5 business days, configurable as `briefing.stale_after_business_days`
+(`0` disables). `needs your tick` is exempt (it is waiting on the user, not stuck), as are lines
+with no sub-line, To-do lines and `term:` lines. Public holidays are not excluded: that needs a
+calendar per org and the cost of closing a day early is a re-add. The closing logic is model
+prose, not a script, so the business-day count is prose too; `scripts/trim_closed.py` only trims.
+The sibling rule said "closed as `done`", which would not have closed an expired option's
+siblings, so it now says `done` or `expired`.
+
 ## 2026-11-03 notetaker none; migration seeds on every write (1.10.3)
 
 `notetaker.service: none` turns the prep lines off silently (no ToolSearch, no failure note).
