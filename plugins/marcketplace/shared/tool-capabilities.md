@@ -10,24 +10,24 @@ The starting set below is not exhaustive on its own; it is extended with every v
 |---|---|---|---|
 | `chat: read canvas` | Read the surface's current content and section addressing | `slack_read_canvas` | briefing, proactive-router, idea-spar, kb-dream, action-sweep, skill-health-check, action-list |
 | `chat: update canvas` | Write one batch of operations against a surface addressing snapshot | `slack_update_canvas` | briefing, proactive-router, idea-spar, kb-dream, action-sweep, skill-health-check |
-| `chat: search messages` | Search reactions, saved items, DMs and channel history; see the search forms below | `slack_search_public_and_private` | briefing, proactive-router, action-sweep, action-list |
-| `chat: read thread` | Fetch one specific thread or message by its permalink, when a reference already names it | `slack_read_thread`, `slack_get_permalink` | reply-draft, kb-note, action-sweep, action-list |
+| `chat: search messages` | Search DMs and channel history; see the search forms below | `slack_search_public_and_private` | briefing, action-sweep, action-list |
+| `chat: read thread` | Fetch one specific thread or message by its permalink, when a reference already names it | `slack_read_thread`, `slack_get_permalink` | reply-draft, session-log (capture), action-sweep, action-list |
 | `chat: search users` | Resolve a name to a user id when not already known | `slack_search_users` | briefing |
 | `chat: send message` | Post directly to a channel - the `chat_message` notify fallback | `slack_send_message` | briefing, kb-dream, notify fallback (any skill) |
-| `tracker: search issues (JQL)` | Query the issue tracker for a candidate set | `searchJiraIssuesUsingJql` | briefing, action-sweep, idea-ticket, action-list, jira-story |
-| `tracker: get issue` | Fetch one issue's full fields, comments, links | `getJiraIssue` | action-sweep, idea-ticket, action-list, jira-story |
-| `tracker: create issue` | File a new issue | `createJiraIssue` | action-sweep (push), idea-ticket (file), action-list, jira-story (new mode) |
+| `tracker: search issues (JQL)` | Query the issue tracker for a candidate set | `searchJiraIssuesUsingJql` | briefing, action-sweep, action-list, jira-story |
+| `tracker: get issue` | Fetch one issue's full fields, comments, links | `getJiraIssue` | action-sweep, action-list, jira-story |
+| `tracker: create issue` | File a new issue | `createJiraIssue` | action-sweep (push), action-list, jira-story (new mode) |
 | `tracker: edit issue` | Update fields on an existing issue; a description edit replaces the whole text | `editJiraIssue` | jira-story |
 | `tracker: link issues` | Create a real link between two issues | `createIssueLink` | jira-story |
 | `tracker: add comment` | Post a non-destructive comment to an existing issue | `addCommentToJiraIssue` | action-sweep (push), action-list |
 | `ideas: search issues (JQL)` | Query the ideas board for a candidate | `searchJiraIssuesUsingJql` (ideas project) | idea-spar |
 | `ideas: get issue` | Fetch one idea's full fields and comments | `getJiraIssue` (ideas project) | idea-spar |
-| `ideas: create issue` | File a new idea, unlabelled | `createJiraIssue` (ideas project) | idea-ticket (file) |
+| `ideas: create issue` | File a new idea, unlabelled | `createJiraIssue` (ideas project) | jira-story (idea mode, file) |
 | `wiki: get page by id` | Fetch a page by its id - never search | `getConfluencePage` | onboarding (profile/state docs), any skill reading a wiki-hosted kb |
-| `wiki: update page` | Full-replace or patch a page | update-page equivalent | onboarding (profile/state docs), kb-note, kb-dream when `kb.kind: confluence` |
+| `wiki: update page` | Full-replace or patch a page | update-page equivalent | onboarding (profile/state docs), session-log, kb-dream when `kb.kind: confluence` |
 | `kb: search` | Search the knowledge base connector for matching files | `sharepoint_search` | action-sweep, idea-spar, kb-dream, session-log, action-list |
-| `kb: read` | Read one kb file by path or resource id | `read_resource` | idea-spar, kb-dream, session-log, kb-note, action-list, jira-story |
-| `kb: write` | Create or full-replace a kb file, byte-checked where the connector requires it | `sharepoint_upload_file` | idea-spar, kb-dream, session-log, kb-note, action-list, jira-story (destination only) |
+| `kb: read` | Read one kb file by path or resource id | `read_resource` | idea-spar, kb-dream, session-log, action-list, jira-story |
+| `kb: write` | Create or full-replace a kb file, byte-checked where the connector requires it | `sharepoint_upload_file` | idea-spar, kb-dream, session-log, action-list, jira-story (destination only) |
 | `calendar: list today` | Today's events only, local timezone window | `outlook_calendar_search` | briefing, action-list |
 | `email: search` | Search mail for threads/mentions | mail-search equivalent | reply-draft, action-sweep, action-list |
 | `email: sent` | List the user's own sent mail, for voice calibration | mail-sent equivalent | voice calibration |
@@ -36,7 +36,7 @@ The starting set below is not exhaustive on its own; it is extended with every v
 | `codebase: search` | Search the connected codebase for a term or symbol | device-bridge or filesystem search | idea-spar (reality lens), action-list |
 | `codebase: read` | Read one file from the connected codebase | device-bridge or filesystem read | idea-spar (reality lens), action-list (work) |
 | `codehost: list merged pull requests` | List pull requests merged in a window that involve the user; read only | `gh` local CLI only - see "Local CLI first" | action-list (build) |
-| `web: search` | General web search for market/competitor research | web-search equivalent | idea-spar (market lens), idea-ticket |
+| `web: search` | General web search for market/competitor research | web-search equivalent | idea-spar (market lens), jira-story (idea mode) |
 | `browser: list tabs` | List the user's own signed-in browser tabs, creating one if none exist, and return a tab id | `tabs_context_mcp` (Chrome browser tools) | transcript |
 | `browser: navigate` | Point one tab id at a URL | `navigate` | transcript |
 | `browser: run page script` | Run a JavaScript expression inside a tab and return its value | `javascript_tool` | transcript |
@@ -60,8 +60,6 @@ and no "couldn't reach" note, and onboarding never fast-fails or asks on it. A o
 
 | Form | Returns | Used by |
 |---|---|---|
-| `hasmy::<emoji>: after:<date>` | Messages the user reacted to with that emoji since the date | proactive-router |
-| `is:saved after:<date>` | Messages the user saved since the date | proactive-router |
 | `from:me after:<date>` | The user's own messages since the date; action-sweep reads these for first-person commitments ("I'll send", "I'll check", "leave it with me") | action-sweep |
 | `with:me is:thread after:<date>` | Threads the user is a participant in; action-sweep keeps only those where someone else spoke last | action-sweep |
 | `@<user> after:<date>` (the user's own mention) | Messages that mention the user; action-sweep keeps only those with no reply or reaction from the user | action-sweep |

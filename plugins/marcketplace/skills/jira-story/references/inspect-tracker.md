@@ -47,8 +47,8 @@ Open the draft with one line stating what was inferred and from how many issues 
 the style of three recent FLT stories: verb-first summaries, bulleted ACs, epic parent
 required"). The user can then correct the inference rather than discover it later.
 
-## Relationship to idea-ticket
+## Relationship to idea mode
 
-`../../idea-ticket/references/ticket-format.md` defines a fixed format for ideas-board
-tickets (Context, The ask, Options). That is a different ticket shape for a different
-board and is not duplicated here. Only its "Cut the AI tells" list is shared, by reference.
+`idea-ticket-format.md` defines a fixed format for ideas-board tickets (Context, The ask,
+Options), used in idea mode (`idea-ticket-flow.md`). That is a different ticket shape for a
+different board, so a story never takes it. Only its "Cut the AI tells" list is shared.

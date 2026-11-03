@@ -14,7 +14,7 @@ good run:
   prepares a dispatch to `idea-spar` in `decide` mode carrying the user's own text as
   `text_as_ticked`. A sub-line saying a tool category could not be resolved is an
   acceptable outcome of the dispatch step.
-- Does NOT treat the line as a swept chat message (there is no permalink; it needs none),
+- Does NOT treat the line as a chat message found by search (there is no permalink; it needs none),
   does not write `pick one`, and does not act on `d2a` or `d2b`.
 
 Fail this if the run ignores the added line, discards it for lacking a permalink or a tag,

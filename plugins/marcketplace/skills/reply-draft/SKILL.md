@@ -100,7 +100,7 @@ user reviews and pastes themself is a better product than a scheduled send, beca
 reply this skill cannot show the user in its final, sent form should never leave in their
 name unseen. `draft` performs no external
 write of any kind; it only writes the draft note into the user's own kb, which is
-additive and reversible like `kb-note`'s writes. `handler-contract.md`'s irreversible-
+additive and reversible like `session-log`'s capture writes. `handler-contract.md`'s irreversible-
 write rule (filing a ticket, posting a comment, sending a message) does not apply to this
 mode, because this mode never sends. Returns exactly the JSON shape in
 `handler-contract.md`: `report_line` names the register used and the gap count if any,

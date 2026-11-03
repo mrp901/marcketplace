@@ -1,6 +1,6 @@
 # Knowledge base conventions
 
-The generic version of `source/session-log/references/vault-conventions.md`. Any skill that reads or writes `profile.kb.*` (session-log, kb-note, kb-dream, idea-spar, voice calibration) follows this contract. It generalises what the source vault-conventions file documented as instance-specific observation into rules any knowledge base of kind `obsidian_typed | plain_markdown | notion | confluence` can follow.
+The generic version of `source/session-log/references/vault-conventions.md`. Any skill that reads or writes `profile.kb.*` (session-log, kb-dream, idea-spar, voice calibration) follows this contract. It generalises what the source vault-conventions file documented as instance-specific observation into rules any knowledge base of kind `obsidian_typed | plain_markdown | notion | confluence` can follow.
 
 ## The knowledge base as a concept
 

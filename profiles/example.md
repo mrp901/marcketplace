@@ -50,8 +50,6 @@ tools:
 chat:
   team_id: TEXAMPLE001
   team_url: https://northwindlogistics.slack.com
-  starter_emoji: [envelope, ticket, book, star]
-  include_saved_items: true
   tracker_feed_channels:
     work_started: CEXAMPLEFEED01
     fix_version: CEXAMPLEFEED02
@@ -67,7 +65,6 @@ briefing:
     idea-spar: 8
     kb-dream: 8
     skill-health-check: 8
-    vault-pulse: 9
 
 tracker:
   cloud_id: 8f2e4a91-3c7d-4b2e-9a11-example000fc
@@ -162,13 +159,12 @@ voice:
 
 budgets:
   briefing: {connector_calls: 3, notetaker_calls: 1, surface_reads: 1, surface_writes: 1, feed_issue_keys: 20}
-  proactive-router: {searches: 5, thread_reads: 6, dispatches: 3}
+  proactive-router: {thread_reads: 6, dispatches: 3}
   action-sweep: {canvas_guard: 5, cold_start_days: 7, targeted_search_per_todo: 1, thread_reads: 6}
-  idea-ticket: {investigation_calls: 4, web_searches: 1, audit_rounds: 2}
+  jira-story: {investigation_calls: 4, web_searches: 1, audit_rounds: 2}   # idea mode only
   idea-spar: {web_searches: 4, code_reads: 8, kb_reads: 3, findings_per_lens: 5, sketch_options: 3, next_per_run: 1}
-  kb-dream: {incremental_reads: 25, sessions_incremental: 5, sessions_full: 10, reviews: monthly}
+  kb-dream: {incremental_reads: 25, sessions_incremental: 5, sessions_full: 10, reviews: monthly, health: {window_days: 7}}   # health optional: lookup_pattern (regex), thresholds {<signal key>: [green_edge, amber_edge]}
   skill-health-check: {kb_reads: 15}
-  vault-pulse: {window_days: 7}   # optional: lookup_pattern (regex), thresholds {<signal key>: [green_edge, amber_edge]}
   models: {worker: sonnet, search: haiku, critic: opus}
 ```
 

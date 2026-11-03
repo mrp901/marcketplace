@@ -20,14 +20,14 @@ budgets:
 
 | Skill | Step | Tier | Why |
 |---|---|---|---|
-| idea-ticket | draft audit (a fresh subagent checks a ticket draft before it goes to the user) | `critic` | the point of the audit is a sharper, more careful reader than the one that wrote the draft; the source skill deliberately does not let this step inherit the default model |
+| jira-story | blind pass, and idea mode's draft audit (a fresh subagent checks a story or ticket draft before it goes to the user) | `critic` | the point of the audit is a sharper, more careful reader than the one that wrote the draft; the source skill deliberately does not let this step inherit the default model |
 | idea-spar | every web and codebase search behind the reality and market lenses, dispatched as a subagent with one narrow job | `search` | code and web lookups are near-free structured lookups; tiering by task (not by step) keeps raw file and page content out of the primary model's context |
 | skill-eval | Step 2 synthesis (revises a `SKILL.md` from captured feedback) | `critic` | this is the hard reasoning step - holding the whole original skill, the specific feedback and the discipline not to over-edit all at once |
 
 Every other skill and step runs on `worker` by default, including all of reply-draft,
-kb-note, action-sweep's drafting, briefing, proactive-router's classification and
+session-log's capture mode, action-sweep's drafting, briefing, proactive-router's classification and
 dispatch, session-log, and kb-dream's curation passes. Voice-matching handlers (reply-
-draft, kb-note, idea-ticket's own drafting step) stay on `worker` - only the audit/critic
+draft, session-log's capture mode, jira-story's own drafting step) stay on `worker` - only the audit/critic
 step above escalates, never the drafting itself.
 
 ## Escalating for one step and returning
@@ -35,7 +35,7 @@ step above escalates, never the drafting itself.
 A skill that needs a higher tier for a single step spawns a **fresh subagent** explicitly
 set to that tier for that step only - it does not switch its own running model. The
 escalation is scoped to the one call: the subagent gets only what that step needs (per
-idea-ticket's audit, a genuinely fresh context with no inherited drafting reasoning, so the
+jira-story's audit, a genuinely fresh context with no inherited drafting reasoning, so the
 critic does not anchor on the primary model's own thinking), returns its narrow result, and the
 calling skill resumes on `worker` for everything after.
 

@@ -32,7 +32,7 @@ Since last briefing
 Runs
 * {skill} {status}: {note} · {link}
 * health: {skill} green · {skill} amber ({why})
-* pulse {tag}: {note} · {link}
+* kb health {tag}: {health.why} · {link}
 * fyi: {one line} · {permalink}
 * overdue: {skill} last ran {n} days ago (expected every {max_gap_days})
 (or "Nothing to report" if there are no outcomes, nothing queued and no runs in the window)
@@ -79,7 +79,7 @@ Runs
 * idea-spar ok: pack for FIG-204 (moved into Next): per-drift alert or a digest? 2 decisions on the board · https://claude.ai/artifact/example-fig-204-pack
 * kb-dream quiet: nothing new since the last dream
 * health: idea-spar green · reply-draft amber (2 of 3 drafts edited before sending)
-* pulse amber: 2 ended sessions unarchived, 17 open follow-ups, Inbox item 38 d old · https://example.com/vault-pulse-log
+* kb health amber: 2 ended sessions unarchived, 5 voice-ledger items unmarked · https://example.com/dream-note
 * fyi: batch-overnight recalculation agreed in #platform-eng · https://northwindlogistics.slack.com/archives/CEXAMPLEAPPRCH1/p1758510005000500
 * overdue: action-sweep last ran 11 days ago (expected every 8)
 

@@ -1,5 +1,27 @@
 # History
 
+## 2026-11-03 idea mode, absorbed from idea-ticket (1.11.0)
+
+`idea-ticket` had not run since 28 Sep. Its job (a rough problem into an audited ideas-board
+ticket) and the hub's `ticket-idea` category now live here as a third mode, **idea**:
+`references/idea-ticket-flow.md` (the seven steps, handler modes `draft` and `file`, budget,
+the "what the ideas board actually is" rules), `idea-ticket-format.md` (structure and the
+"Cut the AI tells" list), `idea-ticket-audit-rubric.md` and `idea-ticket-worked-example.md`,
+moved with history. Step labels became "idea step N" so they do not collide with Refine and
+New. The hub dispatches `jira-story` with `draft` then `file` (a two-tick flow); Refine and
+New are still never dispatched, so this skill is a handler for that one category only.
+
+Decisions where the retired skill's notes were silent:
+- The caps key is `budgets.jira-story` (was `budgets.idea-ticket`); the old name is read as an
+  alias. It applies to idea mode only; Refine and New still have no caps.
+- The earlier line in this file that `idea-ticket`'s format "is not duplicated" still holds:
+  a story never takes the ideas-board shape; only the AI-tells list is shared.
+- Carried from the retired `idea-ticket` HISTORY (22 Sep 2026): the audit is mandatory and
+  fresh each round, capped at two revisions; the hub path and the direct path run identical
+  steps and differ only in who delivers the confirmation gate; `draft` never files and `file`
+  is the only mode that does; `voice.calibration_refs` is optional; vendor mentions are one
+  line each with no research; web search is optional, confirmation only.
+
 ## 2026-10-13 port to marcketplace
 
 Ported from a private `jira-story` skill (single `SKILL.md` plus `references/antipatterns.md`),

@@ -1,5 +1,17 @@
 # briefing - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-03 the knowledge-base health line, and a registry migration (1.11.0)
+
+The Runs block's `pulse` line read `runs.vault-pulse`. `vault-pulse` is folded into `kb-dream`,
+so the line is now `kb health`, from `runs.kb-dream.health`, with the same repeat-while-amber-or-red
+rule; a green reading adds nothing, since `kb-dream`'s own Runs line already reports the run, and
+the date is shown when the last measured run is older than the window (a dream with no local
+access leaves the verdict untouched). `references/migration.md` gains "1.10.4 to 1.11.0": briefing
+rewrites any `registry` handler that names `idea-ticket` (to `jira-story`, `draft`) or `kb-note`
+(to `session-log`, `capture`) in its main-document write, since the hub dispatches by registry
+entry and would otherwise name a skill that no longer exists. The 1.6.0 `voice_edits` row now
+names `session-log` as `kb-note`'s successor.
+
 ## 2026-11-03 expire stuck lines after 5 business days (1.10.4)
 
 A closing rule that waits for a `done` sub-line never fires for a `partial`, `blocked` or router

@@ -34,9 +34,7 @@ PROSE_OK = {
         "references/note-structure.md",  # renamed to draft-format.md in 1.1.0
         "scripts/check_sweep_note.py",  # renamed to check_sweep_draft.py in 1.1.0
     },
-    "skills/proactive-router/evals/01-sweep-classification/graders/minor-allowlist.md": {
-        "references/categories.md"
-    },
+    "skills/kb-dream/HISTORY.md": {"references/followup-escalation.md"},  # removed in 1.11.0; the entry records why
 }
 
 

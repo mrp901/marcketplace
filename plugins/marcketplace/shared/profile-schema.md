@@ -53,8 +53,6 @@ tools:                     # which SERVICE serves each category; prefixes live i
 chat:
   team_id:                 # chat workspace/team id
   team_url:                 # chat workspace URL, e.g. https://<org>.slack.com
-  starter_emoji: [envelope, ticket, book, star]   # reaction set proactive-router polls for
-  include_saved_items: true
   tracker_feed_channels:    # channels where an automation posts tracker events; briefing cross-checks them
     work_started:           # channel id, or none; claims that work started on an issue
     fix_version:            # channel id, or none; claims that an issue's fix version was set or changed
@@ -70,7 +68,6 @@ briefing:
     idea-spar: 8
     kb-dream: 8
     skill-health-check: 8
-    vault-pulse: 9               # weekly run; 3 for a weekday run (see skills/vault-pulse/references/scheduling.md)
 
 tracker:
   cloud_id:                 # tracker's cloud/site id
@@ -156,13 +153,12 @@ voice:
 
 budgets:
   briefing: {connector_calls: 3, notetaker_calls: 1, surface_reads: 1, surface_writes: 1, feed_issue_keys: 20}
-  proactive-router: {searches: 5, thread_reads: 6, dispatches: 3}
+  proactive-router: {thread_reads: 6, dispatches: 3}
   action-sweep: {canvas_guard: 5, cold_start_days: 7, targeted_search_per_todo: 1, thread_reads: 6, chat_pages: 3}
-  idea-ticket:    {investigation_calls: 4, web_searches: 1, audit_rounds: 2}
+  jira-story:     {investigation_calls: 4, web_searches: 1, audit_rounds: 2}   # idea mode only
   idea-spar: {web_searches: 4, code_reads: 8, kb_reads: 3, findings_per_lens: 5, sketch_options: 3, next_per_run: 1}
-  kb-dream: {incremental_reads: 25, sessions_incremental: 5, sessions_full: 10, reviews: monthly}
+  kb-dream: {incremental_reads: 25, sessions_incremental: 5, sessions_full: 10, reviews: monthly, health: {window_days: 7}}   # health optional: lookup_pattern (regex), thresholds {<signal key>: [green_edge, amber_edge]}
   skill-health-check: {kb_reads: 15}
-  vault-pulse: {window_days: 7}   # optional: lookup_pattern (regex), thresholds {<signal key>: [green_edge, amber_edge]}
   models: {worker: sonnet, search: haiku, critic: opus}
 ```
 
@@ -174,53 +170,51 @@ budgets:
 | `state_ref` | onboarding (all skills) | ask (set once at bootstrap) | never guessed; onboarding step 2 fails fast without it |
 | `org.name` | all skills (org context in prose and notes) | ask | |
 | `org.product_scope` | all skills | ask | |
-| `org.product_tag` | idea-spar, idea-ticket, proactive-router | ask | used by `ideas.qualifiers: summary_has_product_tag` |
+| `org.product_tag` | idea-spar, jira-story (idea mode), proactive-router | ask | used by `ideas.qualifiers: summary_has_product_tag` |
 | `org.modules_context` | briefing, idea-spar | ask | one line, quoted verbatim, not summarised |
-| `org.timezone` | briefing, kb-dream, action-sweep, session-log, kb-note, action-list | discover (system clock) | |
-| `user.name` | briefing, kb-dream, reply-draft, kb-note, session-log, action-list | ask | |
-| `user.email` | reply-draft, kb-note, kb-dream (voice calibration) | discover (chat auth test) | |
+| `org.timezone` | briefing, kb-dream, action-sweep, session-log, action-list | discover (system clock) | |
+| `user.name` | briefing, kb-dream, reply-draft, session-log, action-list | ask | |
+| `user.email` | reply-draft, session-log, kb-dream (voice calibration) | discover (chat auth test) | |
 | `user.chat_user_id` | briefing, proactive-router, action-sweep, kb-dream, action-list | discover (chat auth test) | |
-| `user.tracker_account_id` | action-sweep, idea-ticket, briefing, action-list | discover (tracker "myself") | |
+| `user.tracker_account_id` | action-sweep, jira-story (idea mode), briefing, action-list | discover (tracker "myself") | |
 | `tools.*` | onboarding (all skills) | default, refined by discovery | prefixes never stored here, only the service name |
 | `tools.<category>.cli` | onboarding step 4 (local CLI probe) | default (`auto`) | `off` skips the local CLI probe for that category; see `tool-capabilities.md` "Local CLI first" |
 | `chat.team_id` | briefing, kb-dream | discover (parsed from surface URL) | |
 | `chat.team_url` | briefing, kb-dream | discover (parsed from surface URL) | |
-| `chat.starter_emoji` | proactive-router | default | |
-| `chat.include_saved_items` | proactive-router | default | |
 | `chat.tracker_feed_channels.work_started` | briefing | ask | identity-shaped: never defaulted. A channel id, or `none` if the install has no such feed |
 | `chat.tracker_feed_channels.fix_version` | briefing | ask | same as `work_started` |
 | `calendar.day_window` | briefing | default | |
 | `briefing.stale_after_business_days` | briefing | default | 5; `0` disables expiry. Mon-Fri in `org.timezone`, public holidays not excluded |
 | `briefing.expected_runs` | briefing | default | one entry per scheduled skill; a skill missing from the map is never called overdue |
-| `tracker.cloud_id` | briefing, action-sweep, idea-spar, idea-ticket, skill-health-check, action-list | discover (accessible-resources) | |
+| `tracker.cloud_id` | briefing, action-sweep, idea-spar, jira-story, skill-health-check, action-list | discover (accessible-resources) | |
 | `tracker.site_url` | same as `tracker.cloud_id` | discover (accessible-resources) | |
-| `tracker.project_key` | action-sweep, idea-ticket, action-list, jira-story | ask | |
-| `tracker.issue_types` | action-sweep, idea-ticket, action-list, jira-story | discover (create-metadata) | |
-| `tracker.component` | action-sweep, idea-ticket, action-list | default (may be empty) | |
+| `tracker.project_key` | action-sweep, action-list, jira-story | ask | |
+| `tracker.issue_types` | action-sweep, action-list, jira-story | discover (create-metadata) | |
+| `tracker.component` | action-sweep, jira-story (idea mode), action-list | default (may be empty) | |
 | `tracker.default_parent_epic` | action-sweep, jira-story | ask | |
-| `tracker.ticket_template` | idea-ticket, action-sweep, jira-story | default | |
+| `tracker.ticket_template` | action-sweep, jira-story | default | |
 | `tracker.parked_prefix` | action-sweep | default | |
 | `tracker.my_work_jql` | briefing, action-sweep, action-list | default | |
-| `ideas.project_key` | idea-spar, idea-ticket | ask | |
-| `ideas.issue_type` | idea-spar, idea-ticket | discover (create-metadata) | |
-| `ideas.area_field` | idea-spar, idea-ticket | discover (create-metadata) | |
-| `ideas.area_value` | idea-spar, idea-ticket | ask | |
+| `ideas.project_key` | idea-spar, jira-story (idea mode) | ask | |
+| `ideas.issue_type` | idea-spar, jira-story (idea mode) | discover (create-metadata) | |
+| `ideas.area_field` | idea-spar, jira-story (idea mode) | discover (create-metadata) | |
+| `ideas.area_value` | idea-spar, jira-story (idea mode) | ask | |
 | `ideas.roadmap_field` | idea-spar (Next watch) | discover (create-metadata) | the trigger, never a qualifier |
-| `ideas.qualifiers` | idea-spar (Next watch), idea-ticket | default | first-match gate, generalised from the source's single hardcoded gate |
+| `ideas.qualifiers` | idea-spar (Next watch), jira-story (idea mode) | default | first-match gate, generalised from the source's single hardcoded gate |
 | `ideas.next_roadmap_values` | idea-spar (Next watch) | default | the slots that mean "about to be worked"; moving into one is the only roadmap change that produces a pack |
 | `notetaker.lookback_days` | action-sweep, briefing, action-list | default | not read when `tools.notetaker.service` is `none` |
 | `notetaker.prep_lines` | briefing | default | |
-| `kb.name` | kb-note, session-log, kb-dream, idea-spar, action-sweep, action-list | ask | |
-| `kb.kind` | kb-note, session-log, kb-dream, action-list, jira-story | ask | |
-| `kb.local_root` | kb-note, session-log, kb-dream, action-list | default (empty until a device bridge is linked) | |
-| `kb.remote` | kb-note, session-log, kb-dream, action-list | default | |
-| `kb.conventions_file` | session-log, kb-dream, kb-note, action-list, jira-story | default | |
+| `kb.name` | session-log, kb-dream, idea-spar, action-sweep, action-list | ask | |
+| `kb.kind` | session-log, kb-dream, action-list, jira-story | ask | |
+| `kb.local_root` | session-log, kb-dream (health verdict), action-list | default (empty until a device bridge is linked) | |
+| `kb.remote` | session-log, kb-dream, action-list | default | |
+| `kb.conventions_file` | session-log, kb-dream, action-list, jira-story | default | |
 | `kb.types_registry` | session-log, kb-dream, action-list | default | |
 | `kb.people_file` | session-log, kb-dream, action-sweep, action-list | ask | name-collision key |
-| `kb.link_style` | kb-note, session-log, kb-dream, idea-spar, action-list, jira-story | ask | |
-| `kb.frontmatter_required` | kb-note, session-log, kb-dream, action-list, jira-story | default | |
-| `kb.tag_hints` | kb-note, session-log | default | |
-| `kb.paths.*` | kb-note, session-log, kb-dream, idea-spar, action-sweep, reply-draft (voice), action-list, jira-story, vault-pulse | default (asked only for `inbox`/`sessions` if the org has no convention) | |
+| `kb.link_style` | session-log, kb-dream, idea-spar, action-list, jira-story | ask | |
+| `kb.frontmatter_required` | session-log, kb-dream, action-list, jira-story | default | |
+| `kb.tag_hints` | session-log | default | |
+| `kb.paths.*` | session-log, kb-dream, idea-spar, action-sweep, reply-draft (voice), action-list, jira-story | default (asked only for `inbox`/`sessions` if the org has no convention) | |
 | `kb.log_size_cap_kb` | session-log, kb-dream, idea-spar, action-list | default | |
 | `kb.sweep_queries` | kb-dream | default | |
 | `codebase.path` | idea-spar (reality lens) | optional | only asked if `codebase.access != none` |
@@ -237,13 +231,16 @@ budgets:
 | `people[]` | briefing, session-log, kb-dream, action-sweep, action-list | ask | |
 | `people_confusions` | kb-dream, session-log, action-list | optional, starts empty | |
 | `known_fact_errors` | kb-dream, session-log | optional, starts empty | |
-| `voice.guide_path` | reply-draft, kb-note, idea-ticket, kb-dream | default | |
-| `voice.registers` | reply-draft, kb-note, idea-ticket, kb-dream, action-list, jira-story | default | the base four; further registers are discovered from `kb.paths.voice`, per `voice.md` |
-| `voice.calibrated_at` | reply-draft, kb-note, idea-ticket, kb-dream | default (empty until first calibration) | never asked, never defaulted to a fake date |
-| `voice.calibration_refs` | idea-ticket | optional | Tracker keys whose prose is the strongest reference for the `ticket_prose` register. Weighted above general samples during calibration |
+| `voice.guide_path` | reply-draft, session-log, jira-story, kb-dream | default | |
+| `voice.registers` | reply-draft, session-log, kb-dream, action-list, jira-story | default | the base four; further registers are discovered from `kb.paths.voice`, per `voice.md` |
+| `voice.calibrated_at` | reply-draft, session-log, jira-story, kb-dream | default (empty until first calibration) | never asked, never defaulted to a fake date |
+| `voice.calibration_refs` | jira-story (idea mode) | optional | Tracker keys whose prose is the strongest reference for the `ticket_prose` register. Weighted above general samples during calibration |
 | `voice.sample_counts` | kb-dream | default | |
 | `budgets.<skill>` | that skill only | default | a skill only ever reads its own subtree |
-| `budgets.models` | idea-ticket, idea-spar, skill-eval, action-list, jira-story | default | see `model-tiers.md` |
+| `budgets.kb-dream.health` | kb-dream | default | optional: `window_days` (default 7), `lookup_pattern` (regex for the consultation signal), `thresholds` (`{<signal key>: [green_edge, amber_edge]}`); moved here from `budgets.vault-pulse` in 1.11.0, which is still read as an alias for `window_days`, `lookup_pattern` and `thresholds` |
+| `budgets.jira-story` | jira-story (idea mode) | default | `{investigation_calls, web_searches, audit_rounds}`; the pre-1.11.0 `budgets.idea-ticket` is read as this key |
+| *Retired in 1.11.0* | none | none | `chat.starter_emoji`, `chat.include_saved_items`, `budgets.proactive-router.searches` (the reaction and saved-message sweep is gone), `briefing.expected_runs.vault-pulse` (`vault-pulse` folded into `kb-dream`; the briefing's overdue rule skips an `expected_runs` key that names a skill not installed, so it is never called overdue) and `budgets.vault-pulse` (read as an alias of `budgets.kb-dream.health`, see above). An old profile that still carries them parses and they may be deleted |
+| `budgets.models` | idea-spar, skill-eval, action-list, jira-story | default | see `model-tiers.md` |
 
 ## Where the current values come from
 
@@ -290,7 +287,6 @@ the value itself.
 | `known_fact_errors` | `source/vault-dream/SKILL.md` | L69, "Known errors for pass 6" (a mix of corrected figures, a wrongly-assumed process, a vendor name, and a scope claim) |
 | `people_confusions` (cross-check), `known_fact_errors` (notetaker misrenderings) | `source/session-log/SKILL.md` | L302 heading, paragraph L308-312, "Names - check before you write them" |
 | `chat.team_id`, `chat.team_url` | `source/briefing/SKILL.md` | L14 (canvas URL carries both) |
-| `chat.starter_emoji` | `source/proactive-router/SKILL.md` | L74-79, "Intent categories" table |
 | `tracker.cloud_id` (audit step) | `source/cloud-idea-ticket/SKILL.md` | L133, "Fixed facts" (cloudId, with discovery fallback named inline) |
 | `budgets.models.critic` (opus audit) | `source/cloud-idea-ticket/SKILL.md` | L107, Step 4 intro |
 | `budgets.models.search` (haiku sub-dispatch) | `source/cloud-idea-deep-dive/SKILL.md` | L37, "Runtime strategy" bullet 2 |

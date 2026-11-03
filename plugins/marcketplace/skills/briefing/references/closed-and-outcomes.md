@@ -106,7 +106,7 @@ Runs
 * {skill} {status}: {runs.<skill>.note} · {runs.<skill>.ref}
 * {skill} fast-fail: {runs.<skill>.note}
 * health: {skill} green · {skill} amber ({why}) · …          (from runs.skill-health-check.scores; red is on the board, not here)
-* pulse {tag}: {runs.vault-pulse.note} · {runs.vault-pulse.ref}   (the knowledge base's compounding verdict; see the rule below)
+* kb health {tag}: {runs.kb-dream.health.why} · {runs.kb-dream.ref}   (the knowledge base's compounding verdict; see the rule below)
 * fyi: {one line} · {permalink}                               (from runs.proactive-router.fyi, one line each)
 * overdue: {skill} last ran {n} days ago (expected every {max_gap_days})
 ```
@@ -121,10 +121,13 @@ Rules:
 - Health: a red score is a `shc:` line on the board and is not repeated in the message;
   amber and green appear here only, from `runs.skill-health-check.scores`, and only for
   skills scored inside the window.
-- Pulse: `runs.vault-pulse` is reported once, on the first briefing after it ran, and again on
-  every briefing while its last verdict is amber or red, so a bad reading cannot be missed by
-  skipping one message. A green reading is reported once and then drops out. The pulse never
-  writes to the board, so this line is the only place the user sees it.
+- KB health: `runs.kb-dream.health` (kb-dream's one-line verdict, until 1.11.0 the
+  `vault-pulse` skill's) is reported on every briefing while its tag is amber or red, so a
+  bad reading cannot be missed by skipping one message, with its date when `health.at` is
+  older than the briefing window (a run with no local access leaves the last verdict as it
+  was). A green reading adds nothing: kb-dream's own Runs line already covers the run. The
+  verdict never writes to the board, so this line is the only place the user sees it. A
+  profile or state still carrying `runs.vault-pulse` is ignored.
 - FYIs come from `runs.proactive-router.fyi` written by the last Router run in the window.
   They are never written to the board.
 - A fast-fail line is the only place the user sees it, so it carries the note verbatim.

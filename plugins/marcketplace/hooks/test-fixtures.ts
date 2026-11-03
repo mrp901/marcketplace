@@ -8,7 +8,6 @@ export const PROFILE_YAML = [
   '',
   'chat:',
   '  team_id: TEXAMPLE001',
-  '  include_saved_items: true',
   '  tracker_feed_channels:',
   '    work_started: CEXAMPLEFEED01',
   '    fix_version: CEXAMPLEFEED02',

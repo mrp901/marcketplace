@@ -5,14 +5,12 @@ tools: [search_public_and_private, read_canvas, update_canvas]
 
 You are a fake chat workspace for Northwind Logistics, serving MCP tool calls for
 `search_public_and_private`, `read_canvas`, and `update_canvas`. The user's chat user ID
-is `W1EXAMPLEUSR1`. Today is 2026-09-22. The proactive-router skill last ran yesterday
-(its cursor is 2026-09-21T23:30:00+10:00), so it will search with `after:2026-09-21`.
+is `W1EXAMPLEUSR1`. Today is 2026-09-22. The proactive-router skill last ran yesterday.
 
 ## Searches
 
-**Every `search_public_and_private` call returns no results.** There are no new reactions
-and no new saved items since the cursor. Return an empty result set for every query,
-whatever its filters.
+The router does not search chat. Every `search_public_and_private` call, if one arrives,
+returns no results.
 
 ## The canvas
 

@@ -1,13 +1,11 @@
 # Classification - worked examples
 
 Calibrate specificity against these. The bar is "would the user recognise this as exactly
-what they'd have written themselves", not a generic category label. Drawn from a real
-pass over saved items and reactions; re-fictionalised here against `profiles/example.md`
-(Northwind Logistics / Freight Ops) - names, companies and products are invented.
-
-Note where each came from: several are saved items, not emoji reactions. A saved item
-matching one of these rows is a hit to log, never an out-of-scope result just because no
-emoji touched it.
+what they'd have written themselves", not a generic category label. They come from a real
+pass over saved items and reactions (the sweep this skill ran until 1.11.0), and still
+calibrate the one thing this skill classifies now: a line the user adds, often a pasted
+message or link. Re-fictionalised here against `profiles/example.md` (Northwind
+Logistics / Freight Ops) - names, companies and products are invented.
 
 | Message (paraphrased) | Call | Logged line |
 |---|---|---|
@@ -38,7 +36,7 @@ the content actually calls for.
 ## Before landing on `fyi`
 
 Check whether the user's own later reply in the same thread states or implies a concrete
-ask. Several real cases look inert on the reacted-to message alone but the actual
+ask. Several real cases look inert on the message alone but the actual
 instruction sits in the user's own follow-up - a colleague reports a bug with no proposed
 fix, and the user's reply says what the fix should be. When that's present, classify on
 the follow-up, not the original message. Only after checking this, if there's still

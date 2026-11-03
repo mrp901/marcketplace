@@ -1,5 +1,15 @@
 # skill-health-check - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-03 roster and evidence after the 1.11.0 removals
+
+The roster is read from the `skills/` directories, so `vault-pulse`, `kb-note` and `idea-ticket`
+drop out with no edit; a skill that no longer has a directory is never scored, and its old logs
+under `.utility/skill-health/` are left where they are. `references/evidence-gathering.md` names
+`session-log` (capture mode) and `jira-story` as the drafting skills whose `voice_edits` entries
+count, and notes that `runs.kb-dream.health` is `kb-dream`'s own extra evidence (read, never
+re-measured). The `tally.kb-doc` and `tally.ticket-idea` counters carry on unchanged under their
+new handlers.
+
 ## 2026-09-22 port to marcketplace
 
 Renamed from `skill-health-check` (source skill of the same name; no rename needed). Ported

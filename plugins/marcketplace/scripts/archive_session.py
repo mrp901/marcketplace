@@ -170,9 +170,12 @@ def covered_by_session_log(transcript, session_stem, archive):
 
 def main():
     raw = sys.stdin.read()
-    if os.environ.get("VAULT_PULSE_RUN") == "1" or os.environ.get("MARCKETPLACE_HEADLESS") == "1":
-        # A scheduled unattended run (run_pulse.py, run_session_log.py) is not a working session;
-        # archiving it would queue a non-session for write-up every run.
+    if os.environ.get("MARCKETPLACE_HEADLESS") == "1" or os.environ.get("VAULT_PULSE_RUN") == "1":
+        # A scheduled unattended run (run_session_log.py, or `kb-dream health` from a local
+        # scheduler) is not a working session; archiving it would queue a non-session for
+        # write-up every run. Scheduled commands set MARCKETPLACE_HEADLESS=1.
+        # VAULT_PULSE_RUN is deprecated (the retired vault-pulse runner set it); honoured for
+        # one release, 1.11.x, so a repointed script that still sets it keeps working.
         return 0
     try:
         payload = json.loads(raw) if raw.strip() else {}

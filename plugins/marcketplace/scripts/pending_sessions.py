@@ -32,7 +32,7 @@ import sys
 import time
 from datetime import datetime, timezone
 
-# Sibling script; also importable when this file is loaded by path (pulse_metrics.py).
+# Sibling script; also importable when this file is loaded by path (kb-dream's kb_health_metrics.py).
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from archive_session import older_copies, remove_copies  # noqa: E402
 
@@ -64,7 +64,7 @@ HEADLESS_RE = re.compile(r"^/marcketplace:[\w-]+\b.*\bunattended\b")
 SLASH_RUN_RE = re.compile(r"<command-name>/?(?:[\w-]+:)?session-log</command-name>")
 
 # ---- backlog nudge: past either edge the session is told to offer the drain, not wait to be
-# asked. The same edges vault-pulse scores amber (capture.pending, capture.oldest_pending_days).
+# asked. The same edges kb-dream's health verdict scores amber (capture.pending, capture.oldest_pending_days).
 NUDGE_SESSIONS = 5
 NUDGE_DAYS = 3
 
@@ -237,7 +237,7 @@ def assess(path, after):
                     first_text = ""
                 continue
             if not typed and HEADLESS_RE.match(text):
-                # A scheduled unattended run (run_pulse.py, run_session_log.py), not a working session.
+                # A scheduled unattended run (run_session_log.py), not a working session.
                 return False, 0, 0, "", cwd, after
             if not text or text.startswith(NOT_TYPED):
                 continue

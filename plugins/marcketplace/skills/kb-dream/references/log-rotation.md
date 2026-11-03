@@ -1,7 +1,7 @@
 # Rotating an oversized log
 
-`kb-conventions.md` gives every writer skill (`idea-spar`, `kb-note`,
-`reply-draft`, `session-log`) the same rule: once `kb.paths.log` is past
+`kb-conventions.md` gives every writer skill (`idea-spar`, `reply-draft`,
+`session-log`) the same rule: once `kb.paths.log` is past
 `kb.log_size_cap_kb.writers`, defer the log line rather than retype a large full-replace
 file. That rule is only safe if the deferral is short. This skill is the only one that
 rotates the log, so this skill is what bounds how long a writer stays stuck.
