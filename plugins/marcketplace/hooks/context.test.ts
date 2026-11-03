@@ -12,7 +12,7 @@ describe('parseInvocation', () => {
     })
   })
   test('without the token the run is attended', async () => {
-    expect(parseInvocation('/marcketplace:kb-note capture this')).toEqual({ skill: 'kb-note', unattended: false })
+    expect(parseInvocation('/marcketplace:session-log capture this')).toEqual({ skill: 'session-log', unattended: false })
   })
   test('ignores text that names no marcketplace skill', async () => {
     expect(parseInvocation('please run unattended')).toBeUndefined()

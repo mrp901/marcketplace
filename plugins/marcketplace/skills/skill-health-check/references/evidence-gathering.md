@@ -29,6 +29,12 @@ name, or the folder/naming pattern that skill's own `SKILL.md` documents - e.g. 
   canvas`). A long-stale item is a weaker outcome than one closed out
   quickly.
 
+For `kb-dream` there is one more signal, its own: `runs.kb-dream.health` (the one-line
+knowledge-base verdict that replaced `vault-pulse`). Read the tags it carried across the
+window; amber or red on every run says the vault is not being captured, found or learned
+from, which is the purpose the dream is judged by. Report it as evidence, never re-measure
+it (`../../kb-dream/references/kb-health.md` owns the thresholds).
+
 ## Tracker-writing skills
 
 Any skill whose `## Handler mode` or `## Flow` names a `tracker: create issue` or `tracker:
@@ -61,7 +67,7 @@ source in this skill and should never be skipped for a handler that has one.
 
 ## The voice ledger
 
-For a drafting skill (`reply-draft`, `kb-note`, `idea-ticket` - anything listing `voice` in
+For a drafting skill (`reply-draft`, `session-log` in capture mode, `jira-story` - anything listing `voice` in
 its own `## Needs`), read `state.voice_edits` entries recorded since the window opened. Each
 entry (`{tag, register, draft_hash, sent_ref, recorded_at, edited}`) records one draft; only
 entries marked `edited: true` count as the user editing a draft before acting on it. An entry

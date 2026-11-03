@@ -22,7 +22,7 @@ our Friday 2pm call with them to talk through it directly?"
 Friday's call.
 
 **Gap check:** the timeline is a known fact - deferred this quarter, per the kb decision
-note captured earlier the same day (see `kb-note`'s worked example). Whether someone can
+note captured earlier the same day (see `session-log`'s capture worked example). Whether someone can
 join Friday's call is a commitment only the user can make - marked as a gap.
 
 **Register:** `customer_facing` - Owen is internal, but the reply is about representing

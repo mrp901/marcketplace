@@ -30,7 +30,7 @@ arrows, to keep the diagram acyclic:
 flowchart TB
     subgraph overnight["Overnight, each on its own schedule"]
         direction TB
-        router["proactive-router\n(the hub: sweep, then act on every tick)"]
+        router["proactive-router\n(the hub: act on every tick)"]
         dream["kb-dream"]
         sparwatch["idea-spar\n(Next watch)"]
         sweep["action-sweep"]
@@ -53,8 +53,8 @@ flowchart TB
     subgraph handlers["Dispatched by the hub, on a tick"]
         direction TB
         replydraft["reply-draft\n(email, chat-reply)"]
-        kbnote["kb-note"]
-        ideaticket["idea-ticket\n(draft → file)"]
+        capture["session-log\n(capture)"]
+        ideaticket["jira-story\n(idea mode: draft → file)"]
         sweeptargeted["action-sweep\n(targeted / meeting → push)"]
         spardecide["idea-spar\n(decide)"]
         dreamsettle["kb-dream\n(settle)"]
@@ -62,7 +62,7 @@ flowchart TB
     end
 
     router -.-> replydraft
-    router -.-> kbnote
+    router -.-> capture
     router -.-> ideaticket
     router -.-> sweeptargeted
     router -.-> spardecide
@@ -73,8 +73,7 @@ flowchart TB
         direction TB
         sessionlog["session-log"]
         actionlist["action-list\n(build, then work)"]
-        ideaticketdirect["idea-ticket\n(direct)"]
-        jirastory["jira-story\n(refine or draft)"]
+        jirastory["jira-story\n(refine, draft, or idea ticket)"]
         transcriptskill["transcript\n(recording link to text)"]
         sparsession["idea-spar\n(session: challenge, reality,\nmarket, sketch, pack it)"]
         skilleval["skill-eval\n(manual only)"]
@@ -90,12 +89,11 @@ flowchart TB
     subgraph weekly["Weekly band, each on its own schedule"]
         direction TB
         healthcheck["skill-health-check"]
-        pulse["vault-pulse"]
     end
 
     healthcheck -->|"red score only"| board
     healthcheck -.->|"amber, green"| message
-    pulse -.->|"verdict via runs"| message
+    dream -.->|"KB health verdict via runs"| message
 
     subgraph feedback["Feedback loops"]
         direction TB
@@ -129,7 +127,7 @@ flowchart TB
 
 | Line | Tag | On tick |
 |---|---|---|
-| A swept candidate (email, ticket, note, summary, to-do) | `pr:` | dispatched to its handler, or an inline action |
+| A line you added (email, ticket, note, summary, to-do) | `pr:` | dispatched to its handler, or an inline action |
 | A find from the action sweep | `sweep:` | drafted (first tick), then pushed (second tick on the fresh line) |
 | An overdue item | `rb:` | `inline:investigate` |
 | A tracker-feed claim the live issue contradicts | `feed:` | `inline:investigate` |

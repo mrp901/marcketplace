@@ -40,7 +40,11 @@ kb-dream:
   status: ok            # quiet on a genuinely quiet run
   note: "curated 4, surfaced 3 · flags: 1 stale name pair · closed since last dream: 2 done by you, 1 by me"
   ref: Dreams/2026-09-22-dream.md
+  health: {tag: amber, why: "unmarked voice-ledger items 5, run the voice review", at: 2026-09-22T02:05:00+10:00}
 ```
+
+`health` is the knowledge-base verdict (`kb-health.md`), written only by a run that could
+measure it, and never a board line; the briefing repeats it while it is amber or red.
 
 `note` is at most two lines: the Curated count and Surfaced count, then the condensed
 Flags and what closed since the last dream. Depth lives in the dream note. The briefing's

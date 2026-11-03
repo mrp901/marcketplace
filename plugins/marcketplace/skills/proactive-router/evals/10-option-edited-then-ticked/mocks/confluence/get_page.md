@@ -9,7 +9,6 @@ runs:
   proactive-router: {last_run_at: 2026-09-21T23:30:00+10:00, status: ok, note: "1 dispatched", ref: ""}
 cursors:
   briefing: {last_run_ts: 2026-09-22T06:45:00+10:00}
-  proactive-router: {last_scanned: 2026-09-21T23:30:00+10:00}
 ideas: {}
 registry: {}          # shipped defaults apply
 tally: {}

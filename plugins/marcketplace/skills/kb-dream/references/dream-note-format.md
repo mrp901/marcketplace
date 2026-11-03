@@ -34,7 +34,8 @@ session notes + inbox + <scope> · **Access:** <how this run reached the knowled
   **Provenance timestamps:** clean | ... · **Failed writes:** ... (single occurrences;
   escalate on repeat, see `repetition-bar.md`) · **Machine-voice:** clean | N sentences
   rewritten · **Drafts reaped:** N · **Registry review:** (monthly only) · **Voice:**
-  ledger N promoted, N proposed | nothing new · re-sample done | due since <date>
+  ledger N promoted, N proposed | nothing new · re-sample done | due since <date> ·
+  **Health:** <tag>: <why> | not measured (no local access), per `kb-health.md`
 ```
 
 "What I curated" is a table because it is a ledger, not a narrative: one row per change,
@@ -44,7 +45,7 @@ the sentence that makes the ask legible.
 **Bad** (one row, one paragraph, mostly re-explaining a note that already exists):
 
 > | Update | `log.md` - Backfilled three deferred entries for notes written by idea-spar
-> and kb-note. Each entry records what the note argues about the opportunity, the
+> and session-log. Each entry records what the note argues about the opportunity, the
 > reasoning behind that position, which existing notes it links to, whether it has been
 > added to the folder index, and the outcome of the attempted tracker label write, which
 > was rejected by the screen scheme. |
