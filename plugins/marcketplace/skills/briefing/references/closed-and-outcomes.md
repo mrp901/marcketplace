@@ -32,7 +32,7 @@ Nothing acts on a `partial`, `blocked` or router `queued` sub-line by itself, so
 limit the line sits open for ever. The threshold is `briefing.stale_after_business_days`:
 absent means 5, `0` disables expiry.
 
-- Look only at the line's **latest** sub-line (`↳ <handler> <date[ time]>: ...`). It must be
+- Ignore a `classified` sub-line (a note, not an outcome). Look only at the line's **latest** sub-line (`↳ <handler> <date[ time]>: ...`). It must be
   `partial`, `blocked` or a router `queued` note (`↳ router <date>: queued for ...`), and no
   newer sub-line may follow it.
 - Business days are Mon-Fri in `org.timezone`, counted from the latest sub-line's date to the
@@ -55,8 +55,10 @@ Per `surface-protocol.md`'s "The Closed log":
 - <date> (<tag>) <outcome> · <original text, 120 chars> · <by you | by <handler>>
 ```
 
-`<original text>` leaves out the line's trailing ` · tick → …` effect: it says what ticking
-would do, and the Closed line says what happened. Briefing writes one such line per closed
+`<original text>` leaves out the line's trailing ` · tick → <X>` effect when `<X>` is exactly
+the effect its owner wrote (`surface-protocol.md`, "The tick effect"): that says what ticking
+would do, and the Closed line says what happened. A different `<X>` is the user's edit and
+stays. Briefing writes one such line per closed
 line, newest first, prepended above the existing Closed block, then runs
 `../scripts/trim_closed.py` (5 days or 20 lines, whichever bound is hit first) on the
 resulting list before the step 6 write. The trim runs every time this step fires, even when
@@ -76,7 +78,8 @@ in `state.outcomes`; briefing never re-words a handler's report line, only lists
 
 ## Queued-but-undispatched count
 
-While closing, a ticked line with **no sub-line underneath it at all** was ticked after
+While closing, a ticked line with **no sub-line underneath it at all** (a `classified`
+note does not count) was ticked after
 the hub's per-run dispatch cap was spent, or before the hub has run since the tick. Count
 these across the whole board and report the total as one line:
 
@@ -91,7 +94,7 @@ the board to learn that something they ticked has not been actioned yet.
 
 A to-do with no action behind its tick is not on the board (`surface-protocol.md`, "What
 goes on the board"), so the message is where the user first hears of one. Read every
-`state.items` entry with `on_board: false` whose `written_at` is after `last_run_ts` and
+`state.items` entry with `on_board: false` whose `off_board_at` is after `last_run_ts` and
 name them in one line, at most 3 short phrases (the line's own words, about 8 each), then
 `+N more` when there are more:
 
@@ -99,8 +102,9 @@ name them in one line, at most 3 short phrases (the line's own words, about 8 ea
 * {n} new to-do(s) kept off the board, in action-list: {phrase}; {phrase}; {phrase} +{k} more
 ```
 
-Omit it when none are new. It counts toward "Nothing to report" like the queued line. The
-`off_board` entries the 1.12.0 migration wrote are not new and never named.
+Omit it when none are new. It counts toward "Nothing to report" like the queued line. Lines
+the 1.12.0 migration moved count as new in that run (their `off_board_at` is that run) and
+are also named, tag by tag, in the migration's own Closed line.
 
 ## Expired lines
 

@@ -38,7 +38,7 @@ else. Any `unattended` invocation fast-fails: both modes need the user.
 - Repository work an item names (a branch, a commit, a pull request) runs through that
   item's own process and the machine's own tools, outside these categories; each push and
   each pull request still waits for its own yes.
-- State: `runs.action-list`, `cursors.action-list` (`last_window_end`), in its shard; and,
+- State: `runs.action-list`, `cursors.action-list` (`last_window_end`), `settled`, in its shard; and,
   read only, `action-sweep`'s shard for its `category: to-do` `items` (on the board or
   off it). `prep` also reads the kb's 1:1 prep and meeting notes (`kb` search, read).
 
@@ -51,10 +51,10 @@ batch. When every source comes back empty, write no list: say so in one line and
 `runs.action-list` as `quiet`. "I owe" adds **at most 4 reads**: `action-sweep`'s shard (the
 main document and this skill's shard are already read at onboarding), and up to 3 pages of
 one `from:me` chat search over the last 14 days, so a promise older than the window is
-still seen. The extraction subagents already read tracker, transcripts and session notes,
-and are asked also to flag commitments (`references/i-owe.md`). `prep`: up to five extraction subagents at `budgets.models.search`
+still seen. Verification adds **at most 10** (step 3). The extraction subagents already
+read tracker, transcripts and session notes (`references/i-owe.md`). `prep`: up to five extraction subagents at `budgets.models.search`
 (what the user owes, what the person owes, their open asks, previous 1:1 agendas, recent
-meetings), one worker, one critic, one `kb: write`, and the same one extra state read.
+meetings), one worker, one critic, one `kb: write`, the same extra state read and the same 10-read verification cap.
 `work`: spend what each item needs, delegating any broad search to a subagent so its
 output stays out of the conversation. Guidelines in
 `../../shared/token-discipline.md`.
@@ -69,9 +69,8 @@ not today" section. This skill owns no tag prefix and never writes to the surfac
 The user's words usually settle it: "build me a list" is `build`, "work the lunch list" is
 `work`, "build one and let's go" is both, in that order, "what do I owe people" is `build`
 with only the "I owe" section, and "prep my 1:1 with Terry" is `prep`. Where they do not,
-ask once,
-recommending `build` when no list for today exists in `kb.paths.drafts` and `work` when
-one does.
+ask once, recommending `build` when no list for today exists in `kb.paths.drafts` and `work`
+when one does.
 
 ## Flow: build
 
@@ -82,15 +81,19 @@ one does.
    commitments, unanswered mentions and threads; email addressed to them; their open
    tracker work and tickets that mention them; today's meeting transcripts (none when
    `notetaker.service` is `none`); the kb inbox and the open threads of recent `kb.paths.sessions` notes; merged pull requests that
-   involve them. Each returns every candidate, quoted, with a link and a timestamp, and
-   flags any that is a commitment the user made (`references/i-owe.md`). Read `action-sweep`'s
-   to-do `items` from state alongside; they carry "you said" evidence already.
-3. **Verify before ranking.** Check each candidate's source is still open. A later reply,
-   a closed ticket or a sent email moves it to "Dropped" with the evidence.
+   involve them. Each returns every candidate, quoted, with a link and a timestamp,
+   including any phrase that might be a promise, an ask or an offer, unfiltered: extractors
+   decide nothing (`references/i-owe.md`). Read `action-sweep`'s to-do `items` from state
+   alongside; they carry their evidence already.
+3. **Verify before ranking, capped.** At most 10 candidates per build, one targeted read
+   each, owed rows first; the rest stay listed as `unverified` with their age. A later reply,
+   a closed ticket or a sent email moves a verified one to "Dropped" with the evidence; a
+   to-do from state found done is also recorded in `settled` (`references/i-owe.md`).
 4. **Rank.** First, promises the user made with a deadline inside the window; then
    someone waiting on the user, external before internal; then whatever unblocks someone
-   else's work; then the rest. Within a tier a row the user owes someone ranks first, oldest
-   promise first. Every row says why, quoting the words that make it urgent.
+   else's work; then the rest. Within a tier a row the user owes someone (their own promise)
+   ranks first, oldest first; a mere ask of the user gets no boost. Every row says why,
+   quoting the words that make it urgent.
 5. **Draft** every message and tracker comment in the register its audience calls for,
    with a "Check before sending" note naming what it assumes. A fact the sources cannot
    settle is marked `[TBC: ...]`, never guessed.
@@ -98,9 +101,9 @@ one does.
    rank, a resolved item still listed, a name collision, a draft claiming more than its
    source. Fix what it finds.
 7. **Write** the list per `references/list-format.md` (the "I owe" section on top, per
-   `references/i-owe.md`), with its log line in the same
-   batch. Nothing is sent, posted, filed or edited anywhere else. Write
-   `cursors.action-list.last_window_end` and `runs.action-list`.
+   `references/i-owe.md`), with its log line in the same batch. Nothing is sent, posted,
+   filed or edited anywhere else. Write `cursors.action-list.last_window_end`, `settled`
+   and `runs.action-list`.
 
 ## Flow: work
 

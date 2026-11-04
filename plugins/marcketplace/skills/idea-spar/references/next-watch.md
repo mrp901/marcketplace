@@ -48,7 +48,10 @@ the rest wait for the next run.
    missing (`- <key> · <title> · pack`, with `pack` linking the page) and one decision group
    per real fork from the pack's "Decisions for you", at most 2, 2 to 4 options each, tagged
    `(<key>/d<n><letter>)`, category `idea-decision`, each ending with its tick effect
-   (see "Line shape"). No fork: write nothing to the board; the
+   (see "Line shape"). On the first run under 1.12.0 that reads the board, also append the
+   effect to this skill's own older option lines that are untouched, unticked, lack one and
+   have no sub-line, set their `items.<tag>.text` in the same write, and record
+   `cursors.idea-spar.tick_effects_backfilled`. No fork: write nothing to the board; the
    pack still reaches the user through the briefing.
 6. State: `cursors.idea-spar.roadmap_checked_at`, `ideas.<key>`, `items` (each option with
    `group: <key>/d<n>` and `idea_key`), `runs.idea-spar` with `note: "pack for <key>: <the

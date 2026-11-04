@@ -9,8 +9,9 @@ Priya, 12:35: "build me a list for this afternoon". No list for today in `Drafts
 `build`. The cursor says yesterday 17:00; the calendar shows a free block to the 16:30
 roadmap review.
 
-Six search-tier subagents return 31 candidates. Verification drops nine: a question
-Tomasz answered at 11:02, a ticket closed overnight, an email Priya already sent. The
+Six search-tier subagents return 31 candidates. Verification checks the ten most urgent,
+owed rows first, and drops three: a question Tomasz answered at 11:02, a ticket closed
+overnight, an email Priya already sent; the other 21 are listed `unverified` with their age. The
 critic flags one name: "Owen" on a carrier email is the carrier's Owen, not Owen
 Fairclough, so the row is reworded. Written to
 `Drafts/2026-10-14-1235-afternoon-actions.md`:

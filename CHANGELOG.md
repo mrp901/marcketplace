@@ -24,39 +24,46 @@ added to the profile; the state gains optional keys and one migration row.
   derived from `handler-contract.md`'s categories; a two-stage action says which stage the tick
   is. Owners: `action-sweep`, `briefing`, `kb-dream`, `skill-health-check`, `idea-spar` and the
   hub (second-tick, next-action and mapping-proposal lines). The hub strips the effect from the
-  text it hands a handler. The board header's second line now reminds the user of this.
+  text it hands a handler only when it is exactly the one the owner wrote; a changed effect is the
+  user's edit and is passed on. A line the user adds keeps its wording and gets the effect in the
+  hub's `classified` sub-line. Each owner backfills the effect on its own old untouched lines once
+  (`cursors.<skill>.tick_effects_backfilled`). The board header's second line now reminds the user of this.
 - **Version drift check.** A SessionStart hook, `scripts/version_check.py`, compares this copy's
   `plugin.json` version with `main`'s (`gh api`, else raw.githubusercontent), caches the answer
   for 12 hours in `~/.claude/marcketplace/version-check.json` and, when this copy is behind,
   prints `marcketplace: this machine runs X, main is Y. Update the plugin on claude.ai, then
   restart Claude Code.` It is silent on no network, no `gh`, any error, a copy that is ahead of
   `main`, `MARCKETPLACE_VERSION_CHECK=0` and `MARCKETPLACE_HEADLESS=1`, and never blocks a session
-  start. Tests: `scripts/test_version_check.py` (stdlib unittest, offline).
+  start; a failure stamp is cached (per repo) before the lookup, so a stalled lookup still backs
+  off. Tests: `scripts/test_version_check.py` (stdlib unittest, offline).
 - **Run version stamps.** `runs.<skill>.version` is the `plugin.json` version the run read
   (`onboarding.md` step 6; `unknown` if unreadable). `briefing`'s Runs block adds `runs on mixed
   versions: <skill> X, <skill> Y (newest today: Z)` when a day's runs differ.
 - **`action-list`: an "I owe" section and 1:1 prep.** `build` leads with what the user told
   people they would do (who, what, promised when, age in business days, link), from chat, tracker,
   meetings, session-note open threads and `action-sweep`'s to-dos, and ranks an owed row above
-  another of equal urgency. A new `prep` mode ("prep my 1:1 with Terry") writes a short note:
+  another of equal urgency (only the user's own promises earn the boost; asks of the user are a
+  separate "Waiting on you" table). A new `prep` mode ("prep my 1:1 with Terry") writes a short note:
   what is owed each way, their open asks, items carried from earlier 1:1s and recurring themes.
-  Cost: one extra state read (`action-sweep`'s shard) and up to 3 pages of one `from:me` chat
-  search over 14 days. References `i-owe.md` and `one-to-one-prep.md`.
+  Cost: one extra state read (`action-sweep`'s shard), up to 3 pages of one `from:me` chat
+  search over 14 days, and at most 10 verification reads (the rest are listed `unverified`). References `i-owe.md` and `one-to-one-prep.md`.
 
 ### Changed
 - **Decisions only.** A line is on the board only if its tick causes an action. `action-sweep`'s
   `to-do` finds no longer become board lines: they are `state.items` entries with `on_board:
   false`, still deduped against and read by `action-list`, named in one line in the briefing
-  message, and pruned after 30 days. `rb:`, `feed:`, `term:`, `dream:`, `shc:` and idea options
+  message, and pruned 30 days after they left the board (`off_board_at`) or once `action-list`
+  records them done in its `settled` list. `rb:`, `feed:`, `term:`, `dream:`, `shc:` and idea options
   stay (their ticks investigate, promote, settle, queue or record a choice); `shc:` is the
   ambiguous case, kept with an effect that says nothing runs now.
 - **Migration 1.11.0 to 1.12.0.** In its ordinary run `briefing` takes untouched, unticked
-  `sweep:` to-do lines off the board (recorded in `off_board` in its shard; the entries stay) and
-  appends tick effects to its own `rb:`, `term:` and `feed:` lines. Other owners' old lines keep
-  their wording and gain an effect when their owner next writes them. `installed_version` becomes
-  1.12.0.
-- The Closed log drops the effect from `<original text>`. A deletion check skips an off-board
-  to-do.
+  `sweep:` to-do lines off the board (recorded in `off_board` in its shard; the entries stay; its
+  Closed line names every tag moved) and appends tick effects to its own `rb:`, `term:` and
+  `feed:` lines. Each other owner appends the effect to its own old untouched, unticked lines
+  once, on its first 1.12.0 run that settles them; user-added lines and ticked or edited lines
+  are never touched. `installed_version` becomes 1.12.0.
+- The Closed log drops an unchanged effect from `<original text>`. A deletion check (the hub's
+  and briefing's) skips an off-board to-do: no suppression, tally or `patterns_blocked`.
 
 ### Operational notes
 - **Nothing to repoint.** No script, routine prompt or profile key changes. The hook ships in

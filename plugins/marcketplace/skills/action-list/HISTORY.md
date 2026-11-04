@@ -19,9 +19,17 @@ any other of equal urgency; `prep` is a second shape of the same skill, "prep my
   older than the list window are why the chat search reaches back 14 days (up to 3 pages) and
   session-note threads 30 days; both horizons are constants here, not profile keys, because a
   skill reads only its own `budgets` subtree.
-- **A quote or no row.** "I owe" is a claim about what the user said. Every row quotes the
-  words; an acknowledgement with no object ("will do") is dropped, as `action-sweep` already
-  does.
+- **A quote or no row, and promises are not asks.** "I owe" is a claim about what the user said.
+  Only a to-do whose evidence carries the user's own promise ("I'll", "you said you would", "as
+  you told Ivan") is owed and earns the ranking boost; a to-do where someone tagged or asked the
+  user is "Waiting on you": listed, no boost. An offer ("let me know if ...") is not a promise.
+  Extractors (cheap tier) return every candidate and decide nothing; the worker applies "What
+  counts". An early draft told extractors to drop non-promises, which would have lost oddly
+  phrased real ones.
+- **Verification is capped at 10 per build** (and per prep), owed rows first, so the read count
+  is bounded; the rest are listed `unverified` with their age. A to-do found done is recorded in
+  this skill's `settled` list so `action-sweep` prunes it; nothing else closes an off-board
+  to-do.
 - **Owed rows are not described twice.** A promise that is also a ranked action carries a `Row`
   pointer; the row holds the draft and the section holds the promise.
 - **1:1 prep finds its sources through the kb's own conventions**, not a hardcoded folder: the

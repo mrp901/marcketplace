@@ -115,7 +115,7 @@ Fires more than once a day on a changing schedule; never assume a time of day.
    and added to, its own `items` and `closed` (step 3) in its shard, `installed_version`,
    `runs.briefing` (`note` = one line on what closed and what was reported, `ref` =
    `surface.url`, `version` per `../../shared/onboarding.md` step 6), and `off_board`
-   (a tag dropped once its owner's entry carries `on_board: false`).
+   (a tag dropped once its owner's entry carries `on_board: false` or no longer exists).
 
 ## Surface
 Writes the board header, the Today snapshots, its own `rb:`, `term:` and `feed:` lines in

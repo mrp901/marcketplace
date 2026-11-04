@@ -6,11 +6,15 @@ The hub writes few lines of its own, and each now ends with its tick effect: the
 line after `needs_confirmation` (`tick → files the ticket in Jira` or `tick → posts the comment in
 Jira`, so the irreversible tick is visible), a `next_action` line (the effect of its category) and
 the mapping proposal (`tick → maps <category> to <candidate> from now on`). A line the user adds is
-tagged in place and its wording is left alone, so it carries no effect. Before dispatching, the
-hub removes the trailing `· tick → ...` from `text_as_ticked` and `original_text`, so a handler
-drafts from the line's own words; `state.items` keeps the line whole for the verbatim comparison
-with the board. A deletion check now skips an entry with `on_board: false` or a tag in briefing's
-`off_board`: a to-do kept off the board has no line to be deleted. `SKILL.md` is unchanged.
+tagged in place and its wording is left alone; the effect goes in a new `classified` sub-line
+under it (a note: it never settles a later tick). Before dispatching, the hub removes the
+trailing `· tick → ...` from `text_as_ticked` and `original_text` only when it is exactly the
+effect the owner wrote (the segment recorded in `state.items.<tag>.text`, else the category
+table's entry); anything else after `tick → ` is the user's edit and goes to the handler. A
+deletion check skips an entry with `on_board: false` or a tag in briefing's `off_board`: a to-do
+kept off the board has no line to be deleted, so no suppression, tally or `patterns_blocked`.
+`SKILL.md` changed in four places: the State line (reads `off_board`), the classify step, the
+settle step and the deletions step.
 
 ## 2026-11-03 retire the reaction and saved-message sweep (1.11.0)
 

@@ -34,7 +34,8 @@ supersedes_on: closed on the user's word, or past stale_after
    which rows fit before it.
 3. **I owe** - what the user told people they would do: who it is owed to, what, when it
    was promised, its age in business days, a link, and the ranked row that does it, per
-   `i-owe.md`. Always present; one line when nothing is owed.
+   `i-owe.md`, with a second "Waiting on you" table for asks that carry no promise. Always
+   present; one line when nothing is owed.
 4. **If you only do three things** - the top three, each one sentence, each quoting the
    promise or the ask that makes it urgent.
 5. **Ranked actions** - one table: `#`, action (a concrete verb and object), who's waiting
@@ -48,6 +49,8 @@ supersedes_on: closed on the user's word, or past stale_after
 
 ## Rules for the content
 
+- A row past the verification cap is marked `unverified` with its age, never silently
+  treated as open or done.
 - Every rank cites its evidence. "Kim can't brief finance without it" quoting Kim beats
   "important follow-up".
 - An effort is an honest guess in minutes, and "5m + wait" where the item waits on someone.

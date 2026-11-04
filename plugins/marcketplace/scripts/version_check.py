@@ -16,9 +16,11 @@ worse than a stale copy, so every path ends in exit 0 within a few seconds.
 
 Where `main`'s version comes from: `gh api` first (it carries the user's login, so it works
 on a private repo), else the raw.githubusercontent URL. The answer is cached for 12 hours in
-`~/.claude/marcketplace/version-check.json`, beside the plugin's other pointer files; a
-failed lookup is cached for 1 hour so an offline laptop does not pay the timeout at every
-session start. The comparison itself runs on every start, from the cached `main` version.
+`~/.claude/marcketplace/version-check.json`, beside the plugin's other pointer files, keyed
+by repo. A failure stamp is written *before* the lookup and overwritten when it succeeds, so
+a lookup that stalls (a hung DNS query) and is killed at the hook's timeout still backs the
+next 1 hour off, and an offline laptop does not pay the timeout at every session start. The
+comparison itself runs on every start, from the cached `main` version.
 
 A copy that is *ahead* of main (a branch under test, `--plugin-dir`) is not drift and is
 left alone.
@@ -105,38 +107,51 @@ def fetch_via_raw(repo=REPO, timeout=FETCH_TIMEOUT):
         return None
 
 
-def fetch_main_version():
-    return fetch_via_gh() or fetch_via_raw()
+def fetch_main_version(repo=REPO):
+    return fetch_via_gh(repo) or fetch_via_raw(repo)
 
 
-def read_cache(path):
+def read_all(path):
     try:
         with open(path, "r", encoding="utf-8") as fh:
             data = json.load(fh)
-        return float(data["checked_at"]), data.get("main")
-    except (OSError, ValueError, KeyError, TypeError):
+        return data if isinstance(data, dict) else {}
+    except (OSError, ValueError):
+        return {}
+
+
+def read_cache(path, repo=REPO):
+    entry = read_all(path).get(repo)
+    try:
+        return float(entry["checked_at"]), entry.get("main")
+    except (KeyError, TypeError, ValueError, AttributeError):
         return None
 
 
-def write_cache(path, now, main):
+def write_cache(path, now, main, repo=REPO):
+    data = read_all(path)  # keep other repos' entries
+    data[repo] = {"checked_at": now, "main": main}
     try:
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "w", encoding="utf-8") as fh:
-            json.dump({"checked_at": now, "main": main}, fh)
+            json.dump(data, fh)
     except OSError:
         pass  # no cache just means we look again next time
 
 
-def main_version(cache_path, now, fetch):
-    """`main`'s version from the cache while it is fresh, else from `fetch()`; None if unknown."""
-    cached = read_cache(cache_path)
+def main_version(cache_path, now, fetch, repo=REPO):
+    """`main`'s version from the cache while it is fresh, else from `fetch()`; None if unknown.
+    A failure stamp goes in first, so a fetch that never returns still backs the next start off."""
+    cached = read_cache(cache_path, repo)
     if cached:
         checked_at, main = cached
         ttl = CACHE_OK_SECONDS if main else CACHE_FAIL_SECONDS
         if 0 <= now - checked_at < ttl:
             return main
+    write_cache(cache_path, now, None, repo)
     main = fetch()
-    write_cache(cache_path, now, main)
+    if main:
+        write_cache(cache_path, now, main, repo)
     return main
 
 
@@ -150,16 +165,17 @@ def drift_line(local, main):
             "Update the plugin on claude.ai, then restart Claude Code.")
 
 
-def run(plugin_root, cache_path, now=None, fetch=fetch_main_version, env=None):
+def run(plugin_root, cache_path, now=None, fetch=None, env=None, repo=REPO):
     """The whole check; returns the line or None, and never raises."""
     env = os.environ if env is None else env
+    fetch = fetch or (lambda: fetch_main_version(repo))
     try:
         if env.get("MARCKETPLACE_VERSION_CHECK") == "0" or env.get("MARCKETPLACE_HEADLESS") == "1":
             return None
         local = local_version(plugin_root)
         if local is None:
             return None
-        main = main_version(cache_path, time.time() if now is None else now, fetch)
+        main = main_version(cache_path, time.time() if now is None else now, fetch, repo)
         return drift_line(local, main)
     except Exception:
         return None

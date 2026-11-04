@@ -12,6 +12,12 @@ Settle per "Settle before you append":
 - An **edited** line's wording stands. A **deleted** line is never re-added. An
   **untouched** line rolls forward.
 
+**Once, on the first run under 1.12.0 that reads the board:** append the tick effect below
+to each of this skill's own `dream:` lines that is untouched, unticked, lacks one and has no
+sub-line, and set its `items.<tag>.text` to the new text in the same write; then record
+`cursors.kb-dream.tick_effects_backfilled`. Never touch a line another skill or the user
+wrote (`../../../shared/surface-protocol.md`, "Old lines get their effect once").
+
 Never tick, close or delete a line yourself. The old step where this skill settled its
 own ticked items on the next pass is gone: one flow, the Router acts on every tick.
 

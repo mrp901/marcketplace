@@ -99,17 +99,17 @@ Every line a skill writes to For you or Ideas ends with ` · tick → <effect>`,
 | `skill-eval` | `shc:` | `tick → queues it for your next skill-eval run (nothing runs now)` |
 | mapping proposal | `pr:prop-<category>` | `tick → maps <category> to <candidate> from now on`, or `tick → records that you want this built` when the candidate is `needs a new skill` |
 | `calendar`, any category with no handler | `pr:` | `tick → proposes a handler for this (nothing else happens)` |
-| `to-do` | no skill writes one to the board | (a line the user adds: `tick → copies it to your To-do`; the hub does not append it) |
+| `to-do` | no skill writes one to the board | (a line the user adds: the `classified` sub-line says `tick → copies it to your To-do`) |
 | `fyi` | never on the board | none |
 
 Rules:
 
 - **An option line carries the effect of its option's category.** The question line has no checkbox and carries none. A tier question from `action-sweep` has options of three different categories, so each carries its own effect.
 - **Stage.** `sweep-push` and any other line the hub writes for a second tick says what it will do for real (`files`, `posts`); the first-stage lines say `drafts`. A line never says `files` unless its tick files.
-- **A line the user wrote or edited is exempt.** A user-added line is tagged and classified in place and its wording is never changed to add an effect; an edited line keeps its wording (the tick table's edited rows).
+- **A line the user wrote or edited keeps its wording.** A user-added line is tagged and classified in place and its text is never changed; the effect goes in the hub's `classified` sub-line under it (see "The hub's sub-lines"). An edited line keeps its wording (the tick table's edited rows).
 - **A category not in the table** gets a specific effect in the same form, and the writer adds the row here in the same release.
-- **Old lines stay valid.** A line written before 1.12.0 has no effect and is never rewritten just to add one: its owner adds the effect the next time it writes that line, and `briefing` appends it to the lines `briefing` owns when it migrates (`skills/briefing/references/migration.md`). Never rewrite another skill's wording to add one.
-- **The effect is not part of the instruction.** The hub removes the trailing ` · tick → …` segment from `text_as_ticked` and `original_text` before it dispatches, so a handler drafts from the line's own words. `state.items.<tag>.text` still holds the line exactly as written, effect included, for the verbatim comparison with the board. `briefing` drops the segment from the `<original text>` of a Closed line.
+- **Old lines get their effect once.** A line written before 1.12.0 has none, and nobody rewrites another skill's wording to add one. Instead each owner, on its first run under 1.12.0 that settles its lines, appends the effect to **its own** lines that are untouched (text equals `items.<tag>.text`), unticked, without an effect and with no sub-line, and sets `items.<tag>.text` to the new text in the same write. It never touches a user-added line or another owner's line, and records `cursors.<skill>.tick_effects_backfilled` so it runs once. `briefing` does the same for its `rb:`, `term:` and `feed:` lines inside its migration. A line the backfill skipped (ticked, edited, or with a sub-line) stays valid with no effect.
+- **The effect is not part of the instruction, unless the user changed it.** The effect an owner wrote is the trailing ` · tick → <X>` segment of `state.items.<tag>.text` or, where that records none, the table's entry for the category. The hub removes the trailing segment from `text_as_ticked` and `original_text` only when `<X>` equals it exactly, so a handler drafts from the line's own words. Anything else after ` · tick → ` is the user's edit: it stays in `text_as_ticked` and goes to the handler as part of the instruction. `briefing` applies the same rule to the text of a closing line in the Closed log. `state.items.<tag>.text` holds the line whole, effect included, for the verbatim comparison with the board.
 
 ## What goes on the board
 
@@ -218,6 +218,7 @@ Two-space indent, `↳` arrow, handler name, timestamp, one of the four fixed ou
 Documented variants, the only ones:
 
 - No handler: `  - ↳ router: no handler for <category> yet · mapping proposed in For you · <link>`.
+- A classification of a line the user added: `  - ↳ router <date>: classified <category> · tick → <effect>`, written once under it when it is classified unticked. It is a note, not an outcome: it never settles a tick, never hides a later tick from the queued count, and never starts the expiry clock.
 - Two options ticked: `  - ↳ router: blocked · pick one`.
 - A `shc:` tick: `  - ↳ router: queued for your next skill-eval run`.
 
@@ -266,7 +267,7 @@ The 1.11.0 to 1.12.0 migration (`skills/briefing/references/migration.md`) is no
 
 ## Never
 
-- Never rewrite another skill's line, or a user's edited wording. The hub's sub-line and briefing's close are the only cross-owner writes.
+- Never rewrite another skill's line, or a user's edited wording. The hub's sub-line and briefing's close are the only cross-owner writes, with one exception: the 1.12.0 migration's one-time removal of untouched `sweep:` to-do lines from the board (`skills/briefing/references/migration.md`).
 - Never re-add a deleted line. A tag in `state.items` with no matching surface line was deleted by the user, unless briefing's `closed` lists it (closed, awaiting its owner's prune; see `state-schema.md`'s "Shards"), or the entry is `on_board: false` or listed in briefing's `off_board` (kept off the board on purpose), and re-adding it defeats the learning mechanism.
 - Never invent a section id. A missing section is handled by each skill's documented degradation, never a guessed id.
 - Never leave two dated blocks under one heading.

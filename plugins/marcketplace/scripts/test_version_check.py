@@ -115,6 +115,40 @@ class Check(Fixture):
         self.assertIsNone(vc.run(self.root, self.cache, now=1000, fetch=fetch, env={}))
         self.assertEqual(calls, [], "no local version, so no reason to look")
 
+    def test_failure_stamp_is_written_before_the_fetch(self):
+        self.install("1.10.4")
+        seen = []
+
+        def fetch():
+            seen.append(vc.read_cache(self.cache))
+            return "1.12.0"
+
+        vc.run(self.root, self.cache, now=1000, fetch=fetch, env={})
+        self.assertEqual(seen, [(1000.0, None)], "the stamp is there while the lookup runs")
+        self.assertEqual(vc.read_cache(self.cache), (1000.0, "1.12.0"), "and success overwrites it")
+
+    def test_a_lookup_killed_mid_flight_still_backs_off(self):
+        self.install("1.10.4")
+
+        def hang_then_die():
+            raise SystemExit(1)  # what the hook timeout's kill looks like from here
+
+        with self.assertRaises(SystemExit):
+            vc.run(self.root, self.cache, now=1000, fetch=hang_then_die, env={})
+        fetch, calls = self.stub("1.12.0")
+        self.assertIsNone(vc.run(self.root, self.cache, now=1000 + 60, fetch=fetch, env={}))
+        self.assertEqual(calls, [])
+
+    def test_cache_is_keyed_by_repo(self):
+        self.install("1.10.4")
+        fetch_a, calls_a = self.stub("1.12.0")
+        fetch_b, calls_b = self.stub("1.10.4")
+        vc.run(self.root, self.cache, now=1000, fetch=fetch_a, env={}, repo="owner/a")
+        vc.run(self.root, self.cache, now=1001, fetch=fetch_b, env={}, repo="owner/b")
+        self.assertEqual((len(calls_a), len(calls_b)), (1, 1), "another repo is not served from a's entry")
+        self.assertEqual(vc.read_cache(self.cache, "owner/a"), (1000.0, "1.12.0"), "and a's entry survives")
+        self.assertEqual(vc.read_cache(self.cache, "owner/b"), (1001.0, "1.10.4"))
+
     def test_corrupt_cache_is_ignored(self):
         self.install("1.10.4")
         os.makedirs(os.path.dirname(self.cache))

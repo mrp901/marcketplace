@@ -12,8 +12,14 @@ and no board line. They are still deduped against, still carry their evidence ("
 new ones in one line. The other finds keep their lines and end with their category's tick effect
 (`tick → drafts a reply (nothing sent)`, `tick → drafts the ticket (2nd tick files it in Jira)`).
 
-- Off-board entries are pruned after 30 days, since `action-list` verifies the source before
-  ranking anyway and a to-do not worked in a month is stale.
+- Off-board entries are pruned 30 days after they left the board (`off_board_at`, set with
+  `on_board: false`), not after `written_at`: a to-do found three weeks ago and moved off the
+  board by the migration would otherwise vanish a week later, unseen. `action-list` verifies the
+  source before ranking anyway. They are also pruned once `action-list` records the tag in its
+  `settled` list (it found the to-do done), and the migration's Closed line names every tag it
+  moved.
+- On its first run under 1.12.0 it backfills the tick effect on its own old board lines (untouched,
+  unticked, no sub-line), once (`cursors.action-sweep.tick_effects_backfilled`).
 - `briefing`'s 1.12.0 migration takes existing untouched `sweep:` to-do lines off the board; it
   cannot write this skill's shard, so it records them in `off_board` in its own shard and this
   skill sets `on_board: false` on its entries on its next write.

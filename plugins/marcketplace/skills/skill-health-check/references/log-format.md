@@ -33,7 +33,11 @@ Per `surface-protocol.md`'s line grammar, tag form `shc:<YYMMDD>-<n>`, category
 - [ ] (shc:260910-1) 🔴 session-log scored red: two notes superseded by your own corrections this fortnight. Run skill-eval on it? · .utility/skill-health/session-log.md · tick → queues it for your next skill-eval run (nothing runs now)
 ```
 
-The line ends with `tick → queues it for your next skill-eval run (nothing runs now)`, the
+On the first run under 1.12.0 that reads the board, append that effect to this skill's own
+older `shc:` lines that are untouched, unticked, lack one and have no sub-line, set their
+`items.<tag>.text` in the same write, and record `cursors.skill-health-check.tick_effects_backfilled`
+(`../../../shared/surface-protocol.md`, "Old lines get their effect once"). The line ends with
+`tick → queues it for your next skill-eval run (nothing runs now)`, the
 `skill-eval` effect in `../../../shared/surface-protocol.md`'s table, so a tick is never
 mistaken for starting the run.
 

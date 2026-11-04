@@ -6,7 +6,9 @@ Every `dream:` line now ends with what its tick does. The default is `tick → k
 the fix`; a fold proposal says `tick → marks the fold accepted (nothing is edited)` and a
 suppression lift says `tick → marks the lift accepted (the router lifts it next run)`, because
 `settle` never applies a fold and the router applies a lift. A line must not promise more than
-the tick does. The category stays on the board: a tick dispatches `settle`, which acts.
+the tick does. The category stays on the board: a tick dispatches `settle`, which acts. On its
+first run under 1.12.0 it backfills the effect on its own old untouched `dream:` lines, once
+(`cursors.kb-dream.tick_effects_backfilled`).
 `SKILL.md` was already at the 150-line cap, so the effect table lives in
 `references/notification-shape.md` and the Surface paragraph was reflowed, not extended.
 

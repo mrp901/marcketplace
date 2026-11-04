@@ -20,7 +20,11 @@ changes land here:
   and the local one lagged two releases on 3 Nov without anyone noticing. The line is a check,
   not a verdict; the SessionStart check says the same thing at the start of a local session.
 - The message also names new to-dos kept off the board in one line, so the owner still hears
-  of them.
+  of them. Counted from when they left the board (`off_board_at`), so the ones the migration
+  moves are named in that run's message too, and the migration's Closed line and
+  `runs.briefing.note` list every tag it moved: nothing leaves the board unseen. A
+  `classified` sub-line (the hub's note under a user-added line) is ignored by the queued count
+  and by expiry.
 
 **Open question:** the mixed-versions line lists lagging skills plus the newest version; whether
 it should also name which machine ran each (the run record has `machine`) is left until it fires.

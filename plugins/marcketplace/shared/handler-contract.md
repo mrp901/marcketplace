@@ -42,8 +42,8 @@ Any handler name that names a skill retired in 1.11.0 reads as its replacement: 
 | Action | On tick |
 |---|---|
 | `inline:investigate` | Chases what a `running-behind` or `feed-mismatch` line points at, reads only, and reports what it found in the sub-line |
-| `inline:promote` | Writes the `term:` line's text as the user left it (without its tick effect) into `state.glossary`, keyed by the term, and adds a `done` sub-line; briefing then removes the line (never to Closed) |
-| `inline:to-do` | Copies the line's text (post-edit, without its tick effect) as a new unticked line at the top of To-do and adds a `done` sub-line |
+| `inline:promote` | Writes the `term:` line's text as the user left it (without the owner's unchanged tick effect) into `state.glossary`, keyed by the term, and adds a `done` sub-line; briefing then removes the line (never to Closed) |
+| `inline:to-do` | Copies the line's text (post-edit, without the owner's unchanged tick effect) as a new unticked line at the top of To-do and adds a `done` sub-line |
 
 `manual:skill-eval` is not an action at all. A ticked `shc:` line gets the sub-line `  - ↳ router: queued for your next skill-eval run` and nothing is dispatched. `skill-eval` runs only when the user runs it; run with no target, it lists these queued lines as candidates and writes a `state.outcomes` entry (in its own shard) when it finishes, which is what lets briefing close the line.
 
@@ -91,7 +91,7 @@ item:
   tag: <tag>
   section: <heading>
   category: <category>
-  text_as_ticked: <current surface text, post-edit if edited, without the trailing ` · tick → …` effect>
+  text_as_ticked: <current surface text, post-edit if edited; the owner's trailing ` · tick → …` effect removed only if unchanged>
   original_text: <text as first written, if different, same>
   ref: <link>
   idea_key: <tracker key, if the line belongs to an idea block or names a key>

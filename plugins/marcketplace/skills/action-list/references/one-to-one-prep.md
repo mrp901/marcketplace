@@ -39,7 +39,7 @@ a timestamp and deciding nothing. Nothing is sent or edited.
 
 | # | Section | Reads |
 |---|---|---|
-| 1 | You owe them | The "I owe" pipeline (`i-owe.md`) with `owed_to` = the person, plus "I'll ..." lines in the person's earlier 1:1 notes |
+| 1 | You owe them | The "I owe" pipeline (`i-owe.md`) with `who` = the person, plus "I'll ..." lines in the person's earlier 1:1 notes. Extractors return every candidate; the worker applies "What counts" |
 | 2 | They owe you | The person's own promises to the user ("I'll send you", "I can check"): chat DMs and threads, their tracker comments, transcripts, earlier 1:1 notes; and tickets assigned to them that the user is waiting on |
 | 3 | Their open asks | What they sent the user since the last 1:1 (or 14 days) that expects an answer and has none: chat, email, tracker comments mentioning the user. A bare cc or fyi is dropped |
 | 4 | Carried from earlier 1:1s | In the newest two prep or agenda notes: unchecked items, lines under "carry over", "follow up", "next time" or "parked", and questions with no recorded answer |
@@ -47,8 +47,9 @@ a timestamp and deciding nothing. Nothing is sent or edited.
 
 ## Verify and write
 
-Step 3 of `SKILL.md` applies to every row: re-check it is still open and drop what is
-resolved, with the evidence. A "carried" item that a later note or meeting settles is
+Step 3 of `SKILL.md` applies, including its cap of 10 verified candidates (owed rows first;
+the rest are listed `unverified` with their age): re-check each is still open and drop what
+is resolved, with the evidence. A "carried" item that a later note or meeting settles is
 dropped, not carried again. A theme is kept only when it is still unresolved or the user
 would want it raised; say "settled on <date>" in one clause otherwise.
 
