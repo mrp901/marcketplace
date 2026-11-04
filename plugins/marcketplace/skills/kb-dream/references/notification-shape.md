@@ -18,14 +18,22 @@ own ticked items on the next pass is gone: one flow, the Router acts on every ti
 ## Then post this run's lines
 
 One `chat: update canvas` batch, one line per Surfaced bullet, every Surfaced bullet, no
-exception for one that looks small, in the protocol grammar and reading as the action a
-tick causes:
+exception for one that looks small, in the protocol grammar, reading as the action a
+tick causes and ending with what the tick does:
 
 ```
-- [ ] (dream:260922-1) 🧹 merge the two onboarding retro notes into one, keeping the August one as current · Inbox/2026-08-24-onboarding-retro.md
-- [ ] (dream:260922-2) 🧹 lift the suppression on #eng-bugs:ticket-minor, you have ticked three since it was blocked · state
-- [ ] (dream:260922-3) 🧹 fold: add the "never assume a type is unregistered" rule to session-log/SKILL.md, per the memory entry · Memory/2026-09-12-type-registry.md
+- [ ] (dream:260922-1) 🧹 merge the two onboarding retro notes into one, keeping the August one as current · Inbox/2026-08-24-onboarding-retro.md · tick → kb-dream applies the fix
+- [ ] (dream:260922-2) 🧹 lift the suppression on #eng-bugs:ticket-minor, you have ticked three since it was blocked · state · tick → marks the lift accepted (the router lifts it next run)
+- [ ] (dream:260922-3) 🧹 fold: add the "never assume a type is unregistered" rule to session-log/SKILL.md, per the memory entry · Memory/2026-09-12-type-registry.md · tick → marks the fold accepted (nothing is edited)
 ```
+
+The effect is the one `../../../shared/surface-protocol.md`'s table gives for `kb-maintenance`,
+by what `settle` will do: **`tick → kb-dream applies the fix`** for curation, a merge, a
+voice proposal or a new register (the tick is the user's evidence, so `settle` applies it);
+**`tick → marks the lift accepted (the router lifts it next run)`** for a suppression lift;
+**`tick → marks the fold accepted (nothing is edited)`** for a skill-fold proposal, which this
+skill never applies. Never promise more than the tick does: a fold's line must not say
+"applies".
 
 If a bullet doesn't deserve a board line, it wasn't a Surfaced item and belongs in Flags
 instead. Nothing actionable means nothing appended and no canvas call.

@@ -62,7 +62,10 @@ Run /marcketplace:briefing profile=confluence:<cloudId>/<pageId> unattended
 ## How the parts fit together
 
 **The board** is one shared canvas with five sections: Today, To-do, For you, Ideas and
-Closed. It holds only things that need you. **Every tick means "yes, do it."** Edit a line
+Closed. It holds only decisions: a line is there only if ticking it causes something, and
+every line ends with what its tick does (`tick → drafts a reply (nothing sent)`). A plain
+to-do with nothing behind its tick stays off the board, and `action-list` picks it up.
+**Every tick means "yes, do it."** Edit a line
 and then tick it to have it done your way. Edit without ticking and nothing happens yet.
 Delete a line and it is never proposed again. Add a line anywhere and it is a new request.
 To-do is the one exception: it is your own list, and a tick there means done. A choice is
@@ -86,6 +89,11 @@ proposed. Nothing is ever mapped or executed without your tick.
 **Voice compounds.** Drafting skills load a register built from your own writing, check
 themselves against a list of model tells, and record what they wrote. When you edit a
 draft, that difference feeds back on the next review.
+
+**Drift is reported.** The plugin runs in three places that update separately (cloud
+routines on `main`, claude.ai's copy, the synced copy Claude Code loads locally). A
+SessionStart check compares this copy's version with `main`'s and says so when it is behind;
+every run also stamps the version it ran, and the briefing flags a day whose runs differ.
 
 Contributors: see `PORTING.md`. Scheduling is yours to set up; skills never self-schedule.
 

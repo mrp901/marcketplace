@@ -1,15 +1,17 @@
 ---
 name: action-list
-description: "Use when the user wants a ranked, time-boxed action list with ready drafts for a stretch of their day to work through now (\"build me a list for this afternoon\", \"what should I clear before my 4pm\"), or hands over such a list, or names one, to work through item by item and close out. Not for sweeping actions onto the board."
+description: "Use when the user wants a ranked, time-boxed action list with ready drafts for a stretch of their day to work through now (\"build me a list for this afternoon\", \"what should I clear before my 4pm\"), asks what they owe people (\"what do I owe people\", \"what did I promise Lisa\"), asks to prep a 1:1 (\"prep my 1:1 with Terry\"), or hands over such a list, or names one, to work through item by item and close out. Not for sweeping actions onto the board."
 ---
 
 # Action list
 
 A personal, time-boxed plan for one stretch of the day, and the working of it. `build`
 reads what happened since the window opened and writes one ranked list, with ready drafts
-and the evidence for every rank. `work` takes a list (one this skill built, or any other)
-and works the items the user picks, one at a time, until the user says it is done. It is
-direct only: it has no `## Handler mode`, the hub never dispatches it, it never writes to
+and the evidence for every rank, led by an "I owe" section of what the user told people
+they would do. `work` takes a list (one this skill built, or any other) and works the items
+the user picks, one at a time, until the user says it is done. `prep` builds a short 1:1
+prep for one person instead of a day list. It is direct only: it has no `## Handler mode`,
+the hub never dispatches it, it never writes to
 the board, and it never dispatches a handler. The board holds things that wait for a tick;
 this list is for a person sitting down to clear a block of work with Claude beside them.
 
@@ -36,7 +38,9 @@ else. Any `unattended` invocation fast-fails: both modes need the user.
 - Repository work an item names (a branch, a commit, a pull request) runs through that
   item's own process and the machine's own tools, outside these categories; each push and
   each pull request still waits for its own yes.
-- State: `runs.action-list`, `cursors.action-list` (`last_window_end`), in its shard.
+- State: `runs.action-list`, `cursors.action-list` (`last_window_end`), in its shard; and,
+  read only, `action-sweep`'s shard for its `category: to-do` `items` (on the board or
+  off it). `prep` also reads the kb's 1:1 prep and meeting notes (`kb` search, read).
 
 ## Budget
 
@@ -44,8 +48,15 @@ else. Any `unattended` invocation fast-fails: both modes need the user.
 every candidate with its evidence and deciding nothing; ranking and drafting at
 `budgets.models.worker`; one cold review at `budgets.models.critic`; one `kb: write`
 batch. When every source comes back empty, write no list: say so in one line and record
-`runs.action-list` as `quiet`. `work`: spend what each item needs, delegating any broad
-search to a subagent so its output stays out of the conversation. Guidelines in
+`runs.action-list` as `quiet`. "I owe" adds **at most 4 reads**: `action-sweep`'s shard (the
+main document and this skill's shard are already read at onboarding), and up to 3 pages of
+one `from:me` chat search over the last 14 days, so a promise older than the window is
+still seen. The extraction subagents already read tracker, transcripts and session notes,
+and are asked also to flag commitments (`references/i-owe.md`). `prep`: up to five extraction subagents at `budgets.models.search`
+(what the user owes, what the person owes, their open asks, previous 1:1 agendas, recent
+meetings), one worker, one critic, one `kb: write`, and the same one extra state read.
+`work`: spend what each item needs, delegating any broad search to a subagent so its
+output stays out of the conversation. Guidelines in
 `../../shared/token-discipline.md`.
 
 ## Surface
@@ -56,7 +67,9 @@ not today" section. This skill owns no tag prefix and never writes to the surfac
 ## Choosing the mode
 
 The user's words usually settle it: "build me a list" is `build`, "work the lunch list" is
-`work`, "build one and let's go" is both, in that order. Where they do not, ask once,
+`work`, "build one and let's go" is both, in that order, "what do I owe people" is `build`
+with only the "I owe" section, and "prep my 1:1 with Terry" is `prep`. Where they do not,
+ask once,
 recommending `build` when no list for today exists in `kb.paths.drafts` and `work` when
 one does.
 
@@ -69,19 +82,23 @@ one does.
    commitments, unanswered mentions and threads; email addressed to them; their open
    tracker work and tickets that mention them; today's meeting transcripts (none when
    `notetaker.service` is `none`); the kb inbox and the open threads of recent `kb.paths.sessions` notes; merged pull requests that
-   involve them. Each returns every candidate, quoted, with a link and a timestamp.
+   involve them. Each returns every candidate, quoted, with a link and a timestamp, and
+   flags any that is a commitment the user made (`references/i-owe.md`). Read `action-sweep`'s
+   to-do `items` from state alongside; they carry "you said" evidence already.
 3. **Verify before ranking.** Check each candidate's source is still open. A later reply,
    a closed ticket or a sent email moves it to "Dropped" with the evidence.
 4. **Rank.** First, promises the user made with a deadline inside the window; then
    someone waiting on the user, external before internal; then whatever unblocks someone
-   else's work; then the rest. Every row says why, quoting the words that make it urgent.
+   else's work; then the rest. Within a tier a row the user owes someone ranks first, oldest
+   promise first. Every row says why, quoting the words that make it urgent.
 5. **Draft** every message and tracker comment in the register its audience calls for,
    with a "Check before sending" note naming what it assumes. A fact the sources cannot
    settle is marked `[TBC: ...]`, never guessed.
 6. **Review.** A critic-tier subagent reads the list cold against the sources: a wrong
    rank, a resolved item still listed, a name collision, a draft claiming more than its
    source. Fix what it finds.
-7. **Write** the list per `references/list-format.md`, with its log line in the same
+7. **Write** the list per `references/list-format.md` (the "I owe" section on top, per
+   `references/i-owe.md`), with its log line in the same
    batch. Nothing is sent, posted, filed or edited anywhere else. Write
    `cursors.action-list.last_window_end` and `runs.action-list`.
 
@@ -99,6 +116,19 @@ one does.
 5. **Close** when the user says the list is done, per `references/closing.md`, then offer
    `session-log`. Write `runs.action-list`.
 
+## Flow: prep
+
+Per `references/one-to-one-prep.md`.
+
+1. **Resolve the person** from `people`, `kb.people_file` and `people_confusions`; an
+   ambiguous first name is resolved from context or asked once, never guessed.
+2. **Extract**, in parallel, one subagent per source group: what the user owes them, what
+   they owe the user, their open asks of the user, items carried on earlier 1:1 agendas
+   (found through the kb's own conventions), and themes from the last few meetings.
+3. **Verify, review and write** a short prep note to `kb.paths.drafts`, with its log line.
+   Nothing is sent. Write `runs.action-list` (`note`: `prep: <person>`); the window cursor
+   does not move.
+
 See `references/worked-example.md` for one list built and partly worked against
 `profiles/example.md`.
 
@@ -111,6 +141,7 @@ See `references/worked-example.md` for one list built and partly worked against
   explicit yes. A yes to one write never covers the next.
 - Check `kb.people_file` and `people_confusions` before writing any name into a list, a
   draft or a ticket. An ambiguous first name is resolved from context or flagged.
+- An "I owe" or "they owe" row quotes the words that make it a promise; no words, no row.
 - Never edit the substance of a human-verified note. Closing a list touches only the list
   and the log.
 - The list is the user's plan once written; an item they edited is done their way.

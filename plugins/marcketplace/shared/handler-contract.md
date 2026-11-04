@@ -25,6 +25,8 @@ The dispatch contract between `proactive-router` (the hub) and every skill that 
 | calendar | 📅 | none yet |
 | fyi | (none) | never on the board; reported in the briefing message only |
 
+Each category's tick effect, the short `tick → …` statement every board line ends with, is in `surface-protocol.md`'s "The tick effect" table, derived from this one; change a handler or mode here and the effect there in the same release.
+
 Every row names whether its mode is **single-shot** (runs once on the tick and is done) or the first half of a **two-tick** flow (produces a draft, then waits for a second tick on a fresh line before the irreversible step). A mode with no annotation is single-shot.
 
 Any handler name that names a skill retired in 1.11.0 reads as its replacement: `idea-ticket` as `jira-story` (idea mode), `kb-note` as `session-log` (`capture`), keeping the mode (an in-flight `file` second tick stays `file`). That covers `state.registry`, a report sub-line and a `state.outcomes` entry. `briefing`'s 1.10.4 to 1.11.0 migration rewrites the registry; until it runs, and for sub-lines and outcomes that are never rewritten, readers apply the same substitution.
@@ -40,8 +42,8 @@ Any handler name that names a skill retired in 1.11.0 reads as its replacement: 
 | Action | On tick |
 |---|---|
 | `inline:investigate` | Chases what a `running-behind` or `feed-mismatch` line points at, reads only, and reports what it found in the sub-line |
-| `inline:promote` | Writes the `term:` line's text as the user left it into `state.glossary`, keyed by the term, and adds a `done` sub-line; briefing then removes the line (never to Closed) |
-| `inline:to-do` | Copies the line's text (post-edit) as a new unticked line at the top of To-do and adds a `done` sub-line |
+| `inline:promote` | Writes the `term:` line's text as the user left it (without its tick effect) into `state.glossary`, keyed by the term, and adds a `done` sub-line; briefing then removes the line (never to Closed) |
+| `inline:to-do` | Copies the line's text (post-edit, without its tick effect) as a new unticked line at the top of To-do and adds a `done` sub-line |
 
 `manual:skill-eval` is not an action at all. A ticked `shc:` line gets the sub-line `  - ↳ router: queued for your next skill-eval run` and nothing is dispatched. `skill-eval` runs only when the user runs it; run with no target, it lists these queued lines as candidates and writes a `state.outcomes` entry (in its own shard) when it finishes, which is what lets briefing close the line.
 
@@ -89,8 +91,8 @@ item:
   tag: <tag>
   section: <heading>
   category: <category>
-  text_as_ticked: <current surface text, post-edit if edited>
-  original_text: <text as first written, if different>
+  text_as_ticked: <current surface text, post-edit if edited, without the trailing ` · tick → …` effect>
+  original_text: <text as first written, if different, same>
   ref: <link>
   idea_key: <tracker key, if the line belongs to an idea block or names a key>
   group: <the question's tag stem, on an option line>
@@ -148,7 +150,7 @@ Applied by the hub at the end of every run, after dispatch results are in:
 - **Pattern blocking.** Three deletions of the same `<channel>:<category>` pattern adds it to `state.patterns_blocked`; the classification step in whichever skill produces that category stops proposing it for that channel entirely.
 - **Unmapped-tick proposal.** On the first unmapped tick for a category with no open proposal, write to For you, and record it in `state.proposals` (`kind: mapping`):
   ```
-  - [ ] (pr:prop-<category>) propose: map <category> → <candidate or "needs a new skill"> · ticked <date>
+  - [ ] (pr:prop-<category>) propose: map <category> → <candidate or "needs a new skill"> · ticked <date> · tick → maps <category> to <candidate> from now on
   ```
   `<candidate>` comes from a fixed table in the router's own `references/categories.md`, never invented at run time. A tick on this line sets `state.registry[category] = {handler: <candidate>, mode, since: <now>, set_by: user_tick}`.
 - **Sixty-day dismissal.** A proposal untouched for 60 days is dismissed by `kb-dream`'s monthly pass, not by the router itself.

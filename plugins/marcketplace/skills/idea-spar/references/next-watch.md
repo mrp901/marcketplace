@@ -47,7 +47,8 @@ the rest wait for the next run.
    `../../../shared/surface-protocol.md`, then in one write: the idea's block header if
    missing (`- <key> · <title> · pack`, with `pack` linking the page) and one decision group
    per real fork from the pack's "Decisions for you", at most 2, 2 to 4 options each, tagged
-   `(<key>/d<n><letter>)`, category `idea-decision`. No fork: write nothing to the board; the
+   `(<key>/d<n><letter>)`, category `idea-decision`, each ending with its tick effect
+   (see "Line shape"). No fork: write nothing to the board; the
    pack still reaches the user through the briefing.
 6. State: `cursors.idea-spar.roadmap_checked_at`, `ideas.<key>`, `items` (each option with
    `group: <key>/d<n>` and `idea_key`), `runs.idea-spar` with `note: "pack for <key>: <the
@@ -68,9 +69,11 @@ leave `pack_pending` set so the next run retries, write no board line, and say s
 ```
 - FIG-204 · Load-plan variance alerts · pack
   - Channel first?
-    - [ ] (FIG-204/d1a) 🔀 Email digest first: cheap, the digest job exists
-    - [ ] (FIG-204/d1b) 🔀 In-app first: needs a notification service built
-    - [ ] (FIG-204/d1c) 🔀 Both at once
+    - [ ] (FIG-204/d1a) 🔀 Email digest first: cheap, the digest job exists · tick → records your choice; siblings close
+    - [ ] (FIG-204/d1b) 🔀 In-app first: needs a notification service built · tick → records your choice; siblings close
+    - [ ] (FIG-204/d1c) 🔀 Both at once · tick → records your choice; siblings close
 ```
 
-Every option is self-contained and reads as the decision a tick records.
+Every option is self-contained, reads as the decision a tick records, and ends with the
+`idea-decision` effect from `../../../shared/surface-protocol.md`'s table, verbatim: `tick →
+records your choice; siblings close`. The question line has no checkbox and no effect.

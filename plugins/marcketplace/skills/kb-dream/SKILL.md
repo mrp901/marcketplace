@@ -101,9 +101,9 @@ state read and write, two local scripts. The scheduled dream is a cloud routine 
 
 ## Surface
 Owns `dream:` lines in For you, all category `kb-maintenance`, in the protocol grammar
-`- [ ] (dream:<yymmdd>-N) 🧹 <one self-contained line> · <ref>`. A tick is the hub's: it
-dispatches `settle`. This skill never ticks, settles or closes its own lines or edits
-any other line.
+`- [ ] (dream:<yymmdd>-N) 🧹 <line> · <ref> · tick → <effect>`; effects are in
+`references/notification-shape.md`. A tick is the hub's: it dispatches `settle`. This
+skill never ticks, settles or closes its own lines or edits any other line.
 
 ## Handler mode
 Handler, mode `settle` only - the hub dispatches one ticked `dream:` line (category

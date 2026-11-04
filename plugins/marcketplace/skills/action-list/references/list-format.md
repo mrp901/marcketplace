@@ -32,15 +32,18 @@ supersedes_on: closed on the user's word, or past stale_after
    edited anywhere. `[TBC: ...]` marks a fact I couldn't verify."
 2. **The time available** - the free block from the calendar, the next commitment, and
    which rows fit before it.
-3. **If you only do three things** - the top three, each one sentence, each quoting the
+3. **I owe** - what the user told people they would do: who it is owed to, what, when it
+   was promised, its age in business days, a link, and the ranked row that does it, per
+   `i-owe.md`. Always present; one line when nothing is owed.
+4. **If you only do three things** - the top three, each one sentence, each quoting the
    promise or the ask that makes it urgent.
-4. **Ranked actions** - one table: `#`, action (a concrete verb and object), who's waiting
+5. **Ranked actions** - one table: `#`, action (a concrete verb and object), who's waiting
    and why now (quoted, timestamped), source (a link), effort, and the draft it uses.
-5. **Dropped** - resolved or not the user's, one line each with the evidence.
-6. **Drafts** - one `###` per draft: channel, recipients and subject, the draft as a
+6. **Dropped** - resolved or not the user's, one line each with the evidence.
+7. **Drafts** - one `###` per draft: channel, recipients and subject, the draft as a
    quote block, then "Check before sending" bullets naming each assumption.
-7. **Couldn't confirm** - what the sources could not settle.
-8. **Backlog, not today** - the board's open lines and any older open threads, grouped,
+8. **Couldn't confirm** - what the sources could not settle.
+9. **Backlog, not today** - the board's open lines and any older open threads, grouped,
    with no ranking. Read only; the board stays the board's.
 
 ## Rules for the content

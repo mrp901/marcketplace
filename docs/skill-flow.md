@@ -8,7 +8,9 @@ the feedback loops. Skill names below are the repo skills in
 
 Since 1.1.0 there is one tick rule on the whole board: **a tick means "yes, do it"**. The
 Router acts on every tick; the Briefing only closes lines and reports. Nothing on the
-board is an FYI, and nothing ever sends a message on your behalf.
+board is an FYI, and nothing ever sends a message on your behalf. Since 1.12.0 the board
+holds decisions only: every line ends with what its tick does, and a plain to-do with no
+action behind its tick stays in state for `action-list` instead.
 
 Solid arrows are a write or a direct hand-off. Dotted arrows mean the hand-off waits for
 a later run: a tick reaching the hub on its next scheduled run, or something one run
@@ -72,7 +74,7 @@ flowchart TB
     subgraph manual["Your day, direct or hook-driven"]
         direction TB
         sessionlog["session-log"]
-        actionlist["action-list\n(build, then work)"]
+        actionlist["action-list\n(build, work, 1:1 prep)"]
         jirastory["jira-story\n(refine, draft, or idea ticket)"]
         transcriptskill["transcript\n(recording link to text)"]
         sparsession["idea-spar\n(session: challenge, reality,\nmarket, sketch, pack it)"]
@@ -82,6 +84,7 @@ flowchart TB
     sessionhook(["SessionEnd / SessionStart hooks"])
     sessionhook --> sessionlog
     board -.->|"read only, backlog"| actionlist
+    sweep -.->|"to-dos kept off the board, via state"| actionlist
     actionlist -.->|"offered on close"| sessionlog
     roadmap(["You move an idea into Next"])
     roadmap -.-> sparwatch

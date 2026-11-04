@@ -22,8 +22,9 @@ sitting (ticked or unticked) as a `term:` line in For you. For each one:
 
 - Add an unticked line to For you in the protocol grammar, tag `(term:<yymmdd>-N)`,
   category `term`, emoji 📘, text `add to glossary: <term> = <the best one-line reading
-  directly supportable from the surrounding message or ticket text>`, and a ref to where
-  the term was seen. Never a guess that can't be pointed back to a source.
+  directly supportable from the surrounding message or ticket text>`, a ref to where
+  the term was seen, and the tick effect `tick → adds it to the glossary`. Never a guess
+  that can't be pointed back to a source.
 - Cap this at 2 new terms per run. Skip the rest silently rather than cluttering the
   board or spending an extra lookup to chase down a definition.
 

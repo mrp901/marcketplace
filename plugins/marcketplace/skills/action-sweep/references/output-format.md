@@ -2,26 +2,38 @@
 
 ## For you lines (end of the sweep flow)
 
-One line per find, in `../../../shared/surface-protocol.md`'s grammar, tag
-`(sweep:<yymmdd>-N)`, category emoji from `handler-contract.md`, reading as the action a
-tick causes. Against `profiles/example.md`:
+One line per find that a tick can act on, in `../../../shared/surface-protocol.md`'s
+grammar, tag `(sweep:<yymmdd>-N)`, category emoji from `handler-contract.md`, reading as
+the action a tick causes and ending with that category's tick effect, copied from
+`surface-protocol.md`'s table. Against `profiles/example.md`:
 
 ```
-- [ ] (sweep:260922-1) 🎫 [minor] draft a Story under FLT-401: truncate long load names in the summary table · https://northwindlogistics.slack.com/docs/TEXAMPLE001/FEXAMPLECANVAS9
-- [ ] (sweep:260922-2) ☑️ to-do: answer Tomasz on FLT-166 - should the MTD comparison include cancelled loads? (he tagged you) · https://northwindlogistics.atlassian.net/browse/FLT-166
-- [ ] (sweep:260922-3) 💬 draft a reply to Owen in #freight-ops: he's waiting on your call about the support-ticket spike · https://northwindlogistics.slack.com/archives/CEXAMPLEFRTOPS1/p1758600001000100
-- [ ] (sweep:260922-4) ☑️ to-do: send Tomasz the Q4 capacity figures by Friday (you said so in #planning) · https://northwindlogistics.slack.com/archives/CEXAMPLEPLAN001/p1758600002000200
-- [ ] (sweep:260922-5) 🗓️ draft the follow-up you took in Tuesday's dock sync: confirm multi-yard scope with Ana · notetaker:meeting/2026-09-20-dock-sync
+- [ ] (sweep:260922-1) 🎫 [minor] draft a Story under FLT-401: truncate long load names in the summary table · https://northwindlogistics.slack.com/docs/TEXAMPLE001/FEXAMPLECANVAS9 · tick → drafts the ticket (2nd tick files it in Jira)
+- [ ] (sweep:260922-3) 💬 draft a reply to Owen in #freight-ops: he's waiting on your call about the support-ticket spike · https://northwindlogistics.slack.com/archives/CEXAMPLEFRTOPS1/p1758600001000100 · tick → drafts a reply (nothing sent)
+- [ ] (sweep:260922-5) 🗓️ draft the follow-up you took in Tuesday's dock sync: confirm multi-yard scope with Ana · notetaker:meeting/2026-09-20-dock-sync · tick → drafts the follow-up (2nd tick writes it to Jira)
 ```
+
+**A `to-do` is not a board line.** Ticking it would dispatch nothing, so it is a decision for
+nobody: it keeps a tag and a `state.items` entry with `on_board: false`, the `text` written
+as it would have read, and `action-list` picks it up. Two of the finds above (260922-2 and
+-4) were to-dos:
+
+```
+sweep:260922-2  on_board: false  to-do: answer Tomasz on FLT-166 - should the MTD comparison include cancelled loads? (he tagged you) · https://northwindlogistics.atlassian.net/browse/FLT-166
+sweep:260922-4  on_board: false  to-do: send Tomasz the Q4 capacity figures by Friday (you said so in #planning) · https://northwindlogistics.slack.com/archives/CEXAMPLEPLAN001/p1758600002000200
+```
+
+Keep the evidence in the text (who tagged, what was promised and to whom, where): it is what
+`action-list`'s "I owe" section reads. The briefing message names the new ones in one line.
 
 A tracker tag is a to-do, even when it reads as a status update. Tomasz tags the user
 while walking FLT-212's ACs ("AC2: rows are clickable BUT only one carrier opens when
 there are several..."), with no question mark:
 
 ```
-bad:  (nothing posted - "mentions the user only in passing, no ask")
+bad:  (nothing kept - "mentions the user only in passing, no ask")
 bad:  - [ ] (sweep:260922-7) 🎫 draft a reply on FLT-212: Tomasz walked through the ACs
-good: - [ ] (sweep:260922-7) ☑️ to-do: Tomasz tagged you on FLT-212's ACs - AC2's clickable rows only open one carrier when there are several · https://northwindlogistics.atlassian.net/browse/FLT-212
+good: sweep:260922-7  on_board: false  to-do: Tomasz tagged you on FLT-212's ACs - AC2's clickable rows only open one carrier when there are several · https://northwindlogistics.atlassian.net/browse/FLT-212
 ```
 
 Only a comment that is nothing but a bare cc or fyi is dropped:
@@ -35,9 +47,9 @@ A candidate whose tier is unclear is a question, not a guess:
 
 ```
 - Which tier for "rework the load-plan export"? (from #freight-ops, 21 Sep)
-  - [ ] (sweep:260922-6a) 🎫 [minor] small: a Story under FLT-401
-  - [ ] (sweep:260922-6b) 🎫 larger: an idea on FIG for discovery first
-  - [ ] (sweep:260922-6c) 🎫 larger, defined: a new epic in FLT
+  - [ ] (sweep:260922-6a) 🎫 [minor] small: a Story under FLT-401 · tick → drafts the ticket (2nd tick files it in Jira)
+  - [ ] (sweep:260922-6b) 🎫 larger: an idea on FIG for discovery first · tick → drafts the ticket or comment (2nd tick writes it to Jira)
+  - [ ] (sweep:260922-6c) 🎫 larger, defined: a new epic in FLT · tick → drafts the ticket or comment (2nd tick writes it to Jira)
 ```
 
 The run record (`runs.action-sweep.note`) is one line: `7 finds: 2 chat, 1 mention, 1

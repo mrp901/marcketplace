@@ -1,5 +1,15 @@
 # kb-dream - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-04 tick effects on `dream:` lines (1.12.0)
+
+Every `dream:` line now ends with what its tick does. The default is `tick → kb-dream applies
+the fix`; a fold proposal says `tick → marks the fold accepted (nothing is edited)` and a
+suppression lift says `tick → marks the lift accepted (the router lifts it next run)`, because
+`settle` never applies a fold and the router applies a lift. A line must not promise more than
+the tick does. The category stays on the board: a tick dispatches `settle`, which acts.
+`SKILL.md` was already at the 150-line cap, so the effect table lives in
+`references/notification-shape.md` and the Surface paragraph was reflowed, not extended.
+
 ## 2026-11-03 fold vault-pulse in, cut follow-up escalation, state the purpose (1.11.0)
 
 Usage evidence (Oct-Nov 2026): the user works in attended sessions, not by ticking the board,

@@ -1,5 +1,30 @@
 # briefing - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-04 decisions-only board, tick effects, version stamps (1.12.0)
+
+The board was about 200 lines and its owner "forever forgets what a tick will do". Three
+changes land here:
+
+- **The header** now says each line ends with what its tick does. Briefing rewrites it whenever
+  it differs from `surface-protocol.md`, so an old board picks it up on the first run.
+- **The 1.11.0 to 1.12.0 migration** (`references/migration.md`) takes untouched, unticked
+  `sweep:` to-do lines off the board without losing them (the owner's `items` entries stay for
+  `action-list`; briefing records the tags in `off_board` in its own shard because it must not
+  write another skill's shard), and appends tick effects to briefing's own `rb:`, `term:` and
+  `feed:` lines, updating their `items` text so they still compare as untouched. It touches no
+  other owner's wording: those lines gain an effect when their owner next writes them. An `rb:`
+  line stays on the board: its tick runs `inline:investigate`, which is an action.
+- **Runs on mixed versions.** Every run stamps `runs.<skill>.version` (`onboarding.md` step 6).
+  The Runs block flags a day whose runs differ, naming the lagging skills, because the cloud
+  routines run `main` while claude.ai's copy and the locally synced copy update on their own,
+  and the local one lagged two releases on 3 Nov without anyone noticing. The line is a check,
+  not a verdict; the SessionStart check says the same thing at the start of a local session.
+- The message also names new to-dos kept off the board in one line, so the owner still hears
+  of them.
+
+**Open question:** the mixed-versions line lists lagging skills plus the newest version; whether
+it should also name which machine ran each (the run record has `machine`) is left until it fires.
+
 ## 2026-11-03 the knowledge-base health line, and a registry migration (1.11.0)
 
 The Runs block's `pulse` line read `runs.vault-pulse`. `vault-pulse` is folded into `kb-dream`,

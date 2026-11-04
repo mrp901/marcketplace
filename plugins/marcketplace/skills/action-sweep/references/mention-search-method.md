@@ -37,8 +37,8 @@ Use this method instead, every run:
 4. Group matching comments by issue. One issue can carry a mix - some mentions
    addressed, some not. Carry that mix forward rather than collapsing the whole issue to
    one bucket: an addressed commitment on an issue can produce a draft ticket while a
-   separate unaddressed tag on the *same* issue still gets its own `to-do` line. A tag
-   is always `to-do`, even when it implies a ticket (the line can say so); the "more
+   separate unaddressed tag on the *same* issue still gets its own `to-do` item. A tag
+   is always `to-do`, even when it implies a ticket (its text can say so); the "more
    concrete action" rule in `sizing-and-routing.md` never pulls a tag elsewhere.
 
 **Deliberate scope, not an accident:** only tags on issues the user is assignee or

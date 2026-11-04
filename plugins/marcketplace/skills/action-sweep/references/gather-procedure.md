@@ -90,5 +90,6 @@ silently. A source that ran to its end advances as normal.
 One find can surface through several sources (a meeting commitment that is also a chat
 promise, a mention inside a thread already waiting on the user). Dedupe by permalink or
 ticket key against this run's other finds and against every tag in `state.items`, so a
-find already on the board, whoever put it there, is never posted twice. When two sources
+find already on the board, or already kept off it as a to-do (`on_board: false`), whoever put
+it there, is never posted twice. When two sources
 describe one find, keep the one with the most concrete action.
