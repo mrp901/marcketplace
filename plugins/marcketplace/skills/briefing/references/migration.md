@@ -166,3 +166,41 @@ for `runs` or `items` and never deleted by briefing; leave a `shards` pointer to
 place. `dream:` lines the cut follow-up escalation already wrote close as usual by
 sub-line, or expire per `briefing.stale_after_business_days`; the three retired skills
 wrote no board lines.
+
+## 1.11.0 to 1.12.0: decisions only, and a tick effect on every line
+
+Not the run's only write: these steps go inside the ordinary `chat: update canvas` batch and
+shard write. Nothing else waits on it (`../../../shared/state-schema.md`, 1.11.0 to 1.12.0
+row); other owners add the tick effect to their own lines on their next write.
+
+1. **Take the plain to-dos off the board.** A line in For you moves off when all of these
+   hold: its tag prefix is `sweep:`; its `state.items` entry has `category: to-do`; it is
+   unticked; its text matches `items.<tag>.text` verbatim (the user has not edited it); and
+   no sub-line sits under it. Delete the line from the board and add `off_board: {<tag>:
+   <now>}` (the time it left the board) to this skill's shard. **Never remove or rewrite
+   the `items` entry**: it is the owner's, it is what `action-list` reads, and `action-sweep`
+   sets `on_board: false` and `off_board_at` on it at its next write; the 30-day prune runs
+   from that time. A to-do that is ticked, edited or carries a sub-line stays exactly as it
+   is, as does every `pr:` line (the hub's: lines the user added that it tagged, or lines it
+   wrote). An `rb:` line is not a to-do: its tick runs `inline:investigate`. This deletion
+   is the one cross-owner board write the migration makes, and is why it is named in
+   `surface-protocol.md`'s "Never" list.
+2. **Append the tick effect to this skill's own lines.** Each unticked, unedited `rb:`,
+   `term:` and `feed:` line becomes `<its text> · tick → <effect>`, using
+   `../../../shared/surface-protocol.md`'s table (`rb:` and `feed:`: `tick → investigates and
+   reports (read only)`; `term:`: `tick → adds it to the glossary`), and its `items.<tag>.text`
+   in this skill's shard is set to the new text in the same write, so the line still reads as
+   untouched next run. A line already ending `tick → …`, and any ticked or edited line, is
+   left as it is. No other owner's line is touched; each of them backfills its own once
+   (`surface-protocol.md`, "Old lines get their effect once"). Set
+   `cursors.briefing.tick_effects_backfilled` so this runs once.
+3. **Log one line to Closed, naming every tag moved:** `- <date> (migration) 1.12.0: moved
+   off the board into action-list: <tag>, <tag>, ... · <m> line(s) now say what a tick does
+   · by briefing`. Nothing leaves the board unseen: the same tag list goes in
+   `runs.briefing.note`, and the briefing message's off-board to-do line counts them.
+4. Write `installed_version` = 1.12.0.
+
+Idempotent: a to-do already off the board (its tag in `off_board`, or `on_board: false`) and
+a line already carrying its effect are skipped, so an interrupted run is finished by the next.
+The header's second line differs from the 1.12.0 text on an old board, so the ordinary
+header rewrite (`SKILL.md` step 6) brings it up to date in the same batch.

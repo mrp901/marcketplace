@@ -1,5 +1,13 @@
 # idea-spar - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-04 tick effect on decision options (1.12.0)
+
+Each option line in a decision group now ends with `tick → records your choice; siblings
+close`. Option text is already long, so the effect is the shortest form that is still exact:
+the tick writes the decision log and the other options close as `not chosen`. Its own older
+untouched option lines get the effect once, on its first 1.12.0 run that reads the board
+(`cursors.idea-spar.tick_effects_backfilled`).
+
 ## 2026-11-03 local stamps; seed the shard (1.10.3)
 
 The health check found `runs.idea-spar.last_run_at` and `cursors.idea-spar.roadmap_checked_at`

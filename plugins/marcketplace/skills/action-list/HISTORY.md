@@ -1,5 +1,50 @@
 # action-list - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-04 "I owe" section and 1:1 prep (1.12.0)
+
+The owner works in attended sessions and through this skill, rarely from the board, and loses
+track of things he told people he would do ("I can check about Q2", "you said you would go back
+to Ana"). The only record of those was scattered: a chat message, a to-do `action-sweep` had
+found, an open thread in a session note. So `build` now leads with an **I owe** section (who
+it is owed to, what, when promised, age in business days, a link) and ranks an owed row above
+any other of equal urgency; `prep` is a second shape of the same skill, "prep my 1:1 with
+<person>", built from the same sources plus the kb's earlier 1:1 notes.
+
+**Design choices, with reasoning:**
+
+- **No new sources, one new read.** The extraction subagents already read chat, tracker,
+  transcripts and session notes, so each is asked to flag commitments rather than a new
+  subagent being added. State adds one read, `action-sweep`'s shard (its to-dos), because from
+  1.12.0 those are no longer on the board and this skill is where they now surface. Promises
+  older than the list window are why the chat search reaches back 14 days (up to 3 pages) and
+  session-note threads 30 days; both horizons are constants here, not profile keys, because a
+  skill reads only its own `budgets` subtree.
+- **A quote or no row, and promises are not asks.** "I owe" is a claim about what the user said.
+  Only a to-do whose evidence carries the user's own promise ("I'll", "you said you would", "as
+  you told Ivan") is owed and earns the ranking boost; a to-do where someone tagged or asked the
+  user is "Waiting on you": listed, no boost. An offer ("let me know if ...") is not a promise.
+  Extractors (cheap tier) return every candidate and decide nothing; the worker applies "What
+  counts". An early draft told extractors to drop non-promises, which would have lost oddly
+  phrased real ones.
+- **Verification is capped at 10 per build** (and per prep), owed rows first, so the read count
+  is bounded; the rest are listed `unverified` with their age. A to-do found done is recorded in
+  this skill's `settled` list so `action-sweep` prunes it; nothing else closes an off-board
+  to-do.
+- **Owed rows are not described twice.** A promise that is also a ranked action carries a `Row`
+  pointer; the row holds the draft and the section holds the promise.
+- **1:1 prep finds its sources through the kb's own conventions**, not a hardcoded folder: the
+  people file, the conventions file's folder table, then a search. The owner's vault keeps 1:1
+  prep notes under onboarding and meeting notes under meetings; another org's will differ.
+  Names resolve through `people`, `kb.people_file` and `people_confusions` and an ambiguous
+  first name is asked once, never defaulted (the owner's vault has several pairs and a foursome
+  of people who share a first name).
+- **Prep does not move `last_window_end`.** It is not a window.
+
+**Open questions:** how many past meetings "recent themes" should read (4 now); whether prep
+should also look at the calendar for the next 1:1's time (it does not, so the note carries a
+date, not a time); whether "what do I owe people" deserves its own short output instead of a
+full list with only the section.
+
 ## 2026-11-03 notetaker none (1.10.3)
 
 The user has no notetaker. With `notetaker.service: none` the transcript source is skipped

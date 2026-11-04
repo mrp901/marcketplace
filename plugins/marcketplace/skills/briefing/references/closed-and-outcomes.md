@@ -32,7 +32,7 @@ Nothing acts on a `partial`, `blocked` or router `queued` sub-line by itself, so
 limit the line sits open for ever. The threshold is `briefing.stale_after_business_days`:
 absent means 5, `0` disables expiry.
 
-- Look only at the line's **latest** sub-line (`↳ <handler> <date[ time]>: ...`). It must be
+- Ignore a `classified` sub-line (a note, not an outcome). Look only at the line's **latest** sub-line (`↳ <handler> <date[ time]>: ...`). It must be
   `partial`, `blocked` or a router `queued` note (`↳ router <date>: queued for ...`), and no
   newer sub-line may follow it.
 - Business days are Mon-Fri in `org.timezone`, counted from the latest sub-line's date to the
@@ -55,10 +55,14 @@ Per `surface-protocol.md`'s "The Closed log":
 - <date> (<tag>) <outcome> · <original text, 120 chars> · <by you | by <handler>>
 ```
 
-Briefing writes one such line per closed line, newest first, prepended above the existing
-Closed block, then runs `../scripts/trim_closed.py` (5 days or 20 lines, whichever bound
-is hit first) on the resulting list before the step 6 write. The trim runs every time this
-step fires, even when nothing new closed this run.
+`<original text>` leaves out the line's trailing ` · tick → <X>` effect when `<X>` is exactly
+the effect its owner wrote (`surface-protocol.md`, "The tick effect"): that says what ticking
+would do, and the Closed line says what happened. A different `<X>` is the user's edit and
+stays. Briefing writes one such line per closed
+line, newest first, prepended above the existing Closed block, then runs
+`../scripts/trim_closed.py` (5 days or 20 lines, whichever bound is hit first) on the
+resulting list before the step 6 write. The trim runs every time this step fires, even when
+nothing new closed this run.
 
 ## Handler outcomes since last run
 
@@ -74,7 +78,8 @@ in `state.outcomes`; briefing never re-words a handler's report line, only lists
 
 ## Queued-but-undispatched count
 
-While closing, a ticked line with **no sub-line underneath it at all** was ticked after
+While closing, a ticked line with **no sub-line underneath it at all** (a `classified`
+note does not count) was ticked after
 the hub's per-run dispatch cap was spent, or before the hub has run since the tick. Count
 these across the whole board and report the total as one line:
 
@@ -84,6 +89,22 @@ these across the whole board and report the total as one line:
 
 Omit this line when the count is zero. This is what guarantees the user never has to open
 the board to learn that something they ticked has not been actioned yet.
+
+## New to-dos kept off the board
+
+A to-do with no action behind its tick is not on the board (`surface-protocol.md`, "What
+goes on the board"), so the message is where the user first hears of one. Read every
+`state.items` entry with `on_board: false` whose `off_board_at` is after `last_run_ts` and
+name them in one line, at most 3 short phrases (the line's own words, about 8 each), then
+`+N more` when there are more:
+
+```
+* {n} new to-do(s) kept off the board, in action-list: {phrase}; {phrase}; {phrase} +{k} more
+```
+
+Omit it when none are new. It counts toward "Nothing to report" like the queued line. Lines
+the 1.12.0 migration moved count as new in that run (their `off_board_at` is that run) and
+are also named, tag by tag, in the migration's own Closed line.
 
 ## Expired lines
 
@@ -99,7 +120,7 @@ Omit it when none expired. It counts toward "Nothing to report" like the queued 
 ## The Runs block
 
 Built from `state.runs`, one line per scheduled skill that ran inside the window, in a
-fixed order (proactive-router, action-sweep, idea-spar, kb-dream, skill-health-check), then the health scores, FYIs and overdue lines:
+fixed order (proactive-router, action-sweep, idea-spar, kb-dream, skill-health-check), then the health scores, FYIs, overdue lines and the mixed-versions line:
 
 ```
 Runs
@@ -109,6 +130,7 @@ Runs
 * kb health {tag}: {runs.kb-dream.health.why} · {runs.kb-dream.ref}   (the knowledge base's compounding verdict; see the rule below)
 * fyi: {one line} · {permalink}                               (from runs.proactive-router.fyi, one line each)
 * overdue: {skill} last ran {n} days ago (expected every {max_gap_days})
+* runs on mixed versions: {skill} {X}, {skill} {Y} (newest today: {Z})
 ```
 
 Rules:
@@ -131,9 +153,18 @@ Rules:
 - FYIs come from `runs.proactive-router.fyi` written by the last Router run in the window.
   They are never written to the board.
 - A fast-fail line is the only place the user sees it, so it carries the note verbatim.
+- **Mixed versions.** Every skill stamps `runs.<skill>.version` (`onboarding.md`, step 6).
+  Take each `runs.<skill>` whose `last_run_at` falls on today's date in `org.timezone` and
+  whose `version` is present and not `unknown`. If they are not all the same, the newest is
+  the highest by numeric major.minor.patch comparison; write one line naming every skill whose
+  version is lower, each with its version, and the newest. A single version, or fewer than
+  two stamped runs, writes nothing. It is a check, not a verdict: a lagging skill is usually
+  a run from a machine whose synced plugin copy is behind (the SessionStart check says so at
+  the start of a session on that machine), and the line is how a scheduled routine on a stale
+  copy gets noticed. A skill that did not run today is never compared.
 
 ## Nothing to report
 
-When the window has no outcomes, no queued lines, and the Runs block is empty, the whole
+When the window has no outcomes, no queued lines, no new off-board to-dos, and the Runs block is empty, the whole
 "Since last briefing" block becomes one line: "Nothing to report." Never omit the heading
 itself; a quiet window still confirms the check happened.

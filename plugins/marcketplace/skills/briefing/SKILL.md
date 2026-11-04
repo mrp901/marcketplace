@@ -26,10 +26,10 @@ one whose `installed_version` is 1.1.0 retires the old idea lines first.
   cross-check), `notetaker` (list meetings, transcript), optional, only called when
   `notetaker.prep_lines` is true and `notetaker.service` is not `none`.
 - State: `cursors.briefing`, `glossary`, `nicknames`, `items`, `outcomes`, `runs` (every
-  skill's, from the main document and every shard), `closed` and its own `items` (in its
-  shard), `shards`, `installed_version`.
+  skill's, from the main document and every shard), `closed`, `off_board` and its own
+  `items` (in its shard), `shards`, `installed_version`.
 - Writes: the board header, the Today snapshots, lines tagged `rb:`, `term:` and `feed:`
-  in For you, Closed, and the migration.
+  in For you (each ending with its tick effect), Closed, and the migration.
 
 Resolve profile, state and tools per `../../shared/onboarding.md` before doing anything else.
 
@@ -62,6 +62,7 @@ Fires more than once a day on a changing schedule; never assume a time of day.
    only write of this run, and stop after writing state. If `installed_version` is 1.1.0,
    run that file's "1.1.0 to 1.2.0" steps inside this run's one write, then carry on. If it
    is 1.2.0 to 1.4.0, apply `../../shared/state-schema.md`'s rows from it up the same way.
+   If it is 1.11.0, run that file's "1.11.0 to 1.12.0" steps the same way.
    Read `runs`, `items` and `outcomes` from the main document and every shard named in
    `shards`, by id.
 2. **Close.** For every line on the board, apply the closing rule in
@@ -92,7 +93,9 @@ Fires more than once a day on a changing schedule; never assume a time of day.
    outcomes from `state.outcomes` in the window, the count of ticked lines with no sub-line
    (queued behind the hub's cap), the lines expired in step 2, then the Runs block from `state.runs`: what each scheduled
    skill did, with its link; fast-fails; amber and green health scores; the knowledge-base health verdict; FYIs the Router
-   recorded; and any skill overdue against `briefing.expected_runs`. See
+   recorded; any skill overdue against `briefing.expected_runs`; and a `runs on mixed
+   versions` line when today's runs stamped different plugin versions. One line also names
+   any new to-dos kept off the board (found since the last briefing). See
    `references/closed-and-outcomes.md`. Check every unfamiliar term against
    `state.glossary`/`state.nicknames` before writing it; genuine new jargon becomes a `term:`
    line, capped at 2 per run; see `references/glossary-and-terms.md`. Compose the message per
@@ -100,7 +103,8 @@ Fires more than once a day on a changing schedule; never assume a time of day.
 6. **Update the board, one batch.** Rewrite the header only if it differs from the protocol
    text. Today: replace the Calendar and Tracker blocks per the snapshot rule, written every
    run even when unchanged. For you: append up to 2 new `term:` lines, any new `rb:`
-   running-behind lines and this run's `feed:` lines, after settling this skill's own
+   running-behind lines and this run's `feed:` lines, each ending with its tick effect
+   (`../../shared/surface-protocol.md`), after settling this skill's own
    existing `rb:`, `term:` and `feed:` lines per "Settle before you append". Closed: prepend this run's closes (newest first), then
    trim to 5 days or 20 lines, whichever bound is hit first, mechanically, every run
    (`scripts/trim_closed.py`). Remove the lines and empty idea blocks closed in step 2.
@@ -110,7 +114,8 @@ Fires more than once a day on a changing schedule; never assume a time of day.
    channel's cursor moves only as far as the cross-check processed it), `nicknames` carried
    and added to, its own `items` and `closed` (step 3) in its shard, `installed_version`,
    `runs.briefing` (`note` = one line on what closed and what was reported, `ref` =
-   `surface.url`).
+   `surface.url`, `version` per `../../shared/onboarding.md` step 6), and `off_board`
+   (a tag dropped once its owner's entry carries `on_board: false` or no longer exists).
 
 ## Surface
 Writes the board header, the Today snapshots, its own `rb:`, `term:` and `feed:` lines in

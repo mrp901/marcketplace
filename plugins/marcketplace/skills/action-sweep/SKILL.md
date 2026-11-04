@@ -6,8 +6,8 @@ description: "Use when the scheduled action-sweep routine fires, when the user a
 # Action Sweep
 
 Periodic action-item sweep across chat, tracker and meetings, ending in one For you line
-per find and, only on a fresh per-item tick, a draft; and only on a second tick, new
-tracker work. Two hard stops are load-bearing, not defaults to relax over time: this skill
+per find a tick can act on (a plain to-do stays off the board) and, only on a fresh
+per-item tick, a draft; and only on a second tick, new tracker work. Two hard stops are load-bearing, not defaults to relax over time: this skill
 never guesses which routing tier a candidate belongs in, and it never writes to the
 tracker without this run's explicit go-ahead on that specific item. A third joins them:
 it never sends anything. Resolve profile, state and tools per
@@ -30,10 +30,11 @@ it never sends anything. Resolve profile, state and tools per
   mode only, never from a handler mode), `tracker` (search issues by JQL, get issue,
   create issue, add comment; the last two only in `push` mode), `kb` (search, read,
   write), `notetaker` (list meetings, transcript; skipped when `notetaker.service` is `none`).
-- State: `cursors.action-sweep` (`scanned_through`, `chat_since`), `items` (dedupe against
-  every shard's; its own `sweep:` lines), briefing's `closed`, `runs.action-sweep`
-  (`cursors`, `runs` and its `sweep:` items in its shard).
-- Writes lines tagged `sweep:` in For you.
+- State: `cursors.action-sweep` (`scanned_through`, `chat_since`, `tick_effects_backfilled`),
+  `items` (dedupe against every shard's; its own `sweep:` entries), briefing's `closed` and
+  `off_board`, `action-list`'s `settled`,
+  `runs.action-sweep` (`cursors`, `runs` and its `sweep:` items in its shard).
+- Writes lines tagged `sweep:` in For you, each ending with its tick effect.
 
 ## Budget
 
@@ -67,15 +68,24 @@ and `runs.action-sweep.status: quiet` and stop, with no thread read and no board
    (this skill's own modes), or `to-do` (the user's own list). A new-ticket candidate
    whose tier is unclear becomes a question with one option per tier, never a guess.
 5. **Post For you lines.** `chat: read canvas`, settle this skill's own `sweep:` lines
-   per `../../shared/surface-protocol.md` (never act on a tick), then one write: one
-   line per find in the protocol grammar, tag `(sweep:<yymmdd>-N)`, reading as the action
-   a tick causes, `ref` the permalink, ticket or meeting. Shapes and worked examples in
-   `references/output-format.md`. No note is written; the line is the record.
+   per `../../shared/surface-protocol.md` (never act on a tick; once, on the first run
+   under 1.12.0, backfill the tick effect on its own old lines, "Old lines get their effect
+   once"), then one write: one
+   line per find **except a `to-do`**, in the protocol grammar, tag `(sweep:<yymmdd>-N)`,
+   reading as the action a tick causes and ending with that category's tick effect,
+   `ref` the permalink, ticket or meeting. A `to-do` has no action behind its tick, so it is
+   not a board line: it gets a tag and an `items` entry with `on_board: false` and nothing
+   else (a run whose finds are all to-dos writes no board line), and `action-list` reads
+   it. Shapes and worked examples in `references/output-format.md`. No note is written;
+   the line is the record.
 6. **Stop.** Write its shard: `cursors.action-sweep` (both cursors = this run's start
    time, except `chat_since` stays put when a chat search hit the `chat_pages` cap with
    hits unread; see `references/gather-procedure.md`), its own `sweep:` items (this run's
-   added, tags in briefing's `closed` pruned),
-   `runs.action-sweep` (`note`: finds by source; `ref`: `surface.url`). The write first
+   added; `on_board: false` and `off_board_at` (now) on each to-do, and on any entry whose
+   tag is in briefing's `off_board` (copying its time); entries pruned when the tag is in
+   briefing's `closed` or `action-list`'s `settled`, or `off_board_at` is over 30 days old),
+   `runs.action-sweep` (`note`: finds by source, and how many were to-dos kept off the
+   board; `ref`: `surface.url`; `version` per `../../shared/onboarding.md` step 6). The write first
    copies in any of its own `sweep:` items the main document still holds and its shard
    lacks (bar tags in `closed`), per `../../shared/state-schema.md` "Shards"; the shared
    rule alone has been skipped.

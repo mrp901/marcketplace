@@ -30,8 +30,16 @@ Per `surface-protocol.md`'s line grammar, tag form `shc:<YYMMDD>-<n>`, category
 `skill-eval`, reading as the action a tick causes:
 
 ```
-- [ ] (shc:260910-1) 🔴 session-log scored red: two notes superseded by your own corrections this fortnight. Run skill-eval on it? · .utility/skill-health/session-log.md
+- [ ] (shc:260910-1) 🔴 session-log scored red: two notes superseded by your own corrections this fortnight. Run skill-eval on it? · .utility/skill-health/session-log.md · tick → queues it for your next skill-eval run (nothing runs now)
 ```
+
+On the first run under 1.12.0 that reads the board, append that effect to this skill's own
+older `shc:` lines that are untouched, unticked, lack one and have no sub-line, set their
+`items.<tag>.text` in the same write, and record `cursors.skill-health-check.tick_effects_backfilled`
+(`../../../shared/surface-protocol.md`, "Old lines get their effect once"). The line ends with
+`tick → queues it for your next skill-eval run (nothing runs now)`, the
+`skill-eval` effect in `../../../shared/surface-protocol.md`'s table, so a tick is never
+mistaken for starting the run.
 
 The one or two things that drove the tag, not the full evidence list; the log file is the
 detail, the line is the pointer. A tick means "yes, queue it": the hub writes

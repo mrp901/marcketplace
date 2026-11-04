@@ -24,7 +24,7 @@ else.
   document are the only stores this skill writes to. It additionally resolves, but never
   itself uses, whatever tool categories a handler it is about to dispatch declares in that
   handler's `## Needs`; see `references/dispatch.md`.
-- State: `items` (every shard's, plus briefing's `closed`), `registry`, `tally`,
+- State: `items` (every shard's, plus briefing's `closed` and `off_board`), `registry`, `tally`,
   `outcomes`, `suppressions`, `patterns_blocked`, `proposals`, `glossary`
   (`inline:promote` writes), `runs.proactive-router` (`runs`, its own `pr:` items,
   `outcomes`, `tally`, `suppressions` and `patterns_blocked` in its shard), `machines`
@@ -65,7 +65,8 @@ stop before reading a single thread.
    `references/classification.md`, applying the allowlist principle (below) without
    exception: read its thread context within budget, and check for the user's own
    follow-up reply before landing on `fyi`. It gets a `(pr:<yymmdd>-N)` tag in the same
-   write; one added inside an idea block takes that idea as its context and carries its
+   write, and a `classified` sub-line carrying its tick effect (`references/dispatch.md`);
+   one added inside an idea block takes that idea as its context and carries its
    `idea_key`. An `fyi` gets no tag: record it in `runs.proactive-router.fyi` for the
    briefing message. To-do lines are read for added lines only; a To-do tick is
    briefing's to close.
@@ -76,7 +77,7 @@ stop before reading a single thread.
    decides who posts a line, not who dispatches its tick), skipping any that already carry a
    sub-line from an earlier run, with one exception. A sub-line, or an `outcomes` entry for
    the tag (write its missing sub-line, don't re-dispatch), settles a tick; a previous run's
-   note never does. A ticked line with no `state.items` entry after every shard is read is
+   note, or a `classified` sub-line, never does. A ticked line with no `state.items` entry after every shard is read is
    classified as user-added (step 3), then acted on. A tick on a line whose tag date is over
    14 days old gets a `needs your tick` confirm line instead of a dispatch. A `pr:` line whose `state.items` entry is
    `status: blocked` on a named profile key is retried once that key is present and
@@ -97,7 +98,9 @@ stop before reading a single thread.
      increment `tally.<category>.unmapped_ticks`, and stage the step 7 proposal.
    Ticked lines beyond the dispatch cap stay ticked, undispatched; note the queued count
    so briefing can report it.
-6. **Deletions.** Add `state.suppressions` `{source_id, category, pattern, added_at}` and
+6. **Deletions.** A tag with `on_board: false` or listed in briefing's `off_board` is
+   never a deletion: no suppression, no tally, no `patterns_blocked`. Otherwise add
+   `state.suppressions` `{source_id, category, pattern, added_at}` and
    `tally.<category>.deleted += 1`. Three deletions of the same `<channel>:<category>`
    pattern add it to `state.patterns_blocked`. A `suppression_lift` proposal `kb-dream`
    marked accepted removes its pattern from both.
