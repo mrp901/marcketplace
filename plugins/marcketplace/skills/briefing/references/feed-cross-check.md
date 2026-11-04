@@ -70,17 +70,17 @@ exists to catch.
 ## The line
 
 In For you, category `feed-mismatch`, tag `(feed:<yymmdd>-N)`. The line reads as the action
-a tick causes:
+a tick causes, and ends with what it does:
 
 ```
-- [ ] (feed:<yymmdd>-N) 🔎 look into <KEY>: <feed> feed said <claim> on <date>, the live issue shows <what it shows> · <issue link>
+- [ ] (feed:<yymmdd>-N) 🔎 look into <KEY>: <feed> feed said <claim> on <date>, the live issue shows <what it shows> · <issue link> · tick → investigates and reports (read only)
 ```
 
 Worked, against `profiles/example.md`:
 
 ```
-- [ ] (feed:260910-1) 🔎 look into FLT-231: fix-version feed said 2.4 on Sep 10, the live issue shows 2.5 · https://northwindlogistics.atlassian.net/browse/FLT-231
-- [ ] (feed:260910-2) 🔎 look into FLT-240: work-started feed said work began on Sep 9, the live issue is still To Do · https://northwindlogistics.atlassian.net/browse/FLT-240
+- [ ] (feed:260910-1) 🔎 look into FLT-231: fix-version feed said 2.4 on Sep 10, the live issue shows 2.5 · https://northwindlogistics.atlassian.net/browse/FLT-231 · tick → investigates and reports (read only)
+- [ ] (feed:260910-2) 🔎 look into FLT-240: work-started feed said work began on Sep 9, the live issue is still To Do · https://northwindlogistics.atlassian.net/browse/FLT-240 · tick → investigates and reports (read only)
 ```
 
 A tick is the hub's. It runs `inline:investigate`, which reads the issue's history and the

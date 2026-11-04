@@ -1,5 +1,14 @@
 # skill-health-check - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-04 tick effect on `shc:` lines (1.12.0)
+
+A red line now ends with `tick → queues it for your next skill-eval run (nothing runs now)`.
+Its tick dispatches nothing, which makes the category the one ambiguous case in the decisions-only
+rule: it is kept on the board because the tick has a real effect (it queues the line as a
+`skill-eval` candidate and records the user's wish), but the wording says plainly that nothing
+runs, so a tick is never mistaken for starting the evaluation. It backfills the effect on its
+own old untouched `shc:` lines once, on its first 1.12.0 run (`cursors.skill-health-check.tick_effects_backfilled`).
+
 ## 2026-11-03 roster and evidence after the 1.11.0 removals
 
 The roster is read from the `skills/` directories, so `vault-pulse`, `kb-note` and `idea-ticket`

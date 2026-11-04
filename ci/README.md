@@ -15,7 +15,9 @@ git push
 ```
 
 The workflow runs the checks the wave gate runs locally: `scrub_check.py plugins/`,
-`line_budget.py --all` and `check_refs.py`, then installs a pinned Claude Code release and
+`line_budget.py --all`, `check_refs.py` and the unit tests for the SessionStart version
+check (`python3 -m unittest plugins/marcketplace/scripts/test_version_check.py`, offline),
+then installs a pinned Claude Code release and
 runs `claude plugin validate --strict .` and `claude plugin test plugins/marcketplace`. The
 tests need no credentials. Type-checking the hooks module stays a local step (see
 `tsconfig.mods.json`), because the declarations it needs are written only when an

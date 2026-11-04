@@ -118,7 +118,11 @@ Write the profile only if something changed in it this run (a discovered or aske
 filled in) - otherwise leave it untouched, since the profile is low-frequency by design
 (see `state-schema.md`'s "Why two documents"). Write `state.machines` only when this run
 resolved or changed a tool prefix, and always write `state.runs[<skill>]` (this run's
-outcome). Write `runs` and the skill's own keys to its shard, including its own `items`,
+outcome). **Stamp the version it ran:** `runs[<skill>].version` is the `version` in
+`../../.claude-plugin/plugin.json`, read relative to this skill's own directory, so it names
+the plugin copy this run actually loaded (a local file read, no connector call). A run that
+cannot read the file writes `unknown`. `briefing` compares the stamps across the day's runs
+(`skills/briefing/references/closed-and-outcomes.md`, "The Runs block"). Write `runs` and the skill's own keys to its shard, including its own `items`,
 `outcomes` and `voice_edits` entries (first copying in any of its own entries the main
 document still holds and its shard lacks, per "Shards"), and `machines` to the main state document. A routine run's state write
 is its shard alone. If the document to be written is over 45 KB (measure the body just read; see

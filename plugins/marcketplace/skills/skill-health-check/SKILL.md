@@ -69,7 +69,8 @@ write `runs.skill-health-check.status: quiet` and stop before any kb read.
 5. **Board, red only.** For each red score: `chat: read canvas`, settle this skill's own
    `shc:` lines per `surface-protocol.md` (never act on a tick), then append one line per
    red skill this run in the form in `references/log-format.md`: `(shc:<yymmdd>-n) 🔴
-   <skill> scored red: <why>. Run skill-eval on it? · <log path>`, category `skill-eval`.
+   <skill> scored red: <why>. Run skill-eval on it? · <log path> · tick → queues it for
+   your next skill-eval run (nothing runs now)`, category `skill-eval`.
    A repeated red gets its own new line so the trend stays visible. Amber and green get no
    board line.
 6. **Record every score.** `runs.skill-health-check.scores.<skill> = {tag, why, ref:

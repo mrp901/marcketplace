@@ -29,12 +29,14 @@ Since last briefing
 * {handler} {outcome}: {one sentence} · {link}
 * {n} ticked item(s) queued, waiting on the next dispatch run
 * {n} line(s) expired, no activity for {N} business days: {tag}, {tag}
+* {n} new to-do(s) kept off the board, in action-list: {short phrase}; {short phrase}
 Runs
 * {skill} {status}: {note} · {link}
 * health: {skill} green · {skill} amber ({why})
 * kb health {tag}: {health.why} · {link}
 * fyi: {one line} · {permalink}
 * overdue: {skill} last ran {n} days ago (expected every {max_gap_days})
+* runs on mixed versions: {skill} {X}, {skill} {Y} (newest today: {Z})
 (or "Nothing to report" if there are no outcomes, nothing queued and no runs in the window)
 
 {link emoji} [Full briefing & to-dos]({surface.url})
@@ -74,6 +76,7 @@ Since last briefing
 
 * reply-draft done: drafted a reply to Ana's dashboard question · teammate-chat · Drafts/pr-260910-02.md
 * 1 ticked item queued, waiting on the next dispatch run
+* 1 new to-do kept off the board, in action-list: send Tomasz the Q4 capacity figures by Friday
 Runs
 * proactive-router ok: 2 new lines, 1 dispatched · https://northwindlogistics.slack.com/docs/TEXAMPLE001/FEXAMPLECANVAS1
 * idea-spar ok: pack for FIG-204 (moved into Next): per-drift alert or a digest? 2 decisions on the board · https://claude.ai/artifact/example-fig-204-pack
@@ -82,6 +85,7 @@ Runs
 * kb health amber: 2 ended sessions unarchived, 5 voice-ledger items unmarked · https://example.com/dream-note
 * fyi: batch-overnight recalculation agreed in #platform-eng · https://northwindlogistics.slack.com/archives/CEXAMPLEAPPRCH1/p1758510005000500
 * overdue: action-sweep last ran 11 days ago (expected every 8)
+* runs on mixed versions: kb-dream 1.11.0 (newest today: 1.12.0)
 
 :point_right: [Full briefing & to-dos](https://northwindlogistics.slack.com/docs/TEXAMPLE001/FEXAMPLECANVAS1)
 ```

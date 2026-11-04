@@ -6,6 +6,72 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.12.0] - 2026-11-04
+
+The board is for decisions, and every line says what its tick does. The owner works in attended
+sessions and through `action-list`, rarely from the board, and "is forever forgetting what a tick
+will do"; the board had grown to about 200 lines, with real decisions mixed in among plain
+to-dos whose tick dispatched nothing. The plugin's three runtimes also drift apart (cloud
+routines run `main`, claude.ai's copy updates on its own, the locally synced copy lagged two
+releases on 3 Nov unnoticed), and promises the owner made to people were easy to lose. Nothing is
+added to the profile; the state gains optional keys and one migration row.
+
+### Added
+- **Tick effects.** Every line a skill writes to For you or Ideas ends with ` · tick → <effect>`:
+  `tick → drafts a reply (nothing sent)`, `tick → drafts the ticket (2nd tick files it in
+  Jira)`, `tick → kb-dream applies the fix`, `tick → records your choice; siblings close`. The
+  form and a category-to-effect table are in `shared/surface-protocol.md` ("The tick effect"),
+  derived from `handler-contract.md`'s categories; a two-stage action says which stage the tick
+  is. Owners: `action-sweep`, `briefing`, `kb-dream`, `skill-health-check`, `idea-spar` and the
+  hub (second-tick, next-action and mapping-proposal lines). The hub strips the effect from the
+  text it hands a handler only when it is exactly the one the owner wrote; a changed effect is the
+  user's edit and is passed on. A line the user adds keeps its wording and gets the effect in the
+  hub's `classified` sub-line. Each owner backfills the effect on its own old untouched lines once
+  (`cursors.<skill>.tick_effects_backfilled`). The board header's second line now reminds the user of this.
+- **Version drift check.** A SessionStart hook, `scripts/version_check.py`, compares this copy's
+  `plugin.json` version with `main`'s (`gh api`, else raw.githubusercontent), caches the answer
+  for 12 hours in `~/.claude/marcketplace/version-check.json` and, when this copy is behind,
+  prints `marcketplace: this machine runs X, main is Y. Update the plugin on claude.ai, then
+  restart Claude Code.` It is silent on no network, no `gh`, any error, a copy that is ahead of
+  `main`, `MARCKETPLACE_VERSION_CHECK=0` and `MARCKETPLACE_HEADLESS=1`, and never blocks a session
+  start; a failure stamp is cached (per repo) before the lookup, so a stalled lookup still backs
+  off. Tests: `scripts/test_version_check.py` (stdlib unittest, offline).
+- **Run version stamps.** `runs.<skill>.version` is the `plugin.json` version the run read
+  (`onboarding.md` step 6; `unknown` if unreadable). `briefing`'s Runs block adds `runs on mixed
+  versions: <skill> X, <skill> Y (newest today: Z)` when a day's runs differ.
+- **`action-list`: an "I owe" section and 1:1 prep.** `build` leads with what the user told
+  people they would do (who, what, promised when, age in business days, link), from chat, tracker,
+  meetings, session-note open threads and `action-sweep`'s to-dos, and ranks an owed row above
+  another of equal urgency (only the user's own promises earn the boost; asks of the user are a
+  separate "Waiting on you" table). A new `prep` mode ("prep my 1:1 with Terry") writes a short note:
+  what is owed each way, their open asks, items carried from earlier 1:1s and recurring themes.
+  Cost: one extra state read (`action-sweep`'s shard), up to 3 pages of one `from:me` chat
+  search over 14 days, and at most 10 verification reads (the rest are listed `unverified`). References `i-owe.md` and `one-to-one-prep.md`.
+
+### Changed
+- **Decisions only.** A line is on the board only if its tick causes an action. `action-sweep`'s
+  `to-do` finds no longer become board lines: they are `state.items` entries with `on_board:
+  false`, still deduped against and read by `action-list`, named in one line in the briefing
+  message, and pruned 30 days after they left the board (`off_board_at`) or once `action-list`
+  records them done in its `settled` list. `rb:`, `feed:`, `term:`, `dream:`, `shc:` and idea options
+  stay (their ticks investigate, promote, settle, queue or record a choice); `shc:` is the
+  ambiguous case, kept with an effect that says nothing runs now.
+- **Migration 1.11.0 to 1.12.0.** In its ordinary run `briefing` takes untouched, unticked
+  `sweep:` to-do lines off the board (recorded in `off_board` in its shard; the entries stay; its
+  Closed line names every tag moved) and appends tick effects to its own `rb:`, `term:` and
+  `feed:` lines. Each other owner appends the effect to its own old untouched, unticked lines
+  once, on its first 1.12.0 run that settles them; user-added lines and ticked or edited lines
+  are never touched. `installed_version` becomes 1.12.0.
+- The Closed log drops an unchanged effect from `<original text>`. A deletion check (the hub's
+  and briefing's) skips an off-board to-do: no suppression, tally or `patterns_blocked`.
+
+### Operational notes
+- **Nothing to repoint.** No script, routine prompt or profile key changes. The hook ships in
+  `hooks/hooks.json`; the local copy only gets it when claude.ai's copy updates and Claude Code
+  restarts, which is the exact lag the check reports from the next release on.
+- The first `briefing` run after 1.12.0 rewrites the header and runs the migration; the first
+  `action-sweep` run after it marks the moved to-dos `on_board: false`.
+
 ## [1.11.0] - 2026-11-03
 
 Three skills and one router step are removed, following the usage evidence of Oct-Nov 2026: the

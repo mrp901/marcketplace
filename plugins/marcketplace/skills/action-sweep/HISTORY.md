@@ -1,5 +1,31 @@
 # action-sweep - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-04 plain to-dos leave the board (1.12.0)
+
+A tick on a to-do line dispatched `inline:to-do`, which only copied the line into the
+owner's To-do section: no action behind it, and the owner works from `action-list` and attended
+sessions, not the board. The For you section had grown to about 200 lines, many of them these.
+A line now goes on the board only if its tick causes something (`surface-protocol.md`, "What
+goes on the board"), so `to-do` finds are kept as `state.items` entries with `on_board: false`
+and no board line. They are still deduped against, still carry their evidence ("you said so in
+#planning"), and `action-list` reads them for its "I owe" section; the briefing message names
+new ones in one line. The other finds keep their lines and end with their category's tick effect
+(`tick → drafts a reply (nothing sent)`, `tick → drafts the ticket (2nd tick files it in Jira)`).
+
+- Off-board entries are pruned 30 days after they left the board (`off_board_at`, set with
+  `on_board: false`), not after `written_at`: a to-do found three weeks ago and moved off the
+  board by the migration would otherwise vanish a week later, unseen. `action-list` verifies the
+  source before ranking anyway. They are also pruned once `action-list` records the tag in its
+  `settled` list (it found the to-do done), and the migration's Closed line names every tag it
+  moved.
+- On its first run under 1.12.0 it backfills the tick effect on its own old board lines (untouched,
+  unticked, no sub-line), once (`cursors.action-sweep.tick_effects_backfilled`).
+- `briefing`'s 1.12.0 migration takes existing untouched `sweep:` to-do lines off the board; it
+  cannot write this skill's shard, so it records them in `off_board` in its own shard and this
+  skill sets `on_board: false` on its entries on its next write.
+- The `inline:to-do` action stays in the hub for a line the user adds; only this skill's use of
+  it is gone.
+
 ## 2026-11-03 chat searches page; notetaker none; seed the shard (1.10.3)
 
 The health check found the three chat sources read page 1 of each search and nothing more, so
