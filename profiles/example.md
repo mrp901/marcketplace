@@ -117,6 +117,7 @@ kb:
     product_index: Product/FreightOps/index.md
     service_map: Product/service-map.md
     utility: .utility/
+    customers: Customers/
   log_size_cap_kb: {writers: 20, dream: 40}
   sweep_queries: ["freight ops dashboard", "dock scheduling", "competitor brief"]
 
@@ -163,7 +164,7 @@ budgets:
   action-sweep: {canvas_guard: 5, cold_start_days: 7, targeted_search_per_todo: 1, thread_reads: 6}
   jira-story: {investigation_calls: 4, web_searches: 1, audit_rounds: 2}   # idea mode only
   idea-spar: {web_searches: 4, code_reads: 8, kb_reads: 3, findings_per_lens: 5, sketch_options: 3, next_per_run: 1}
-  kb-dream: {incremental_reads: 25, sessions_incremental: 5, sessions_full: 10, reviews: monthly, health: {window_days: 7}}   # health optional: lookup_pattern (regex), thresholds {<signal key>: [green_edge, amber_edge]}
+  kb-dream: {incremental_reads: 25, sessions_incremental: 5, sessions_full: 10, customers_per_pass: 3, reviews: monthly, health: {window_days: 7}}   # health optional: lookup_pattern (regex), thresholds {<signal key>: [green_edge, amber_edge]}
   skill-health-check: {kb_reads: 15}
   models: {worker: sonnet, search: haiku, critic: opus}
 ```

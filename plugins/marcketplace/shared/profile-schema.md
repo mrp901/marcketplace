@@ -120,6 +120,7 @@ kb:
     product_index:
     service_map:
     utility:
+    customers:                       # optional; one living note per customer, shared/customer-notes.md
   log_size_cap_kb: {writers: 20, dream: 40}
   sweep_queries: []
 
@@ -157,7 +158,7 @@ budgets:
   action-sweep: {canvas_guard: 5, cold_start_days: 7, targeted_search_per_todo: 1, thread_reads: 6, chat_pages: 3}
   jira-story:     {investigation_calls: 4, web_searches: 1, audit_rounds: 2}   # idea mode only
   idea-spar: {web_searches: 4, code_reads: 8, kb_reads: 3, findings_per_lens: 5, sketch_options: 3, next_per_run: 1}
-  kb-dream: {incremental_reads: 25, sessions_incremental: 5, sessions_full: 10, reviews: monthly, health: {window_days: 7}}   # health optional: lookup_pattern (regex), thresholds {<signal key>: [green_edge, amber_edge]}
+  kb-dream: {incremental_reads: 25, sessions_incremental: 5, sessions_full: 10, customers_per_pass: 3, reviews: monthly, health: {window_days: 7}}   # health optional: lookup_pattern (regex), thresholds {<signal key>: [green_edge, amber_edge]}
   skill-health-check: {kb_reads: 15}
   models: {worker: sonnet, search: haiku, critic: opus}
 ```
@@ -215,6 +216,7 @@ budgets:
 | `kb.frontmatter_required` | session-log, kb-dream, action-list, jira-story | default | |
 | `kb.tag_hints` | session-log | default | |
 | `kb.paths.*` | session-log, kb-dream, idea-spar, action-sweep, reply-draft (voice), action-list, jira-story | default (asked only for `inbox`/`sessions` if the org has no convention) | |
+| `kb.paths.customers` | kb-dream (writes), reply-draft, action-list, jira-story, idea-spar (read first) | optional; default `Customers` if that folder exists, else the feature is off | `shared/customer-notes.md` |
 | `kb.log_size_cap_kb` | session-log, kb-dream, idea-spar, action-list | default | |
 | `kb.sweep_queries` | kb-dream | default | |
 | `codebase.path` | idea-spar (reality lens) | optional | only asked if `codebase.access != none` |
@@ -237,6 +239,7 @@ budgets:
 | `voice.calibration_refs` | jira-story (idea mode) | optional | Tracker keys whose prose is the strongest reference for the `ticket_prose` register. Weighted above general samples during calibration |
 | `voice.sample_counts` | kb-dream | default | |
 | `budgets.<skill>` | that skill only | default | a skill only ever reads its own subtree |
+| `budgets.kb-dream.customers_per_pass` | kb-dream | default 3 | customer notes refreshed per incremental pass; the rest carry to the next |
 | `budgets.kb-dream.health` | kb-dream | default | optional: `window_days` (default 7), `lookup_pattern` (regex for the consultation signal), `thresholds` (`{<signal key>: [green_edge, amber_edge]}`); moved here from `budgets.vault-pulse` in 1.11.0, which is still read as an alias for `window_days`, `lookup_pattern` and `thresholds` |
 | `budgets.jira-story` | jira-story (idea mode) | default | `{investigation_calls, web_searches, audit_rounds}`; the pre-1.11.0 `budgets.idea-ticket` is read as this key |
 | *Retired in 1.11.0* | none | none | `chat.starter_emoji`, `chat.include_saved_items`, `budgets.proactive-router.searches` (the reaction and saved-message sweep is gone), `briefing.expected_runs.vault-pulse` (`vault-pulse` folded into `kb-dream`; the briefing's overdue rule skips an `expected_runs` key that names a skill not installed, so it is never called overdue) and `budgets.vault-pulse` (read as an alias of `budgets.kb-dream.health`, see above). An old profile that still carries them parses and they may be deleted |
@@ -316,7 +319,7 @@ Two groups of keys live under `kb` and the difference is easy to mis-cite from m
   keeps. There is one of each.
 - **Under `kb.paths.<name>`**: `inbox`, `drafts`, `research`, `screenshots`,
   `sessions`, `dreams`, `decisions`, `memory`, `voice`, `log`, `product_index`,
-  `service_map`, `utility`. These are locations inside it: where a given kind of thing is
+  `service_map`, `utility`, and optionally `customers`. These are locations inside it: where a given kind of thing is
   written or found.
 
 The trap is that `kb.paths` holds a few single files (`log`, `product_index`,

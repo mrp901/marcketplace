@@ -1,5 +1,9 @@
 # History
 
+## 2026-11-09 read the customer's note first (1.13.0)
+
+A thread that names a customer has its living note read once as context before drafting
+(`shared/customer-notes.md`, "Reading"). Missing note: draft as before.
 ## 2026-09-22 built for marcketplace
 
 `reply-draft` has no source predecessor - it is the `email` category's handler, built

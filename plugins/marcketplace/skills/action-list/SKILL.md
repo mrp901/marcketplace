@@ -26,7 +26,7 @@ else. Any `unattended` invocation fast-fails: both modes need the user.
   `tracker.component`, `kb.name`, `kb.kind`, `kb.conventions_file`, `kb.types_registry`,
   `kb.people_file`, `kb.link_style`, `kb.frontmatter_required`, `kb.log_size_cap_kb`,
   `kb.paths.drafts`, `kb.paths.inbox`, `kb.paths.sessions`, `kb.paths.voice`,
-  `kb.paths.log`, `notetaker.lookback_days`, `surface.id`, `voice.registers` (optional -
+  `kb.paths.log`, `kb.paths.customers` (optional), `notetaker.lookback_days`, `surface.id`, `voice.registers` (optional -
   see `../../shared/voice.md`), `budgets.models.search`, `budgets.models.worker`,
   `budgets.models.critic`.
 - Tool categories: `chat` (search messages, read thread, read canvas), `email` (search),
@@ -36,8 +36,7 @@ else. Any `unattended` invocation fast-fails: both modes need the user.
   `kb` (search, read, write), `codehost` (list merged pull requests; optional),
   `codebase` (search, read; optional, `work` only).
 - Repository work an item names (a branch, a commit, a pull request) runs through that
-  item's own process and the machine's own tools, outside these categories; each push and
-  each pull request still waits for its own yes.
+  item's own process and the machine's own tools; each push and pull request waits for its own yes.
 - State: `runs.action-list`, `cursors.action-list` (`last_window_end`), `settled`, in its shard; and,
   read only, `action-sweep`'s shard for its `category: to-do` `items` (on the board or
   off it). `prep` also reads the kb's 1:1 prep and meeting notes (`kb` search, read).
@@ -51,13 +50,13 @@ batch. When every source comes back empty, write no list: say so in one line and
 `runs.action-list` as `quiet`. "I owe" adds **at most 4 reads**: `action-sweep`'s shard (the
 main document and this skill's shard are already read at onboarding), and up to 3 pages of
 one `from:me` chat search over the last 14 days, so a promise older than the window is
-still seen. Verification adds **at most 10** (step 3). The extraction subagents already
-read tracker, transcripts and session notes (`references/i-owe.md`). `prep`: up to five extraction subagents at `budgets.models.search`
-(what the user owes, what the person owes, their open asks, previous 1:1 agendas, recent
-meetings), one worker, one critic, one `kb: write`, the same extra state read and the same 10-read verification cap.
-`work`: spend what each item needs, delegating any broad search to a subagent so its
-output stays out of the conversation. Guidelines in
-`../../shared/token-discipline.md`.
+still seen. Verification adds **at most 10** (step 3), and customers named add 1 index read and 1 read
+per note (max 3 notes per run). The extraction subagents already read tracker, transcripts and session notes
+(`references/i-owe.md`). `prep`: up to five extraction subagents at `budgets.models.search`
+(owed each way, their open asks, previous 1:1 agendas, recent meetings), one worker, one
+critic, one `kb: write`, the same extra state read and 10-read verification cap.
+`work`: spend what each item needs, delegating any broad search to a subagent. Guidelines
+in `../../shared/token-discipline.md`.
 
 ## Surface
 
@@ -84,7 +83,8 @@ when one does.
    involve them. Each returns every candidate, quoted, with a link and a timestamp,
    including any phrase that might be a promise, an ask or an offer, unfiltered: extractors
    decide nothing (`references/i-owe.md`). Read `action-sweep`'s to-do `items` from state
-   alongside; they carry their evidence already.
+   alongside; they carry their evidence already. A customer a candidate names has its note
+   read first (`../../shared/customer-notes.md` "Reading"; `references/i-owe.md`).
 3. **Verify before ranking, capped.** At most 10 candidates per build, one targeted read
    each, owed rows first; the rest stay listed as `unverified` with their age. A later reply,
    a closed ticket or a sent email moves a verified one to "Dropped" with the evidence; a
@@ -124,7 +124,8 @@ when one does.
 Per `references/one-to-one-prep.md`.
 
 1. **Resolve the person** from `people`, `kb.people_file` and `people_confusions`; an
-   ambiguous first name is resolved from context or asked once, never guessed.
+   ambiguous first name is resolved from context or asked once, never guessed. A customer
+   named (or a customer's contact) has its note read first, per `references/one-to-one-prep.md`.
 2. **Extract**, in parallel, one subagent per source group: what the user owes them, what
    they owe the user, their open asks of the user, items carried on earlier 1:1 agendas
    (found through the kb's own conventions), and themes from the last few meetings.
@@ -145,6 +146,5 @@ See `references/worked-example.md` for one list built and partly worked against
 - Check `kb.people_file` and `people_confusions` before writing any name into a list, a
   draft or a ticket. An ambiguous first name is resolved from context or flagged.
 - An "I owe" or "they owe" row quotes the words that make it a promise; no words, no row.
-- Never edit the substance of a human-verified note. Closing a list touches only the list
-  and the log.
+- Never edit a human-verified note's substance; closing a list touches only the list and the log.
 - The list is the user's plan once written; an item they edited is done their way.

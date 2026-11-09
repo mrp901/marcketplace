@@ -1,5 +1,9 @@
 # History
 
+## 2026-11-09 read the customer's note first (1.13.0)
+
+A task that names a customer has its living note read once as context at the start of Refine and
+New mode (`shared/customer-notes.md`, "Reading"). Missing note: proceed as before.
 ## 2026-11-03 idea mode, absorbed from idea-ticket (1.11.0)
 
 `idea-ticket` had not run since 28 Sep. Its job (a rough problem into an audited ideas-board

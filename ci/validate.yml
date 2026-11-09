@@ -30,6 +30,9 @@ jobs:
       - name: Test the SessionStart version check
         run: python3 -m unittest plugins/marcketplace/scripts/test_version_check.py
 
+      - name: Test the health scorer
+        run: python3 -m unittest plugins/marcketplace/skills/kb-dream/scripts/test_kb_health_score.py
+
       - name: Line budget check (SKILL.md 150-line cap)
         run: python3 plugins/marcketplace/scripts/line_budget.py --all
       - run: python3 plugins/marcketplace/scripts/check_refs.py
