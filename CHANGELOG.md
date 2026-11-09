@@ -6,6 +6,57 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.13.0] - 2026-11-09
+
+Customer context lived across meeting notes, memory entries, drafts and session logs, and every
+customer-facing task (a reply, a list, a ticket, a spar) re-assembled it. Each customer or
+prospect with two or more notes in the knowledge base now gets one living note that `kb-dream`
+keeps current and the drafting skills read first. Nothing is added to the board. The profile gains
+one optional key and the state gains optional keys in `kb-dream`'s shard.
+
+### Added
+- **Customer living notes.** `shared/customer-notes.md` is the single contract: path
+  (`<kb.paths.customers>/<slug>.md`), `type: Customer` frontmatter, seven sections in order
+  (Where things stand, What they want, Open promises, People, Timeline, the user's own notes,
+  Sources), `aliases:` and `customer.evidence_through` in the frontmatter, and ownership by
+  section: each machine section carries a comment saying `kb-dream` rewrites it, the user's section is
+  authoritative (read first, never contradicted, never written), and a note whose `generated.by` is
+  a human is append-only with proposals in the dream note. `session-log` does not write these notes.
+- **`kb-dream` step 5a, "Refresh customer notes"** (`skills/kb-dream/references/customer-notes.md`).
+  Qualifies a customer at 2 or more notes naming it in tags or title, refreshes or creates notes
+  from evidence newer than each note's own `customer.evidence_through`, stalest first, after draft
+  reaping and within the reads that pass has left (`budgets.kb-dream.customers_per_pass`, default 3);
+  the rest wait for the next pass. Resellers and partners are listed for the user's say-so, never
+  created. Works the same locally and in the cloud routine (only `kb: search/read/write`; no shell, no
+  per-note state). Never on a health-only run or a quiet exit. Candidates are chosen from the
+  `Customers/index.md` columns (`Aliases`, `Evidence through`) before any note is read, the oldest
+  unread evidence is read first and `evidence_through` is the newest date actually read, the prior
+  note text is copied to the dream recycle folder before a rewrite, and an uncited line in a
+  machine section (hand-typed) is kept and listed in the dream note. To take a note over set
+  `generated.by` to `human:<you>`; to hand it back set it to `kb-dream`.
+- **Readers.** `reply-draft`, `action-list` (list building, `references/i-owe.md`,
+  `references/one-to-one-prep.md`), `jira-story` and `idea-spar` read the named customer's note once
+  first, as context, resolved through `Customers/index.md` aliases (two extra reads: index, then
+  note); a missing note changes nothing. A note's
+  `We owe` lines are extra I-owe candidates, verified against their source; only the user's own
+  promises get the ranking boost.
+- **Profile:** `kb.paths.customers` (optional; default `Customers` if that folder exists, else the
+  feature is off) and `budgets.kb-dream.customers_per_pass`.
+- **State:** `cursors.kb-dream.customers_refreshed_at` (discovery of new customers only) and
+  `cursors.kb-dream.last_health_values_at`, in `kb-dream`'s shard. No migration: an existing
+  `Customers/` note is refreshed normally, and a missing `evidence_through` means refresh on its first pass.
+- `skills/kb-dream/scripts/test_kb_health_score.py`, run in CI.
+
+### Operational notes
+- Update the claude.ai plugin and restart Claude Code promptly after merging: the local 10:00
+  health-only job runs the synced copy, and an old copy would keep dropping `learning.confirmed_repeats`.
+
+### Fixed
+- **A health-only `kb-dream` run no longer drops `learning.confirmed_repeats`.** It adjudicates no
+  repeats, so the scorer returned no value and `last_health_values` lost the previous one. Any
+  value a run did not measure is now carried forward unchanged for up to 30 days (`carried` in the
+  scorer's output, dated in `last_health_values_at`; not graded, so it never moves the overall tag).
+
 ## [1.12.0] - 2026-11-04
 
 The board is for decisions, and every line says what its tick does. The owner works in attended

@@ -74,3 +74,7 @@ indexed into the knowledge base's topic structure. Two rules follow:
 Without the reaping pass, drafts accumulate indefinitely, which is exactly the failure the
 inbox curation rules exist to prevent. A port of `kb-dream` that does not implement this is
 incomplete.
+
+## Customer living notes
+
+One internal hub note per customer or prospect under `kb.paths.customers`, written by `kb-dream` and read first by any skill handed a customer's name. The contract (path, frontmatter, seven sections, precedence, how to read it) is `customer-notes.md`; this file does not restate it.

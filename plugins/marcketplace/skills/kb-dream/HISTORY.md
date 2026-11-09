@@ -1,5 +1,27 @@
 # kb-dream - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-09 refresh customer notes; carry unmeasured health values (1.13.0)
+
+Customer context sat scattered across meeting notes, memory entries, drafts and session logs, and
+every drafting task re-assembled it. One hub note per customer (`shared/customer-notes.md`) is now
+refreshed here, in one new step (5a), and read first by the skills that are handed a customer's name.
+`kb-dream` is the only writer, so there is one place to get it wrong and one place to fix it.
+Decisions: ownership is by section, not by detecting edits (a first design hashed the file and
+kept per-note state in Confluence; a review found it fragile across runtimes and a lost entry
+could overwrite the user). Each machine section says so in a comment, the user's section is read
+first and wins, and a source that conflicts with it is raised once as a question and changes
+neither side. A note whose `generated.by` is a human is append-only. Each note keeps its own
+refresh clock (`customer.evidence_through`), so there is no per-note state and the 1.12.0 shard
+rewrite is harmless; stalest first, capped per pass. The step runs after draft reaping and uses
+the reads left over; a monthly full pass has the room to catch up. Resellers are never created
+automatically. Readers resolve a named customer through `Customers/index.md` aliases (+2 reads).
+Never on a health-only run.
+`SKILL.md` was at the 150-line cap, so the step is one line and the detail is
+`references/customer-notes.md`.
+Bug fixed alongside: a health-only run dropped `learning.confirmed_repeats` from
+`last_health_values` (seen 9 Nov 2026), because that run adjudicates no repeats and the scorer
+only kept what it measured. `kb_health_score.py` now carries any unmeasured prior value forward
+(`carried`, not graded, at most 30 days, dated in `last_health_values_at`); `scripts/test_kb_health_score.py` covers it.
 ## 2026-11-04 tick effects on `dream:` lines (1.12.0)
 
 Every `dream:` line now ends with what its tick does. The default is `tick → kb-dream applies

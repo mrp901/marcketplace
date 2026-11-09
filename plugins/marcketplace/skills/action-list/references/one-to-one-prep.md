@@ -18,6 +18,15 @@ nothing sent), per `list-format.md`.
    name in a transcript is the same person, not a new one.
 4. Say the resolved full name and role at the top of the note.
 
+## A customer in the prep
+
+When the person is a customer's contact, or the user names a customer, read that customer's
+note first (the customers index, then the note: 2 reads) (`../../../shared/customer-notes.md`, "Reading") and use its `People`,
+`Where things stand` and `Open promises` as context for the five extractions below: they say
+where to look, they are never copied in as rows. Anything it contributes to "You owe them" or
+"They owe you" goes through `i-owe.md`'s "Customer notes" rules and carries its own source
+link. No note: prep as today.
+
 ## Find where the kb keeps 1:1 notes
 
 Do not hardcode a folder. In order, stop when found:

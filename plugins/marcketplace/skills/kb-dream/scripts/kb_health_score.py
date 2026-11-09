@@ -9,12 +9,17 @@ Input:
    "confirmed_repeats": n,                            # the skill's adjudication of the candidates; omit if not adjudicated
    "thresholds": {"<signal key>": [green_edge, amber_edge]},   # profile overrides, optional
    "prior": {"<signal key>": value},                  # last verdict's values, for the trend
+   "prior_at": {"<signal key>": "<iso>"},             # when each prior value was last measured
    "now": "<iso>"}
 
 Exits 2 with {"error": ...} when the input is unreadable or carries the metrics script's own error.
 
 Output: {"signals": {key: {tag, value, prev?, why}}, "overall": {tag, headline},
-         "values": {key: value}}   # `values` is what the skill stores as the next verdict's prior.
+         "values": {key: value}, "values_at": {key: iso}, "carried": [key]}
+`values` is what the skill stores as the next verdict's prior. A key the prior holds that this run
+did not measure (e.g. learning.confirmed_repeats on a health-only run) is carried forward into
+`values` unchanged and listed in `carried` (not graded), for at most 30 days since it was last
+measured (`values_at`, which the skill stores beside `values` as the next prior_at).
 
 A signal that was not measured is tagged "unmeasured", never green. Overall is red if any
 signal is red, amber if any is amber or two or more are unmeasured, else green. Every
@@ -39,6 +44,9 @@ DEFAULTS = {
     "learning.confirmed_repeats": (0, 2, "low"),
     "backlog.inbox_oldest_days": (14, 60, "low"),
 }
+
+
+CARRY_DAYS = 30
 
 
 def grade(v, g, a, direction):
@@ -128,6 +136,27 @@ def main():
     else:
         unmeasured("backlog.inbox_oldest_days", b.get("why", "not measured"))
 
+    # A value this run did not measure (a health-only or quiet run adjudicates no repeats; a signal
+    # came back unmeasured) keeps the last verdict's number, so the next trend still has a prior.
+    # It is carried, not graded: it stays out of `signals` and never moves the overall tag.
+    # A carried value expires after CARRY_DAYS so a stale number is never shown as a fresh trend.
+    # `prior_at` stamps each value with when it was last measured. A prior value with no stamp (written
+    # before stamps existed) is carried and stamped now, so it expires 30 days from this first carry.
+    prior_at = d.get("prior_at") or {}
+    values_at = {k: now.isoformat() for k in values}
+    carried = []
+    for k in sorted(prior):
+        if k not in T or k in values or not isinstance(prior[k], (int, float)):
+            continue
+        try:
+            age = (now - datetime.fromisoformat(prior_at[k]).replace(tzinfo=None)).days if k in prior_at else 0
+        except ValueError:
+            age = 0
+        if age <= CARRY_DAYS:
+            values[k] = prior[k]
+            values_at[k] = prior_at.get(k, now.isoformat())
+            carried.append(k)
+
     tags = [s["tag"] for s in sig.values()]
     red = [k for k, s in sig.items() if s["tag"] == "red"]
     amber = [k for k, s in sig.items() if s["tag"] == "amber"]
@@ -141,7 +170,8 @@ def main():
     if gaps:
         parts.append("not measured: " + ", ".join(gaps))
     headline = "; ".join(parts) if parts else f"all {len(tags)} signals green"
-    print(json.dumps({"signals": sig, "overall": {"tag": overall, "headline": headline}, "values": values}, indent=2))
+    print(json.dumps({"signals": sig, "overall": {"tag": overall, "headline": headline},
+                      "values": values, "values_at": values_at, "carried": carried}, indent=2))
     return 0
 
 

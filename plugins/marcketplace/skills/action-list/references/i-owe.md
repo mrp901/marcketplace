@@ -49,6 +49,18 @@ the permalink's own timestamp, else from the text, else `written_at` shown as `~
 promise often surfaces twice (a chat message and its to-do); dedupe by permalink and keep the
 one with the most evidence.
 
+## Customer notes
+
+When a candidate names a customer or prospect, read that customer's note before ranking
+(`../../../shared/customer-notes.md`, "Reading": the customers index once per run, then each
+note; at most 3 notes per run). Its `## Open promises` > `We owe` lines are **extra candidates**, not rows: each goes
+to the worker with its linked source as its evidence and is classified by "What counts" like
+any other. Only a promise the user themself made earns the ranking boost; a `We owe` line made
+by someone else is not owed by the user and is dropped, unless it is an ask of the user, which is
+Waiting on you. A line with no source link, or whose source cannot be read, is `unverified` and never
+boosted. Verification (step 3) applies unchanged and a line the source shows kept is dropped.
+The note is provisional machine text: where it disagrees with the source, the source wins.
+
 ## What an extractor returns
 
 ```
