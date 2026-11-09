@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added
+- `RELEASING.md`, a runtime checklist every PR answers before merge (cloud routines, synced copy,
+  local scripts and tasks, profile and state, existing content, rollback), and
+  `.github/pull_request_template.md` carrying it.
+- `scripts/runtime_refs.py` (read-only, stdlib): lists the skills, profile keys and env vars a
+  diff removes and greps `~/.claude/scripts`, `settings.json` and `skills` for them. Unit test
+  `test_runtime_refs.py` runs in CI. No plugin behaviour change and no version bump.
+
 ## [1.13.0] - 2026-11-09
 
 Customer context lived across meeting notes, memory entries, drafts and session logs, and every
