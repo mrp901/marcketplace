@@ -14,13 +14,41 @@ jobs:
         with:
           python-version: "3.11"
 
+      # The organisation-specific denylist is private data and is not in the repo.
+      # Store the contents of your scrub_denylist.local.txt in the SCRUB_DENYLIST
+      # repository secret; without it the check runs on the built-in shapes only.
       - name: Scrub check (organisation literals)
-        run: python3 plugins/marcketplace/scripts/scrub_check.py plugins/
+        env:
+          SCRUB_DENYLIST_CONTENT: ${{ secrets.SCRUB_DENYLIST }}
+        run: |
+          if [ -n "$SCRUB_DENYLIST_CONTENT" ]; then
+            printf '%s\n' "$SCRUB_DENYLIST_CONTENT" > "$RUNNER_TEMP/scrub_denylist.txt"
+            export SCRUB_DENYLIST="$RUNNER_TEMP/scrub_denylist.txt"
+          fi
+          python3 plugins/marcketplace/scripts/scrub_check.py plugins/
+
+      - name: Test the SessionStart version check
+        run: python3 -m unittest plugins/marcketplace/scripts/test_version_check.py
+
+      - name: Test the health scorer
+        run: python3 -m unittest plugins/marcketplace/skills/kb-dream/scripts/test_kb_health_score.py
 
       - name: Line budget check (SKILL.md 150-line cap)
         run: python3 plugins/marcketplace/scripts/line_budget.py --all
       - run: python3 plugins/marcketplace/scripts/check_refs.py
 
-      # `claude plugin validate` is not run here: the Claude Code CLI is not
-      # available on this runner. The orchestrator runs it locally as part
-      # of each wave's QA gate (see PORTING.md step 11).
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # Pinned: the hooks module needs a Claude Code build with function hooks,
+      # and an older npm release has none. Bump this deliberately.
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code@2.1.296
+
+      - name: Validate the marketplace, plugin and hooks module
+        run: claude plugin validate --strict .
+
+      # Runs offline: the tests need no credentials.
+      - name: Test the hooks module
+        run: claude plugin test plugins/marcketplace
