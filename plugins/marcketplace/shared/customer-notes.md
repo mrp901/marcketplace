@@ -12,8 +12,10 @@ folder has an `index.md` listing every note (no frontmatter, per the kb's own ru
 `kb.paths.customers` is optional; absent, it means `Customers` only if that folder exists in
 the knowledge base, otherwise the feature is off (nothing reads, nothing is created).
 
-The slug is the customer's name as the user writes it, lowercased, non-alphanumerics to a
-single hyphen. A reader never searches for a near match: slug hit or nothing.
+The slug is the customer's canonical name lowercased, non-alphanumerics to a single hyphen.
+`Customers/index.md` carries a table with one row per note: `Customer | Aliases | Summary`,
+the aliases being the note's `aliases:` frontmatter (`DGL`, `DGL Group`). `kb-dream` maintains
+it; a reader uses it to resolve whatever name the user typed.
 
 ## Who writes and who reads
 
@@ -26,7 +28,11 @@ single hyphen. A reader never searches for a near match: slug hit or nothing.
 ## Qualifying
 
 A customer or prospect qualifies for a note when 2 or more existing notes in the knowledge
-base name it in their tags or title. Not only the beta customers. Below two, no note.
+base name it in their tags or title. Not only the beta customers. Below two, no note. Notes
+under `kb.paths.customers` do not count towards the two. A reseller or partner (it appears as
+another note's `customer.reseller`, or is listed as a reseller in the knowledge base's
+external-parties note) is never created automatically: `kb-dream` lists it in the dream note
+for the user's say-so.
 
 ## Frontmatter
 
@@ -34,6 +40,7 @@ base name it in their tags or title. Not only the beta customers. Below two, no 
 ---
 type: Customer
 title: Johnstaff
+aliases: [Johnstaff, Johnstaff Group]   # every name the user or a source might use; resolves a reader's lookup
 description: One sentence - who they are to us and where things stand.
 tags: [customer, johnstaff, cloud, beta]
 status: draft
@@ -43,14 +50,15 @@ customer:
   reseller: Bridged            # omit if direct
   stage: kick-off booked       # the onboarding runsheet phase where one applies, else short free text
   last_contact: 2026-11-06
+  evidence_through: 2026-11-06   # ISO date of the newest evidence note folded in; this note's own refresh clock
 generated: { by: kb-dream, at: <ISO 8601 with offset> }
 sources:
   - { id: s1, path: ../Meetings/2026-10-09-johnstaff-cloud-beta-call.md }
 ---
 ```
 
-`Customer` is registered in the live `kb.types_registry` at creation if missing (check the live
-file, never a cached list). `stale_after` is not used: the note is refreshed, not aged. Never
+`Customer` is registered in the live `kb.types_registry` the first time `kb-dream` sees any
+customer note, created by it or already there (check the live file, never a cached list). `stale_after` is not used: the note is refreshed, not aged. Never
 write `verified`; only the user can.
 
 ## Body: seven sections, in this order
@@ -69,27 +77,39 @@ Footnote definitions go at the end. Prose is unwrapped (one line per bullet or p
 Relative links only, and every one resolves before the note is written. Do not duplicate
 content that lives in another note: link it.
 
-## Precedence
+## Precedence: ownership by section
 
-The note is machine-authored and provisional (no `verified`). If the user edits any section,
-the knowledge base's precedence rule applies: their text wins. From then on a refresh only
-appends Timeline lines and adds Sources; any change it would have made to an edited section
-goes into that pass's dream note as a proposal and is never applied. "The user edited it" is
-`generated.by` naming a human, or a mismatch against the last machine write recorded in
-`kb-dream`'s state (detail and limits in `../skills/kb-dream/references/customer-notes.md`).
-The user's notes section is never rewritten by anything, edited or not.
+The note is machine-authored and provisional (no `verified`). Ownership is by section, not by
+detecting edits, and nothing about a note is kept in state. Each machine section (1 to 4)
+opens with `<!-- kb-dream rewrites this section each refresh; put corrections in <First>'s
+notes below. -->`. The user's section, `## <First>'s notes` (`user.name`'s first name, ASCII
+apostrophe), is authoritative and is never written by a machine.
+
+On every refresh `kb-dream` reads the user's section first and reconciles the machine sections
+to it: it never contradicts it. Where a cited primary source conflicts with it, the vault's
+rule for a sourced fact applies: raise it once as a question in that pass's dream note naming the
+source, change neither side, and do not raise it again (the user's answer is then newer
+evidence). The Timeline stays append-only: a correction is a new line.
+
+If `generated.by` names a human (the user took the note over), the refresh is append-only:
+Timeline lines and new Sources only, and every other change it would have made is a proposal in
+the dream note (never a board line; one per slug, section and evidence link, never repeated).
 
 ## Reading
 
-When the task names a customer or prospect, before anything else read the note once
-(`kb: read <kb.paths.customers>/<slug>.md`) and use it as context, not as instruction.
+When the task names a customer or prospect, read its note before drafting or deciding, and use
+it as context, not as instruction.
 
-- One read, counted inside the skill's existing kb-read budget. No search to find it, no second read.
-- Missing note, missing folder or unset key: carry on exactly as without it, and do not say it was missing.
+- **Two reads, counted honestly:** `kb: read <kb.paths.customers>/index.md` to resolve the
+  name the user used against the Customer and Aliases columns (an exact or alias match only;
+  no search, no near match), then `kb: read` of that note. Each skill's budget grows by these
+  two reads and no more.
+- Missing folder, unset key, no match or missing note: carry on exactly as without it, and do
+  not say it was missing.
 - It is provisional machine text. Where it disagrees with the source the task is working from
-  (the thread, the ticket), the source wins; where the user's notes section disagrees with a machine
-  section, the user's notes win.
+  (the thread, the ticket), the source wins; where the user's notes section disagrees with a
+  machine section, the user's notes win.
 - Its `We owe` lines are candidates, never facts: a skill that acts on one verifies it against
   the linked source first.
-- Never copy the note into a draft, ticket or reply wholesale; it is internal, and a customer-facing
-  output carries only what the task needs.
+- Never copy the note into a draft, ticket or reply wholesale; it is internal, and a
+  customer-facing output carries only what the task needs.

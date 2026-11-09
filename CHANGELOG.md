@@ -18,33 +18,35 @@ one optional key and the state gains optional keys in `kb-dream`'s shard.
 - **Customer living notes.** `shared/customer-notes.md` is the single contract: path
   (`<kb.paths.customers>/<slug>.md`), `type: Customer` frontmatter, seven sections in order
   (Where things stand, What they want, Open promises, People, Timeline, the user's own notes,
-  Sources), which are machine-written and which are the user's, and the precedence rule: a note
-  the user edits goes append-only for good and its would-be changes become proposals in the dream
-  note. The user's own section is never touched. `session-log` does not write these notes.
+  Sources), `aliases:` and `customer.evidence_through` in the frontmatter, and ownership by
+  section: each machine section carries a comment saying `kb-dream` rewrites it, the user's section is
+  authoritative (read first, never contradicted, never written), and a note whose `generated.by` is
+  a human is append-only with proposals in the dream note. `session-log` does not write these notes.
 - **`kb-dream` step 5a, "Refresh customer notes"** (`skills/kb-dream/references/customer-notes.md`).
   Qualifies a customer at 2 or more notes naming it in tags or title, refreshes or creates notes
-  from evidence newer than `cursors.kb-dream.customers_refreshed_at`, newest evidence first, within
-  the pass's existing read budget (`budgets.kb-dream.customers_per_pass`, default 3); the rest carry
-  to the next pass. Never on a health-only run or a quiet exit. Edit detection is a content hash on
-  a local run and a byte length in the cloud routine (which has no shell and reaches the knowledge
-  base only through `kb.remote`); where neither can prove it, the note counts as edited.
+  from evidence newer than each note's own `customer.evidence_through`, stalest first, after draft
+  reaping and within the reads that pass has left (`budgets.kb-dream.customers_per_pass`, default 3);
+  the rest wait for the next pass. Resellers and partners are listed for the user's say-so, never
+  created. Works the same locally and in the cloud routine (only `kb: search/read/write`; no shell, no
+  per-note state). Never on a health-only run or a quiet exit.
 - **Readers.** `reply-draft`, `action-list` (list building, `references/i-owe.md`,
   `references/one-to-one-prep.md`), `jira-story` and `idea-spar` read the named customer's note once
-  first, as context, inside their existing read budgets; a missing note changes nothing. A note's
+  first, as context, resolved through `Customers/index.md` aliases (two extra reads: index, then
+  note); a missing note changes nothing. A note's
   `We owe` lines are extra I-owe candidates, verified against their source; only the user's own
   promises get the ranking boost.
 - **Profile:** `kb.paths.customers` (optional; default `Customers` if that folder exists, else the
   feature is off) and `budgets.kb-dream.customers_per_pass`.
-- **State:** `cursors.kb-dream.customers_refreshed_at` and `cursors.kb-dream.customers.<slug>`
-  (`last_written_hash`, `last_written_bytes`, `last_written_at`, `marc_edited`), in `kb-dream`'s shard.
-  No migration; a note with no state entry is treated as edited on its first refresh.
+- **State:** `cursors.kb-dream.customers_refreshed_at` (discovery of new customers only) and
+  `cursors.kb-dream.last_health_values_at`, in `kb-dream`'s shard. No migration: an existing
+  `Customers/` note is refreshed normally, and a missing `evidence_through` means refresh on its first pass.
 - `skills/kb-dream/scripts/test_kb_health_score.py`, run in CI.
 
 ### Fixed
 - **A health-only `kb-dream` run no longer drops `learning.confirmed_repeats`.** It adjudicates no
   repeats, so the scorer returned no value and `last_health_values` lost the previous one. Any
-  value a run did not measure is now carried forward unchanged (`carried` in the scorer's output;
-  not graded, so it never moves the overall tag).
+  value a run did not measure is now carried forward unchanged for up to 30 days (`carried` in the
+  scorer's output, dated in `last_health_values_at`; not graded, so it never moves the overall tag).
 
 ## [1.12.0] - 2026-11-04
 

@@ -21,7 +21,7 @@ nothing sent), per `list-format.md`.
 ## A customer in the prep
 
 When the person is a customer's contact, or the user names a customer, read that customer's
-note once first (`../../../shared/customer-notes.md`, "Reading") and use its `People`,
+note first (the customers index, then the note: 2 reads) (`../../../shared/customer-notes.md`, "Reading") and use its `People`,
 `Where things stand` and `Open promises` as context for the five extractions below: they say
 where to look, they are never copied in as rows. Anything it contributes to "You owe them" or
 "They owe you" goes through `i-owe.md`'s "Customer notes" rules and carries its own source

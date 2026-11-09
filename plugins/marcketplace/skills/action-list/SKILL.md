@@ -50,8 +50,8 @@ batch. When every source comes back empty, write no list: say so in one line and
 `runs.action-list` as `quiet`. "I owe" adds **at most 4 reads**: `action-sweep`'s shard (the
 main document and this skill's shard are already read at onboarding), and up to 3 pages of
 one `from:me` chat search over the last 14 days, so a promise older than the window is
-still seen. Verification adds **at most 10** (step 3), and each customer note read adds 1
-(max 3 per run). The extraction subagents already read tracker, transcripts and session notes
+still seen. Verification adds **at most 10** (step 3), and customers named add 1 index read and 1 read
+per note (max 3 notes per run). The extraction subagents already read tracker, transcripts and session notes
 (`references/i-owe.md`). `prep`: up to five extraction subagents at `budgets.models.search`
 (owed each way, their open asks, previous 1:1 agendas, recent meetings), one worker, one
 critic, one `kb: write`, the same extra state read and 10-read verification cap.

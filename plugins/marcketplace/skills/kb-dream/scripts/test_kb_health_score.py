@@ -35,6 +35,17 @@ class CarryForward(unittest.TestCase):
         self.assertEqual(out["values"]["learning.confirmed_repeats"], 0)
         self.assertEqual(out["carried"], [])
 
+    def test_a_carried_value_expires_after_30_days(self):
+        rc, out = score({"metrics": METRICS, "now": "2026-11-09T10:00:00",
+                         "prior": {"learning.confirmed_repeats": 1},
+                         "prior_at": {"learning.confirmed_repeats": "2026-09-01T10:00:00"}})
+        self.assertNotIn("learning.confirmed_repeats", out["values"])
+        rc, out = score({"metrics": METRICS, "now": "2026-11-09T10:00:00",
+                         "prior": {"learning.confirmed_repeats": 1},
+                         "prior_at": {"learning.confirmed_repeats": "2026-10-20T10:00:00"}})
+        self.assertEqual(out["values_at"]["learning.confirmed_repeats"], "2026-10-20T10:00:00",
+                         "a carried value keeps its own date")
+
     def test_no_prior_means_nothing_to_carry(self):
         rc, out = score({"metrics": METRICS})
         self.assertNotIn("learning.confirmed_repeats", out["values"])

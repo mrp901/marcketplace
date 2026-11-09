@@ -2,7 +2,7 @@
 
 ## 2026-11-09 customer notes as context and as I-owe candidates (1.13.0)
 
-When a candidate or the prep names a customer, its living note is read first (one read, max 3 per
+When a candidate or the prep names a customer, its living note is read first (index then note, max 3 notes per
 run). Its `We owe` lines are extra I-owe candidates, verified against their linked source like any
 other; only the user's own promises get the ranking boost (unchanged rule). Detail in
 `references/i-owe.md` and `references/one-to-one-prep.md`; the note's contract is

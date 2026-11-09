@@ -24,14 +24,14 @@ else. Resolve tools via onboarding step 4; prefixes come from `state.machines`.
   only: `kb.kind`, `kb.conventions_file`, `kb.link_style`, `kb.frontmatter_required`,
   `kb.paths.drafts`, `kb.paths.voice`; `kb.paths.customers` (optional; read when a customer is named)
 - Tool categories: `tracker` (search issues, get issue, create issue, edit issue, link
-  issues), `kb` (read, write; knowledge-base destination and voice ledger only), `ideas`
+  issues), `kb` (read, write; knowledge-base destination, voice ledger and, when a customer is named, the customers index and that customer's note), `ideas`
   (search issues JQL, get issue, create issue; idea mode), `web` (optional; idea mode)
 - Caps: none for Refine and New (see Budget); idea mode reads `budgets.jira-story`.
 - Idea mode adds ideas-board keys and tools: `references/idea-ticket-flow.md`, "Needs".
 
 ## Budget
 
-Step 3 is at most two searches plus three reads of existing issues. One blind-pass subagent
+Step 3 is at most two searches plus three reads of existing issues, plus two reads for a named customer. One blind-pass subagent
 call per ticket at `profile.budgets.models.critic`, one batched question round, and one edit
 or create call per ticket. A second blind pass only if Step 8 rewrites more than a
 sentence or two of an AC. Guidelines in `../../shared/token-discipline.md`; the blind pass
@@ -53,8 +53,8 @@ confirmation gate (`references/idea-ticket-format.md`, `idea-ticket-audit-rubric
    and the `kb` keys under Needs, with the folder index and log lines it demands), or a file path (clean
    markdown only; invent no conventions for a location that never asked for any). If
    nothing says, ask once.
-2. **Read the target (refine).** If the task names a customer, read its note once as context
-   first, per `../../shared/customer-notes.md` "Reading". `tracker: get issue` for the description, before anything
+2. **Read the target (refine).** If the task names a customer, read its note as context
+   first (two reads: index, then note; per `../../shared/customer-notes.md` "Reading"). `tracker: get issue` for the description, before anything
    else touches the tracker. Skim the parent epic and any sibling stories it links;
    cross-AC and cross-ticket contradictions are a recurring failure and cannot be caught
    without the siblings. No tracker connected and destination is the tracker: say so and

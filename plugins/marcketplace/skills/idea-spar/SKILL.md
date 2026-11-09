@@ -51,8 +51,8 @@ offset, never UTC (`references/next-watch.md` step 6); the same write seeds its 
 
 Before any lens runs, build the **known packet**: the idea's ticket text and comments
 (`ideas: get issue`), at most `kb_reads` kb notes on the same theme, and everything the
-user has said in this session. When the idea names a customer, its note is read first and counts as
-one of the `kb_reads` (`../../shared/customer-notes.md` "Reading"). The packet is input. It is never output: do not summarise
+user has said in this session. When the idea names a customer, its note is read first, in addition to the `kb_reads`: two
+reads, the customers index then the note (`../../shared/customer-notes.md` "Reading"). The packet is input. It is never output: do not summarise
 it back. Print one line naming what it holds ("Working from: FIG-204 + 3 comments,
 `Research/fig-204-….md`, your framing above") and go straight to the lens.
 

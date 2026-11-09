@@ -36,8 +36,8 @@ session notes + inbox + <scope> · **Access:** <how this run reached the knowled
   rewritten · **Drafts reaped:** N · **Registry review:** (monthly only) · **Voice:**
   ledger N promoted, N proposed | nothing new · re-sample done | due since <date> ·
   **Health:** <tag>: <why> | not measured (no local access), per `kb-health.md` ·
-  **Customers:** N refreshed, N created, N deferred (<slugs>), N edited by you
-  (append-only), per `customer-notes.md` | step skipped
+  **Customers:** N refreshed, N created, N deferred (<slugs>), N append-only, N
+  questions raised, per `customer-notes.md` | step skipped
 ```
 
 "What I curated" is a table because it is a ledger, not a narrative: one row per change,

@@ -26,8 +26,8 @@ else.
   if unset), `budgets.kb-dream` (`.health` optional).
 - Tools: `chat` (read canvas, update canvas; scheduled run only), `kb` (search, read,
   write), `wiki` (get/update page, only where `kb.kind: confluence`), a shell (the health
-  verdict's scripts and customer-note hashing; without one the verdict is skipped).
-- State: `cursors.kb-dream` (incl. `customers_refreshed_at`), `tally`, `suppressions`, `outcomes` (the hub's shard),
+  verdict's scripts; without one the verdict is skipped).
+- State: `cursors.kb-dream` (incl. `customers_refreshed_at`, discovery only), `tally`, `suppressions`, `outcomes` (the hub's shard),
   `proposals`, `voice_edits` (reply-draft's, session-log's and the frozen kb-note shard), `ideas` (monthly
   prune, in idea-spar's shard), briefing's `closed`, `runs.kb-dream` (`cursors`, `runs`, its own
   `dream:` items and `voice_verdicts` in its shard).
@@ -80,7 +80,6 @@ state read and write, two local scripts. The scheduled dream is a cloud routine 
    writing-voice feedback goes to `Voice/edits-ledger.md` instead, never to memory.
 5. **Draft fold proposals** for settled corrections, per `references/fold-proposals.md`.
    Never applied, only proposed.
-5a. **Refresh customer notes**, per `references/customer-notes.md` (not on a health-only run).
 6. **Run the link pass** over every note this run changed, per `references/link-pass.md`.
 7. **Voice and registry.** Every non-quiet run: ledger promotion, per
    `references/voice-review.md` Part A - unattended, knowledge-base reads only. Whenever
@@ -88,6 +87,7 @@ state read and write, two local scripts. The scheduled dream is a cloud routine 
    needs an attended run, so an unattended one flags it and retries next dream). On a full
    monthly-first-fire dream, also `references/registry-review.md`.
 8. **Reap transient drafts**, per `references/draft-reaping.md`.
+8a. **Refresh customer notes**, per `references/customer-notes.md`; not on a health-only run.
 9. **Write the dream note** per `references/dream-note-format.md`, then the maintenance
    contract (index/log lines) it describes.
 10. **Health verdict**, per `references/kb-health.md`: measure, score, record one line
