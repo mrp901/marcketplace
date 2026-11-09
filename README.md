@@ -110,7 +110,8 @@ plugins/marcketplace/
   shared/                     the eleven contracts every skill depends on
   scripts/                    the checks that gate every change
 profiles/example.md           the template and eval fixture
-ci/validate.yml               copy into .github/workflows/ to enable, see ci/README.md
+ci/validate.yml               the CI workflow, mirrored in .github/workflows/, see ci/README.md
+RELEASING.md                  the runtime checklist every PR answers before merge
 ```
 
 `HISTORY.md` files are worth reading before changing a skill. Most of the rules in this
@@ -136,3 +137,8 @@ enforces the line cap that keeps the always-loaded part of each skill small. The
 checks that every path a skill
 points at resolves from the file it is written in, which is the easiest thing here to get
 wrong by exactly one directory level.
+
+These read files in this repository. The plugin also runs outside it (cloud routines, the
+synced copy, local scripts and tasks, live state and notes), so every PR also answers the
+runtime checklist in [RELEASING.md](RELEASING.md); `scripts/runtime_refs.py` automates its
+"outside the repo" item.

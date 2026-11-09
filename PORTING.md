@@ -189,6 +189,7 @@ exempt a genuinely fictional token that happens to match a WARN-class shape.
 - [ ] Evals are re-fictionalised and reference `profiles/example.md`.
 - [ ] If this skill is a handler, it returns the handler contract JSON and never writes the
       surface.
+- [ ] The `RELEASING.md` runtime checklist is answered in the PR body.
 - [ ] The proposed commit message is in your hand-back report.
 - [ ] You ran no `git add`, `git commit` or `git push`.
 
