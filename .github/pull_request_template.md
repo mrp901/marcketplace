@@ -12,9 +12,9 @@ Answer each with checked (how), not affected (why), or gap (named). See `RELEASI
 
 - [ ] 1. Cloud routines still run from a fresh clone with connectors only:
 - [ ] 2. Synced copy: anything local that needs the new version (say "update and restart after merge" if so):
-- [ ] 3. Outside the repo: `runtime_refs.py` run, every hit fixed or named:
-- [ ] 4. Profile and state: defaults, migrations or aliases, mixed-version writes:
-- [ ] 5. Existing content: notes, lines or state made under an older contract:
+- [ ] 3. Outside the repo: `runtime_refs.py` run (`python3`, or `python` on Windows), every hit fixed or named:
+- [ ] 4. Profile and state: defaults, migrations or aliases; how an older version writes this document (whole-document replace or key merge) and that it keeps keys it does not know:
+- [ ] 5. Existing content: does any new or changed rule (clock, prune, lock, counter, matcher) act on notes, board lines or state that already exist? The oldest real example you ran it against, and what it does to it (especially anything it deletes or counts):
 - [ ] 6. Rollback: what a revert leaves that the old version misreads:
 
 ## Repo checks run

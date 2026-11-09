@@ -7,14 +7,7 @@ every repo check and still break there.
 
 ## Why
 
-Three consecutive releases each shipped a break that all the repo checks passed and only an
-independent reviewer found, because it lived in a runtime outside the repo:
-
-| Change | Break | Where it lived |
-|---|---|---|
-| A skill was removed | A scheduled local task kept calling the removed skill and failed every weekday until noticed | A local scheduled task and a script under `~/.claude/scripts` |
-| A new housekeeping clock | It would have deleted old to-dos, and a counter treated moved items as deletions | The live board and state written by older runs |
-| A new note contract | Existing seeded notes would have locked append-only for good, and an older synced copy would have dropped new state keys | Notes that already existed, and mixed plugin versions |
+Three consecutive releases each broke in a runtime the repo does not contain (a scheduled local task calling a removed skill, a housekeeping rule acting on state older runs had written, a note contract applied to notes that already existed), and every repo check passed.
 
 The checklist below makes that runtime check a written step of every PR instead of something a
 reviewer remembers.
@@ -36,22 +29,21 @@ Answer each item in the PR body with **checked** (and how), **not affected** (an
 
 1. **Cloud routines.** Does each routine whose skill changed still run from a fresh clone with connectors only: no local files, no shell, no state on disk?
 2. **Synced copy.** Does anything local depend on the new version? If yes, the PR body says "update the plugin and restart after merge" and what breaks until then.
-3. **Outside the repo.** Run `python3 plugins/marcketplace/scripts/runtime_refs.py` on the branch (see below). Every hit is fixed or named.
-4. **Profile and state.** Every new key has a default. Every renamed or removed key has a migration row in `shared/state-schema.md` or an alias. An older version writing the same document on the same day cannot drop or corrupt the new keys.
-5. **Existing content.** Does a contract change apply to notes, board lines or state that already exist (seeded, hand-made, or written by an older version)?
+3. **Outside the repo.** Run `python3 plugins/marcketplace/scripts/runtime_refs.py` on the branch (see below; on Windows `python` may be the right command, since `python3` can be the Store stub). Every hit is fixed or named.
+4. **Profile and state.** Every new key has a default. Every renamed or removed key has a migration row in `shared/state-schema.md` or an alias. An older version writing the same document on the same day cannot drop or corrupt the new keys. Name how an older version writes this document (whole-document replace or key merge) and confirm it keeps keys it does not know.
+5. **Existing content.** Does any new or changed rule (clock, prune, lock, counter, matcher) act on notes, board lines or state that already exist (seeded, hand-made, moved, or written by an older version)? Name the oldest real example you ran it against and what it does to it, especially anything it deletes or counts.
 6. **Rollback.** If this merge is reverted, what state or content does the new version leave behind that the old one misreads?
 
 ### `runtime_refs.py`
 
 It diffs `--base` (default `origin/main`) against `--head` (default `HEAD`), collects the names
-the diff removes (skills, as `<skill>` and `/<plugin>:<skill>`; profile keys; env vars read by
-scripts and hooks), and greps `~/.claude/scripts`, `~/.claude/settings.json` and
+the diff removes (skills, as `<skill>` and `/<plugin>:<skill>`; profile keys no live table row lists any more; env vars scripts and hooks read; removed script files), and greps `~/.claude/scripts`, `~/.claude/settings.json` and
 `~/.claude/skills` for them. `--extra <path>` adds places to look (another machine's task
 folder, say). It prints `file:line: <name> (removed in this diff)` per hit, exits 1 on any hit,
 and `--json` gives the same for an agent. It is read-only. It runs on the machine that has the
 runtimes, so CI does not run it; CI runs only its unit test.
 
-A clean run means no local file names a removed thing. It does not cover the OS scheduler's own
+A path that does not exist is an error when you passed it and a warning when it is a default, and a run that scanned no file exits 2, so a clean run cannot mean "looked at nothing". A clean run means no local file names a removed thing. It does not cover the OS scheduler's own
 entries, other machines, or anything that calls a skill by a name built at run time.
 
 ## Reviewer brief
