@@ -49,14 +49,17 @@ produce.
    title-overlap pairs, not verdicts. Read both entries of each (at most 5). A **repeat** is
    the same correction or preference recorded twice because the first did not change
    behaviour; two entries on one topic that add something new are not. Count the confirmed
-   ones. A quiet run adjudicates nothing and omits `confirmed_repeats`.
+   ones. A quiet or health-only run adjudicates nothing and omits `confirmed_repeats`; the
+   scorer then carries the prior value forward unchanged (it lists it under `carried`), so
+   the next adjudicating run still has something to trend against.
 3. **Score.** Pipe `{metrics, confirmed_repeats, thresholds, prior, now}` to
    `../scripts/kb_health_score.py`: `thresholds` from `budgets.kb-dream.health.thresholds`,
    `prior` from `cursors.kb-dream.last_health_values`.
 4. **Record.** `runs.kb-dream.health` = `{tag, why, at}`: `tag` is the scorer's overall tag,
    `why` its headline led by the worst signal's action from the table, under 200 characters
    so it reads alone in a chat message (`unmarked voice-ledger items 5, run the voice
-   review`). `cursors.kb-dream.last_health_values` = the scorer's `values`. The dream note's
+   review`). `cursors.kb-dream.last_health_values` = the scorer's `values` (it includes any `carried`
+   value; never drop a key the previous verdict held because this run did not measure it). The dream note's
    Flags gets `Health: <tag>: <why>`. A first reading has no prior: say it is the baseline,
    and that its amber signals are the real backlog, not new faults.
 

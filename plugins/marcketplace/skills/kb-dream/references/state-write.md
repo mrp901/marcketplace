@@ -8,7 +8,8 @@ skipped: this shard was created at 1.3.0, before seeding existed.
 
 Then write `cursors.kb-dream` (`last_dream_at`, `last_full_dream_at` if full,
 `last_registry_review_at` if run, `last_voice_review_at` only when the re-sample completed,
-`last_health_values` when the verdict was measured; drop `open_followups` if the shard still
+`last_health_values` when the verdict was measured (carrying forward any value that run did
+not measure); `customers_refreshed_at` and `customers.<slug>` when the customer step ran; drop `open_followups` if the shard still
 holds it, the escalation ledger is gone), its own `items` with this run's `dream:` tags (tags
 in briefing's `closed` pruned), `voice_verdicts`, `runs.kb-dream` (with `health`, when
 measured), all in its shard;

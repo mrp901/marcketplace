@@ -14,7 +14,10 @@ Input:
 Exits 2 with {"error": ...} when the input is unreadable or carries the metrics script's own error.
 
 Output: {"signals": {key: {tag, value, prev?, why}}, "overall": {tag, headline},
-         "values": {key: value}}   # `values` is what the skill stores as the next verdict's prior.
+         "values": {key: value}, "carried": [key]}
+`values` is what the skill stores as the next verdict's prior. A key the prior holds that this run
+did not measure (e.g. learning.confirmed_repeats on a health-only run) is carried forward into
+`values` unchanged and listed in `carried`; it is not graded.
 
 A signal that was not measured is tagged "unmeasured", never green. Overall is red if any
 signal is red, amber if any is amber or two or more are unmeasured, else green. Every
@@ -128,6 +131,13 @@ def main():
     else:
         unmeasured("backlog.inbox_oldest_days", b.get("why", "not measured"))
 
+    # A value this run did not measure (a health-only or quiet run adjudicates no repeats; a signal
+    # came back unmeasured) keeps the last verdict's number, so the next trend still has a prior.
+    # It is carried, not graded: it stays out of `signals` and never moves the overall tag.
+    carried = sorted(k for k in prior if k in T and k not in values and isinstance(prior[k], (int, float)))
+    for k in carried:
+        values[k] = prior[k]
+
     tags = [s["tag"] for s in sig.values()]
     red = [k for k, s in sig.items() if s["tag"] == "red"]
     amber = [k for k, s in sig.items() if s["tag"] == "amber"]
@@ -141,7 +151,8 @@ def main():
     if gaps:
         parts.append("not measured: " + ", ".join(gaps))
     headline = "; ".join(parts) if parts else f"all {len(tags)} signals green"
-    print(json.dumps({"signals": sig, "overall": {"tag": overall, "headline": headline}, "values": values}, indent=2))
+    print(json.dumps({"signals": sig, "overall": {"tag": overall, "headline": headline},
+                      "values": values, "carried": carried}, indent=2))
     return 0
 
 

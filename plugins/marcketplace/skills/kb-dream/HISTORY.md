@@ -1,5 +1,23 @@
 # kb-dream - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-09 refresh customer notes; carry unmeasured health values (1.13.0)
+
+Customer context sat scattered across meeting notes, memory entries, drafts and session logs, and
+every drafting task re-assembled it. One hub note per customer (`shared/customer-notes.md`) is now
+refreshed here, in one new step (5a), and read first by the skills that are handed a customer's name.
+`kb-dream` is the only writer, so there is one place to get it wrong and one place to fix it.
+Decisions: the user's notes section is never touched; a note the user edits goes append-only for
+good (sticky `marc_edited`), because rewriting it would overrule a human; edit detection is a hash
+locally and a byte length in the cloud routine (no shell, knowledge base only through `kb.remote`),
+and where neither proves anything the note counts as edited, the safe error. The step spends only
+the reads curation left over and defers the oldest evidence, so a heavy pass never starves
+curation; a monthly full pass has the room to catch up. Never on a health-only run.
+`SKILL.md` was at the 150-line cap, so the step is one line and the detail is
+`references/customer-notes.md`.
+Bug fixed alongside: a health-only run dropped `learning.confirmed_repeats` from
+`last_health_values` (seen 9 Nov 2026), because that run adjudicates no repeats and the scorer
+only kept what it measured. `kb_health_score.py` now carries any unmeasured prior value forward
+(`carried`, not graded); `scripts/test_kb_health_score.py` covers it.
 ## 2026-11-04 tick effects on `dream:` lines (1.12.0)
 
 Every `dream:` line now ends with what its tick does. The default is `tick → kb-dream applies

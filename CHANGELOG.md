@@ -6,6 +6,46 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.13.0] - 2026-11-09
+
+Customer context lived across meeting notes, memory entries, drafts and session logs, and every
+customer-facing task (a reply, a list, a ticket, a spar) re-assembled it. Each customer or
+prospect with two or more notes in the knowledge base now gets one living note that `kb-dream`
+keeps current and the drafting skills read first. Nothing is added to the board. The profile gains
+one optional key and the state gains optional keys in `kb-dream`'s shard.
+
+### Added
+- **Customer living notes.** `shared/customer-notes.md` is the single contract: path
+  (`<kb.paths.customers>/<slug>.md`), `type: Customer` frontmatter, seven sections in order
+  (Where things stand, What they want, Open promises, People, Timeline, the user's own notes,
+  Sources), which are machine-written and which are the user's, and the precedence rule: a note
+  the user edits goes append-only for good and its would-be changes become proposals in the dream
+  note. The user's own section is never touched. `session-log` does not write these notes.
+- **`kb-dream` step 5a, "Refresh customer notes"** (`skills/kb-dream/references/customer-notes.md`).
+  Qualifies a customer at 2 or more notes naming it in tags or title, refreshes or creates notes
+  from evidence newer than `cursors.kb-dream.customers_refreshed_at`, newest evidence first, within
+  the pass's existing read budget (`budgets.kb-dream.customers_per_pass`, default 3); the rest carry
+  to the next pass. Never on a health-only run or a quiet exit. Edit detection is a content hash on
+  a local run and a byte length in the cloud routine (which has no shell and reaches the knowledge
+  base only through `kb.remote`); where neither can prove it, the note counts as edited.
+- **Readers.** `reply-draft`, `action-list` (list building, `references/i-owe.md`,
+  `references/one-to-one-prep.md`), `jira-story` and `idea-spar` read the named customer's note once
+  first, as context, inside their existing read budgets; a missing note changes nothing. A note's
+  `We owe` lines are extra I-owe candidates, verified against their source; only the user's own
+  promises get the ranking boost.
+- **Profile:** `kb.paths.customers` (optional; default `Customers` if that folder exists, else the
+  feature is off) and `budgets.kb-dream.customers_per_pass`.
+- **State:** `cursors.kb-dream.customers_refreshed_at` and `cursors.kb-dream.customers.<slug>`
+  (`last_written_hash`, `last_written_bytes`, `last_written_at`, `marc_edited`), in `kb-dream`'s shard.
+  No migration; a note with no state entry is treated as edited on its first refresh.
+- `skills/kb-dream/scripts/test_kb_health_score.py`, run in CI.
+
+### Fixed
+- **A health-only `kb-dream` run no longer drops `learning.confirmed_repeats`.** It adjudicates no
+  repeats, so the scorer returned no value and `last_health_values` lost the previous one. Any
+  value a run did not measure is now carried forward unchanged (`carried` in the scorer's output;
+  not graded, so it never moves the overall tag).
+
 ## [1.12.0] - 2026-11-04
 
 The board is for decisions, and every line says what its tick does. The owner works in attended

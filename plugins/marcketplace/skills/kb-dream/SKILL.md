@@ -10,11 +10,9 @@ every pass is judged by one question: is the vault now easier for an agent to fi
 trust? Curation is how it answers: read the recent past and the accumulated whole, hand
 back a merged, de-contradicted, correctly filed version, surface what no single note
 captures, and leave a trail the user can review in under two minutes and roll back. The
-pass ends with a one-line health verdict (fresh, reused, learning?). This is the
-widest-scoped skill in the plugin: curation, memory consolidation, a link pass, the verdict,
-and four obligations other skills leave for it (drafts, proposals, voice, registry review).
-Scheduled runs are fresh and unattended: decide, record assumptions in the dream note,
-never block or ask a question.
+pass ends with a one-line health verdict (fresh, reused, learning?). It is the plugin's
+widest-scoped skill. Scheduled runs are fresh and unattended: decide, record assumptions
+in the dream note, never block or ask a question.
 
 Resolve profile, state and tools per `../../shared/onboarding.md` before doing anything
 else.
@@ -23,13 +21,13 @@ else.
 - Profile: `org.timezone`, `kb.name`, `kb.kind`, `kb.local_root`, `kb.remote`,
   `kb.conventions_file`, `kb.types_registry`, `kb.people_file`, `kb.link_style`,
   `kb.frontmatter_required`, `kb.paths.*` (inbox, drafts, sessions, dreams, memory, voice,
-  log, utility, at minimum), `kb.log_size_cap_kb`, `surface.id`, `surface.url`, `people`,
+  log, utility, at minimum; `customers` optional), `kb.log_size_cap_kb`, `surface.id`, `surface.url`, `people`,
   `people_confusions`, `known_fact_errors`, `voice.registers`, `voice.guide_path` (optional
   if unset), `budgets.kb-dream` (`.health` optional).
 - Tools: `chat` (read canvas, update canvas; scheduled run only), `kb` (search, read,
   write), `wiki` (get/update page, only where `kb.kind: confluence`), a shell (the health
-  verdict's scripts; without one the verdict is skipped).
-- State: `cursors.kb-dream`, `tally`, `suppressions`, `outcomes` (the hub's shard),
+  verdict's scripts and customer-note hashing; without one the verdict is skipped).
+- State: `cursors.kb-dream` (incl. `customers_refreshed_at`), `tally`, `suppressions`, `outcomes` (the hub's shard),
   `proposals`, `voice_edits` (reply-draft's, session-log's and the frozen kb-note shard), `ideas` (monthly
   prune, in idea-spar's shard), briefing's `closed`, `runs.kb-dream` (`cursors`, `runs`, its own
   `dream:` items and `voice_verdicts` in its shard).
@@ -43,8 +41,9 @@ session notes, reads as needed for the whole knowledge base, same canvas budget.
 the mode: if a pass finds nothing, say so in one line; never read `kb.paths.utility`
 besides this skill's own recycle folder, and never read `.obsidian`-equivalent tooling
 folders. A log rotation adds one archive write and its read-back to either mode; the health
-verdict adds two local scripts and at most five repeat-pair reads. Guidelines in
-`../../shared/token-discipline.md`.
+verdict adds two local scripts and at most five repeat-pair reads. Refreshing customer
+notes spends only the reads left after curation (`references/customer-notes.md`).
+Guidelines in `../../shared/token-discipline.md`.
 
 **Quiet exit:** nothing new in `kb.paths.inbox`, no `kb.paths.log` entry and no session
 note since `cursors.kb-dream.last_dream_at`, no draft past its stale date, `kb.paths.log`
@@ -81,6 +80,7 @@ state read and write, two local scripts. The scheduled dream is a cloud routine 
    writing-voice feedback goes to `Voice/edits-ledger.md` instead, never to memory.
 5. **Draft fold proposals** for settled corrections, per `references/fold-proposals.md`.
    Never applied, only proposed.
+5a. **Refresh customer notes**, per `references/customer-notes.md` (not on a health-only run).
 6. **Run the link pass** over every note this run changed, per `references/link-pass.md`.
 7. **Voice and registry.** Every non-quiet run: ledger promotion, per
    `references/voice-review.md` Part A - unattended, knowledge-base reads only. Whenever

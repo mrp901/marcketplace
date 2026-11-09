@@ -19,7 +19,7 @@ else.
 - Profile: `org.product_scope`, `org.modules_context`, `org.product_tag`,
   `ideas.project_key`, `ideas.issue_type`, `ideas.area_field`, `ideas.area_value`,
   `ideas.qualifiers`, `ideas.roadmap_field`, `ideas.next_roadmap_values`, `user.name`,
-  `kb.name`, `kb.paths.research`, `kb.paths.screenshots`, `kb.link_style`,
+  `kb.name`, `kb.paths.research`, `kb.paths.screenshots`, `kb.paths.customers` (optional), `kb.link_style`,
   `kb.frontmatter_required`, `codebase.path`, `codebase.access`, `surface.id`,
   `surface.url`, `budgets.idea-spar`, `budgets.models.search`.
 - Tool categories: `ideas` (search issues JQL, get issue), `kb` (search, read, write),
@@ -51,7 +51,8 @@ offset, never UTC (`references/next-watch.md` step 6); the same write seeds its 
 
 Before any lens runs, build the **known packet**: the idea's ticket text and comments
 (`ideas: get issue`), at most `kb_reads` kb notes on the same theme, and everything the
-user has said in this session. The packet is input. It is never output: do not summarise
+user has said in this session. When the idea names a customer, its note is read first and counts as
+one of the `kb_reads` (`../../shared/customer-notes.md` "Reading"). The packet is input. It is never output: do not summarise
 it back. Print one line naming what it holds ("Working from: FIG-204 + 3 comments,
 `Research/fig-204-….md`, your framing above") and go straight to the lens.
 

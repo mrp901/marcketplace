@@ -1,5 +1,9 @@
 # idea-spar - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-09 read the customer's note first (1.13.0)
+
+An idea that names a customer has its living note read first and counted as one of the `kb_reads`
+in the known packet (`shared/customer-notes.md`, "Reading"). Missing note: build the packet as before.
 ## 2026-11-04 tick effect on decision options (1.12.0)
 
 Each option line in a decision group now ends with `tick → records your choice; siblings

@@ -22,7 +22,7 @@ else. Resolve tools via onboarding step 4; prefixes come from `state.machines`.
   `tracker.ticket_template` (optional; a hint, sampled issues win), `budgets.models.critic`,
   `voice.registers` (optional; `ticket_prose`). Knowledge-base destination or voice ledger
   only: `kb.kind`, `kb.conventions_file`, `kb.link_style`, `kb.frontmatter_required`,
-  `kb.paths.drafts`, `kb.paths.voice`
+  `kb.paths.drafts`, `kb.paths.voice`; `kb.paths.customers` (optional; read when a customer is named)
 - Tool categories: `tracker` (search issues, get issue, create issue, edit issue, link
   issues), `kb` (read, write; knowledge-base destination and voice ledger only), `ideas`
   (search issues JQL, get issue, create issue; idea mode), `web` (optional; idea mode)
@@ -53,7 +53,8 @@ confirmation gate (`references/idea-ticket-format.md`, `idea-ticket-audit-rubric
    and the `kb` keys under Needs, with the folder index and log lines it demands), or a file path (clean
    markdown only; invent no conventions for a location that never asked for any). If
    nothing says, ask once.
-2. **Read the target (refine).** `tracker: get issue` for the description, before anything
+2. **Read the target (refine).** If the task names a customer, read its note once as context
+   first, per `../../shared/customer-notes.md` "Reading". `tracker: get issue` for the description, before anything
    else touches the tracker. Skim the parent epic and any sibling stories it links;
    cross-AC and cross-ticket contradictions are a recurring failure and cannot be caught
    without the siblings. No tracker connected and destination is the tracker: say so and
