@@ -33,6 +33,9 @@ jobs:
       - name: Test the health scorer
         run: python3 -m unittest plugins/marcketplace/skills/kb-dream/scripts/test_kb_health_score.py
 
+      - name: Test the runtime-reference check
+        run: python3 -m unittest plugins/marcketplace/scripts/test_runtime_refs.py
+
       - name: Line budget check (SKILL.md 150-line cap)
         run: python3 plugins/marcketplace/scripts/line_budget.py --all
       - run: python3 plugins/marcketplace/scripts/check_refs.py

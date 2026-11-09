@@ -1,23 +1,17 @@
 # CI
 
-`validate.yml` is the GitHub Actions workflow for this repo. It lives here rather than in
-`.github/workflows/` because the automation that builds this repo authenticates with a
-token that has no `workflow` scope, so it cannot create or update files under
-`.github/workflows/`.
-
-To enable CI, copy it into place and push from your own machine:
-
-```
-mkdir -p .github/workflows
-cp ci/validate.yml .github/workflows/validate.yml
-git add .github/workflows/validate.yml && git commit -m "ci: enable validation workflow"
-git push
-```
+`validate.yml` is the GitHub Actions workflow for this repo. It is mirrored, byte for byte, in
+`.github/workflows/validate.yml`, which is the copy GitHub runs. Edit both together:
+`diff ci/validate.yml .github/workflows/validate.yml` must print nothing. The copy lives here
+too because the automation that builds this repo authenticates with a token that has no
+`workflow` scope, so it cannot create or update files under `.github/workflows/`; a change made
+here is copied into place from your own machine.
 
 The workflow runs the checks the wave gate runs locally: `scrub_check.py plugins/`,
 `line_budget.py --all`, `check_refs.py` and the unit tests for the SessionStart version
-check (`python3 -m unittest plugins/marcketplace/scripts/test_version_check.py`, offline),
-then installs a pinned Claude Code release and
+check (`python3 -m unittest plugins/marcketplace/scripts/test_version_check.py`, offline) and
+for `runtime_refs.py` (`test_runtime_refs.py`; the script itself needs a local `~/.claude` and is
+a pre-merge step, see `RELEASING.md`), then installs a pinned Claude Code release and
 runs `claude plugin validate --strict .` and `claude plugin test plugins/marcketplace`. The
 tests need no credentials. Type-checking the hooks module stays a local step (see
 `tsconfig.mods.json`), because the declarations it needs are written only when an
