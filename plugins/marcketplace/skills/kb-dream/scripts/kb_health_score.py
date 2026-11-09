@@ -140,8 +140,8 @@ def main():
     # came back unmeasured) keeps the last verdict's number, so the next trend still has a prior.
     # It is carried, not graded: it stays out of `signals` and never moves the overall tag.
     # A carried value expires after CARRY_DAYS so a stale number is never shown as a fresh trend.
-    # `prior_at` stamps each value with when it was last measured; one with no stamp (a prior written
-    # before stamps existed) is carried once and stamped now.
+    # `prior_at` stamps each value with when it was last measured. A prior value with no stamp (written
+    # before stamps existed) is carried and stamped now, so it expires 30 days from this first carry.
     prior_at = d.get("prior_at") or {}
     values_at = {k: now.isoformat() for k in values}
     carried = []

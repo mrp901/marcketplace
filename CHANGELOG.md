@@ -28,7 +28,12 @@ one optional key and the state gains optional keys in `kb-dream`'s shard.
   reaping and within the reads that pass has left (`budgets.kb-dream.customers_per_pass`, default 3);
   the rest wait for the next pass. Resellers and partners are listed for the user's say-so, never
   created. Works the same locally and in the cloud routine (only `kb: search/read/write`; no shell, no
-  per-note state). Never on a health-only run or a quiet exit.
+  per-note state). Never on a health-only run or a quiet exit. Candidates are chosen from the
+  `Customers/index.md` columns (`Aliases`, `Evidence through`) before any note is read, the oldest
+  unread evidence is read first and `evidence_through` is the newest date actually read, the prior
+  note text is copied to the dream recycle folder before a rewrite, and an uncited line in a
+  machine section (hand-typed) is kept and listed in the dream note. To take a note over set
+  `generated.by` to `human:<you>`; to hand it back set it to `kb-dream`.
 - **Readers.** `reply-draft`, `action-list` (list building, `references/i-owe.md`,
   `references/one-to-one-prep.md`), `jira-story` and `idea-spar` read the named customer's note once
   first, as context, resolved through `Customers/index.md` aliases (two extra reads: index, then
@@ -41,6 +46,10 @@ one optional key and the state gains optional keys in `kb-dream`'s shard.
   `cursors.kb-dream.last_health_values_at`, in `kb-dream`'s shard. No migration: an existing
   `Customers/` note is refreshed normally, and a missing `evidence_through` means refresh on its first pass.
 - `skills/kb-dream/scripts/test_kb_health_score.py`, run in CI.
+
+### Operational notes
+- Update the claude.ai plugin and restart Claude Code promptly after merging: the local 10:00
+  health-only job runs the synced copy, and an old copy would keep dropping `learning.confirmed_repeats`.
 
 ### Fixed
 - **A health-only `kb-dream` run no longer drops `learning.confirmed_repeats`.** It adjudicates no

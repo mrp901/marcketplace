@@ -51,7 +51,8 @@ produce.
    behaviour; two entries on one topic that add something new are not. Count the confirmed
    ones. A quiet or health-only run adjudicates nothing and omits `confirmed_repeats`; the
    scorer then carries the prior value forward unchanged (it lists it under `carried`), for
-   at most 30 days since it was last measured, so the next adjudicating run still has something
+   at most 30 days since it was last measured (an unstamped one is stamped now, so it expires 30
+   days from its first carry), so the next adjudicating run still has something
    to trend against and a stale number never passes as a fresh one. It is never graded.
 3. **Score.** Pipe `{metrics, confirmed_repeats, thresholds, prior, prior_at, now}` to
    `../scripts/kb_health_score.py`: `thresholds` from `budgets.kb-dream.health.thresholds`,
