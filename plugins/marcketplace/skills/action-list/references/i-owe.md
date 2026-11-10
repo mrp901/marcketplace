@@ -98,13 +98,13 @@ Two tables, oldest first.
 | Owed to | What you said you'd do | Promised | Age | Link | Row |
 |---|---|---|---|---|---|
 | Ana Reyes | Send the depot-map feedback: "I'll get it to you after lunch" | Wed 14 Oct, 10:12 | 0 bd | [DM](...) | #1 |
-| Ana Chen | Go back to her about the Q2 figures: "I can check about Q2" | Mon 5 Oct, 16:40 | 7 bd | [thread](...) | - |
+| Ana Reyes | Go back to them about the Q2 figures: "I can check about Q2" | Mon 5 Oct, 16:40 | 7 bd | [thread](...) | - |
 
 **Waiting on you** (asked of you, no promise from you)
 
 | From | The ask | Since | Age | Link | Row |
 |---|---|---|---|---|---|
-| Tomasz Nowak | Whether the MTD comparison includes cancelled loads: "he tagged you" | Tue 6 Oct | 6 bd | [FLT-516](...) | - |
+| Tomasz Nowak | Whether the same-weekday comparison includes cancelled loads: "he tagged you" | Tue 6 Oct | 6 bd | [FLT-514](...) | - |
 ```
 
 - **Age** is business days: the weekdays (Mon-Fri, `org.timezone`) after the date up to and

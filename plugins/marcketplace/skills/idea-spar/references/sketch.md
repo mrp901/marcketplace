@@ -43,7 +43,7 @@ How people read UI: they scan for a label they recognise, an affordance (button,
 checkbox) and a number. They don't read sentences in a screen. So:
 
 - **Every label is at most three words**, in the product's own vocabulary from the captures
-  or the ticket ("Air Freight Spend", not "Your Air Freight Spending overview").
+  or the ticket ("Air spend", not "Your air freight spending overview").
 - **No sentences inside a frame.** Helper text, descriptions and explanations are grey
   bars (`text`). If a sentence feels necessary for the option to make sense, the layout is
   wrong; change the layout.

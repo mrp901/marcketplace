@@ -215,7 +215,7 @@ Unit (import the pure module):
 - `guards` budget: call 24 of 25 silent; call 25 returns `note`; call 31 denies
   `slack_send_message` and allows `getJiraIssue`.
 - `lint`: `- [ ] (pr:260922-03) ✉️ draft a reply · <url>` passes; `(pr:prop-calendar)`
-  passes; `(FLT-514/d1a)` passes; `(todo-1)` fails; any string with `\u2014` fails naming
+  passes; `(FLT-512/d1a)` passes; `(todo-1)` fails; any string with `\u2014` fails naming
   the line; an untagged To-do line is ignored.
 - `yaml-lite`: fence extraction from a markdown body and from a storage-format
   `<ac:structured-macro>` body; top-level keys ignore comments and nested keys; 45 KB is

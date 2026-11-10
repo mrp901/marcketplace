@@ -19,7 +19,7 @@ as it would have read, and `action-list` picks it up. Two of the finds above (26
 -4) were to-dos:
 
 ```
-sweep:260922-2  on_board: false  to-do: answer Tomasz on FLT-516 - should the MTD comparison include cancelled loads? (he tagged you) · https://northwindlogistics.atlassian.net/browse/FLT-516
+sweep:260922-2  on_board: false  to-do: answer Tomasz on FLT-514 - should the same-weekday comparison include cancelled loads? (he tagged you) · https://northwindlogistics.atlassian.net/browse/FLT-514
 sweep:260922-4  on_board: false  to-do: send Tomasz the Q4 capacity figures by Friday (you said so in #planning) · https://northwindlogistics.slack.com/archives/CEXAMPLEPLAN001/p1758600002000200
 ```
 

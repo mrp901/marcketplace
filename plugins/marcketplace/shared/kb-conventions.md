@@ -1,6 +1,6 @@
 # Knowledge base conventions
 
-The generic version of `source/session-log/references/vault-conventions.md`. Any skill that reads or writes `profile.kb.*` (session-log, kb-dream, idea-spar, voice calibration) follows this contract. It generalises what the source vault-conventions file documented as instance-specific observation into rules any knowledge base of kind `obsidian_typed | plain_markdown | notion | confluence` can follow.
+Any skill that reads or writes `profile.kb.*` (session-log, kb-dream, idea-spar, voice calibration) follows this contract: rules any knowledge base of kind `obsidian_typed | plain_markdown | notion | confluence` can follow. Any `kb.kind` beginning `obsidian_` is read as `obsidian_typed`.
 
 ## The knowledge base as a concept
 
@@ -21,7 +21,7 @@ Every note in the knowledge base carries all six of `profile.kb.frontmatter_requ
 | `status` | The note's own lifecycle state (`draft`, `stable`, etc. - vocabulary is kb-local). **Default for any machine-written note: `draft`.** Nothing a skill writes has been reviewed by a human yet, so no skill promotes its own output past `draft`; only the user does |
 | `generated` | `{ by: <actor>, at: <ISO 8601> }` - `at` is the current time in `org.timezone` with its offset, never a UTC date or a placeholder midnight; see provenance below |
 
-**`generated` versus `verified` - the provenance semantics.** `generated.by` names whichever actor last changed the note's *content* - not who first wrote it. When a machine edits a note whose `generated.by` was a human, `generated` updates to the machine and the current timestamp; `generated.at` postdating `verified.at` is legal and honest, and TFM treats the two fields as independent by design. **A machine never edits the substance or the voice of human-verified content.** `verified: { by: human:<user> }` marks a real human review; a machine that edits a `verified` note's substance or its prose voice is overruling that review silently, which this contract forbids outright - the machine may only touch mechanical conformance (frontmatter shape, link repair, index entries) on a verified note, and even then must say so rather than silently updating `generated`. Never delete `verified` (it erases a real review) and never bump its date to make it look re-confirmed (it fabricates one). A machine-authored note (no human review yet) never carries `verified` at all - writing one would claim a machine-confirmed trust tier the kb has never used.
+**`generated` versus `verified` - the provenance semantics.** `generated.by` names whichever actor last changed the note's *content* - not who first wrote it. When a machine edits a note whose `generated.by` was a human, `generated` updates to the machine and the current timestamp; `generated.at` postdating `verified.at` is legal and honest, and the typed-frontmatter convention treats the two fields as independent by design. **A machine never edits the substance or the voice of human-verified content.** `verified: { by: human:<user> }` marks a real human review; a machine that edits a `verified` note's substance or its prose voice is overruling that review silently, which this contract forbids outright - the machine may only touch mechanical conformance (frontmatter shape, link repair, index entries) on a verified note, and even then must say so rather than silently updating `generated`. Never delete `verified` (it erases a real review) and never bump its date to make it look re-confirmed (it fabricates one). A machine-authored note (no human review yet) never carries `verified` at all - writing one would claim a machine-confirmed trust tier the kb has never used.
 
 ## The type registry and its single authority
 
@@ -33,7 +33,7 @@ The cautionary tale this rule exists to prevent, from the source: `session-log` 
 
 `profile.kb.link_style` is `relative_markdown` or `wikilink`, and it governs every link a skill writes into the kb:
 
-- **`relative_markdown`** - `[week one retro](../Onboarding/first-week-notes.md)`. Labels are readable prose, not filenames. Never an absolute `/path` - legal in most kb formats but resolved unreliably by local tooling (Obsidian included). Broken links are fine: a link to a note that doesn't exist yet is a forward reference to not-yet-written knowledge, not an error to delete or "tidy up".
+- **`relative_markdown`** - `[first week notes](../Onboarding/first-week-notes.md)`. Labels are readable prose, not filenames. Never an absolute `/path` - legal in most kb formats but resolved unreliably by local tooling (Obsidian included). Broken links are fine: a link to a note that doesn't exist yet is a forward reference to not-yet-written knowledge, not an error to delete or "tidy up".
 - **`wikilink`** - `[[Note Title]]` form, used only where `profile.kb.link_style` is explicitly set to it. Where the kb's own tooling treats wikilinks as native (Obsidian) but the kb is also read by anything that doesn't resolve them (a plain markdown viewer, an export pipeline), `relative_markdown` is the safer default and onboarding should say so when the choice is ambiguous.
 
 Whichever style is configured, apply it consistently across every note a skill writes in one run - never mix styles within a single note or a single skill's output.
@@ -51,7 +51,7 @@ Where the kb's connector is full-replace rather than append (a SharePoint/OneDri
 
 ## Dated file naming
 
-Any note anchored to a specific date or run - a session note, a dream note, an action sweep - is named `YYYY-MM-DD-short-slug.md` inside its owning folder. ISO date first so the folder sorts chronologically for free; kebab-case; no spaces. The slug names the *substance*, not the medium or the mechanism (`2026-08-24-vault-tfm-migration.md`, never `2026-08-24-claude-session.md`). If a file already exists for that date and the new content is a genuinely separate occasion (not a continuation of the same run), add a distinguishing slug rather than overwriting; a same-day re-run of the same mechanical process (an action sweep, for instance) does overwrite rather than duplicate - each skill's own contract says which case applies.
+Any note anchored to a specific date or run - a session note, a dream note, an action sweep - is named `YYYY-MM-DD-short-slug.md` inside its owning folder. ISO date first so the folder sorts chronologically for free; kebab-case; no spaces. The slug names the *substance*, not the medium or the mechanism (`2026-08-24-kb-typed-migration.md`, never `2026-08-24-claude-session.md`). If a file already exists for that date and the new content is a genuinely separate occasion (not a continuation of the same run), add a distinguishing slug rather than overwriting; a same-day re-run of the same mechanical process (an action sweep, for instance) does overwrite rather than duplicate - each skill's own contract says which case applies.
 
 ## `.utility/` is tooling space, not content
 

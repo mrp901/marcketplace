@@ -1,5 +1,13 @@
 # kb-dream - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-10 neutral channel field (1.14.0)
+
+`customer.reseller` became `customer.via` (the partner or channel a customer buys through) so the
+contract carries no sector-specific word. The old key stays readable as an alias, `via` wins when
+both are present, and this skill rewrites a legacy key to `via` on the next refresh of a note it
+owns (a human-owned note is left as written). The "never auto-create a reseller" rule is now
+"never auto-create a channel partner". No state change.
+
 ## 2026-11-09 refresh customer notes; carry unmeasured health values (1.13.0)
 
 Customer context sat scattered across meeting notes, memory entries, drafts and session logs, and
@@ -13,13 +21,13 @@ first and wins, and a source that conflicts with it is raised once as a question
 neither side. A note whose `generated.by` is a human is append-only. Each note keeps its own
 refresh clock (`customer.evidence_through`), so there is no per-note state and the 1.12.0 shard
 rewrite is harmless; stalest first, capped per pass. The step runs after draft reaping and uses
-the reads left over; a monthly full pass has the room to catch up. Resellers are never created
-automatically. Readers resolve a named customer through `Customers/index.md` aliases (+2 reads).
+the reads left over; a monthly full pass has the room to catch up. Channel partners are never
+created automatically. Readers resolve a named customer through `Customers/index.md` aliases (+2 reads).
 Never on a health-only run.
 `SKILL.md` was at the 150-line cap, so the step is one line and the detail is
 `references/customer-notes.md`.
 Bug fixed alongside: a health-only run dropped `learning.confirmed_repeats` from
-`last_health_values` (seen 9 Nov 2026), because that run adjudicates no repeats and the scorer
+`last_health_values` (seen once), because that run adjudicates no repeats and the scorer
 only kept what it measured. `kb_health_score.py` now carries any unmeasured prior value forward
 (`carried`, not graded, at most 30 days, dated in `last_health_values_at`); `scripts/test_kb_health_score.py` covers it.
 ## 2026-11-04 tick effects on `dream:` lines (1.12.0)
@@ -36,7 +44,7 @@ first run under 1.12.0 it backfills the effect on its own old untouched `dream:`
 
 ## 2026-11-03 fold vault-pulse in, cut follow-up escalation, state the purpose (1.11.0)
 
-Usage evidence (Oct-Nov 2026): the user works in attended sessions, not by ticking the board,
+Usage evidence: the user works in attended sessions, not by ticking the board,
 `vault-pulse` scored red five runs on one number with no action, and the "settle the follow-up
 open N dreams" escalation was the main source of board bloat. The user's stated goal for this
 skill: "I just want to keep a second brain as a first port of call for the AI harness I use."
@@ -48,7 +56,7 @@ skill: "I just want to keep a second brain as a first port of call for the AI ha
   `cursors.kb-dream.open_followups` ledger are gone. Pass 5 still lists the open follow-ups it
   sees in the session notes it reads, once, in Flags; nothing carries them across dreams and
   nothing becomes a `dream:` line. Lines the old rule already wrote still settle (`## Handler
-  mode`) and expire (1.10.4). The 10 Sep rationale below (chronic follow-ups never reached the
+  mode`) and expire (1.10.4). The earlier rationale below (chronic follow-ups never reached the
   user) is superseded: a follow-up that matters lives in its session note and the user's own
   list, not on a board line this skill re-raises.
 - **`vault-pulse` folded in as flow step 10**, `references/kb-health.md`, two ported scripts
@@ -64,16 +72,15 @@ skill: "I just want to keep a second brain as a first port of call for the AI ha
   routine, so on its own it never measures: the `health` argument (`/marcketplace:kb-dream
   health ...`) runs only the verdict, for the local scheduler `vault-pulse` used to have. A quiet run still measures: stalled capture is what a quiet
   dream sees, and the scripts cost no connector reads.
-- **Carried from the retired `vault-pulse` HISTORY** (13 Oct 2026, scheduling 16 Oct, session
-  count fix 26 Oct): every earlier silent failure was found by an audit, not an alert (the
-  SessionEnd hook broken until 7 Oct, about six sessions never captured, 39 ledger pairs
-  unpromoted for nine days, a monthly review failing unattended); behaviour beats hygiene as a
+- **Carried from the retired `vault-pulse` HISTORY:** every earlier silent failure was found by
+  an audit, not an alert (a SessionEnd hook broken for days with sessions never captured, ledger
+  pairs left unpromoted, a monthly review failing unattended); behaviour beats hygiene as a
   signal (links in, lookups, repeat corrections); numbers come from scripts, never a model
   impression; a signal that cannot be measured is never green; "substantive" is defined once,
   in `pending_sessions.py`; `capture.pending` counts sessions, not files. Rejected
   then and now: a model judging "usefulness" of notes, and a dashboard note in the bundle.
-  First reading on the vault it was built for (13 Oct): amber on 2 unarchived sessions,
-  17 open follow-ups and a 38-day Inbox item; green on reuse 64% and consultation 78%.
+  The first reading on a real knowledge base was amber on a few unarchived sessions, open
+  follow-ups and an old Inbox item, and green on reuse and consultation.
 
 ## 2026-11-03 name the shard seed in the state write (1.10.3)
 
@@ -83,12 +90,12 @@ across and briefing's 1.6.0 migration deferred every run. Step 11 now says the w
 first, per `state-schema.md` "Shards".
 
 - 1.10.2: pass 1 also fills missing frontmatter on inbox notes it leaves in place (`fold-261002-1`).
-  The user's standing instruction (`pr:260927-2`, 30 Sep) was to always fill YAML into inbox files
+  The user's standing instruction was to always fill YAML into inbox files
   that lack it, but pass 1 only filled it when filing, so ambiguous inbox notes stayed bare. The
-  edit is the one the 2 Oct dream drafted; it stays inside pass 1's act rule (mechanical, reversible,
+  edit is the one a dream pass drafted; it stays inside pass 1's act rule (mechanical, reversible,
   never a `verified` note) and leaves filename, body and location alone.
 
-Carried from `source/vault-dream/HISTORY.md`, generalised past the one vault it names:
+Carried from `source/vault-dream/HISTORY.md`, generalised past the one knowledge base it names:
 
 - Modelled on the idea of a periodic "dream" over a knowledge base - read the recent past
   and the accumulated whole, hand back a merged, de-contradicted, correctly filed version.
@@ -322,7 +329,7 @@ A capture audit found a week of the user's voice corrections stranded: four ledg
 in this skill's text:
 
 - **The review could not run unattended.** Its first step re-sampled chat and mail, which
-  is calibration and forbidden unattended, so the vault-only part - promoting from the
+  is calibration and forbidden unattended, so the knowledge-base-only part - promoting from the
   ledger - never ran either. Split into Part A (ledger promotion, every non-quiet dream,
   knowledge-base reads only) and Part B (re-sample, attended).
 - **A failed month waited for the next month.** The trigger was "first full dream of the
@@ -345,7 +352,7 @@ memory, so preferences about the user's writing stop landing where nothing steer
 
 After the 1.3.0 shards, `items` and `outcomes` still sat in a 27 KB main state page, so
 every run that posted a board line had to re-type all of it through a full-body-replace
-connector. Runs judged that too risky and skipped it (four unattended runs, 10-12 Oct),
+connector. Runs judged that too risky and skipped it (several unattended runs),
 freezing the ledger the hub reads ticks against. Its `dream:` items live in its own shard,
 pruned of tags in briefing's `closed`. Its voice-settle verdict on a `reply-draft` or
 `kb-note` entry goes into its own shard's `voice_verdicts` rather than onto the other
@@ -356,19 +363,17 @@ by the hub, which owns `suppressions`. The registry review reads `tally`, `outco
 
 ## 2026-10-19 write targeting, clock stamps, pending count (1.9.1)
 
-A skill-eval on a red health check (18 Oct) found three corrections across the 15 and 16 Oct
-dreams. Voice promotion and follow-up escalation, which the same check credited, are untouched.
+A skill-eval on a red health check found three corrections across two dream runs. Voice promotion and follow-up escalation, which the same check credited, are untouched.
 
-- **A root `index.md` was overwritten.** The 15 Oct run took an item id from a folder listing,
+- **A root `index.md` was overwritten.** One run took an item id from a folder listing,
   wrote `log.md` text through it onto the root `index.md`, and had never read that file, so it
   could only leave a placeholder and ask for a Version History restore. The same wrong-target
-  shape put log text into an archive file on 11 Sep. The skill had no rule against touching the
+  shape put log text into an archive file once before. The skill had no rule against touching the
   root index (that ground rule belongs to `skill-health-check`, not this skill) and needs none,
   since it writes folder indexes every run. The fix is at the cause: a ground rule that a
   full-replace write takes its target from a path lookup and never replaces a file the run
   has not read.
-- **`generated.at` ran ahead of the clock** on four runs (16 Oct by 2 to 4 minutes, 19 Oct by
-  one), each a round, planned time typed instead of read. Step 1 read the clock once at
+- **`generated.at` ran ahead of the clock** on four runs (by 1 to 4 minutes), each a round, planned time typed instead of read. Step 1 read the clock once at
   wake-up; it now reads it again for every stamp.
 - **"10 pending sessions" where there were 5.** Step 2 named no unit, and the queue holds a
   `.meta.json` sidecar beside each `.jsonl` transcript. It now counts transcripts.
@@ -376,7 +381,7 @@ dreams. Voice promotion and follow-up escalation, which the same check credited,
 ## 2026-10-26 a write rule the connector can meet (1.10.0)
 
 1.9.1 said to take an item id "from a lookup of the target path". The SharePoint connector's
-path read returns the file's text and no id, so the rule could never be met, and the 24 Oct
+path read returns the file's text and no id, so the rule could never be met, and a
 run skipped its `log.md` line for exactly that reason; any run with real changes would have
 deferred every log line. The rule now names two routes the connector does have: write by
 name into the target's folder (replace on conflict), or use an id only after reading that id

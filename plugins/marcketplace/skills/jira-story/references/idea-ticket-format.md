@@ -3,8 +3,8 @@
 ## Structure
 
 **Title:** `<profile.org.product_tag> <short, concrete problem statement>` - describes the
-problem, not the fix (e.g. `[Cloud] Prior-month comparison should be same-weekday, not
-full month`, not `[Cloud] Fix MTD bug`).
+problem, not the fix (e.g. `[Freight] Delivery-time chart should compare the same weekdays, not
+whole weeks`, not `[Freight] Fix chart bug`).
 
 **Context** - What's happening, why it's wrong or confusing, and who it misleads. Ground it
 in the real screen details from idea step 1, and in the product's own vocabulary - name the
@@ -13,8 +13,8 @@ finish this section knowing exactly what's wrong.
 
 Write it the way the user talks. Present tense, concrete nouns, direct statements of fact:
 
-> In Road and Rail we don't have daily data, but for Cloud we do. So the Air Freight Spend tile
-> comparing month-to-date against the *whole* of last month is comparing 12 days to 31.
+> The Air Delivery Time chart compares this week so far against the *whole* of last week, so
+> on a Wednesday it is comparing 3 days to 7.
 
 Not:
 
@@ -33,16 +33,17 @@ different part changes. Let the contrast do the work.
 
 Good - the difference jumps out because nothing else moved:
 
-> - **Compare MTD to the same days of the previous month** (1-12 Sep vs 1-12 Aug).
+> - **Compare this week's days so far to the same weekdays of last week** (Mon-Wed vs
+>   Mon-Wed).
 > - **Add a full date range picker** and then compare the range to the equivalent previous
 >   range.
-> - **Keep the current comparison** and just label it "vs full previous month" so it isn't
+> - **Keep the current comparison** and just label it "vs whole of last week" so it isn't
 >   misread.
 
 Bad - same three ideas, but each is pitched at a different altitude, so the reader has to
 work out whether option 2 is even a different thing from option 1:
 
-> - Compare MTD to the same days of the previous month.
+> - Compare this week's days so far to the same weekdays of last week.
 > - Introduce a more flexible period-selection model that gives users control over the
 >   comparison basis.
 > - Labelling change.
@@ -59,7 +60,7 @@ Rules for this section:
   thorough.
 
 **Open Questions** - Real unresolved scoping decisions only, asked as questions about scope
-("does this affect the forecast widget or just MTD?"), never as risks or blockers ("Risk:
+("does this affect the forecast widget or just the delivery-time chart?"), never as risks or blockers ("Risk:
 billing-cycle misalignment may block implementation" is not the register). Omit the heading
 entirely if there genuinely aren't any - a forced Open Questions section reads as filler.
 

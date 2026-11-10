@@ -1,5 +1,9 @@
 # idea-spar - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-10 neutral sketch example (1.14.0)
+
+The sketch label example is a fictional air-freight spend tile. No behaviour change.
+
 ## 2026-11-09 read the customer's note first (1.13.0)
 
 An idea that names a customer has its living note read first and counted as one of the `kb_reads`
@@ -62,7 +66,7 @@ Design choices that follow:
 
 Carried over from the retired skills, because each rule exists for a reason:
 
-- The qualifying gate and its "no flag-and-proceed" stance (idea-scout, 29 Aug 2026: two
+- The qualifying gate and its "no flag-and-proceed" stance (idea-scout: two
   off-domain picks; a flagged off-domain note still costs a read). Applied only to the Next
   watch. Roadmap remains the trigger, never a qualifier.
 - Captures before drawing (idea-wireframe: a drawn nav rail that didn't exist and a shipped
@@ -85,7 +89,7 @@ The state page passed 49 KB and a full-body-replace write became unsafe to re-ty
 
 After the 1.3.0 shards, `items` and `outcomes` still sat in a 27 KB main state page, so
 every run that posted a board line had to re-type all of it through a full-body-replace
-connector. Runs judged that too risky and skipped it (four unattended runs, 10-12 Oct),
+connector. Runs judged that too risky and skipped it (several unattended runs),
 freezing the ledger the hub reads ticks against. Its `<key>/d…` items live in its own
 shard, pruned of tags in briefing's `closed` on each write. See `shared/state-schema.md`,
 "Shards".

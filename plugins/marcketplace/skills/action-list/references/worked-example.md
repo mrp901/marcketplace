@@ -1,7 +1,7 @@
 # Worked example
 
 Against `profiles/example.md`: Priya Kanth, Product Manager at Northwind Logistics,
-tracker project FLT, kb "Northwind Ops Vault". Fictional throughout.
+tracker project FLT, kb "Northwind Ops Notes". Fictional throughout.
 
 ## build
 
@@ -64,7 +64,7 @@ note, `Drafts/2026-10-15-0852-tomasz-1on1-prep.md`, is one screen:
 
 - **You owe him:** the FLT-1188 scope answer (promised 9 Oct, 4 bd), quoted.
 - **He owes you:** the carrier-export sample, "I'll send you one Monday" (12 Oct, 3 bd).
-- **His open asks:** whether the MTD comparison includes cancelled loads (FLT-516, 2 bd).
+- **His open asks:** whether the same-weekday comparison includes cancelled loads (FLT-514, 2 bd).
 - **Carried from 7 Oct:** "agree an owner for the dock-sync notes", still open.
 - **Recurring:** in three of the last four meetings, who owns the multi-yard scope call,
   each time left with Ana. Marked unresolved.

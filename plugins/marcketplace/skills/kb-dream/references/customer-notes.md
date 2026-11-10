@@ -46,8 +46,9 @@ losing it costs one wider search, never a wrong write.
    with 2 or more notes naming it in tags or title, counted from search hits with no extra reads
    and **excluding notes under `kb.paths.customers`**. Resolve it against `kb.people_file` and
    `known_fact_errors` first: two spellings of one customer are one. A name that appears as
-   another note's `customer.reseller`, or as a reseller in the external-parties note, is never
-   created: list it in the dream note's `Surfaced` as `<name> looks like a reseller; create a
+   another note's `customer.via` (or legacy `customer.reseller`), or as a channel partner or
+   reseller in the external-parties note, is never
+   created: list it in the dream note's `Surfaced` as `<name> looks like a channel partner; create a
    note?` for the user's say-so. A doubtful identity is a line in the dream note, not a note.
 3. **Order and budget.** Existing candidates first, **stalest `evidence_through` first**, then new
    customers newest evidence first. Each costs at most 1 read of its note, 4 evidence reads and
@@ -79,7 +80,10 @@ losing it costs one wider search, never a wrong write.
    - Rewrite sections 1 to 4 (each keeps its ownership comment), append Timeline lines for
      evidence not yet there (newest first, never rewriting an existing line), add Sources and
      aliases seen, set `customer.evidence_through` to the newest date **actually read**, never
-     the newest found (the rest is picked up next pass), and `last_contact` if later. The user's notes section stays byte-for-byte. A promise leaves Open
+     the newest found (the rest is picked up next pass), and `last_contact` if later. The
+     channel field is `customer.via`: when a note still carries the legacy `customer.reseller`,
+     rewrite it as `via` with the same value on this refresh (machine frontmatter; a note taken
+     over by a human is append-only, so its key is left as written and read as an alias). The user's notes section stays byte-for-byte. A promise leaves Open
      promises only on evidence it was kept. Cite each claim; a claim with no source is dropped,
      not guessed. `[TBC: ...]` for a fact the sources do not settle. Names against
      `kb.people_file` and `people_confusions`.
@@ -111,7 +115,7 @@ The dream note's `What I curated` gets one row per customer note (`Create` or `U
 
 ## Linking a new note in
 
-A new note needs one inbound link besides its index row, but the vault's precedence rule limits
+A new note needs one inbound link besides its index row, but the knowledge base's precedence rule limits
 where it may go. Add a one-line pointer only to a note that is machine-authored
 (`generated.by` is an agent), to a folder `index.md` (for example the product's index) or to the
 knowledge base's people-and-organisations note, as a pointer entry and nothing more. **Never

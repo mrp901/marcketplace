@@ -17,7 +17,12 @@ Without a denylist the check still runs on the built-in shapes and says so in it
 output. CI can supply the denylist from a secret (see ci/validate.yml).
 
 Modes:
-  scrub_check.py <path...>       walk paths, print FAIL/WARN hits, exit 1 on any FAIL
+  scrub_check.py <path...>       scan paths, print FAIL/WARN hits, exit 1 on any FAIL. A directory inside
+                                 a git work tree is scanned by `git ls-files` (tracked files only), and
+                                 a tracked path under .claude/ or named *.local.* is itself a FAIL;
+                                 outside git the filesystem is walked.
+  --require-denylist             with a scan: exit 2 if no denylist was loaded (a built-in-shapes-only
+                                 run is not a pass; CI and the release checklist use this)
   scrub_check.py --report <file> print every hit in one file grouped by pattern, exit 0 always
   scrub_check.py --list-patterns print the pattern table (built-in plus denylist) and exit 0
 
@@ -26,12 +31,15 @@ stdlib only, no third-party dependencies.
 
 import os
 import re
+import subprocess
 import sys
 
 EM_DASH = chr(0x2014)
 
 # Directories skipped while walking a path.
-SKIP_DIRS = {".git", "source", "profiles", "__pycache__"}
+# `.claude` holds local worktrees and scratch, never shipped content. `profiles/` IS scanned:
+# its committed example is shipped, and a real profile is `*.local.md` (skipped below).
+SKIP_DIRS = {".git", "node_modules", ".claude", "__pycache__"}
 
 # The TypeScript declarations Claude Code writes beside a plugin it loads with
 # --plugin-dir (.claude-plugin/types/). They are the engine's, not this repo's,
@@ -41,7 +49,10 @@ SKIP_DIR_PAIRS = {(".claude-plugin", "types")}
 
 # Skipped when walking: this script (the pattern table below necessarily contains the
 # shapes it looks for) and the denylist files (which hold the literals themselves).
-SKIP_BASENAMES = {"scrub_check.py", "scrub_denylist.local.txt", "scrub_denylist.example.txt"}
+SKIP_BASENAMES = {"scrub_check.py", "scrub_denylist.local.txt"}
+
+# Private-by-convention files (`profiles/<org>.local.md`, `*.local.txt`, ...) are never committed.
+LOCAL_FILE_RE = re.compile(r"\.local\.")
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_ALLOWLIST = os.path.join(HERE, "scrub_allowlist.txt")
@@ -65,6 +76,7 @@ PATTERNS = [
     ("service-url", r"https?://[a-z0-9-]+\.(slack|atlassian)\.com", "WARN", True),
     ("onedrive-path", r"OneDrive - [A-Za-z][A-Za-z0-9 ]*", "WARN", False),
     ("tracker-custom-field", r"cf\[\d+\]|customfield_\d+", "WARN", False),
+    ("wiki-page-id", r"(?:pages?/|page ids?[ :=]+|pageId[ :=]+|confluence:[^/\s]+/)\d{9,10}\b", "WARN", True),
 ]
 
 # Special-cased WARN: two capitalised words on a line that also mentions
@@ -149,10 +161,50 @@ def load_allowlist(path):
     return allowed
 
 
+def _git(args, cwd):
+    try:
+        r = subprocess.run(["git"] + args, cwd=cwd, capture_output=True, check=False)
+    except (OSError, ValueError):
+        return None
+    return r.stdout.decode("utf-8", "replace") if r.returncode == 0 else None
+
+
+def tracked_files(p):
+    """For a directory inside a git work tree: [(path_to_scan, path_from_repo_root)] for every
+    tracked file under it. None when p is not in a work tree (or git is unavailable)."""
+    if not os.path.isdir(p) or _git(["rev-parse", "--is-inside-work-tree"], p) is None:
+        return None
+    top = (_git(["rev-parse", "--show-toplevel"], p) or "").strip()
+    listed = _git(["ls-files", "-z", "--full-name"], p)
+    if not top or listed is None:
+        return None
+    out = []
+    for full in filter(None, listed.split("\0")):
+        abs_path = os.path.join(top, full)
+        if os.path.isfile(abs_path):
+            out.append((os.path.join(p, os.path.relpath(abs_path, p)), full))
+    return out
+
+
+def private_tracked_path(full):
+    """True for a tracked path that must never be committed: under .claude/ or named *.local.*."""
+    parts = full.replace("\\", "/").split("/")
+    return ".claude" in parts[:-1] or any(LOCAL_FILE_RE.search(x) for x in parts)
+
+
 def iter_files(paths):
     for p in paths:
+        tracked = tracked_files(p)
+        if tracked is not None:
+            for path, full in tracked:
+                if private_tracked_path(full):
+                    continue  # reported as a FAIL by tracked_violations, never read
+                if os.path.basename(path) in SKIP_BASENAMES:
+                    continue
+                yield path
+            continue
         if os.path.isfile(p):
-            if os.path.basename(p) in SKIP_BASENAMES:
+            if os.path.basename(p) in SKIP_BASENAMES or LOCAL_FILE_RE.search(os.path.basename(p)):
                 continue
             yield p
         elif os.path.isdir(p):
@@ -163,7 +215,7 @@ def iter_files(paths):
                     if d not in SKIP_DIRS and (parent, d) not in SKIP_DIR_PAIRS
                 ]
                 for fname in files:
-                    if fname in SKIP_BASENAMES:
+                    if fname in SKIP_BASENAMES or LOCAL_FILE_RE.search(fname):
                         continue
                     yield os.path.join(root, fname)
 
@@ -190,13 +242,27 @@ def scan_file(path, patterns, allowlist):
                 yield (i, "name-pair-on-people-line", "WARN", text)
 
 
-def mode_scan(paths):
+def mode_scan(paths, require_denylist=False):
     extra, status = resolve_denylist()
+    if require_denylist and not extra:
+        print(status)
+        print(
+            f"error: --require-denylist set but no denylist patterns loaded. Set {DENYLIST_ENV} "
+            "to a denylist file (or add scrub_denylist.local.txt beside this script); a scan on "
+            "built-in shapes alone is not a pass.",
+            file=sys.stderr,
+        )
+        return 2
     patterns = compiled_patterns(extra)
     allowlist = load_allowlist(DEFAULT_ALLOWLIST)
     print(status)
     fail_count = 0
     warn_count = 0
+    for p in paths:
+        for path, full in tracked_files(p) or []:
+            if private_tracked_path(full):
+                print(f"FAIL {path}: tracked-private-path: a tracked file under .claude/ or named *.local.*")
+                fail_count += 1
     for path in sorted(iter_files(paths)):
         for line_no, name, severity, text in scan_file(path, patterns, allowlist):
             print(f"{severity} {path}:{line_no}: {name}: {text}")
@@ -253,7 +319,12 @@ def main(argv):
             print("usage: scrub_check.py --report <file>")
             return 1
         return mode_report(argv[1])
-    return mode_scan(argv)
+    require = "--require-denylist" in argv
+    paths = [a for a in argv if a != "--require-denylist"]
+    if not paths:
+        print("usage: scrub_check.py <path...> [--require-denylist]")
+        return 1
+    return mode_scan(paths, require)
 
 
 if __name__ == "__main__":

@@ -6,13 +6,48 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.14.0] - 2026-11-10
+
+The scrub check is now enforced: it covers the whole repository including `profiles/`, and it
+fails rather than passing on built-in shapes alone when no denylist is loaded. Worked examples use
+the fictional Northwind Logistics throughout. No state migration; two renames keep their old
+spelling as an alias.
+
 ### Added
+- `scrub_check.py --require-denylist`: exits 2 when no denylist loaded, so a run on built-in
+  shapes alone is never a pass. CI uses it. A built-in WARN for bare 9-10 digit wiki page ids.
+- `scripts/test_scrub_check.py` (stdlib, offline): the exit-2 rule, a denylist hit failing,
+  `profiles/` scanned, `.claude/`, `.git`, `node_modules`, `*.local.*` and the denylist files
+  skipped. Runs in CI.
 - `RELEASING.md`, a runtime checklist every PR answers before merge (cloud routines, synced copy,
   local scripts and tasks, profile and state, existing content, rollback), and
   `.github/pull_request_template.md` carrying it.
 - `scripts/runtime_refs.py` (read-only, stdlib): lists the skills, profile keys and env vars a
   diff removes and greps `~/.claude/scripts`, `settings.json` and `skills` for them. Unit test
-  `test_runtime_refs.py` runs in CI. No plugin behaviour change and no version bump.
+  `test_runtime_refs.py` runs in CI.
+
+### Changed
+- **Scrub scope.** CI, `RELEASING.md`, `PORTING.md` and the README run `scrub_check.py .
+  --require-denylist` over the whole repository, not `plugins/` alone, and `profiles/` is no
+  longer skipped. The PR template asks for the `denylist: <path> (N patterns)` line.
+- **`customer.via`** replaces `customer.reseller` as the field naming the partner or channel a
+  customer buys through. Every reader accepts either key (`via` wins); `kb-dream` writes only
+  `via` and renames a legacy key when it refreshes the note. A channel partner is never
+  auto-created as a customer note.
+- **`kb.kind: obsidian_typed`** names a markdown-folder knowledge base. Any `kb.kind` beginning
+  `obsidian_` is read as `obsidian_typed`, so an existing profile needs no edit.
+- Worked examples, eval personas and rubric text use Northwind Logistics (freight, routing,
+  telematics, billing); ticket keys are `FLT-` / `FIG-`. Runtime text says "knowledge base"
+  for the user's own notes store.
+- `kb_health_metrics.py`: the default `--lookup-pattern` is now `(?i)vault|knowledge|(^|__)kb[-_]`
+  (pin your own with `budgets.kb-dream.health.lookup_pattern`), and the folders it leaves out of
+  the reuse count are the `--inbox` and `--dreams` folders it is given, plus `.utility`, `.obsidian`,
+  `.git` and `node_modules`.
+- CHANGELOG and HISTORY wording is kept general; the technical substance is unchanged.
+
+### Removed
+- The porting-provenance table in `shared/profile-schema.md` (porting is done; `PORTING.md`
+  keeps the procedure) and the source-skill citation in `shared/kb-conventions.md`.
 
 ## [1.13.0] - 2026-11-09
 
@@ -71,8 +106,8 @@ The board is for decisions, and every line says what its tick does. The owner wo
 sessions and through `action-list`, rarely from the board, and "is forever forgetting what a tick
 will do"; the board had grown to about 200 lines, with real decisions mixed in among plain
 to-dos whose tick dispatched nothing. The plugin's three runtimes also drift apart (cloud
-routines run `main`, claude.ai's copy updates on its own, the locally synced copy lagged two
-releases on 3 Nov unnoticed), and promises the owner made to people were easy to lose. Nothing is
+routines run `main`, claude.ai's copy updates on its own, the locally synced copy could lag
+releases unnoticed), and promises the user made to people were easy to lose. Nothing is
 added to the profile; the state gains optional keys and one migration row.
 
 ### Added
@@ -136,7 +171,7 @@ added to the profile; the state gains optional keys and one migration row.
 Three skills and one router step are removed, following the usage evidence of Oct-Nov 2026: the
 user works in attended sessions and through `action-list` and `action-sweep`, not by emoji-reacting
 in Slack or ticking the board. `vault-pulse` scored red five runs on one number with no action,
-`idea-ticket` had not run since 28 Sep, `kb-note` had four runs in total, and `kb-dream`'s
+`idea-ticket` rarely ran, `kb-note` had almost no runs, and `kb-dream`'s
 follow-up escalation was the main source of board bloat. Fifteen skills become twelve. Nothing is
 added to the profile or the main state document; keys are retired (profile) and a migration row is
 added (state).
@@ -200,7 +235,7 @@ added (state).
 ## [1.10.4] - 2026-11-03
 
 A line whose latest sub-line was `partial`, `blocked` or a router `queued` note stayed open for
-ever (lines from 24 Sep were still open on 3 Nov). State shape is unchanged; one optional
+ever (lines weeks old were still open). State shape is unchanged; one optional
 profile key is new.
 
 ### Added
@@ -239,7 +274,7 @@ From a skill-health-check run. State shape is unchanged; one optional budget key
 
 ## [1.10.2] - 2026-11-02
 
-From the 2 Nov 2026 queue drain (a Teams recording transcribed, then three queued sessions written
+From a queue drain (a Teams recording transcribed, then queued sessions written
 up) and the open `kb-dream` fold. Nothing here changes state.
 
 ### Fixed
@@ -249,7 +284,7 @@ up) and the open `kb-dream` fold. Nothing here changes state.
   `assess` now counts both. SessionEnd had no coverage check at all: it now runs the same
   `assess` and, when a session-log run covers everything substantive, archives straight to
   `archive/` (sidecar `covered_by`) instead of `pending/`. Unsure still queues it. Two of three
-  sessions drained on 2 Nov were already covered.
+  sessions in one drain were already covered.
 - `skills/session-log` (`SKILL.md`, `references/pending-sessions.md`): `python3` can be the
   Windows Store stub ("Python was not found"), so the read-transcript commands failed on that
   machine. They now probe as the hooks do (`P=python3; $P -c '' 2>/dev/null || P=python`).
@@ -262,11 +297,11 @@ up) and the open `kb-dream` fold. Nothing here changes state.
   file-write tool, not a shell heredoc (apostrophes broke the heredoc in two runs); the tool's own
   label between batch results is named and stripped; each batch is checked by prefix checksum at
   every 950-character boundary as well as by length, which finds the bad slice (a 4-character
-  error on 2 Nov); Step 4 says the page can lose `window.__TX` mid-run and a re-harvest rebuilds
+  error in one batch); Step 4 says the page can lose `window.__TX` mid-run and a re-harvest rebuilds
   the same text.
 - `skills/kb-dream/references/curation-passes.md` pass 1: also fill missing
   `kb.frontmatter_required` keys on every other inbox note, never a `verified` one. This is
-  `fold-261002-1`, drafted in the 2 Oct dream from the user's standing instruction (`pr:260927-2`).
+  `fold-261002-1`, drafted by a `kb-dream` pass from the user's standing instruction.
 
 ## [1.10.1] - 2026-10-26
 
@@ -279,13 +314,13 @@ board (`dream:260115-4`, `dream:260126-1`).
   an intermediate paste, and the entry names it. Can't read it: a `Said:` item or nothing.
 - `skills/transcript/SKILL.md` Step 5: after each batch the file's character count must equal
   `min(chars, 8550 * batches)`; a shortfall is re-pulled by offset and patched. A Haiku subagent
-  dropped 16 characters on 8 Oct that the timestamp check missed. The heredoc's trailing
+  dropped 16 characters that the timestamp check missed. The heredoc's trailing
   newline per append is named as a defect.
 
 ## [1.10.0] - 2026-10-26
 
-From a whole-system troubleshoot: the session queue had stopped draining (no session note since
-20 Oct, vault-pulse red four runs), the Router was dropping ticks, and two scheduled runs had
+From a whole-system troubleshoot: the session queue had stopped draining (no recent session notes,
+vault-pulse red several runs), the Router was dropping ticks, and two scheduled runs had
 failed without anyone hearing. Each fix is at the cause.
 
 ### Added
@@ -330,8 +365,8 @@ escalation are unchanged.
 
 ## [1.9.0] - 2026-10-16
 
-`vault-pulse` can now be scheduled and its misses noticed. The first real unattended run, on the
-machine it was built for, worked end to end (exit 0 in 94 seconds, a log entry and its own state
+`vault-pulse` can now be scheduled and its misses noticed. The first real unattended run worked
+end to end (exit 0, a log entry and its own state
 shard) and exposed three gaps this release closes: nothing to run it headless, nothing to tell
 the user in a session when a run was missed, and the run's own session being archived into the
 write-up queue.

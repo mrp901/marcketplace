@@ -17,7 +17,7 @@ changes land here:
 - **Runs on mixed versions.** Every run stamps `runs.<skill>.version` (`onboarding.md` step 6).
   The Runs block flags a day whose runs differ, naming the lagging skills, because the cloud
   routines run `main` while claude.ai's copy and the locally synced copy update on their own,
-  and the local one lagged two releases on 3 Nov without anyone noticing. The line is a check,
+  and the local one can lag releases without anyone noticing. The line is a check,
   not a verdict; the SessionStart check says the same thing at the start of a local session.
 - The message also names new to-dos kept off the board in one line, so the owner still hears
   of them. Counted from when they left the board (`off_board_at`), so the ones the migration
@@ -44,7 +44,7 @@ names `session-log` as `kb-note`'s successor.
 ## 2026-11-03 expire stuck lines after 5 business days (1.10.4)
 
 A closing rule that waits for a `done` sub-line never fires for a `partial`, `blocked` or router
-`queued` sub-line, because nothing acts on those; lines from 24 Sep were still open on 3 Nov.
+`queued` sub-line, because nothing acts on those; lines weeks old were still open.
 The owner chose expiry after 5 business days, configurable as `briefing.stale_after_business_days`
 (`0` disables). `needs your tick` is exempt (it is waiting on the user, not stuck), as are lines
 with no sub-line, To-do lines and `term:` lines. Public holidays are not excluded: that needs a
@@ -148,7 +148,7 @@ shared rules, referenced rather than restated.
 **Open questions for the orchestrator**, beyond the two flagged above:
 - `tracker.project_key` could not be extracted from this source skill (it queries a JQL
   fragment across all of the user's own work, not one fixed project) - `profile-schema.md`'s
-  own "Where the current values come from" table already points at `canvass`/`action-sweep`
+  own key-by-key table already points at `canvass`/`action-sweep`
   for that key, so this is confirmation rather than a gap, but noting it here since this
   skill's extract file explicitly does not supply it.
 - `state-schema.md`'s `items.<tag>` shape does not carry a `category` breakdown per section
@@ -290,7 +290,7 @@ The state page passed 49 KB and a full-body-replace write became unsafe to re-ty
 
 After the 1.3.0 shards, `items` and `outcomes` still sat in a 27 KB main state page, so
 every run that posted a board line had to re-type all of it through a full-body-replace
-connector. Runs judged that too risky and skipped it (four unattended runs, 10-12 Oct),
+connector. Runs judged that too risky and skipped it (several unattended runs),
 freezing the ledger the hub reads ticks against. Briefing no longer prunes other skills'
 `items`: it records every tag it closes or removes in `closed` in its own shard, each
 owner prunes its own entries on its next write, and briefing drops a `closed` tag once no
@@ -302,7 +302,7 @@ then one shrinking main write, never re-typing more than it removes). See
 
 ## 2026-10-26 a deferred migration says why, in numbers (1.10.0)
 
-The 1.6.0 shared-list migration was deferred on six runs, 19 to 26 Oct, each note saying
+The 1.6.0 shared-list migration was deferred on six runs, each note saying
 "same reasoning as" the last. None recorded the plan's numbers, so nobody could tell which
 owner's unseeded entries were holding it. Step 1 now writes bytes kept and removed and each
 owner still unseeded, and redoes the plan every run.

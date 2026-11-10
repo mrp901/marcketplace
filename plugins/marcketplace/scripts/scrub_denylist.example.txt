@@ -22,7 +22,7 @@
 #
 # Suggested entries, one per kind of literal the plugin must never carry. The values
 # below are invented placeholders chosen so they match nothing in this repository;
-# `scrub_check.py` skips this file and the local file when it walks a path.
+# `scrub_check.py` scans this file like any other (its placeholders are allowlisted) and skips the local one.
 
 FAIL ci company-name       \bZephyrholm\b|zephyrholmgroup
 FAIL ci user-name          \bQuillan\b|Vosberg

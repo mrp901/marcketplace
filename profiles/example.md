@@ -91,10 +91,10 @@ notetaker:
   prep_lines: true
 
 kb:
-  name: Northwind Ops Vault
+  name: Northwind Ops Notes
   kind: obsidian_typed
   local_root: ""
-  remote: {service: sharepoint, library: "Northwind Ops Vault", path_prefix: "Vault/Northwind Ops"}
+  remote: {service: sharepoint, library: "Northwind Ops Notes", path_prefix: "Notes/Northwind Ops"}
   conventions_file: CLAUDE.md
   types_registry: References/kb-conventions.md
   people_file: Org/people-and-org.md
@@ -107,7 +107,7 @@ kb:
     inbox: Inbox/
     drafts: Drafts/
     research: Product/FreightOps/Research/
-    screenshots: References/Assets/Screenshots/
+    screenshots: Assets/Screenshots/
     sessions: Sessions/
     dreams: Dreams/
     decisions: Decisions/

@@ -1,7 +1,7 @@
 # Releasing
 
 Every change to this plugin gets a runtime check before it merges. The repo checks (validate,
-plugin test, scrub, line budget, `check_refs.py`, unit tests) read files in this repository. A
+plugin test, scrub (whole repo, denylist required), line budget, `check_refs.py`, unit tests) read files in this repository. A
 plugin like this also runs in places the repository does not contain, and a change can pass
 every repo check and still break there.
 
@@ -45,6 +45,12 @@ runtimes, so CI does not run it; CI runs only its unit test.
 
 A path that does not exist is an error when you passed it and a warning when it is a default, and a run that scanned no file exits 2, so a clean run cannot mean "looked at nothing". A clean run means no local file names a removed thing. It does not cover the OS scheduler's own
 entries, other machines, or anything that calls a skill by a name built at run time.
+
+### The scrub line
+
+The PR body shows the scrub output line `denylist: <path> (N patterns)` from
+`python3 plugins/marcketplace/scripts/scrub_check.py . --require-denylist`. A run that loaded no
+denylist exits 2 and is not a pass: the built-in shapes alone miss most organisation literals.
 
 ## Reviewer brief
 

@@ -94,8 +94,8 @@ notetaker:
   prep_lines: true
 
 kb:
-  name:                        # display name of the knowledge base / vault
-  kind: obsidian_typed | plain_markdown | notion | confluence
+  name:                        # display name of the knowledge base
+  kind: obsidian_typed | plain_markdown | notion | confluence   # any kind beginning obsidian_ is read as obsidian_typed
   local_root:                   # local path, if a device bridge is used
   remote: {service, library, path_prefix}
   conventions_file: CLAUDE.md
@@ -206,7 +206,7 @@ budgets:
 | `notetaker.lookback_days` | action-sweep, briefing, action-list | default | not read when `tools.notetaker.service` is `none` |
 | `notetaker.prep_lines` | briefing | default | |
 | `kb.name` | session-log, kb-dream, idea-spar, action-sweep, action-list | ask | |
-| `kb.kind` | session-log, kb-dream, action-list, jira-story | ask | |
+| `kb.kind` | session-log, kb-dream, action-list, jira-story | ask | `obsidian_typed`, `plain_markdown`, `notion` or `confluence`; any value beginning `obsidian_` is read as `obsidian_typed` (nothing branches on `kb.kind` except `confluence`) |
 | `kb.local_root` | session-log, kb-dream (health verdict), action-list | default (empty until a device bridge is linked) | |
 | `kb.remote` | session-log, kb-dream, action-list | default | |
 | `kb.conventions_file` | session-log, kb-dream, action-list, jira-story | default | |
@@ -244,69 +244,6 @@ budgets:
 | `budgets.jira-story` | jira-story (idea mode) | default | `{investigation_calls, web_searches, audit_rounds}`; the pre-1.11.0 `budgets.idea-ticket` is read as this key |
 | *Retired in 1.11.0* | none | none | `chat.starter_emoji`, `chat.include_saved_items`, `budgets.proactive-router.searches` (the reaction and saved-message sweep is gone), `briefing.expected_runs.vault-pulse` (`vault-pulse` folded into `kb-dream`; the briefing's overdue rule skips an `expected_runs` key that names a skill not installed, so it is never called overdue) and `budgets.vault-pulse` (read as an alias of `budgets.kb-dream.health`, see above). An old profile that still carries them parses and they may be deleted |
 | `budgets.models` | idea-spar, skill-eval, action-list, jira-story | default | see `model-tiers.md` |
-
-## Where the current values come from
-
-This table is what a porting subagent uses to extract this install's real values into
-`profiles/extract/<skill>.local.md`. Every pointer below was checked against the live
-source file at the line or heading given; it points at *where* the value sits, never at
-the value itself.
-
-| Key | Source file | Line / heading |
-|---|---|---|
-| `user.chat_user_id` | `source/briefing/SKILL.md` | L12, "Fixed facts" bullet 1 |
-| `notify.webhooks.briefing`, `notify.fallback_channel_id` | `source/briefing/SKILL.md` | L13, "Fixed facts" bullet 2 |
-| `surface.id`, `surface.url` | `source/briefing/SKILL.md` | L14, "Fixed facts" bullet 3 |
-| `tracker.cloud_id` | `source/briefing/SKILL.md` | L15, "Fixed facts" bullet 4 |
-| `state_ref` | `source/briefing/SKILL.md` | L16, "Fixed facts" bullet 5 (Confluence page id and space) |
-| `people[].chat_id` | `source/briefing/SKILL.md` | L17, "Fixed facts" bullet 6 (known Slack IDs) |
-| `people[].nickname` | `source/briefing/SKILL.md` | L18, "Fixed facts" bullet 7 |
-| `org.timezone` | `source/briefing/SKILL.md` | L21, "Time rules" intro line (Australia/Sydney convention, confirmed again at vault-dream L41) |
-| `tracker.cloud_id`, `tracker.site_url` | `source/canvass/SKILL.md` | L48, "Fixed facts" bullet 1 |
-| `user.tracker_account_id` | `source/canvass/SKILL.md` | L50, "Fixed facts" bullet 2 |
-| `user.chat_user_id` (cross-check) | `source/canvass/SKILL.md` | L51, "Fixed facts" bullet 3 |
-| `tracker.default_parent_epic` | `source/canvass/SKILL.md` | L52, "Fixed facts" bullet 4 |
-| `tracker.project_key`, `tracker.issue_types`, `tracker.component` | `source/canvass/SKILL.md` | L55-56, "Fixed facts" bullet 5 |
-| `ideas.project_key`, `ideas.issue_type`, `ideas.area_field`, `ideas.area_value` | `source/canvass/SKILL.md` | L57-58, "Fixed facts" bullet 6 |
-| `kb.paths.inbox` | `source/canvass/SKILL.md` | L59, "Fixed facts" bullet 7 |
-| `kb.remote.path_prefix`, `kb.remote.service` | `source/canvass/SKILL.md` | L62-63, "Fixed facts" bullet 8 |
-| `ideas.area_field` (roadmap contrast) | `source/cloud-idea-scout/SKILL.md` | L23, "Fixed facts" bullet 2 |
-| `ideas.labels.investigated` | `source/cloud-idea-scout/SKILL.md` | L24, "Fixed facts" bullet 3 |
-| `user.email` | `source/cloud-idea-scout/SKILL.md` | L25, "Fixed facts" bullet 4 |
-| `surface.id` (section name), `notify.webhooks.idea-scout` | `source/cloud-idea-scout/SKILL.md` | L26, "Fixed facts" bullet 5 |
-| `kb.name`, `kb.paths.research` (Product/Cloud/Research) | `source/cloud-idea-scout/SKILL.md` | L27, "Fixed facts" bullet 6 |
-| `ideas.qualifiers` (the three gate tests) | `source/cloud-idea-scout/SKILL.md` | L40-45, Step 1 body |
-| `ideas.labels.wireframed` | `source/cloud-idea-wireframe/SKILL.md` | L28, "Fixed facts" bullet 3 |
-| `surface.id` (section name), `notify.webhooks.idea-wireframe` | `source/cloud-idea-wireframe/SKILL.md` | L29, "Fixed facts" bullet 4 |
-| `kb.local_root` | `source/cloud-idea-wireframe/SKILL.md` | L30, "Fixed facts" bullet 5 |
-| `kb.paths.prototypes`, `kb.paths.screenshots` | `source/cloud-idea-wireframe/SKILL.md` | L31, "Fixed facts" bullet 6 |
-| `kb.remote.service`, `kb.remote.library` | `source/cloud-idea-wireframe/SKILL.md` | L32, "Fixed facts" bullet 7 |
-| `kb.name`, `kb.kind` | `source/vault-dream/SKILL.md` | L34, "Fixed facts" bullet 1 |
-| `kb.remote.service` (access precedence) | `source/vault-dream/SKILL.md` | L35, "Fixed facts" bullet 2 |
-| `surface.id`, `surface.home_channel_id`, `notify.webhooks.kb-dream` | `source/vault-dream/SKILL.md` | L36, "Fixed facts" bullet 3 |
-| `kb.log_size_cap_kb.dream` | `source/vault-dream/SKILL.md` | L37, "Fixed facts" bullet 4 |
-| `org.timezone` (TZ confirmation) | `source/vault-dream/SKILL.md` | L41, Step 0 point 1 |
-| `people_confusions` | `source/vault-dream/SKILL.md` | L69, "Known errors for pass 6" |
-| `known_fact_errors` | `source/vault-dream/SKILL.md` | L69, "Known errors for pass 6" (a mix of corrected figures, a wrongly-assumed process, a vendor name, and a scope claim) |
-| `people_confusions` (cross-check), `known_fact_errors` (notetaker misrenderings) | `source/session-log/SKILL.md` | L302 heading, paragraph L308-312, "Names - check before you write them" |
-| `chat.team_id`, `chat.team_url` | `source/briefing/SKILL.md` | L14 (canvas URL carries both) |
-| `tracker.cloud_id` (audit step) | `source/cloud-idea-ticket/SKILL.md` | L133, "Fixed facts" (cloudId, with discovery fallback named inline) |
-| `budgets.models.critic` (opus audit) | `source/cloud-idea-ticket/SKILL.md` | L107, Step 4 intro |
-| `budgets.models.search` (haiku sub-dispatch) | `source/cloud-idea-deep-dive/SKILL.md` | L37, "Runtime strategy" bullet 2 |
-| `budgets.models.critic` (wireframe critic) | `source/cloud-idea-wireframe/SKILL.md` | L92, Step 5 |
-| `budgets.models.critic` (skill-eval synthesis) | `source/skill-eval/SKILL.md` | L55, Step 2 intro |
-
-**Corrections to PLAN.md's pointers.** The plan's summary table cited two lines that do
-not hold what it said:
-
-- `people_confusions` was cited in PLAN.md as "session-log L308-315". The actual heading
-  ("Names - check before you write them") starts at L302, and the paragraph it points at
-  (same-first-name colleagues and notetaker misrenderings) runs L308-312, not to L315 - L313-315 is blank line plus the start
-  of the next paragraph on ambiguous names, which does not carry the fixed facts. Corrected
-  above to L302 (heading) / L308-312 (paragraph).
-- The plan's YAML comment for `known_fact_errors` did not name a source at all; added the
-  vault-dream L69 known-errors sentence above, since that is where the source install's actual
-  corrected-fact list lives.
 
 ## Naming inside the `kb` block, and why it trips people
 

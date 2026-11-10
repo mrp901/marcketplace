@@ -1,6 +1,6 @@
 # Voice
 
-A new capability with no single direct source - it generalises the discipline `source/cloud-idea-ticket/SKILL.md` applies by hand (calibrated against three named prior tickets, a "Cut the AI tells" list, an independent audit) into a standing, compounding mechanism every drafting skill shares.
+A new capability with no single direct source - it generalises a discipline applied by hand (calibrated against three named prior tickets, a "Cut the AI tells" list, an independent audit) into a standing, compounding mechanism every drafting skill shares.
 
 ## Purpose
 

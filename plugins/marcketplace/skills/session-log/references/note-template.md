@@ -4,7 +4,7 @@
 
 `kb.paths.sessions` + `YYYY-MM-DD-short-slug.md`, per `kb-conventions.md`'s dated-file
 naming rule - ISO date first, kebab-case, slug names the substance not the medium
-(`2026-09-22-vault-tfm-migration.md`, never `2026-09-22-claude-session.md`). If a note
+(`2026-09-22-kb-typed-migration.md`, never `2026-09-22-claude-session.md`). If a note
 already exists for that date and the new content is a genuinely separate occasion, add a
 distinguishing slug rather than overwriting; a continuation of the same live session
 updates the existing note in place instead (see `proposed-followups.md`'s "same live

@@ -37,7 +37,7 @@ from datetime import datetime, timedelta
 DATE_RE = re.compile(r"^(\d{4})-(\d{2})-(\d{2})")
 LINK_RE = re.compile(r"\]\(([^)\s]+?\.md)(?:#[^)\s]*)?\)")
 FM_RE = re.compile(r"\A---\r?\n(.*?)\r?\n---", re.S)
-SKIP_DIRS = {".utility", ".obsidian", ".git", "Inbox", "Drafts", "Dreams", "Transcripts"}
+SKIP_DIRS = {".utility", ".obsidian", ".git", "node_modules"}  # main() adds the --inbox and --dreams folder names
 NOT_NOTES = re.compile(r"^(index|log|log-archive.*)\.md$", re.I)
 IDLE_HOURS = 2
 MIN_BYTES = 64 * 1024
@@ -334,7 +334,7 @@ def main():
     ap.add_argument("--memory", default="")
     ap.add_argument("--inbox", default="")
     ap.add_argument("--ledger", default="")
-    ap.add_argument("--lookup-pattern", default=r"(?i)vault|kbdocs|repomap|knowledge|(^|__)kb[-_]")
+    ap.add_argument("--lookup-pattern", default=r"(?i)vault|knowledge|(^|__)kb[-_]")
     ap.add_argument("--matured-from", type=int, default=35)
     ap.add_argument("--matured-to", type=int, default=7)
     ap.add_argument("--stale-memory-days", type=int, default=14)
@@ -346,6 +346,10 @@ def main():
         return 2
     now = naive(parse_now(a.now))
     root = a.kb_root
+    for folder in (a.inbox, a.dreams):
+        name = os.path.basename(folder.rstrip("/\\"))
+        if name:
+            SKIP_DIRS.add(name)
     out = {
         "at": now.isoformat(timespec="minutes"), "window_days": a.days,
         "freshness": freshness(root, now, {"dreams": a.dreams, "sessions": a.sessions}),

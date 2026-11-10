@@ -6,7 +6,7 @@ description: "Use when this skill's schedule fires, when the user says \"dream\"
 # KB dream
 
 The knowledge base is the first port of call for the AI harness the user works in, so
-every pass is judged by one question: is the vault now easier for an agent to find and
+every pass is judged by one question: is the knowledge base now easier for an agent to find and
 trust? Curation is how it answers: read the recent past and the accumulated whole, hand
 back a merged, de-contradicted, correctly filed version, surface what no single note
 captures, and leave a trail the user can review in under two minutes and roll back. The

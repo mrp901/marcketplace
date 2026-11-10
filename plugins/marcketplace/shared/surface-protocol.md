@@ -72,7 +72,7 @@ Every checkbox line on the surface follows one grammar, reads as the action a ti
 |---|---|---|
 | Skill abbreviation, date, sequence | `(pr:260922-03)` | proactive-router's third item logged on 22 Sep 2026; likewise `dream:`, `sweep:`, `rb:`, `term:`, `feed:`, `shc:` |
 | Same, about a tracker item | `(feed:260910-1)` | briefing's first tracker-feed mismatch on 10 Sep 2026. The line names a tracker item but is not tagged with its key, so a later mismatch on the same key, or another skill's line about it, never shares its `state.items` tag |
-| Idea block line | `(PRJ-514/d1a)` | a line inside an idea block: the idea key, a slash, then the group and option (see the Ideas block grammar) |
+| Idea block line | `(PRJ-540/d1a)` | a line inside an idea block: the idea key, a slash, then the group and option (see the Ideas block grammar) |
 
 A tag is the item's identity across runs. `state.items.<tag>.text` holds the line exactly as written, compared verbatim with the board, which is how a writer tells "still exactly as I left it" from "the user touched this" on its next read. Never invent a tag form ad hoc; if a new writer needs one, pick a short lowercase abbreviation, add it to the prefix table above, and record it in that skill's `references/`.
 
@@ -155,10 +155,10 @@ The question line carries no checkbox and no tag of its own; `state.items` recor
 The Ideas section holds one block per idea that has anything open. Blocks are removed by briefing once they have no open lines.
 
 ```
-- PRJ-514 · <title> · pack
+- PRJ-540 · <title> · pack
   - <decision question>
-    - [ ] (PRJ-514/d1a) <option>
-    - [ ] (PRJ-514/d1b) <option>
+    - [ ] (PRJ-540/d1a) <option>
+    - [ ] (PRJ-540/d1b) <option>
 ```
 
 - The header line is `- <key> · <title> · pack`, `pack` linking the idea's shareable pack. idea-spar writes the header when it first needs the block; briefing removes it when the block empties.
@@ -179,7 +179,7 @@ Worked example (tracker block after a 5:13pm run; project key and names fictiona
 **Sep 10, 5:13pm:** Tracker
 
 * [PRJ-231](…) Dashboard: top cost increases table - In Review, assigned J. Alvarez
-* [PRJ-516](…) Prior-month comparison should be same-weekday - Parking lot, unassigned
+* [PRJ-542](…) Delivery-time chart should compare the same weekdays - Parking lot, unassigned
 ```
 
 ## The section_id_mapping reuse rule

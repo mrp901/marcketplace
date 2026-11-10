@@ -1,12 +1,17 @@
 # History
 
+## 2026-11-10 neutral examples (1.14.0)
+
+The idea-ticket examples, rubric and format notes moved to the fictional freight product set
+(`[Freight]` titles, `FLT-` keys, an air-freight spend tile) Rules are unchanged.
+
 ## 2026-11-09 read the customer's note first (1.13.0)
 
 A task that names a customer has its living note read once as context at the start of Refine and
 New mode (`shared/customer-notes.md`, "Reading"). Missing note: proceed as before.
 ## 2026-11-03 idea mode, absorbed from idea-ticket (1.11.0)
 
-`idea-ticket` had not run since 28 Sep. Its job (a rough problem into an audited ideas-board
+`idea-ticket` had stopped running. Its job (a rough problem into an audited ideas-board
 ticket) and the hub's `ticket-idea` category now live here as a third mode, **idea**:
 `references/idea-ticket-flow.md` (the seven steps, handler modes `draft` and `file`, budget,
 the "what the ideas board actually is" rules), `idea-ticket-format.md` (structure and the
@@ -20,7 +25,7 @@ Decisions where the retired skill's notes were silent:
   alias. It applies to idea mode only; Refine and New still have no caps.
 - The earlier line in this file that `idea-ticket`'s format "is not duplicated" still holds:
   a story never takes the ideas-board shape; only the AI-tells list is shared.
-- Carried from the retired `idea-ticket` HISTORY (22 Sep 2026): the audit is mandatory and
+- Carried from the retired `idea-ticket` HISTORY (early version): the audit is mandatory and
   fresh each round, capped at two revisions; the hub path and the direct path run identical
   steps and differ only in who delivers the confirmation gate; `draft` never files and `file`
   is the only mode that does; `voice.calibration_refs` is optional; vendor mentions are one
@@ -56,7 +61,7 @@ same name. Written as a directly invoked skill, not a hub handler.
 - The persistent-memory note and the `lessons.md` fallback: marcketplace forbids per-skill
   memory files. Durable tone or quality feedback now routes to the voice ledger as
   `../../shared/voice.md` describes, or ends with the conversation.
-- The vault-specific destination rules (vault CLAUDE.md, TFM frontmatter, index and log
+- The knowledge-base-specific destination rules (conventions file, typed frontmatter, index and log
   handling): replaced by the generic knowledge-base pointer.
 - The real example ticket keys and tenant/site names.
 
