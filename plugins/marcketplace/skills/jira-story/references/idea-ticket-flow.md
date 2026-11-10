@@ -45,7 +45,7 @@ Two consequences this mode gets wrong if forgotten:
 ## Flow
 
 1. **Ground it.** If a screenshot or screen is referenced, read it for exact labels,
-   numbers and field names - "the Air Freight Spend tile's '+6.5% prior month' figure" beats "the
+   numbers and field names - "the Air Delivery Time chart's '-57% vs last week' figure" beats "the
    dashboard shows a misleading percentage". If which product area is ambiguous and the user
    invoked this directly, ask one quick clarifying question. Dispatched by the hub, no one
    is there to answer: take `profile.org.product_scope` (or the likeliest area), draft, and

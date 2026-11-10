@@ -3,8 +3,8 @@
 Against `profiles/example.md` (Northwind Logistics, Freight Ops). Product tag `[Freight]`,
 ideas project `FIG`.
 
-Raw input from the user: *"the freight cost tile comparison is wrong, it's comparing MTD to
-all of last month"*
+Raw input from the user: *"the delivery-time chart comparison is wrong, it's comparing this
+week so far to all of last week"*
 
 ---
 
@@ -12,34 +12,35 @@ all of last month"*
 
 **Context**
 
-In the dispatch and yard modules we don't have daily data, but for Freight Cost we do. The
-Freight Cost tile still compares like they're the same - it takes month-to-date spend and
-puts it against the *whole* of last month. On 12 September that's 12 days against 31, and
-the tile reports "-58% prior month" as if spend has collapsed.
+In the dispatch and yard modules we only have weekly totals, but in Route Planner we have
+daily ones. The Delivery Time chart still compares like they're the same - it takes this
+week's days so far and puts them against the *whole* of last week. On a Wednesday that's 3
+days against 7, and the chart reports "-57% vs last week" as if delivery hours have
+collapsed.
 
-Anyone glancing at the dashboard mid-month reads that as a real drop. It gets worse the
-earlier in the month you look, and it always resolves itself by month end, which is exactly
+Anyone glancing at the dashboard early in the week reads that as a real drop. It gets worse
+the earlier in the week you look, and it always resolves itself by Sunday, which is exactly
 when nobody's checking.
 
 **The ask**
 
-**When we show a prior-period comparison, compare the same number of days - 1-12 Sep
-against 1-12 Aug - and say on the tile which range we used.**
+**When we show a prior-week comparison, compare the same weekdays - Mon-Wed against
+Mon-Wed - and say on the chart which days we used.**
 
 **Options**
 
-- **Compare MTD to the same days of the previous month** (1-12 Sep vs 1-12 Aug) - smallest
-  change, fixes the tile as it stands.
+- **Compare this week's days so far to the same weekdays of last week** (Mon-Wed vs
+  Mon-Wed) - smallest change, fixes the chart as it stands.
 - **Add a full date range picker** and then compare the range to the equivalent previous
-  range - more work, but it fixes every period comparison, not just MTD.
-- **Keep the current comparison** and just label it "vs full previous month" - no maths
+  range - more work, but it fixes every period comparison, not just this chart.
+- **Keep the current comparison** and just label it "vs whole of last week" - no maths
   change, only stops it being misread.
 
 **Open Questions**
 
-- Does this affect the other dashboard widgets and the summary email, or just this tile?
-- For accounts whose billing cycle isn't the calendar month, do we compare on billing cycle
-  or calendar days? That changes what "the same days" means.
+- Does this affect the other dashboard widgets and the summary email, or just this chart?
+- For depots whose working week isn't Monday to Friday, do we compare on the depot's working
+  week or on calendar weekdays? That changes what "the same weekdays" means.
 
 **Related**
 
