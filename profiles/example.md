@@ -91,12 +91,12 @@ notetaker:
   prep_lines: true
 
 kb:
-  name: Northwind Ops Vault
-  kind: obsidian_okf
+  name: Northwind Ops Notes
+  kind: obsidian_typed
   local_root: ""
-  remote: {service: sharepoint, library: "Northwind Ops Vault", path_prefix: "Vault/Northwind Ops"}
+  remote: {service: sharepoint, library: "Northwind Ops Notes", path_prefix: "Notes/Northwind Ops"}
   conventions_file: CLAUDE.md
-  types_registry: References/okf-conventions.md
+  types_registry: References/kb-conventions.md
   people_file: Org/people-and-org.md
   link_style: relative_markdown
   link_pass: surface

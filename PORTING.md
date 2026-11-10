@@ -44,8 +44,8 @@ under `source/<old-name>/`, and one already-ported exemplar (`briefing`, after w
    The report is only as good as the denylist it loads (see "Scrub regexes" below): make
    sure `scripts/scrub_denylist.local.txt` holds the source organisation's names, ids and
    keys before you run it, and read the first line of the output to confirm it loaded.
-   Classify every reported hit as one of: a profile key (look up the "Where the current
-   values come from" table in `shared/profile-schema.md` to find the matching key), a state
+   Classify every reported hit as one of: a profile key (look up the key-by-key table in
+   `shared/profile-schema.md` to find the matching key), a state
    key, drop (organisation-specific behaviour that does not generalise), or fictionalise
    (keep the shape, replace the value). Do the same for any other file in the source skill
    folder that scrub flags.
@@ -121,7 +121,7 @@ under `source/<old-name>/`, and one already-ported exemplar (`briefing`, after w
     ```
     claude plugin validate --strict .
     claude plugin test plugins/marcketplace
-    python3 plugins/marcketplace/scripts/scrub_check.py plugins/
+    python3 plugins/marcketplace/scripts/scrub_check.py . --require-denylist
     python3 plugins/marcketplace/scripts/line_budget.py --all
     python3 plugins/marcketplace/scripts/check_refs.py
     grep -rn "$(python3 -c 'print(chr(0x2014))')" plugins/marcketplace/skills/<new-name>
@@ -172,7 +172,7 @@ exempt a genuinely fictional token that happens to match a WARN-class shape.
 ## Definition of done
 
 - [ ] `claude plugin validate --strict .` and `claude plugin test plugins/marcketplace` pass.
-- [ ] `scrub_check.py plugins/` reports zero FAIL, and every WARN on this skill's files has
+- [ ] `scrub_check.py . --require-denylist` reports zero FAIL, and every WARN on this skill's files has
       been reviewed (not just passed through).
 - [ ] `check_refs.py` exits 0: every `references/`, `scripts/` and `../../../shared/` path you
       wrote actually resolves from the file it is written in. A path that is correct from

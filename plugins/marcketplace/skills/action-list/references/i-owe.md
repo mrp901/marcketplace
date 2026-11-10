@@ -19,7 +19,7 @@ check or come back with something, **with a concrete object**. Keep the user's o
 
 - First person: "I'll ...", "I can check about Q2", "I'll get back to you", "let me find
   out", "leave it with me", "I'll come back to you on ...".
-- Attributed, where someone else records it: "you said you would go back to Lisa", "as you
+- Attributed, where someone else records it: "you said you would go back to Ana", "as you
   told Ivan", "you promised ...".
 - **Not a promise:** an acknowledgement with no object ("sounds good", "will do"); something
   someone else will do; a promise already delivered; a condition that never came up ("if it
@@ -98,7 +98,7 @@ Two tables, oldest first.
 | Owed to | What you said you'd do | Promised | Age | Link | Row |
 |---|---|---|---|---|---|
 | Ana Reyes | Send the depot-map feedback: "I'll get it to you after lunch" | Wed 14 Oct, 10:12 | 0 bd | [DM](...) | #1 |
-| Lisa Chen | Go back to her about the Q2 figures: "I can check about Q2" | Mon 5 Oct, 16:40 | 7 bd | [thread](...) | - |
+| Ana Reyes | Go back to them about the Q2 figures: "I can check about Q2" | Mon 5 Oct, 16:40 | 7 bd | [thread](...) | - |
 
 **Waiting on you** (asked of you, no promise from you)
 

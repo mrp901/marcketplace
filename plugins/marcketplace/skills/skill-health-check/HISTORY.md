@@ -1,5 +1,9 @@
 # skill-health-check - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-10 neutral log example (1.14.0)
+
+The log-format example correction is a fictional fuel-surcharge rate. No behaviour change.
+
 ## 2026-11-04 tick effect on `shc:` lines (1.12.0)
 
 A red line now ends with `tick → queues it for your next skill-eval run (nothing runs now)`.
@@ -132,7 +136,7 @@ The state page passed 49 KB and a full-body-replace write became unsafe to re-ty
 
 After the 1.3.0 shards, `items` and `outcomes` still sat in a 27 KB main state page, so
 every run that posted a board line had to re-type all of it through a full-body-replace
-connector. Runs judged that too risky and skipped it (four unattended runs, 10-12 Oct),
+connector. Runs judged that too risky and skipped it (several unattended runs),
 freezing the ledger the hub reads ticks against. Its `shc:` items live in its own shard,
 pruned of tags in briefing's `closed`; `outcomes`, `tally` and `voice_edits` are read
 across the shards that hold them. See `shared/state-schema.md`, "Shards".

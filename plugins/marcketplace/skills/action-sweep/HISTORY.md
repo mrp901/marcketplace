@@ -223,7 +223,7 @@ A Task drafted from a ticked line with no source issue carried the drafter's own
 
 After the 1.3.0 shards, `items` and `outcomes` still sat in a 27 KB main state page, so
 every run that posted a board line had to re-type all of it through a full-body-replace
-connector. Runs judged that too risky and skipped it (four unattended runs, 10-12 Oct),
+connector. Runs judged that too risky and skipped it (several unattended runs),
 freezing the ledger the hub reads ticks against. Its `sweep:` items now live in its own
 shard, pruned of tags in briefing's `closed`; dedupe reads every shard's `items`. A sweep
 run writes one small page. See `shared/state-schema.md`, "Shards".

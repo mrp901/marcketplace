@@ -152,7 +152,7 @@ blank and proceeded past.
 
 A skill whose state document cannot be resolved has nowhere to record the fast-fail, and
 nobody reads a scheduled run's session output: the platform marks the run succeeded either
-way (the 23 Oct 2026 `kb-dream` run stopped in 12 seconds with no wiki connector loaded and
+way (a `kb-dream` run stopped in seconds with no wiki connector loaded and
 no one heard). So before concluding the wiki tool is absent, search for it once more by its
 connector's name. If it is still missing, write the failure to session output and, when the
 profile was read and a `chat` tool resolved, post one line - `<skill> did not run: <what was

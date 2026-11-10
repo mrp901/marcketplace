@@ -7,14 +7,14 @@ contract; skills link here and never restate it. It sits under the contract in
 
 ## Path, naming and the profile key
 
-`<kb.paths.customers>/<customer-slug>.md`, kebab-case (`johnstaff.md`, `dgl-group.md`). The
+`<kb.paths.customers>/<customer-slug>.md`, kebab-case (`harbourline-depot.md`, `kestrel-freight.md`). The
 folder has an `index.md` listing every note (no frontmatter, per the kb's own rule).
 `kb.paths.customers` is optional; absent, it means `Customers` only if that folder exists in
 the knowledge base, otherwise the feature is off (nothing reads, nothing is created).
 
 The slug is the customer's canonical name lowercased, non-alphanumerics to a single hyphen.
 `Customers/index.md` has (at least) one table with a row per note: the first column a link to
-the note, then `Aliases` (the note's `aliases:` frontmatter: `DGL`, `DGL Group`), `Evidence
+the note, then `Aliases` (the note's `aliases:` frontmatter: `KF`, `Kestrel Freight`), `Evidence
 through` (the note's `customer.evidence_through`) and a summary. Extra tables, grouping and
 sections are allowed and are preserved: `kb-dream` adds and updates rows in place, keeping
 Aliases and Evidence through in step with each note's frontmatter, and never rebuilds the
@@ -32,9 +32,9 @@ index's shape. A reader matches the name the user typed against the aliases in a
 
 A customer or prospect qualifies for a note when 2 or more existing notes in the knowledge
 base name it in their tags or title. Not only the beta customers. Below two, no note. Notes
-under `kb.paths.customers` do not count towards the two. A reseller or partner (it appears as
-another note's `customer.reseller`, or is listed as a reseller in the knowledge base's
-external-parties note) is never created automatically: `kb-dream` lists it in the dream note
+under `kb.paths.customers` do not count towards the two. A channel partner (it appears as
+another note's `customer.via` or legacy `customer.reseller`, or is listed as a channel partner
+or reseller in the knowledge base's external-parties note) is never created automatically: `kb-dream` lists it in the dream note
 for the user's say-so.
 
 ## Frontmatter
@@ -42,27 +42,29 @@ for the user's say-so.
 ```yaml
 ---
 type: Customer
-title: Johnstaff
-aliases: [Johnstaff, Johnstaff Group]   # every name the user or a source might use; resolves a reader's lookup
+title: Harbourline Depot
+aliases: [Harbourline Depot, Harbourline]   # every name the user or a source might use; resolves a reader's lookup
 description: One sentence - who they are to us and where things stand.
-tags: [customer, johnstaff, cloud, beta]
+tags: [customer, harbourline, routing, beta]
 status: draft
 customer:
   relationship: beta           # beta | customer | prospect | partner-customer
-  products: [cloud]            # cloud | connect | telecom ...
-  reseller: Bridged            # omit if direct
+  products: [routing]          # routing | telematics | billing ...
+  via: Contoso Channel         # the partner or channel they buy through; omit if direct. Legacy key `reseller` is read as an alias
   stage: kick-off booked       # the onboarding runsheet phase where one applies, else short free text
-  last_contact: 2026-11-06
-  evidence_through: 2026-11-06   # ISO date of the newest evidence note folded in; this note's own refresh clock
+  last_contact: 2026-03-12
+  evidence_through: 2026-03-12   # ISO date of the newest evidence note folded in; this note's own refresh clock
 generated: { by: kb-dream, at: <ISO 8601 with offset> }
 sources:
-  - { id: s1, path: ../Meetings/2026-10-09-johnstaff-cloud-beta-call.md }
+  - { id: s1, path: ../Meetings/2026-03-05-harbourline-routing-beta-call.md }
 ---
 ```
 
 `Customer` is registered in the live `kb.types_registry` the first time `kb-dream` sees any
 customer note, created by it or already there (check the live file, never a cached list). `stale_after` is not used: the note is refreshed, not aged. Never
 write `verified`; only the user can.
+
+`customer.via` replaced `customer.reseller` in 1.14.0. Every reader accepts either key (`via` wins if both are present); `kb-dream` writes only `via` and renames a legacy key when it refreshes the note.
 
 ## Body: seven sections, in this order
 
@@ -89,7 +91,7 @@ notes below. -->`. The user's section, `## <First>'s notes` (`user.name`'s first
 apostrophe), is authoritative and is never written by a machine.
 
 On every refresh `kb-dream` reads the user's section first and reconciles the machine sections
-to it: it never contradicts it. Where a cited primary source conflicts with it, the vault's
+to it: it never contradicts it. Where a cited primary source conflicts with it, the knowledge base's
 rule for a sourced fact applies: raise it once as a question in that pass's dream note naming the
 source, change neither side, and do not raise it again (the user's answer is then newer
 evidence). The Timeline stays append-only: a correction is a new line.

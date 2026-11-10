@@ -31,7 +31,7 @@ name, or the folder/naming pattern that skill's own `SKILL.md` documents - e.g. 
 
 For `kb-dream` there is one more signal, its own: `runs.kb-dream.health` (the one-line
 knowledge-base verdict that replaced `vault-pulse`). Read the tags it carried across the
-window; amber or red on every run says the vault is not being captured, found or learned
+window; amber or red on every run says the knowledge base is not being captured, found or learned
 from, which is the purpose the dream is judged by. Report it as evidence, never re-measure
 it (`../../kb-dream/references/kb-health.md` owns the thresholds).
 

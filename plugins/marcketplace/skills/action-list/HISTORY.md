@@ -1,5 +1,10 @@
 # action-list - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-10 neutral examples (1.14.0)
+
+The "I owe" and 1:1 examples use fictional people (Ana, Tomasz, Priya) instead of real
+colleagues. No behaviour change.
+
 ## 2026-11-09 customer notes as context and as I-owe candidates (1.13.0)
 
 When a candidate or the prep names a customer, its living note is read first (index then note, max 3 notes per
@@ -11,7 +16,7 @@ other; only the user's own promises get the ranking boost (unchanged rule). Deta
 
 The owner works in attended sessions and through this skill, rarely from the board, and loses
 track of things he told people he would do ("I can check about Q2", "you said you would go back
-to Lisa"). The only record of those was scattered: a chat message, a to-do `action-sweep` had
+to Ana"). The only record of those was scattered: a chat message, a to-do `action-sweep` had
 found, an open thread in a session note. So `build` now leads with an **I owe** section (who
 it is owed to, what, when promised, age in business days, a link) and ranks an owed row above
 any other of equal urgency; `prep` is a second shape of the same skill, "prep my 1:1 with
@@ -40,10 +45,10 @@ any other of equal urgency; `prep` is a second shape of the same skill, "prep my
 - **Owed rows are not described twice.** A promise that is also a ranked action carries a `Row`
   pointer; the row holds the draft and the section holds the promise.
 - **1:1 prep finds its sources through the kb's own conventions**, not a hardcoded folder: the
-  people file, the conventions file's folder table, then a search. The owner's vault keeps 1:1
+  people file, the conventions file's folder table, then a search. One user's knowledge base keeps 1:1
   prep notes under onboarding and meeting notes under meetings; another org's will differ.
   Names resolve through `people`, `kb.people_file` and `people_confusions` and an ambiguous
-  first name is asked once, never defaulted (the owner's vault has several pairs and a foursome
+  first name is asked once, never defaulted (one knowledge base had several pairs and a foursome
   of people who share a first name).
 - **Prep does not move `last_window_end`.** It is not a window.
 

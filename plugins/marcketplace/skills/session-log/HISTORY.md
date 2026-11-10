@@ -1,5 +1,10 @@
 # session-log - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-10 neutral examples (1.14.0)
+
+Note-naming and decision-vocabulary examples no longer cite a real migration or an external
+frontmatter standard. No behaviour change.
+
 ## 2026-11-03 capture mode, absorbed from kb-note (1.11.0)
 
 `kb-note` (one decision or reference fact into the knowledge base, from a ticked `kb-doc` or
@@ -14,13 +19,13 @@ dispatched; capture is a handler for those two categories only.
   entries are not copied: the `kb-note` shard is frozen and readers read it alongside this one,
   deduplicated by `tag` (state-schema's 1.10.4 to 1.11.0 row). `kb-dream` was the alternative, but it never drafts, and "one document, one
   writer, a drafter writes its own entry" is the rule the ledger already follows.
-- Carried from the retired `kb-note` HISTORY (22 Sep 2026): a dead or empty source returns
+- Carried from the retired `kb-note` HISTORY (early version): a dead or empty source returns
   `blocked` and never a note built from the tick's wording; decision-shaped versus
   reference-shaped is judged from content, and the `type` is read from the live registry; a
   duplicate returns `done` with the existing note and never an edit; capture is not a
   two-tick mode because a note in the user's own knowledge base is additive and reversible
   (stated in the Handler mode so nobody "fixes" it by analogy with ticket filing); capture
-  notes are `status: draft`; `generated.at` takes `org.timezone`, not UTC (9 Oct).
+  notes are `status: draft`; `generated.at` takes `org.timezone`, not UTC.
 
 ## 2026-11-03 write runs.session-log (1.10.3)
 
@@ -31,13 +36,13 @@ writes `runs.session-log: {last_run_at, status, machine, note, ref}` every run, 
 `state-schema.md`, as `onboarding.md` step 6 already required.
 
 - 1.10.2: a session that ran session-log inside itself is not queued for a second write-up.
-  On 2 Nov 2026, two of the three queued sessions had written their own notes; one was queued
+  In one drain, two of the three queued sessions had written their own notes; one was queued
   because the sweep only counted a `Skill` tool call and not the `/session-log` slash command,
   the other because SessionEnd checked nothing. Both hooks now share the sweep's `assess`, and
   the digest prints a coverage block so a queue left from before still resolves in one look.
   `python3` can be the Windows Store stub, so the skill's commands probe as the hooks do.
 
-- The "is this worth a note" gate exists because the source vault's own conventions warn
+- The "is this worth a note" gate exists because the source knowledge base's own conventions warn
   against notes nobody links to and against letting capture accumulate. Unchanged in the
   port.
 - The type-registry cautionary tale is the single most important behaviour this skill
@@ -199,8 +204,8 @@ and tone feedback, verbatim, which kb-dream routes to the edits ledger.
 
 ## 2026-10-26 a queue nothing drained (1.10.0)
 
-A whole-system troubleshoot on 26 Oct found the queue at 38 files and no session note since
-20 Oct, so the 24 Oct dream had nothing to curate and vault-pulse had been red four runs.
+A whole-system troubleshoot found the queue at dozens of files and no recent session note,
+so a dream pass had nothing to curate and vault-pulse had been red several runs.
 Four causes, each fixed where it starts:
 
 - **Nobody drains it.** The hooks only fill the queue, and the SessionStart nudge said not to
@@ -210,7 +215,7 @@ Four causes, each fixed where it starts:
   for a scheduler, so the queue no longer depends on anyone remembering; hooks-setup.md,
   "Draining on a schedule".
 - **One file per end, not per session.** A worktree or background session ends many times
-  and every copy was the full transcript: 38 files held 10 sessions, about 135 MB in a
+  and every copy was the full transcript: dozens of files held a handful of sessions, over 100 MB in a
   synced folder. `archive_session.py` and the sweep now replace an older pending copy of
   the same session. `archive_session.py` carries the *earliest* `tail_after` of the copies
   it replaces, or none if any had none (a review caught a first draft that kept the latest,
@@ -218,7 +223,7 @@ Four causes, each fixed where it starts:
   from `archive/` only. `queued_since` survives replacement, so a long session's backlog
   age doesn't reset on every end.
 - **Re-opening an old session re-queued it.** SessionEnd fires again with a few bytes of
-  bookkeeping and no new message; one 28 Sep session was archived six times. The archiver
+  bookkeeping and no new message; one session was archived six times. The archiver
   now skips a session when the bytes appended since its newest copy hold no user turn. It
   counts turns in the appended part only (never reading the copy, which may be cloud-only
   in a synced folder) rather than comparing timestamps, so a format change can only cause

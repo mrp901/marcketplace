@@ -1,6 +1,6 @@
 ---
 name: action-list
-description: "Use when the user wants a ranked, time-boxed action list with ready drafts for a stretch of their day to work through now (\"build me a list for this afternoon\", \"what should I clear before my 4pm\"), asks what they owe people (\"what do I owe people\", \"what did I promise Lisa\"), asks to prep a 1:1 (\"prep my 1:1 with Terry\"), or hands over such a list, or names one, to work through item by item and close out. Not for sweeping actions onto the board."
+description: "Use when the user wants a ranked, time-boxed action list with ready drafts for a stretch of their day to work through now (\"build me a list for this afternoon\", \"what should I clear before my 4pm\"), asks what they owe people (\"what do I owe people\", \"what did I promise Ana\"), asks to prep a 1:1 (\"prep my 1:1 with Tomasz\"), or hands over such a list, or names one, to work through item by item and close out. Not for sweeping actions onto the board."
 ---
 
 # Action list
@@ -67,7 +67,7 @@ not today" section. This skill owns no tag prefix and never writes to the surfac
 
 The user's words usually settle it: "build me a list" is `build`, "work the lunch list" is
 `work`, "build one and let's go" is both, in that order, "what do I owe people" is `build`
-with only the "I owe" section, and "prep my 1:1 with Terry" is `prep`. Where they do not,
+with only the "I owe" section, and "prep my 1:1 with Tomasz" is `prep`. Where they do not,
 ask once, recommending `build` when no list for today exists in `kb.paths.drafts` and `work`
 when one does.
 

@@ -122,7 +122,7 @@ plugin exist because something went wrong once, and the history says what.
 ```
 claude plugin validate --strict .
 claude plugin test plugins/marcketplace
-python3 plugins/marcketplace/scripts/scrub_check.py plugins/
+python3 plugins/marcketplace/scripts/scrub_check.py . --require-denylist
 python3 plugins/marcketplace/scripts/line_budget.py --all
 python3 plugins/marcketplace/scripts/check_refs.py
 ```
@@ -132,7 +132,9 @@ tests, offline. The third fails if any organisation-specific literal reaches the
 which is what keeps it portable. It checks organisation-neutral shapes on its own; the
 organisation's actual names, ids and keys load from a gitignored
 `scripts/scrub_denylist.local.txt` (format in `scrub_denylist.example.txt`), so the
-denylist is itself never committed. CI supplies it from a repository secret. The fourth
+denylist is itself never committed. CI supplies it from a repository secret. The scan covers the whole
+repository (not only `plugins/`), and `--require-denylist` makes it exit 2 when no denylist is
+loaded, so a run on built-in shapes alone is never mistaken for a pass. The fourth
 enforces the line cap that keeps the always-loaded part of each skill small. The fifth
 checks that every path a skill
 points at resolves from the file it is written in, which is the easiest thing here to get

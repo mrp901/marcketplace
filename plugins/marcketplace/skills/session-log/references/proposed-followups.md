@@ -31,7 +31,7 @@ newly-approved action makes an earlier log line stale.
 
 When a proposal is a `Decisions/`-shaped record, use the vocabulary the kb's existing
 decision records already use rather than inventing keys: `decision_status` for the
-decision's own workflow state (distinct from the OKF `status` field), `jira` or the
+decision's own workflow state (distinct from the lifecycle `status` field), `jira` or the
 equivalent tracker key, `owner` in `human:<user>` actor form, `deciders` as plain names,
 `date_raised` as `YYYY-MM-DD`. Decision Records also number their `##` sections
 (`## 1. Decision required`, `## 2. Why this came up`, ...), which no other type does -

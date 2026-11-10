@@ -141,7 +141,7 @@ register selection from the audience, and still never a `send` mode.
 
 After the 1.3.0 shards, `items` and `outcomes` still sat in a 27 KB main state page, so
 every run that posted a board line had to re-type all of it through a full-body-replace
-connector. Runs judged that too risky and skipped it (four unattended runs, 10-12 Oct),
+connector. Runs judged that too risky and skipped it (several unattended runs),
 freezing the ledger the hub reads ticks against. Its `voice_edits` entries and `runs` now
 live in its own shard (it had none before), so a draft writes one small page. It still
 sets `edited` on its own entries; kb-dream's verdicts on the rest go in kb-dream's shard.

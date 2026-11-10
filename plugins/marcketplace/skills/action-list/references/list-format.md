@@ -51,7 +51,7 @@ supersedes_on: closed on the user's word, or past stale_after
 
 - A row past the verification cap is marked `unverified` with its age, never silently
   treated as open or done.
-- Every rank cites its evidence. "Kim can't brief finance without it" quoting Kim beats
+- Every rank cites its evidence. "Priya can't brief finance without it" quoting Priya beats
   "important follow-up".
 - An effort is an honest guess in minutes, and "5m + wait" where the item waits on someone.
 - A draft is written in the register its audience calls for, per `../../../shared/voice.md`,

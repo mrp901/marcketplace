@@ -39,7 +39,7 @@ cost with no input.
   first-run world, tested only the sweep and were deleted; `12-quiet-run` was reworded (quiet
   now means no line changed, and any `search_public_and_private` call fails it). The orphaned
   `.claude/hillclimb/proactive-router-sweep/` harness was deleted.
-- The 22 Sep and 13 Oct rationale below about the daily sweep, five searches and `is:saved` is
+- The earlier rationale below about the daily sweep, five searches and `is:saved` is
   history, superseded by this entry.
 
 ## 2026-11-03 name the shard seed in the state write (1.10.3)
@@ -199,7 +199,7 @@ The state page passed 49 KB and a full-body-replace write became unsafe to re-ty
 
 After the 1.3.0 shards, `items` and `outcomes` still sat in a 27 KB main state page, so
 every run that posted a board line had to re-type all of it through a full-body-replace
-connector. Runs judged that too risky and skipped it (four unattended runs, 10-12 Oct),
+connector. Runs judged that too risky and skipped it (several unattended runs),
 freezing the ledger the hub reads ticks against. The hub keeps its `pr:` items,
 `outcomes`, `tally`, `suppressions` and `patterns_blocked` in its own shard and reads
 every shard's `items` plus briefing's `closed`, so a closed line awaiting its owner's
@@ -210,10 +210,9 @@ gone: only idea-spar writes `ideas`. See `shared/state-schema.md`, "Shards".
 
 ## 2026-10-26 every shard read, every tick acted on (1.10.0)
 
-The 25 Oct run read the main state document and its own shard, found no `state.items` entry
-for `dream:` and `sweep:` lines posted after 10 Oct, and "treated them as already settled, as
-the 20 Oct run did". Those entries live in their owners' shards, which it never opened; the
-briefing the next morning counted 55 ticked lines with no hub sub-line. SKILL.md already said
+One run read the main state document and its own shard, found no `state.items` entry
+for `dream:` and `sweep:` lines, and treated them as already settled, as an earlier run had. Those entries live in their owners' shards, which it never opened; the
+next briefing counted dozens of ticked lines with no hub sub-line. SKILL.md already said
 `items` was every shard's, in the State bullet, and the run skimmed past it.
 
 - Step 1 now reads every shard by id as an explicit step and names the shard and item count

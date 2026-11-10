@@ -49,7 +49,7 @@ Any handler name that names a skill retired in 1.11.0 reads as its replacement: 
 
 ## The allowlist principle
 
-Classify what the message is asking for, not whether you're currently allowed to do it, and not by which search surfaced it. No handler exists yet for some categories; that's a fact about scope, not a reason to soften or omit the proposed action. Write the specific, concrete thing you'd do if you could ("draft an email to Elie proposing a discovery call", not "an email might be relevant"). The gate on whether it actually gets built lives entirely in the tick, later; never pre-empt that gate by declining to name the action here.
+Classify what the message is asking for, not whether you're currently allowed to do it, and not by which search surfaced it. No handler exists yet for some categories; that's a fact about scope, not a reason to soften or omit the proposed action. Write the specific, concrete thing you'd do if you could ("draft an email to Jonas proposing a discovery call", not "an email might be relevant"). The gate on whether it actually gets built lives entirely in the tick, later; never pre-empt that gate by declining to name the action here.
 
 Concretely: classification names the concrete action whether or not a handler exists in the table above. A category with `none yet` still gets a specific, named line on the board; it just closes as `acknowledged, no handler` rather than dispatching one. The one place this cuts the other way: don't invent an action content doesn't support. A genuine FYI is classified `fyi` and stays off the board.
 

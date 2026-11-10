@@ -3,8 +3,8 @@
 ## Structure
 
 **Title:** `<profile.org.product_tag> <short, concrete problem statement>` - describes the
-problem, not the fix (e.g. `[Cloud] Prior-month comparison should be like-for-like MTD, not
-full month`, not `[Cloud] Fix MTD bug`).
+problem, not the fix (e.g. `[Freight] Prior-month comparison should be like-for-like MTD, not
+full month`, not `[Freight] Fix MTD bug`).
 
 **Context** - What's happening, why it's wrong or confusing, and who it misleads. Ground it
 in the real screen details from idea step 1, and in the product's own vocabulary - name the
@@ -13,7 +13,7 @@ finish this section knowing exactly what's wrong.
 
 Write it the way the user talks. Present tense, concrete nouns, direct statements of fact:
 
-> In TEM and Mobile we don't have daily data, but for Cloud we do. So the Cloud Spend tile
+> In Road and Rail we don't have daily data, but for Air we do. So the Air Freight Spend tile
 > comparing month-to-date against the *whole* of last month is comparing 12 days to 31.
 
 Not:

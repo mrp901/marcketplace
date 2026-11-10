@@ -15,8 +15,8 @@ judge the ticket cold, the way a teammate opening it fresh would.
    and `../../../shared/voice.md`'s shared avoid-list; name any specific tell found.
 3. **Zero-context clarity.** Someone who has never seen the screen can read Context alone
    and know exactly what's wrong, because it names the actual modules, screens, tiles,
-   labels and numbers. "A percentage is misleading" fails. "In TEM and Mobile we don't have
-   daily data, but for Cloud we do - so the Cloud Spend tile is comparing 12 days of this
+   labels and numbers. "A percentage is misleading" fails. "In Road and Rail we don't have
+   daily data, but for Air we do - so the Air Freight Spend tile is comparing 12 days of this
    month to 31 of last" passes.
 4. **Options are parallel.** The options use the same sentence shape and level of detail,
    with only the genuinely different part varying, so the trade-off is visible at a glance.

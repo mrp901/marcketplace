@@ -1,7 +1,7 @@
 # Worked example
 
 Against `profiles/example.md`: Priya Kanth, Product Manager at Northwind Logistics,
-tracker project FLT, kb "Northwind Ops Vault". Fictional throughout.
+tracker project FLT, kb "Northwind Ops Notes". Fictional throughout.
 
 ## build
 
