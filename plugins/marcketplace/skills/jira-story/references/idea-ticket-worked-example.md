@@ -12,9 +12,8 @@ week so far to all of last week"*
 
 **Context**
 
-In the dispatch and yard modules we only have weekly totals, but in Route Planner we have
-daily ones. The Delivery Time chart still compares like they're the same - it takes this
-week's days so far and puts them against the *whole* of last week. On a Wednesday that's 3
+The Delivery Time chart in Route Planner compares unlike periods - it takes this week's days
+so far and puts them against the *whole* of last week. On a Wednesday that's 3
 days against 7, and the chart reports "-57% vs last week" as if delivery hours have
 collapsed.
 

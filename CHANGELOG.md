@@ -39,7 +39,7 @@ spelling as an alias.
 - Worked examples, eval personas and rubric text use Northwind Logistics (freight, routing,
   telematics, billing); ticket keys are `FLT-` / `FIG-`. Runtime text says "knowledge base"
   for the user's own notes store.
-- `kb_health_metrics.py`: the default `--lookup-pattern` is now `(?i)vault|knowledge|notes|docs|(^|__)kb[-_]`
+- `kb_health_metrics.py`: the default `--lookup-pattern` is now `(?i)vault|knowledge|(^|__)kb[-_]`
   (pin your own with `budgets.kb-dream.health.lookup_pattern`), and the folders it leaves out of
   the reuse count are the `--inbox` and `--dreams` folders it is given, plus `.utility`, `.obsidian`,
   `.git` and `node_modules`.

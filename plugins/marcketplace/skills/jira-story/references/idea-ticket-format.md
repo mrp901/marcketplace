@@ -13,9 +13,8 @@ finish this section knowing exactly what's wrong.
 
 Write it the way the user talks. Present tense, concrete nouns, direct statements of fact:
 
-> In Road and Rail we only have weekly totals, but for Air we have daily ones. So the Air
-> Delivery Time chart comparing this week so far against the *whole* of last week is
-> comparing 3 days to 7.
+> The Air Delivery Time chart compares this week so far against the *whole* of last week, so
+> on a Wednesday it is comparing 3 days to 7.
 
 Not:
 

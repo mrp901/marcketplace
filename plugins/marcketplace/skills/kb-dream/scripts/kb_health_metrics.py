@@ -334,7 +334,7 @@ def main():
     ap.add_argument("--memory", default="")
     ap.add_argument("--inbox", default="")
     ap.add_argument("--ledger", default="")
-    ap.add_argument("--lookup-pattern", default=r"(?i)vault|knowledge|notes|docs|(^|__)kb[-_]")
+    ap.add_argument("--lookup-pattern", default=r"(?i)vault|knowledge|(^|__)kb[-_]")
     ap.add_argument("--matured-from", type=int, default=35)
     ap.add_argument("--matured-to", type=int, default=7)
     ap.add_argument("--stale-memory-days", type=int, default=14)
