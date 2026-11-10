@@ -23,5 +23,15 @@ cf[20067]
 Ana Beltrao
 Ana Souza
 
-# The pre-1.14.0 kb.kind value, documented on purpose as a legacy alias that readers still accept.
-obsidian_okf
+# The invented placeholders in scrub_denylist.example.txt, and the fictional wiki page ids in
+# profiles/example.md, the hooks tests and the router evals.
+0f1e2d3c-4b5a-4968-8777-66554433aabb
+604800:0f1e2d3c-4b5a-4968-8777-66554433aabb
+C0ZEPHCHN001
+T0ZEPHTEAM01
+U0ZEPHUSR001
+OneDrive - ZEPHYRHOLM
+cf[10987]
+confluence:8f2e4a91-example-cloud-id/889000111
+confluence:8f2e4a91-example-cloud-id/990111222
+confluence:x/889000111

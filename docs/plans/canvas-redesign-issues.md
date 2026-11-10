@@ -19,7 +19,7 @@ The user wants these fixed. They also want loose token-spend guidelines that don
    - This especially covers any repository belonging to the user's employer (the organisation whose private skills this plugin was ported from).
    - If a tool defaults to, or suggests, another repo, stop.
 2. Search open issues first (`search_issues` on `repo:mrp901/marcketplace`), so issues aren't duplicated if the plan is re-run.
-3. Issue text must contain no organisation IDs, webhook URLs, Slack/Confluence IDs, real ticket keys or people's names. Use `PRJ-164` as the example idea key, and "the user" for the person. Implementers will copy issue text into `plugins/`, where `scrub_check.py` fails on those literals and on em dashes.
+3. Issue text must contain no organisation IDs, webhook URLs, Slack/Confluence IDs, real ticket keys or people's names. Use `PRJ-540` as the example idea key, and "the user" for the person. Implementers will copy issue text into `plugins/`, where `scrub_check.py` fails on those literals and on em dashes.
 4. Write in Australian English, plainly:
    - no em-dash asides
    - no "not X, but Y" framing
@@ -89,13 +89,13 @@ The content for each issue is below. Expand it into full prose, but don't add sc
     - a Migration section
   - **Ideas block grammar:**
     ```
-    - PRJ-164 · <title> · note · wireframe
+    - PRJ-540 · <title> · note · wireframe
       - <decision question>
-        - [ ] (PRJ-164/d1a) <option>
-        - [ ] (PRJ-164/d1b) <option>
-      - [ ] (PRJ-164/w-keep) 👍 Keep this wireframe direction
-      - [ ] (PRJ-164/w-rework) 🔁 Rework: edit this line to say what to change
-      - [ ] (PRJ-164/r) ⬆️ Moved <parked slot> → <slot>. Refresh the research?
+        - [ ] (PRJ-540/d1a) <option>
+        - [ ] (PRJ-540/d1b) <option>
+      - [ ] (PRJ-540/w-keep) 👍 Keep this wireframe direction
+      - [ ] (PRJ-540/w-rework) 🔁 Rework: edit this line to say what to change
+      - [ ] (PRJ-540/r) ⬆️ Moved <parked slot> → <slot>. Refresh the research?
     ```
     - At most 2 open decisions per idea, with 2-4 options each.
     - The block is removed once it has no open lines.
@@ -191,7 +191,7 @@ The content for each issue is below. Expand it into full prose, but don't add sc
   - **Requeued ideas first.** Scout selects requeued ideas first and refreshes the note in place.
   - **Remove the old scout behaviour.** Scout stops self-settling its ticked lines and stops firing its webhook.
   - **Deep-dive.**
-    - It writes its forks as option groups inside the block (`PRJ-164/q1a…`).
+    - It writes its forks as option groups inside the block (`PRJ-540/q1a…`).
     - A stuck or paused question becomes one line: "edit with your answer and tick".
     - It gets no selector change, and it stops firing its webhook.
 - **Files:** `skills/idea-scout/SKILL.md`, `references/note-format.md`, the new `references/decide-mode.md`, `skills/idea-deep-dive/SKILL.md`, `references/write-up.md`.

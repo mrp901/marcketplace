@@ -8,11 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [1.14.0] - 2026-11-10
 
-The shipped text and examples are neutral again, and the check that keeps them neutral is
-enforced. Examples had drifted to one organisation's customers, colleagues, products and idioms;
-the scrub only looked at `plugins/`, skipped `profiles/`, and passed on built-in shapes alone when
-no denylist was loaded. The worked examples now use the fictional Northwind Logistics throughout.
-No state migration; two renames keep their old spelling as an alias.
+The scrub check is now enforced: it covers the whole repository including `profiles/`, and it
+fails rather than passing on built-in shapes alone when no denylist is loaded. Worked examples use
+the fictional Northwind Logistics throughout. No state migration; two renames keep their old
+spelling as an alias.
 
 ### Added
 - `scrub_check.py --require-denylist`: exits 2 when no denylist loaded, so a run on built-in
@@ -35,13 +34,16 @@ No state migration; two renames keep their old spelling as an alias.
   customer buys through. Every reader accepts either key (`via` wins); `kb-dream` writes only
   `via` and renames a legacy key when it refreshes the note. A channel partner is never
   auto-created as a customer note.
-- **`kb.kind: obsidian_typed`** replaces `obsidian_okf`. The legacy value is accepted wherever
-  `kb.kind` is read and means the same thing; an existing profile needs no edit.
-- Worked examples, eval personas and rubric text moved to Northwind Logistics (freight, routing,
+- **`kb.kind: obsidian_typed`** names a markdown-folder knowledge base. Any `kb.kind` beginning
+  `obsidian_` is read as `obsidian_typed`, so an existing profile needs no edit.
+- Worked examples, eval personas and rubric text use Northwind Logistics (freight, routing,
   telematics, billing); ticket keys are `FLT-` / `FIG-`. Runtime text says "knowledge base"
-  where it meant the user's own notes store.
-- CHANGELOG and HISTORY wording no longer carries dates or incidents from any real install; the
-  technical substance is unchanged.
+  for the user's own notes store.
+- `kb_health_metrics.py`: the default `--lookup-pattern` is now `(?i)vault|knowledge|notes|docs|(^|__)kb[-_]`
+  (pin your own with `budgets.kb-dream.health.lookup_pattern`), and the folders it leaves out of
+  the reuse count are the `--inbox` and `--dreams` folders it is given, plus `.utility`, `.obsidian`,
+  `.git` and `node_modules`.
+- CHANGELOG and HISTORY wording is kept general; the technical substance is unchanged.
 
 ### Removed
 - The porting-provenance table in `shared/profile-schema.md` (porting is done; `PORTING.md`
@@ -304,7 +306,7 @@ up) and the open `kb-dream` fold. Nothing here changes state.
 ## [1.10.1] - 2026-10-26
 
 Two folds `kb-dream` proposed from the knowledge base's memory and the user accepted on the
-board (`dream:261015-4`, `dream:261026-1`).
+board (`dream:260115-4`, `dream:260126-1`).
 
 ### Changed
 - `shared/voice.md` "The edits ledger": an entry's After side is the artefact the user actually

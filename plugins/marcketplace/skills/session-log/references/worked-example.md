@@ -4,7 +4,7 @@ Against `profiles/example.md` (Northwind Logistics, Freight Ops), a live session
 corrected a figure.
 
 **Gate check:** the session corrected a fact (an earlier cost-table draft used the wrong
-comparison baseline) and made a decision (use like-for-like MTD instead) - worth a note.
+comparison baseline) and made a decision (use same-period instead) - worth a note.
 
 **Note written**, `Sessions/2026-09-22-cost-table-baseline-corrected.md`:
 
@@ -12,7 +12,7 @@ comparison baseline) and made a decision (use like-for-like MTD instead) - worth
 ---
 type: Session Log
 title: Cost-table comparison baseline corrected (22 Sep 2026)
-description: Dashboard cost-table now compares like-for-like MTD, not prior full month.
+description: Dashboard cost-table now compares same-period, not prior full month.
 tags: [session, freight, dashboard]
 status: draft
 generated: { by: session-log, at: 2026-09-22T17:40:00+10:00 }
@@ -24,7 +24,7 @@ generated: { by: session-log, at: 2026-09-22T17:40:00+10:00 }
 
 ## Decisions
 
-- **Compare like-for-like MTD, not full prior month.** The earlier draft compared a
+- **Compare same-period, not full prior month.** The earlier draft compared a
   partial current month against a complete prior month, overstating every increase. Feeds
   [decision record](../Decisions/2026-09-22-cost-table-baseline.md).
 
@@ -39,20 +39,20 @@ generated: { by: session-log, at: 2026-09-22T17:40:00+10:00 }
 
 ## Proposed follow-ups
 
-- [ ] `Decisions/2026-09-22-cost-table-baseline.md` - new record for the MTD comparison
+- [ ] `Decisions/2026-09-22-cost-table-baseline.md` - new record for the period comparison
       call. Not written yet.
 ```
 
 **Index line**, `Sessions/index.md`:
 
 ```markdown
-* [Cost-table comparison baseline corrected (22 Sep 2026)](2026-09-22-cost-table-baseline-corrected.md) - Dashboard cost-table now compares like-for-like MTD, not prior full month.
+* [Cost-table comparison baseline corrected (22 Sep 2026)](2026-09-22-cost-table-baseline-corrected.md) - Dashboard cost-table now compares same-period, not prior full month.
 ```
 
 **Log line**, `log.md` under today's heading:
 
 ```markdown
-* **Creation**: [Session - cost-table baseline corrected](Sessions/2026-09-22-cost-table-baseline-corrected.md) - MTD comparison fix, 14% figure was a baseline artefact.
+* **Creation**: [Session - cost-table baseline corrected](Sessions/2026-09-22-cost-table-baseline-corrected.md) - period comparison fix, 14% figure was a baseline artefact.
 ```
 
 **A same-run stale line, corrected unasked:** if an earlier line logged today already

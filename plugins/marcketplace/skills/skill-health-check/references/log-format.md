@@ -8,10 +8,10 @@ to the top. No frontmatter - see `kb-conventions.md`'s `.utility/` rule.
 
 Evidence window: 2026-08-24 to 2026-09-10 (4 kb notes, 1 tracker ticket)
 
-- FIG-164 deep-dive note: no correction found, links resolve, cited by the FIG-164 wireframe.
-- FIG-165 deep-dive note: superseded by the user's own addition on 2026-09-08 correcting the
-  fuel-surcharge figure - the note used the old 8.5% instead of the July 9.2% update.
-- Ticket FIG-171 (jira-story, idea mode): edited by the user 20 minutes after creation, priority changed.
+- FIG-531 deep-dive note: no correction found, links resolve, cited by the FIG-531 wireframe.
+- FIG-532 deep-dive note: superseded by the user's own addition on 2026-09-08 correcting the
+  fuel-surcharge figure - the note used the old 7.0% instead of the March 9.2% update.
+- Ticket FIG-538 (jira-story, idea mode): edited by the user 20 minutes after creation, priority changed.
 - Evidence sources available: kb frontmatter/links (full), tracker changelog (full), voice
   ledger (none - this skill drafts no prose).
 ```

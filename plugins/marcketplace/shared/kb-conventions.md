@@ -1,6 +1,6 @@
 # Knowledge base conventions
 
-Any skill that reads or writes `profile.kb.*` (session-log, kb-dream, idea-spar, voice calibration) follows this contract: rules any knowledge base of kind `obsidian_typed | plain_markdown | notion | confluence` can follow. The legacy kind `obsidian_okf` (before 1.14.0) is read as `obsidian_typed` wherever `kb.kind` is read.
+Any skill that reads or writes `profile.kb.*` (session-log, kb-dream, idea-spar, voice calibration) follows this contract: rules any knowledge base of kind `obsidian_typed | plain_markdown | notion | confluence` can follow. Any `kb.kind` beginning `obsidian_` is read as `obsidian_typed`.
 
 ## The knowledge base as a concept
 
@@ -33,7 +33,7 @@ The cautionary tale this rule exists to prevent, from the source: `session-log` 
 
 `profile.kb.link_style` is `relative_markdown` or `wikilink`, and it governs every link a skill writes into the kb:
 
-- **`relative_markdown`** - `[week one retro](../Onboarding/week-one-retro.md)`. Labels are readable prose, not filenames. Never an absolute `/path` - legal in most kb formats but resolved unreliably by local tooling (Obsidian included). Broken links are fine: a link to a note that doesn't exist yet is a forward reference to not-yet-written knowledge, not an error to delete or "tidy up".
+- **`relative_markdown`** - `[first week notes](../Onboarding/first-week-notes.md)`. Labels are readable prose, not filenames. Never an absolute `/path` - legal in most kb formats but resolved unreliably by local tooling (Obsidian included). Broken links are fine: a link to a note that doesn't exist yet is a forward reference to not-yet-written knowledge, not an error to delete or "tidy up".
 - **`wikilink`** - `[[Note Title]]` form, used only where `profile.kb.link_style` is explicitly set to it. Where the kb's own tooling treats wikilinks as native (Obsidian) but the kb is also read by anything that doesn't resolve them (a plain markdown viewer, an export pipeline), `relative_markdown` is the safer default and onboarding should say so when the choice is ambiguous.
 
 Whichever style is configured, apply it consistently across every note a skill writes in one run - never mix styles within a single note or a single skill's output.

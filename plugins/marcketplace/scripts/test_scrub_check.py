@@ -10,6 +10,8 @@ reads the exit code and output. Nothing here touches the real denylist or the ne
 import contextlib
 import io
 import os
+import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -116,11 +118,25 @@ class Scope(Fixture):
         code, _, _ = self.run_main([self.root, "--require-denylist"])
         self.assertEqual(code, 0)
 
-    def test_denylist_files_are_skipped(self):
-        self.write("scrub_denylist.example.txt", "Zorbax\n")
+    def test_local_denylist_is_skipped_but_example_is_scanned(self):
         self.write("scrub_denylist.local.txt", "Zorbax\n")
         code, _, _ = self.run_main([self.root, "--require-denylist"])
         self.assertEqual(code, 0)
+        self.write("scrub_denylist.example.txt", "Zorbax\n")
+        code, out, _ = self.run_main([self.root, "--require-denylist"])
+        self.assertEqual(code, 1)
+        self.assertIn("scrub_denylist.example.txt", out)
+
+    def test_source_dir_is_scanned(self):
+        self.write("source/old/SKILL.md", "Zorbax\n")
+        code, _, _ = self.run_main([self.root, "--require-denylist"])
+        self.assertEqual(code, 1)
+
+    def test_confluence_page_id_shape_warns(self):
+        self.write("a.md", "ref confluence:cloud-x/" + "1234567890" + " here\n")
+        code, out, _ = self.run_main([self.root, "--require-denylist"])
+        self.assertEqual(code, 0)
+        self.assertIn("wiki-page-id", out)
 
     def test_wiki_page_id_shape_warns_but_does_not_fail(self):
         self.write("a.md", "see pages/" + "1234567890" + " for it\n")
@@ -128,6 +144,52 @@ class Scope(Fixture):
         self.assertEqual(code, 0)
         self.assertIn("WARN", out)
         self.assertIn("wiki-page-id", out)
+
+
+@unittest.skipUnless(shutil.which("git"), "git not installed")
+class GitTracked(Fixture):
+    def setUp(self):
+        super().setUp()
+        subprocess.run(["git", "init", "-q"], cwd=self.root, check=True)
+
+    def track(self, *rels):
+        subprocess.run(["git", "add", "-f", "--"] + list(rels), cwd=self.root, check=True)
+
+    def test_only_tracked_files_are_scanned(self):
+        self.write("tracked.md", "Zorbax\n")
+        self.write("untracked.md", "Zorbax\n")
+        self.track("tracked.md")
+        code, out, _ = self.run_main([self.root, "--require-denylist"])
+        self.assertEqual(code, 1)
+        self.assertIn("tracked.md", out)
+        self.assertNotIn("untracked.md", out)
+
+    def test_untracked_leak_does_not_fail_in_a_git_tree(self):
+        self.write("ok.md", "fine\n")
+        self.write("untracked.md", "Zorbax\n")
+        self.track("ok.md")
+        code, _, _ = self.run_main([self.root, "--require-denylist"])
+        self.assertEqual(code, 0)
+
+    def test_tracked_local_file_fails(self):
+        self.write("profiles/acme.local.md", "fine\n")
+        self.track("profiles/acme.local.md")
+        code, out, _ = self.run_main([self.root, "--require-denylist"])
+        self.assertEqual(code, 1)
+        self.assertIn("tracked-private-path", out)
+
+    def test_tracked_claude_dir_fails(self):
+        self.write(".claude/scratch/x.md", "fine\n")
+        self.track(".claude/scratch/x.md")
+        code, out, _ = self.run_main([self.root, "--require-denylist"])
+        self.assertEqual(code, 1)
+        self.assertIn("tracked-private-path", out)
+
+    def test_tracked_example_denylist_is_scanned(self):
+        self.write("scrub_denylist.example.txt", "Zorbax\n")
+        self.track("scrub_denylist.example.txt")
+        code, _, _ = self.run_main([self.root, "--require-denylist"])
+        self.assertEqual(code, 1)
 
 
 if __name__ == "__main__":

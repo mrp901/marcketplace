@@ -95,7 +95,7 @@ notetaker:
 
 kb:
   name:                        # display name of the knowledge base
-  kind: obsidian_typed | plain_markdown | notion | confluence   # legacy alias obsidian_okf is read as obsidian_typed
+  kind: obsidian_typed | plain_markdown | notion | confluence   # any kind beginning obsidian_ is read as obsidian_typed
   local_root:                   # local path, if a device bridge is used
   remote: {service, library, path_prefix}
   conventions_file: CLAUDE.md
@@ -206,7 +206,7 @@ budgets:
 | `notetaker.lookback_days` | action-sweep, briefing, action-list | default | not read when `tools.notetaker.service` is `none` |
 | `notetaker.prep_lines` | briefing | default | |
 | `kb.name` | session-log, kb-dream, idea-spar, action-sweep, action-list | ask | |
-| `kb.kind` | session-log, kb-dream, action-list, jira-story | ask | `obsidian_typed`, `plain_markdown`, `notion` or `confluence`; the legacy value `obsidian_okf` (pre-1.14.0) is accepted everywhere it is read and means `obsidian_typed` |
+| `kb.kind` | session-log, kb-dream, action-list, jira-story | ask | `obsidian_typed`, `plain_markdown`, `notion` or `confluence`; any value beginning `obsidian_` is read as `obsidian_typed` (nothing branches on `kb.kind` except `confluence`) |
 | `kb.local_root` | session-log, kb-dream (health verdict), action-list | default (empty until a device bridge is linked) | |
 | `kb.remote` | session-log, kb-dream, action-list | default | |
 | `kb.conventions_file` | session-log, kb-dream, action-list, jira-story | default | |

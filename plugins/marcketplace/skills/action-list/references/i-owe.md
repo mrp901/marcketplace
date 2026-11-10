@@ -104,7 +104,7 @@ Two tables, oldest first.
 
 | From | The ask | Since | Age | Link | Row |
 |---|---|---|---|---|---|
-| Tomasz Nowak | Whether the MTD comparison includes cancelled loads: "he tagged you" | Tue 6 Oct | 6 bd | [FLT-166](...) | - |
+| Tomasz Nowak | Whether the same-weekday comparison includes cancelled loads: "he tagged you" | Tue 6 Oct | 6 bd | [FLT-514](...) | - |
 ```
 
 - **Age** is business days: the weekdays (Mon-Fri, `org.timezone`) after the date up to and

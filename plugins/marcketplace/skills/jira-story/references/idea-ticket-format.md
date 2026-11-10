@@ -3,8 +3,8 @@
 ## Structure
 
 **Title:** `<profile.org.product_tag> <short, concrete problem statement>` - describes the
-problem, not the fix (e.g. `[Freight] Prior-month comparison should be like-for-like MTD, not
-full month`, not `[Freight] Fix MTD bug`).
+problem, not the fix (e.g. `[Freight] Delivery-time chart should compare the same weekdays, not
+full month`, not `[Freight] Fix chart bug`).
 
 **Context** - What's happening, why it's wrong or confusing, and who it misleads. Ground it
 in the real screen details from idea step 1, and in the product's own vocabulary - name the

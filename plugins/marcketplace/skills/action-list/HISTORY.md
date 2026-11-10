@@ -2,8 +2,7 @@
 
 ## 2026-11-10 neutral examples (1.14.0)
 
-The "I owe" and 1:1 examples use fictional people (Ana, Tomasz, Priya) instead of real
-colleagues. No behaviour change.
+The "I owe" and 1:1 examples use fictional people (Ana, Tomasz, Priya). No behaviour change.
 
 ## 2026-11-09 customer notes as context and as I-owe candidates (1.13.0)
 
@@ -48,8 +47,7 @@ any other of equal urgency; `prep` is a second shape of the same skill, "prep my
   people file, the conventions file's folder table, then a search. One user's knowledge base keeps 1:1
   prep notes under onboarding and meeting notes under meetings; another org's will differ.
   Names resolve through `people`, `kb.people_file` and `people_confusions` and an ambiguous
-  first name is asked once, never defaulted (one knowledge base had several pairs and a foursome
-  of people who share a first name).
+  first name is asked once, never defaulted (several people can share a first name).
 - **Prep does not move `last_window_end`.** It is not a window.
 
 **Open questions:** how many past meetings "recent themes" should read (4 now); whether prep

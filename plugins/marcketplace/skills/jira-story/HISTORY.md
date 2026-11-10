@@ -3,8 +3,7 @@
 ## 2026-11-10 neutral examples (1.14.0)
 
 The idea-ticket examples, rubric and format notes moved to the fictional freight product set
-(`[Freight]` titles, `FLT-` keys, an air-freight spend tile) so the shipped text names no real
-product or tracker project. Rules are unchanged.
+(`[Freight]` titles, `FLT-` keys, an air-freight spend tile) Rules are unchanged.
 
 ## 2026-11-09 read the customer's note first (1.13.0)
 

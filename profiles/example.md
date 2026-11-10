@@ -107,7 +107,7 @@ kb:
     inbox: Inbox/
     drafts: Drafts/
     research: Product/FreightOps/Research/
-    screenshots: References/Images and Screenshots/Screenshots/
+    screenshots: Assets/Screenshots/
     sessions: Sessions/
     dreams: Dreams/
     decisions: Decisions/

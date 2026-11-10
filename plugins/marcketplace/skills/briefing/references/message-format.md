@@ -69,7 +69,7 @@ Fictionalised against `profiles/example.md` (Northwind Logistics / Freight Ops),
 :ticket: Tracker
 
 * [FLT-231](https://northwindlogistics.atlassian.net/browse/FLT-231) Dashboard: top cost increases table - In Review, assigned Tomasz
-* [FLT-166](https://northwindlogistics.atlassian.net/browse/FLT-166) Prior-month comparison should be like-for-like MTD - Parking lot, unassigned
+* [FLT-514](https://northwindlogistics.atlassian.net/browse/FLT-514) Delivery-time chart should compare the same weekdays - Parking lot, unassigned
 * Feed check: 1 claim the live tracker contradicts, on the board to look into
 
 Since last briefing

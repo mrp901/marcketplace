@@ -24,7 +24,7 @@ use the nearest part and say so in a note. Each part has a fixed look in
 
 | Part | Use for | ASCII form |
 |---|---|---|
-| shell | The product's real frame: top bar, nav rail, breadcrumb - only what the real product has | `┌─ Cloud › Spend ───┐` |
+| shell | The product's real frame: top bar, nav rail, breadcrumb - only what the real product has | `┌─ Freight › Spend ───┐` |
 | card | A summary metric or a grouped block | `┌ Title ──┐ $41k ▲6%` |
 | table | Rows of records; 3-5 columns, 2-3 rows | `Account  Spend  Δ` |
 | filter | Filter bar or dropdown | `[Account ▾] [Month ▾]` |

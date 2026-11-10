@@ -8,7 +8,7 @@ all of last month"*
 
 ---
 
-**Title:** `[Freight] Prior-month comparison should be like-for-like MTD, not full month`
+**Title:** `[Freight] Delivery-time chart should compare the same weekdays, not whole weeks`
 
 **Context**
 
@@ -43,7 +43,7 @@ against 1-12 Aug - and say on the tile which range we used.**
 
 **Related**
 
-- FLT-164 - another idea in the garden touching period selection. Worth a look for whoever
+- FLT-512 - another idea in the garden touching period selection. Worth a look for whoever
   picks either up; not a dependency.
 
 ---
@@ -54,7 +54,7 @@ against 1-12 Aug - and say on the tile which range we used.**
 item:
   tag: pr:260922-05
   category: ticket-idea
-  text_as_ticked: draft an idea ticket about the freight cost tile MTD comparison bug
+  text_as_ticked: draft an idea ticket about the delivery-time chart comparison bug
   ref: <link to the Slack thread it came from>
 mode: draft
 ```
@@ -64,9 +64,9 @@ mode: draft
 ```json
 {
   "status": "needs_confirmation",
-  "report_line": "drafted [Freight] MTD comparison ticket, audit clean · ticket_prose · <draft link>",
+  "report_line": "drafted [Freight] same-weekday comparison ticket, audit clean · ticket_prose · <draft link>",
   "artefacts": [{"kind": "idea_ticket_draft", "ref": "<draft link>"}],
-  "next_action": {"category": "ticket-idea", "text": "file the ticket: [Freight] Prior-month comparison should be like-for-like MTD, not full month", "ref": "<draft link>"}
+  "next_action": {"category": "ticket-idea", "text": "file the ticket: [Freight] Delivery-time chart should compare the same weekdays, not whole weeks", "ref": "<draft link>"}
 }
 ```
 
@@ -75,8 +75,8 @@ mode: draft
 ```json
 {
   "status": "done",
-  "report_line": "filed FLT-171 · [Freight] Prior-month comparison should be like-for-like MTD · <issue link>",
-  "artefacts": [{"kind": "idea_ticket", "ref": "FLT-171"}],
+  "report_line": "filed FLT-519 · [Freight] Delivery-time chart should compare the same weekdays · <issue link>",
+  "artefacts": [{"kind": "idea_ticket", "ref": "FLT-519"}],
   "next_action": null
 }
 ```
