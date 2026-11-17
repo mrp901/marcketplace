@@ -26,8 +26,8 @@ one whose `installed_version` is 1.1.0 retires the old idea lines first.
   cross-check), `notetaker` (list meetings, transcript), optional, only called when
   `notetaker.prep_lines` is true and `notetaker.service` is not `none`.
 - State: `cursors.briefing`, `glossary`, `nicknames`, `items`, `outcomes`, `runs` (every
-  skill's, from the main document and every shard), `closed`, `off_board` and its own
-  `items` (in its shard), `shards`, `installed_version`.
+  skill's, from the main document and every shard), `action-list`'s `settled`, `closed`,
+  `off_board` and its own `items` (in its shard), `shards`, `installed_version`.
 - Writes: the board header, the Today snapshots, lines tagged `rb:`, `term:` and `feed:`
   in For you (each ending with its tick effect), Closed, and the migration.
 
@@ -69,7 +69,9 @@ Fires more than once a day on a changing schedule; never assume a time of day.
    `../../shared/surface-protocol.md`'s "Closing": a `done` sub-line closes the line; a
    ticked To-do line closes as done by you; an option whose sibling closed closes as `not
    chosen`; a `state.outcomes` entry with the tag and `status: done` closes the manual
-   `skill-eval` path; a `no handler` sub-line closes as `acknowledged, no handler`. A `term:` line with a `done` sub-line is removed, never logged. A line whose latest
+   `skill-eval` path; a `no handler` sub-line closes as `acknowledged, no handler`; a
+   `sweep:` line whose tag is in `action-list`'s `settled` closes as `done · verified by
+   action-list`. A `term:` line with a `done` sub-line is removed, never logged. A line whose latest
    sub-line is `partial`, `blocked` or a router `queued` note, with nothing newer for
    `briefing.stale_after_business_days` business days, closes as `expired`. A younger
    `partial` or `blocked`, or an unresolved `needs your tick`, leaves the line open. An

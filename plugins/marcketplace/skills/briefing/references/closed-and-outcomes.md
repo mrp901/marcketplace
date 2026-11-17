@@ -15,6 +15,7 @@ this file covers the shapes.
 | The chosen option | `chosen` | you, plus the handler's own outcome on the same line if it dispatched |
 | A line whose tag has a `state.outcomes` entry with `status: done` and no sub-line (the manual `skill-eval` path) | the outcome's `report_line` | skill-eval |
 | A line with a `no handler` sub-line | `acknowledged, no handler` | you |
+| A `sweep:` line whose tag is in `action-list`'s `settled` | `done · verified by action-list` | you |
 | A line whose latest sub-line is `partial`, `blocked` or a router `queued` note, with no newer sub-line for `briefing.stale_after_business_days` business days (below) | `expired · no activity for 5 business days` | you |
 | A `term:` line with a `done` sub-line | removed from the board, no Closed line | (nothing logged) |
 

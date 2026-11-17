@@ -39,13 +39,14 @@ supersedes_on: closed on the user's word, or past stale_after
 4. **If you only do three things** - the top three, each one sentence, each quoting the
    promise or the ask that makes it urgent.
 5. **Ranked actions** - one table: `#`, action (a concrete verb and object), who's waiting
-   and why now (quoted, timestamped), source (a link), effort, and the draft it uses.
+   and why now (quoted, timestamped), source (a link), effort, and the draft it uses, or
+   for a find with a live board line, that line's `sweep:` tag (`SKILL.md` step 5).
 6. **Dropped** - resolved or not the user's, one line each with the evidence.
 7. **Drafts** - one `###` per draft: channel, recipients and subject, the draft as a
    quote block, then "Check before sending" bullets naming each assumption.
 8. **Couldn't confirm** - what the sources could not settle.
-9. **Backlog, not today** - the board's open lines and any older open threads, grouped,
-   with no ranking. Read only; the board stays the board's.
+9. **Backlog, not today** - the board's open lines not ranked above and any older open
+   threads, grouped, with no ranking. Read only; the board stays the board's.
 
 ## Rules for the content
 

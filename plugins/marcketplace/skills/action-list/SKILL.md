@@ -37,22 +37,20 @@ else. Any `unattended` invocation fast-fails: both modes need the user.
   `codebase` (search, read; optional, `work` only).
 - Repository work an item names (a branch, a commit, a pull request) runs through that
   item's own process and the machine's own tools; each push and pull request waits for its own yes.
-- State: `runs.action-list`, `cursors.action-list` (`last_window_end`), `settled`, in its shard; and,
-  read only, `action-sweep`'s shard for its `category: to-do` `items` (on the board or
-  off it). `prep` also reads the kb's 1:1 prep and meeting notes (`kb` search, read).
+- State: `runs.action-list`, `cursors.action-list` (`last_window_end`), `settled`, in its
+  shard; read only, `action-sweep`'s `sweep:` `items`, `runs` and `cursors`. `prep` also
+  reads the kb's 1:1 prep and meeting notes (`kb` search, read).
 
 ## Budget
 
-`build`: one extraction subagent per source at `budgets.models.search`, each returning
-every candidate with its evidence and deciding nothing; ranking and drafting at
-`budgets.models.worker`; one cold review at `budgets.models.critic`; one `kb: write`
-batch. When every source comes back empty, write no list: say so in one line and record
-`runs.action-list` as `quiet`. "I owe" adds **at most 4 reads**: `action-sweep`'s shard (the
-main document and this skill's shard are already read at onboarding), and up to 3 pages of
-one `from:me` chat search over the last 14 days, so a promise older than the window is
-still seen. Verification adds **at most 10** (step 3), and customers named add 1 index read and 1 read
-per note (max 3 notes per run). The extraction subagents already read tracker, transcripts and session notes
-(`references/i-owe.md`). `prep`: up to five extraction subagents at `budgets.models.search`
+`build`: one extraction subagent at `budgets.models.search` per source sweep does not
+cover, one for the delta, one per fallback source (step 2), each deciding nothing;
+ranking and drafting at `budgets.models.worker`; one cold review at
+`budgets.models.critic`; one `kb: write` batch. When sweep's items and every source come
+back empty, write no list: say so in one line and record `runs.action-list` as `quiet`.
+"I owe" adds **at most 4 reads**: `action-sweep`'s shard (which also feeds step 2), and up
+to 3 pages of one `from:me` chat search over the last 14 days. Verification adds **at most
+10** (step 3); customers named add 1 index read and 1 per note (max 3 notes per run). `prep`: up to five extraction subagents at `budgets.models.search`
 (owed each way, their open asks, previous 1:1 agendas, recent meetings), one worker, one
 critic, one `kb: write`, the same extra state read and 10-read verification cap.
 `work`: spend what each item needs, delegating any broad search to a subagent. Guidelines
@@ -61,7 +59,8 @@ in `../../shared/token-discipline.md`.
 ## Surface
 
 Read only. `build` reads the board once, through `chat: read canvas`, for its "Backlog,
-not today" section. This skill owns no tag prefix and never writes to the surface.
+not today" section and to tell which `sweep:` items still have a line (step 5). This
+skill owns no tag prefix and never writes to the surface.
 
 ## Choosing the mode
 
@@ -76,19 +75,19 @@ when one does.
 1. **Set the window.** It opens at `cursors.action-list.last_window_end`, or at 17:00 the
    previous day in `org.timezone` when there is no cursor, and closes now. Read today's
    calendar for the free time between now and the next commitment; size the list to it.
-2. **Extract.** One search-tier subagent per source, in parallel: the user's own chat
-   commitments, unanswered mentions and threads; email addressed to them; their open
-   tracker work and tickets that mention them; today's meeting transcripts (none when
-   `notetaker.service` is `none`); the kb inbox and the open threads of recent `kb.paths.sessions` notes; merged pull requests that
-   involve them. Each returns every candidate, quoted, with a link and a timestamp,
-   including any phrase that might be a promise, an ask or an offer, unfiltered: extractors
-   decide nothing (`references/i-owe.md`). Read `action-sweep`'s to-do `items` from state
-   alongside; they carry their evidence already. A customer a candidate names has its note
-   read first (`../../shared/customer-notes.md` "Reading"; `references/i-owe.md`).
+2. **Extract.** `action-sweep` is the one gatherer for chat, tracker and meetings: every
+   `sweep:` item in its shard, any category, on the board or off it, is a candidate. One
+   search-tier subagent per remaining source, in parallel: email, the kb inbox and session
+   notes, merged pull requests, and the delta on sweep's sources since its cursors, with a
+   whole-window fallback when sweep is stale or missed a source
+   (`references/sweep-handoff.md`). Each returns every candidate, quoted, with a link and a
+   timestamp, unfiltered: extractors decide nothing (`references/i-owe.md`). Dedupe by
+   permalink or ticket key, keeping the most evidence. A customer a candidate names has its
+   note read first (`../../shared/customer-notes.md` "Reading"; `references/i-owe.md`).
 3. **Verify before ranking, capped.** At most 10 candidates per build, one targeted read
    each, owed rows first; the rest stay listed as `unverified` with their age. A later reply,
    a closed ticket or a sent email moves a verified one to "Dropped" with the evidence; a
-   to-do from state found done is also recorded in `settled` (`references/i-owe.md`).
+   `sweep:` item found done is also recorded in `settled` (`references/sweep-handoff.md`).
 4. **Rank.** First, promises the user made with a deadline inside the window; then
    someone waiting on the user, external before internal; then whatever unblocks someone
    else's work; then the rest. Within a tier a row the user owes someone (their own promise)
@@ -96,7 +95,8 @@ when one does.
    quoting the words that make it urgent.
 5. **Draft** every message and tracker comment in the register its audience calls for,
    with a "Check before sending" note naming what it assumes. A fact the sources cannot
-   settle is marked `[TBC: ...]`, never guessed.
+   settle is marked `[TBC: ...]`, never guessed. A find with a live `sweep:` line is ranked,
+   never drafted here: its row points at the line (`references/sweep-handoff.md`).
 6. **Review.** A critic-tier subagent reads the list cold against the sources: a wrong
    rank, a resolved item still listed, a name collision, a draft claiming more than its
    source. Fix what it finds.

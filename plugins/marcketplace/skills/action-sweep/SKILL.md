@@ -68,8 +68,9 @@ and `runs.action-sweep.status: quiet` and stop, with no thread read and no board
    (this skill's own modes), or `to-do` (the user's own list). A new-ticket candidate
    whose tier is unclear becomes a question with one option per tier, never a guess.
 5. **Post For you lines.** `chat: read canvas`, settle this skill's own `sweep:` lines
-   per `../../shared/surface-protocol.md` (never act on a tick; once, on the first run
-   under 1.12.0, backfill the tick effect on its own old lines, "Old lines get their effect
+   per `../../shared/surface-protocol.md` (never act on a tick; a line whose tag is in
+   `action-list`'s `settled` is done: never re-posted, left for briefing to close; once, on
+   the first run under 1.12.0, backfill the tick effect on its own old lines, "Old lines get their effect
    once"), then one write: one
    line per find **except a `to-do`**, in the protocol grammar, tag `(sweep:<yymmdd>-N)`,
    reading as the action a tick causes and ending with that category's tick effect,
@@ -83,7 +84,8 @@ and `runs.action-sweep.status: quiet` and stop, with no thread read and no board
    hits unread; see `references/gather-procedure.md`), its own `sweep:` items (this run's
    added; `on_board: false` and `off_board_at` (now) on each to-do, and on any entry whose
    tag is in briefing's `off_board` (copying its time); entries pruned when the tag is in
-   briefing's `closed` or `action-list`'s `settled`, or `off_board_at` is over 30 days old),
+   briefing's `closed`, an off-board entry's tag is in `action-list`'s `settled`, or
+   `off_board_at` is over 30 days old; an on-board entry waits for briefing's close),
    `runs.action-sweep` (`note`: finds by source, and how many were to-dos kept off the
    board; `ref`: `surface.url`; `version` per `../../shared/onboarding.md` step 6). The write first
    copies in any of its own `sweep:` items the main document still holds and its shard

@@ -243,6 +243,7 @@ Briefing is the only skill that moves lines to Closed, and it closes a line only
 - It is an option whose sibling closed as `done` or `expired`; it closes as `not chosen`.
 - A `state.outcomes` entry names its tag with `status: done` (the manual `skill-eval` path).
 - A `no handler` sub-line sits under it; it closes as `acknowledged, no handler` (the mapping proposal carries the request forward).
+- It is a `sweep:` line whose tag is in `action-list`'s `settled` (verified done away from the board); it closes as `done · verified by action-list`. Like every close, its tag goes into `closed`, so it is never read as a deletion.
 - Its latest sub-line is `partial`, `blocked` or a router `queued` note, and no newer sub-line has followed for `briefing.stale_after_business_days` business days (default 5, `0` disables); it closes as `expired · no activity for 5 business days` (5 is the configured threshold). Business days are Mon-Fri in `org.timezone`, counted from the latest sub-line's date to the run date; public holidays are not treated specially. This never applies to a `needs your tick` sub-line, a line with no sub-line, a To-do line or a `term:` line.
 
 A `partial` or `blocked` sub-line inside the expiry window, or a `needs your tick` sub-line whose fresh line is still open, keeps the parent open. A `term:` line whose sub-line is `done` is removed rather than logged: a confirmed term is vocabulary the system absorbed, not work anyone finished. That exception is deliberate; do not "fix" it.

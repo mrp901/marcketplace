@@ -141,6 +141,13 @@ handler name, and an `outcomes` entry.
 `manual:skill-eval` (`shc:` lines) is not inline and not a dispatch: the sub-line
 `  - ↳ router: queued for your next skill-eval run` is written and nothing runs.
 
+A ticked `sweep:` line whose tag is in `action-list`'s `settled` is not dispatched either:
+`action-list` verified it done away from the board. The hub writes
+`  - ↳ router <date time>: done · already done, verified by action-list · <ref>` and an
+`outcomes` entry, uncapped like an inline action, and nothing runs. It is a tick, not a
+deletion: no suppression, no tally change. The `done` sub-line settles the tick and makes
+the line eligible for briefing to close.
+
 That read-only-or-state-only constraint is what makes an action eligible to be inline at
 all. An action whose output is a durable artefact outside state (a note, a ticket, a
 comment) is a dispatch to a handler instead. This is why `summarise` dispatches to

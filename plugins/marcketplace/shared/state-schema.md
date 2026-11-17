@@ -77,11 +77,16 @@ main document.**
   or no longer exists. Every reader treats a tag in `off_board`, or an entry with
   `on_board: false`, as open and not on the board: never deleted, never closed, never
   re-posted by its owner.
-- **Closing an off-board to-do.** Nothing on the board closes it, so `action-list` records
-  every tag it verifies as done or withdrawn in `settled: {<tag>: <settled_at>}` in its own
-  shard (the same shape as `closed`). `action-sweep` reads it (it reads every shard) and
-  prunes its entries for those tags on its next write; `action-list` drops a `settled`
-  entry once no document's `items` holds the tag.
+- **Closing a settled item.** A `sweep:` item can be done before anything on the board
+  closes it, so `action-list` records every `sweep:` tag it verifies as done or withdrawn,
+  on the board or off it, in `settled: {<tag>: <settled_at>}` in its own shard (the same
+  shape as `closed`). An off-board entry: `action-sweep` reads it (it reads every shard) and
+  prunes its entry on its next write. An on-board line: `briefing` closes it like any
+  finished line (surface-protocol.md, "Closing"), so the tag reaches `closed` and is never
+  read as a deletion; a tick on it before then is not dispatched (`proactive-router` writes
+  a `done` sub-line instead); `action-sweep` leaves the line and its entry for that close
+  and prunes as usual. `action-list` drops a `settled` entry once no document's `items` holds
+  the tag.
 - **Retired shards.** A shard whose skill no longer exists (`vault-pulse`, `kb-note`,
   `idea-ticket`, retired in 1.11.0) is ignored by readers, and nothing requires deleting its
   page. The one exception is `kb-note`'s `voice_edits`: that shard is frozen (read-only, never
@@ -114,8 +119,8 @@ main document.**
 - **Readers.** `briefing`, `proactive-router`, `action-sweep` and `skill-health-check` read
   every skill's `runs` or `items`, so each reads the main document plus every shard named
   in `shards`, by id. Every skill that owns a tag prefix also reads `briefing`'s shard for
-  `closed`. `action-list` reads only `action-sweep`'s shard (its to-do `items`, on the
-  board or off it), beside its own. A shard that cannot be read is reported as `runs: unreadable` for that skill;
+  `closed`. `action-list` reads only `action-sweep`'s shard (all its `sweep:` `items`, on
+  the board or off it, and its `runs` and `cursors`), beside its own. A shard that cannot be read is reported as `runs: unreadable` for that skill;
   it never fails the reader, and a reader that cannot read a shard does not treat that
   skill's lines as deleted.
 - **Size guard.** A skill that is about to write a document over 45 KB, main or shard,
@@ -149,7 +154,7 @@ the events in the last column, and with only rare keys left in it, it stays smal
 | idea-spar, skill-health-check | main, its shard, briefing's (skill-health-check: every shard) | its shard (`items` for its own lines) | never |
 | reply-draft, session-log (capture) | main, its shard | its shard (`voice_edits`) | never |
 | skill-eval | main, the hub's, reply-draft's and session-log's | its shard (one `outcomes` entry) | never |
-| action-list | main, its shard, `action-sweep`'s (to-do `items`) | its shard (`runs`, `cursors`, `settled`) | never |
+| action-list | main, its shard, `action-sweep`'s (`items`, `runs`, `cursors`) | its shard (`runs`, `cursors`, `settled`) | never |
 | jira-story, session-log | main, its shard | its shard | never |
 | any skill, onboarding step 4 | | | it resolved or re-probed a tool prefix (`machines`) |
 
@@ -201,7 +206,7 @@ patterns_blocked: []          # shard: proactive-router
 
 closed: {<tag>: <closed_at>}  # shard: briefing - tags it closed or removed whose owner has not yet pruned them
 off_board: {<tag>: <off_board_at>} # shard: briefing - tags it moved off the board (1.12.0 migration) whose owner has not yet marked them on_board: false
-settled: {<tag>: <settled_at>}    # shard: action-list - off-board to-dos it verified done or withdrawn; action-sweep prunes its entries
+settled: {<tag>: <settled_at>}    # shard: action-list - sweep: tags it verified done or withdrawn; briefing closes an on-board line, action-sweep prunes an off-board entry
 voice_verdicts: {<tag>: true | false}   # shard: kb-dream - its edited verdict on another skill's voice_edits entry
 
 items:                        # shard: each writer's own entries, by tag prefix
@@ -234,12 +239,12 @@ a tracker label on an idea.
 | `state_version` | onboarding, on bootstrap | every skill (compatibility check) | permanent |
 | `installed_version` | onboarding on bootstrap; afterwards only the skill that completes a migration (for 1.0.0 to 1.1.0, `briefing`) | `briefing` (the migrating skill); other skills check the board's headings instead | permanent; never bumped by a skill that skipped a pending migration |
 | `profile_ref` | onboarding, on bootstrap | every skill | permanent |
-| `runs.<skill>` | that skill, at the end of its own run | briefing (the Runs report), skill-health-check | permanent, one entry per skill, overwritten each run |
+| `runs.<skill>` | that skill, at the end of its own run | briefing (the Runs report), skill-health-check; action-list (`runs.action-sweep`, for freshness) | permanent, one entry per skill, overwritten each run |
 | `runs.<skill>.version` | that skill, in the same write: the `version` in `.claude-plugin/plugin.json` as this run read it | briefing (the mixed-versions line) | overwritten each run |
 | `runs.proactive-router.fyi` | proactive-router | briefing | overwritten each run |
 | `runs.skill-health-check.scores` | skill-health-check | briefing | one entry per skill scored, overwritten when re-scored |
 | `cursors.briefing` | briefing | briefing | permanent, overwritten each run |
-| `cursors.action-sweep` | action-sweep | action-sweep | permanent, overwritten each run |
+| `cursors.action-sweep` | action-sweep | action-sweep; action-list (where its own delta starts) | permanent, overwritten each run |
 | `cursors.idea-spar` | idea-spar (Next watch) | idea-spar | permanent, overwritten each run |
 | `cursors.kb-dream` | kb-dream | kb-dream | permanent, overwritten each run; `last_health_values` is the previous verdict's scored values |
 | `cursors.kb-dream.customers_refreshed_at` | kb-dream, when its customer step ran | kb-dream | permanent, overwritten; only finds newly qualifying customers (each note's own `customer.evidence_through` is its refresh clock, in the knowledge base, not here); not written by a health-only run |
@@ -257,11 +262,11 @@ a tracker label on an idea.
 | `proposals` | proactive-router (opens a mapping on the first unmapped tick), kb-dream (folds and lifts) | proactive-router, kb-dream (dismisses after 60 days untouched) | until resolved or dismissed |
 | `suppressions` | proactive-router (on delete; removes a pattern whose `suppression_lift` proposal is accepted), in its shard | proactive-router, kb-dream | permanent until lifted |
 | `patterns_blocked` | proactive-router (after 3 deletions of the same channel+category pattern), in its shard | proactive-router, kb-dream | permanent until lifted |
-| `items.<tag>` | whichever skill wrote the surface line, in its own shard (the owner of the tag prefix) | proactive-router, briefing, action-sweep (dedupe) | pruned by its owner once the tag is in `closed` |
+| `items.<tag>` | whichever skill wrote the surface line, in its own shard (the owner of the tag prefix) | proactive-router, briefing, action-sweep (dedupe), action-list (`sweep:` entries) | pruned by its owner once the tag is in `closed` |
 | `items.<tag>.status`, `.blocked_reason`, `.blocked_on`, `.blocked_at`, `.retried_for` | proactive-router, on its own `pr:` lines only, when a dispatch returns `blocked` | proactive-router (blocked-line retry) | cleared on retry; pruned with the item |
-| `items.<tag>.on_board`, `.off_board_at` | the owner of the tag's prefix (`action-sweep` for a `sweep:` to-do it does not post, or one briefing took off the board): `on_board: false` and the time it left the board | action-list (reads `action-sweep`'s `category: to-do` entries), proactive-router and briefing (never read as deleted) | pruned with the item, or 30 days after `off_board_at` |
+| `items.<tag>.on_board`, `.off_board_at` | the owner of the tag's prefix (`action-sweep` for a `sweep:` to-do it does not post, or one briefing took off the board): `on_board: false` and the time it left the board | action-list (reads every `sweep:` entry, and points at a live line rather than redrafting it), proactive-router and briefing (never read as deleted) | pruned with the item, or 30 days after `off_board_at` |
 | `off_board.<tag>` | briefing, in its shard, for each line its 1.12.0 migration took off the board (value: when) | action-sweep (sets `on_board: false`, copies the time), proactive-router (not deleted) | dropped once the owner's entry carries `on_board: false` or is gone |
-| `settled.<tag>` | action-list, in its shard, for each off-board to-do it verified done or withdrawn | action-sweep (prunes its entry) | dropped once no document's `items` holds the tag |
+| `settled.<tag>` | action-list, in its shard, for each `sweep:` tag it verified done or withdrawn, on the board or off it | briefing (closes an on-board line), proactive-router (never dispatches a tick on one), action-sweep (prunes an off-board entry) | dropped once no document's `items` holds the tag |
 | `cursors.<skill>.tick_effects_backfilled` | each owner that writes board lines (`action-sweep`, `kb-dream`, `skill-health-check`, `idea-spar`, `briefing`), once, on its first 1.12.0 run that settles its lines | that skill | permanent |
 | `closed.<tag>` | briefing, in its shard, for every tag it closes or removes | every skill that owns a tag prefix; proactive-router (closed, not deleted) | dropped once no document's `items` holds the tag |
 | `outcomes` | proactive-router, after each dispatch or inline action; skill-eval, when a manual run finishes; each in its own shard | briefing (handler outcome summary and the manual close), kb-dream, skill-health-check | ring buffer per shard, max 50, newest first |

@@ -31,23 +31,27 @@ check or come back with something, **with a concrete object**. Keep the user's o
 
 ## Where candidates come from
 
-The extraction subagents of `SKILL.md` step 2 already read these. Nothing is read twice.
+`action-sweep`'s items and the extraction subagents of `SKILL.md` step 2 already read
+these. Nothing is read twice: a source sweep gathers is read here only after its cursors,
+unless it falls back (step 2). The two own-words reads stay here even so, because sweep's
+subagents keep only what they judge a promise, and extractors here decide nothing.
 
 | Source | Reads | Horizon |
 |---|---|---|
 | Chat | the user's own messages: one `from:me` search, `after:` set 14 days back, paged up to 3 pages | 14 days |
-| Tracker | the user's own comments on the tickets already read | 14 days |
-| Meetings | transcripts: what the user said they would do (none when `notetaker.service` is `none`) | the list window |
+| Tracker | the user's own comments on their open tracker work and the tickets sweep's items name | 14 days |
+| Meetings | transcripts after sweep's last run (the whole window on fallback): what the user said they would do (none when `notetaker.service` is `none`) | the list window |
 | Session notes | unchecked `Open threads` lines in `kb.paths.sessions` notes that name a person | 30 days |
-| State | `action-sweep`'s `items` with `category: to-do`, on the board or off it | 30 days |
+| State | `action-sweep`'s `sweep:` items, every category, on the board or off it | while open (off the board: 30 days) |
 
-A to-do from state is classified by its own evidence. "You said so in #planning", "as you
-told Ivan", "you said you would" carry the user's promise: **I owe**. "He tagged you", "she
-asked you" carry none: **Waiting on you**. A to-do whose text shows neither is Waiting on
-you. Its `written_at` is when it was found, not when it was promised: take the date from
-the permalink's own timestamp, else from the text, else `written_at` shown as `~`. The same
-promise often surfaces twice (a chat message and its to-do); dedupe by permalink and keep the
-one with the most evidence.
+A `sweep:` item from state, whatever its category, is classified by its own evidence. "You
+said so in #planning", "as you told Ivan", "you said you would" carry the user's promise:
+**I owe**. "He tagged you", "she asked you", "he's waiting on your call" carry none:
+**Waiting on you**. An item whose text shows neither is Waiting on you. Its `written_at` is
+when it was found, not when it was promised: take the date from the permalink's own
+timestamp, else from the text, else `written_at` shown as `~`. The same promise often
+surfaces twice (a chat message and its sweep item); dedupe by permalink and keep the one
+with the most evidence.
 
 ## Customer notes
 
@@ -81,9 +85,10 @@ sharing a first name are a real case): an ambiguous first name is flagged
 `SKILL.md` step 3 verifies at most 10 candidates per build, one targeted read each, owed rows
 first. Look for a later message, ticket comment, transcript line or note showing the user did
 it (or the person withdrew the ask). Done: the row moves to **Dropped** with that evidence,
-and a to-do that came from state is recorded in this skill's shard as
-`settled: {<tag>: <settled_at>}`, so `action-sweep` prunes its entry
-(`../../../shared/state-schema.md`, "Closing an off-board to-do"). A candidate past the cap
+and a `sweep:` item that came from state, on the board or off it, is recorded in this
+skill's shard as `settled: {<tag>: <settled_at>}`: `briefing` closes its board line, if it
+has one, and `action-sweep` prunes its entry (`../../../shared/state-schema.md`, "Closing a
+settled item"). A candidate past the cap
 stays listed, marked `unverified, <age> bd`, and a source that could not be read is named
 under "Couldn't confirm"; neither is ever assumed delivered.
 

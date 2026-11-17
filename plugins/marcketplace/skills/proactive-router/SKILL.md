@@ -24,7 +24,8 @@ else.
   document are the only stores this skill writes to. It additionally resolves, but never
   itself uses, whatever tool categories a handler it is about to dispatch declares in that
   handler's `## Needs`; see `references/dispatch.md`.
-- State: `items` (every shard's, plus briefing's `closed` and `off_board`), `registry`, `tally`,
+- State: `items` (every shard's, plus briefing's `closed` and `off_board`, and
+  `action-list`'s `settled`), `registry`, `tally`,
   `outcomes`, `suppressions`, `patterns_blocked`, `proposals`, `glossary`
   (`inline:promote` writes), `runs.proactive-router` (`runs`, its own `pr:` items,
   `outcomes`, `tally`, `suppressions` and `patterns_blocked` in its shard), `machines`
@@ -85,6 +86,9 @@ stop before reading a single thread.
    the new sub-line lands under the old one. The line is settled in place and never
    re-posted, and a deleted line is never retried. Full rule: `references/dispatch.md`,
    "Retrying blocked lines". Without this, a block whose cause was fixed would stay forever.
+   - A `sweep:` line whose tag is in `action-list`'s `settled` is already done: no
+     dispatch, no draft. Write `  - ↳ router <date time>: done · already done, verified by
+     action-list · <ref>` and its `outcomes` entry; briefing closes it.
    - Inline actions (`inline:investigate`, `inline:promote`, `inline:to-do`) run
      here, in this run, uncapped, per `references/dispatch.md`.
    - A `shc:` line gets `  - ↳ router: queued for your next skill-eval run` and nothing

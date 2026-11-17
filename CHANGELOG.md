@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+`action-list` is now the attended counterpart of `action-sweep`: it builds on sweep's finds
+instead of gathering the same sources again, and a find is never drafted twice. No state
+migration: `settled` gains on-board `sweep:` tags, and older versions read it as before.
+
+### Changed
+- **`action-list` build reads every `sweep:` item** (all categories, on the board or off it),
+  not just `to-do`s, and extracts only email, the kb, merged pull requests and the delta on
+  sweep's sources since its cursors, falling back to the whole window when sweep is stale or
+  missed a source. Its own 14-day `from:me` "I owe" search stays, since sweep's extractors
+  filter. Detail in the new `skills/action-list/references/sweep-handoff.md`.
+- **No double drafting.** A find with a live `sweep:` line is ranked in the list and points at
+  that line instead of being drafted again.
+- **`settled` covers on-board `sweep:` items.** `briefing` closes such a line as
+  `done · verified by action-list` (a close, never a deletion), `action-sweep` never re-posts
+  it, and `proactive-router` does not dispatch a tick on it.
+
 ## [1.14.0] - 2026-11-10
 
 The scrub check is now enforced: it covers the whole repository including `profiles/`, and it
