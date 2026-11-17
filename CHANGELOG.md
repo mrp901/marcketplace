@@ -14,10 +14,22 @@ migration: `settled` gains on-board `sweep:` tags, and older versions read it as
 - **`action-list` build reads every `sweep:` item** (all categories, on the board or off it),
   not just `to-do`s, and extracts only email, the kb, merged pull requests and the delta on
   sweep's sources since its cursors, falling back to the whole window when sweep is stale or
-  missed a source. Its own 14-day `from:me` "I owe" search stays, since sweep's extractors
-  filter. Detail in the new `skills/action-list/references/sweep-handoff.md`.
+  missed a source. Its own 14-day `from:me` "I owe" search stays, since sweep filters its
+  finds for the board. Detail in the new `skills/action-list/references/sweep-handoff.md`.
 - **No double drafting.** A find with a live `sweep:` line is ranked in the list and points at
   that line instead of being drafted again.
+- **The `search` tier extracts and never judges.** `shared/model-tiers.md` gains
+  "Extraction decides nothing": a `search`-tier subagent returns every candidate with its
+  quote and link, and every keep-or-drop filter runs on `worker` afterwards. A cheap-tier
+  relevance filter once dropped a real tracker tag silently. `token-discipline.md` rule 4
+  points at it and puts it under rule 7's protection, and the model-tiers table now lists
+  action-list, action-sweep and proactive-router.
+- **`action-sweep` filters on `worker`, not in its extractors.** The chat-canvas source
+  (which to-dos plausibly need a tracker reply or ticket) and the commitments source (which
+  statements are promises with a concrete object) used to ask the extractor to return only
+  what qualified. Both extractors now return every candidate, quoted, and the skill applies
+  those filters, and the "keep only" rules for waiting threads and unanswered mentions, on
+  `worker`. A sweep may cost a few more output lines per read; no new reads.
 - **`settled` covers on-board `sweep:` items.** `briefing` closes such a line as
   `done · verified by action-list` (a close, never a deletion), `action-sweep` never re-posts
   it, and `proactive-router` does not dispatch a tick on it.

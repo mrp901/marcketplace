@@ -25,7 +25,11 @@ step; rule 7 says so and outranks the other six.
    knowledge-base search results goes to a `budgets.models.search`-tier subagent that
    returns a short structured answer, so raw content stays out of the skill's own
    context (`model-tiers.md`). Don't use a subagent for a single small read; the
-   overhead outweighs the saving.
+   overhead outweighs the saving. The extractor returns every candidate with its
+   evidence and decides nothing; the skill filters afterwards on `worker`
+   (`model-tiers.md`, "Extraction decides nothing"). The tokens saved by filtering on the
+   cheap tier are never worth a silently dropped item, so this is a quality step that
+   rule 7 protects.
 5. **Load references lazily.** Open a `references/` file only in the step that needs it,
    never all of them up front.
 6. **Read once, write once.** One surface read, one surface write batch, one state read

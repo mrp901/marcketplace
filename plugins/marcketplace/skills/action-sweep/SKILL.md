@@ -25,7 +25,7 @@ it never sends anything. Resolve profile, state and tools per
   `surface.url`, `budgets.action-sweep`
   (`canvas_guard`, `cold_start_days`, `targeted_search_per_todo`, and `thread_reads`,
   optional, default 6, and `chat_pages`, optional, default 3),
-  `budgets.models.search`.
+  `budgets.models.search`, `budgets.models.worker`.
 - Tools: `chat` (search messages, read thread; `read canvas`/`update canvas` in sweep
   mode only, never from a handler mode), `tracker` (search issues by JQL, get issue,
   create issue, add comment; the last two only in `push` mode), `kb` (search, read,
@@ -45,7 +45,8 @@ searches, each read up to `budgets.action-sweep.chat_pages` pages
 (`references/gather-procedure.md`), one notetaker list call plus one transcript
 per meeting in `notetaker.lookback_days`. Every thread or transcript body is read by a
 `budgets.models.search`-tier subagent, capped at `budgets.action-sweep.thread_reads`
-reads per run; at most `targeted_search_per_todo` chase-search per to-do. One surface
+reads per run, that returns every candidate and decides nothing; keep-or-drop runs on
+`budgets.models.worker`; at most `targeted_search_per_todo` chase-search per to-do. One surface
 read, one surface write. Per handler dispatch: one draft read or write; `push` adds one
 tracker write call. Guidelines in `../../shared/token-discipline.md`.
 

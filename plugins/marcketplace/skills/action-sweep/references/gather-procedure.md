@@ -8,11 +8,18 @@ asked, who owes it, the permalink, and nothing else), capped at
 `budgets.action-sweep.thread_reads` reads across the whole run; raw bodies never enter
 this skill's own context (`../../../shared/token-discipline.md`).
 
+**The extractor decides nothing.** It returns every candidate in the body, each with a
+short quote and its permalink, and never drops one as irrelevant, in passing, already
+handled or not a real ask. Every "keep only" and "skip" rule in the sections below is
+applied by this skill on `budgets.models.worker` after the extractor returns
+(`../../../shared/model-tiers.md`, "Extraction decides nothing").
+
 ## 1. Chat canvases (current state, no cursor)
 
-Search for canvases authored by the user, most recent first. Read every one found and
-pull out anything phrased as an outstanding action or to-do, but only items that
-plausibly need a tracker reply or ticket; skip kb-admin, personal, or process to-dos.
+Search for canvases authored by the user, most recent first. Read every one found; the
+extractor returns every outstanding action or to-do on it, quoted. This skill then keeps
+only items that plausibly need a tracker reply or ticket, skipping kb-admin, personal, or
+process to-dos.
 Canvases represent current state, not a stream; there is no "since" filter here.
 
 **Guardrail.** If the search turns up more than `budgets.action-sweep.canvas_guard`
@@ -55,24 +62,27 @@ discipline as every other source.
 
 `chat: search messages` with `from:me after:<chat_since>` (the form is documented in
 `../../../shared/tool-capabilities.md`), paged per "Paging the chat searches" below. The
-subagent reads each hit and returns only
-first-person promises with a concrete object: "I'll send the figures Friday", "leave the
-rollback with me", "I'll raise a ticket for that". An acknowledgement ("sounds good",
-"will do" with no object) is not a commitment. Each commitment routes to `to-do` unless
+subagent reads each hit and returns every first-person statement about future action,
+quoted with its permalink. This skill then keeps only promises with a concrete object:
+"I'll send the figures Friday", "leave the rollback with me", "I'll raise a ticket for
+that". An acknowledgement ("sounds good", "will do" with no object) is not a commitment. Each commitment routes to `to-do` unless
 it is itself a ticket to raise (`ticket-minor`/`ticket-reply`) or a reply owed
 (`chat-reply`).
 
 ## 6. Threads waiting on the user (since `chat_since`)
 
-`chat: search messages` with `with:me is:thread after:<chat_since>`. Keep only threads
+`chat: search messages` with `with:me is:thread after:<chat_since>`. The extractor returns
+each thread's last speaker, last message and the user's last reply, quoted; this skill
+then keeps only threads
 where someone other than the user spoke last and the last message asks the user
 something, or answers a question the user asked and now awaits their reply. Routes to
 `chat-reply`. A thread the user already replied to after the ask is dropped.
 
 ## 7. Unanswered mentions (since `chat_since`)
 
-`chat: search messages` for the user's own mention, `after:<chat_since>`. Keep only
-mentions the user has neither replied to nor reacted to. A bare "cc" mention with no ask
+`chat: search messages` for the user's own mention, `after:<chat_since>`. The extractor
+returns every mention with its text and any reply or reaction from the user; this skill
+then keeps only mentions the user has neither replied to nor reacted to. A bare "cc" mention with no ask
 is dropped, not listed. Routes to `chat-reply`, or `to-do` when the mention hands the user
 a task rather than a question.
 
