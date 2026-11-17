@@ -11,6 +11,15 @@ instead of gathering the same sources again, and a find is never drafted twice. 
 migration: `settled` gains on-board `sweep:` tags, and older versions read it as before.
 
 ### Changed
+- **`session-log` asks the user how the session went.** An attended log run on the live
+  session asks three structured questions (did it land, worth the time, where was the
+  friction) and writes the answers, verbatim, as a new `## How it went` note section with the
+  skills the session ran (`skills/session-log/references/session-eval.md`). Unattended runs and
+  archived transcripts skip it and write no section. `skill-health-check` reads it as a new
+  "Session evals" evidence row (one negative attributed eval is amber, two red; Friction
+  alone is never negative), and `kb-dream`'s signal extraction counts friction recurring on
+  the same skill across two or more notes. No state or new profile key; `skill-health-check`
+  now reads `kb.paths.sessions` and is added to that row's readers in `profile-schema.md`.
 - **`action-list` build reads every `sweep:` item** (all categories, on the board or off it),
   not just `to-do`s, and extracts only email, the kb, merged pull requests and the delta on
   sweep's sources since its cursors, falling back to the whole window when sweep is stale or

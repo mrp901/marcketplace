@@ -215,7 +215,7 @@ budgets:
 | `kb.link_style` | session-log, kb-dream, idea-spar, action-list, jira-story | ask | |
 | `kb.frontmatter_required` | session-log, kb-dream, action-list, jira-story | default | |
 | `kb.tag_hints` | session-log | default | |
-| `kb.paths.*` | session-log, kb-dream, idea-spar, action-sweep, reply-draft (voice), action-list, jira-story | default (asked only for `inbox`/`sessions` if the org has no convention) | |
+| `kb.paths.*` | session-log, kb-dream, idea-spar, action-sweep, reply-draft (voice), action-list, jira-story, skill-health-check (`sessions`, `utility`) | default (asked only for `inbox`/`sessions` if the org has no convention) | |
 | `kb.paths.customers` | kb-dream (writes), reply-draft, action-list, jira-story, idea-spar (read first) | optional; default `Customers` if that folder exists, else the feature is off | `shared/customer-notes.md` |
 | `kb.log_size_cap_kb` | session-log, kb-dream, idea-spar, action-list | default | |
 | `kb.sweep_queries` | kb-dream | default | |

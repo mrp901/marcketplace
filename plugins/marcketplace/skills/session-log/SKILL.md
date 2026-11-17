@@ -23,7 +23,8 @@ before, and what's still open. Ninety seconds to read, clear on where things sta
   `kb.frontmatter_required`, `kb.tag_hints`, `kb.paths.sessions`, `kb.paths.decisions`,
   `kb.paths.utility`, `kb.paths.log`, `kb.log_size_cap_kb`, `people`,
   `people_confusions` (optional), `known_fact_errors` (optional - see HISTORY.md).
-- Tools: `kb` (search, read, write); `chat: read thread` and `wiki` (get/update page, only
+- Tools: `kb` (search, read, write); the interactive question tool (attended log mode,
+  for the eval); `chat: read thread` and `wiki` (get/update page, only
   where `kb.kind: confluence`) for capture mode.
 - State: `cursors.session-log` (`last_pending_processed`) and `runs.session-log`, in its
   shard; capture mode also appends `voice_edits` there.
@@ -77,6 +78,12 @@ one-line `kb.paths.log` entry instead of a note.
    mistake cost a `kb.paths.log` correction entry (`kb-conventions.md`, "The type registry
    and its single authority", carries the same rule for every skill that writes to the
    kb - it is not unique to this one, but this is the skill that paid for it).
+3a. **Ask how it went** - interactive log mode, live session, note being written only. One
+   question call, three questions: did it land, was it worth the time, where was the friction.
+   The answers become the note's `## How it went` section, the only place the user's own
+   rating of a session is recorded; skill-health-check and kb-dream read it. Unattended, an
+   archived transcript, or the user dismisses it: no section, never a guessed rating. Wording
+   and options in `references/session-eval.md`.
 4. **Write the note.** Path, frontmatter, body structure, and the `generated`/`verified`
    handling when a session edits an existing note - see `references/note-template.md` and
    `references/worked-example.md` for one filled-in example.

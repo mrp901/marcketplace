@@ -6,6 +6,9 @@ corrected a figure.
 **Gate check:** the session corrected a fact (an earlier lane-table draft used the wrong
 comparison baseline) and made a decision (use the same weekdays instead) - worth a note.
 
+**Eval asked** (attended, live session, note being written): the user answered all three
+questions and typed a comment, so the note carries `## How it went`.
+
 **Note written**, `Sessions/2026-09-22-lane-table-baseline-corrected.md`:
 
 ```yaml
@@ -36,6 +39,12 @@ generated: { by: session-log, at: 2026-09-22T17:40:00+10:00 }
 ## Open threads
 
 - [ ] Confirm with Tomasz whether the same baseline bug affects the monthly rollup.
+
+## How it went
+
+- **Landed:** yes, fully · **Time:** took too long · **Friction:** rework or wrong assumption
+- **Skills run:** none
+- **Said:** "should have checked the baseline before quoting 14%"
 
 ## Proposed follow-ups
 

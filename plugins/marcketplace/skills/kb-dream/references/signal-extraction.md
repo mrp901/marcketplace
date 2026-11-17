@@ -9,7 +9,7 @@ grep - this skill never reads a session transcript directly.
 Every `kb.paths.sessions` note written since `state.cursors.kb-dream.last_dream_at`
 (incremental) or all of them (full), up to `budgets.kb-dream.sessions_incremental` /
 `.sessions_full`. Read each note's `## Decisions`, `## Facts and corrections`,
-`## Voice and tone feedback` and `## Open threads` sections - these are session-log's own
+`## Voice and tone feedback`, `## Open threads` and `## How it went` sections - these are session-log's own
 distillation, already filtered for signal, so this pass reads them rather than
 re-deriving signal from source material a
 second time. `../scripts/signal_grep.py` runs a deterministic first pass over the same notes
@@ -26,7 +26,14 @@ connector read alone" when the knowledge base is remote-only.
 - **Decisions** - a `## Decisions` bullet, or prose committing to a choice among named
   alternatives.
 - **Recurring friction** - the same complaint or workaround appearing in more than one
-  session note since the last dream.
+  session note since the last dream. A `## How it went` section (session-log's attended
+  eval) is the user's own rating. It is recurring friction only when two or more notes since
+  the last dream share a skill under **Skills run** and either the same **Friction** option
+  or a poor **Landed**/**Time** answer, or when their **Said** text names the same
+  complaint. The same option on unrelated sessions is not a pattern (four options repeat by
+  chance). Record it with the newest note as `source:` and the others listed in the entry's
+  body. One poor rating is never a pattern: leave it to skill-health-check, which scores
+  per skill.
 
 For each finding, record: the fact, the date (the session note's own date, never today's),
 confidence (explicit instruction is high, implied is medium), and any conflict with an

@@ -21,13 +21,14 @@ machine note said; did the user verify a note as-is; did a ticket get edited sho
 skill drafted it; did links resolve and frontmatter stay conformant; did a handler keep
 coming back `blocked` or `partial`; did a drafting skill's output keep getting edited before
 the user acted on it (the tally and voice ledger, which this skill now owns as a signal; it
-used to be `kb-dream`'s registry review's job to raise). Where no such evidence exists the
+used to be `kb-dream`'s registry review's job to raise); and how did the user rate the
+sessions that ran it (session-log's attended eval, the one direct verdict they give). Where no such evidence exists the
 log says so honestly rather than inventing a score.
 
 Resolve profile, state and tools per `../../shared/onboarding.md` before doing anything else.
 
 ## Needs
-- Profile: `kb.paths.utility`, `kb.local_root`/`kb.remote`, `kb.frontmatter_required`,
+- Profile: `kb.paths.utility`, `kb.paths.sessions`, `kb.local_root`/`kb.remote`, `kb.frontmatter_required`,
   `tracker.cloud_id`, `tracker.site_url`, `surface.id`, `surface.url`, `org.timezone`,
   `voice.registers` (optional), `budgets.skill-health-check`.
 - Tools: `kb` (search, read, write), `tracker` (search issues by JQL, get issue), `chat`
@@ -40,7 +41,8 @@ Resolve profile, state and tools per `../../shared/onboarding.md` before doing a
 
 ## Budget
 Per run: 1 state read, `budgets.skill-health-check.kb_reads` (default 15) knowledge-base
-reads across the whole roster, 1 tracker search plus 1 get-issue per tracker-writing skill
+reads across the whole roster, 1 `kb: search` for rated session notes (session evals),
+1 tracker search plus 1 get-issue per tracker-writing skill
 scored, 1 canvas read and 1 canvas update batch (only when at least one skill scored red),
 1 state write. No posts, no webhooks. Guidelines in `../../shared/token-discipline.md`.
 
@@ -56,8 +58,8 @@ write `runs.skill-health-check.status: quiet` and stop before any kb read.
    skill with no cursor yet, nothing dated after the top entry of its own log file, if one
    exists; a skill with no log file yet is scored from all available evidence).
 2. **Gather evidence, per skill type.** See `references/evidence-gathering.md`: kb-writing
-   skills, tracker-writing skills, the hub's outcome and tally record, and the voice ledger
-   each have their own signals and their own cheap-versus-expensive line.
+   skills, tracker-writing skills, the hub's outcome and tally record, the voice ledger and
+   session evals each have their own signals and their own cheap-versus-expensive line.
 3. **Score.** One tag per skill, `green`, `amber`, `red`, per `references/scoring-rubric.md`,
    backed by 2-4 evidence bullets and a line naming which evidence sources were actually
    available. Never invent a score from an impression; a skill with no gatherable evidence

@@ -33,7 +33,8 @@ PATTERNS = {
         re.IGNORECASE,
     ),
     "friction": re.compile(
-        r"\b(again|every time|keep forgetting|same as before|carried forward)\b",
+        r"\b(again|every time|keep forgetting|same as before|carried forward)\b"
+        r"|\*\*Friction:\*\*\s*(?!none\b)\w",
         re.IGNORECASE,
     ),
 }

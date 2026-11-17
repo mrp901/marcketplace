@@ -37,7 +37,7 @@ trust tier the kb has never used (`kb-conventions.md`'s provenance rule).
 
 ## Body
 
-Five sections, in this order; drop any that are genuinely empty rather than padding them:
+Six sections, in this order; drop any that are genuinely empty rather than padding them:
 
 ```markdown
 # Session - <title>
@@ -67,6 +67,12 @@ Five sections, in this order; drop any that are genuinely empty rather than padd
 ## Open threads
 
 - [ ] <What's unresolved, and what would resolve it.>
+
+## How it went
+
+- **Landed:** <answer> · **Time:** <answer> · **Friction:** <answer(s), or none>
+- **Skills run:** <plugin skills invoked this session, or none>
+- **Said:** "<the user's free text, verbatim>"
 ```
 
 Give corrections their own bullet prefix; never fold one silently into "facts" as though
@@ -81,6 +87,11 @@ a Decision, because `kb-dream` routes it to `Voice/edits-ledger.md` rather than 
 the session already wrote the user's before/after pairs into the ledger, say so in one
 bullet and link the entry instead of repeating them. Feedback on the substance (a wrong
 figure, a missing step) is a Correction, not tone.
+
+**How it went** is the user's own rating of the session, from the eval in
+`session-eval.md`, never Claude's. It is present only when the user answered; an
+unattended run or a dismissed question leaves it out, so a missing section means "not
+asked", never "fine". The **Said** bullet appears only when they typed something.
 
 ## When the session changed an existing note
 

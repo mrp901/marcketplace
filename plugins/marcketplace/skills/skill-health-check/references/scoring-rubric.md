@@ -9,8 +9,8 @@ that absence is named in the evidence-sources line below.
 | Tag | Meaning |
 |---|---|
 | `green` | Evidence is clean: no correction, no repeated `blocked`/`partial`, conformance checks pass, voice-ledger edits (if any) are isolated rather than clustered. |
-| `amber` | Minor conformance issues, or exactly one correction/edit-cluster/`blocked` outcome, nothing structural. |
-| `red` | A pattern - more than one correction, a recurring `blocked`/`partial` handler outcome, broken links, or a note/ticket that needed real rework. |
+| `amber` | Minor conformance issues, or exactly one correction/edit-cluster/`blocked` outcome/negative session eval, nothing structural. |
+| `red` | A pattern - more than one correction, a recurring `blocked`/`partial` handler outcome, broken links, a note/ticket that needed real rework, or two or more negative session evals attributed to the skill. |
 
 Every log entry carries (a red score's board line points at it):
 

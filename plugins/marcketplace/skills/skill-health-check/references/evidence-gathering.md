@@ -77,6 +77,34 @@ signal than a general "voice felt off" impression - name the register in the evi
 This is cheap: the ledger is already maintained by the drafting skills themselves per
 `voice.md`'s compounding mechanism, so this skill only reads it, never recomputes it.
 
+## Session evals
+
+Every skill. session-log's attended eval (`../../session-log/references/session-eval.md`)
+writes the user's own rating of a session into its note's `## How it went` section, with the
+plugin skills that session ran (session-log itself is never listed). Once per run, not per
+skill: one `kb: search` of `kb.paths.sessions` for notes since the earliest window in the
+roster that carry `How it went`, then read each match once and attribute it across the whole
+roster. Those reads count against `budgets.skill-health-check.kb_reads`; past the budget,
+take the newest notes first and say how many were left unread.
+
+- **Attribution.** A rating counts for or against a skill only when it is the sole skill
+  under **Skills run**, or the **Friction** or **Said** text names it. Otherwise cite it as
+  context, not evidence.
+- **Negative:** `Landed: partly` or `no`, or `Time: took too long` or `not worth it`.
+  **Positive:** `Landed: yes, fully` with `Time` faster or about right and Friction `none`.
+  `Landed: mostly` is neutral. `other` is context unless the Said text is plainly negative.
+- **Friction alone is never negative.** It says where the cost was, not that the session
+  failed: a skill that asks questions by design will collect `too many questions` on good
+  sessions. Cite it in the evidence bullet; a Friction option recurring on one skill's
+  rated sessions is an amber at most, never a red on its own.
+- **Quote the Said line** in the evidence bullet when there is one: it is the user's own
+  words, the strongest evidence this skill can cite.
+
+A session note without the section was not rated (unattended, archived or dismissed): it
+is absent evidence, never a positive. A remote knowledge base whose search can't match the
+heading: fall back to listing `kb.paths.sessions` notes dated inside the window, within the
+same read budget.
+
 ## Skills with no reliable automatic signal
 
 A skill whose only externally-visible act is a chat post with no tick/edit mechanism (the

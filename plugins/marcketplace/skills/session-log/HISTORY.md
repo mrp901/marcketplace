@@ -1,5 +1,28 @@
 # session-log - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-18 the user's own verdict (Unreleased)
+
+The user asked whether a session note records how they felt the session went: its quality,
+whether it got them what they came for, whether it was worth the time. It didn't. The note
+carried a rough duration Claude estimated and their tone feedback, and nothing else of
+theirs. skill-health-check scores from behaviour the user leaves behind (corrections, edits,
+ticks) and had no direct verdict to read; kb-dream's recurring-friction shape had only prose
+to grep.
+
+An attended log run now asks one short structured eval before writing (did it land, was it
+worth the time, where was the friction) and records the answers verbatim in a sixth section,
+`## How it went`, with the plugin skills the session ran so a rating can be attributed
+(`references/session-eval.md`). It is asked only for the live conversation, never for an
+archived transcript (a rating days later is a guess) and never unattended; a run that didn't
+ask writes no section, so absence reads as "not asked", not "fine". skill-health-check gains
+a "Session evals" evidence row (one negative attributed eval is amber, two red); kb-dream
+treats friction on the same skill in two or more notes as recurring and leaves single
+ratings to the health check. An independent review caught the first draft counting any
+Friction pick as negative, which would have turned question-asking skills (jira-story,
+idea-spar) red on good sessions: Friction is now context, never a negative on its own. The
+Friction question also gained a `None` option, since the tool caps options at four and an
+empty multi-select may not submit.
+
 ## 2026-11-10 neutral examples (1.14.0)
 
 Note-naming and decision-vocabulary examples no longer cite a real migration or an external
