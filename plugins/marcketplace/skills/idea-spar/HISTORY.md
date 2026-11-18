@@ -1,5 +1,49 @@
 # idea-spar - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-18 prior statements, primary sources, the user's claims (Unreleased)
+
+An ad hoc investigation the user rated more useful than this skill (two questions about how
+an external provider bills, ahead of an exec meeting) did five things the skill didn't:
+
+- **Swept what was already said first.** A tracker comment saying a thing "can't be done,
+  an engineer confirmed it" and an ideas ticket already holding three options both
+  surfaced before any research. The known packet now sweeps ideas, tracker, chat, email
+  and transcripts, each degrading to "couldn't check". A prior statement the evidence
+  contradicts is a finding, not a packet item to drop.
+- **Proved provider behaviour at the source.** The provider's own docs quoted and linked,
+  the load-bearing quote re-fetched by the main session rather than trusted from a search
+  summary, and a public sample dataset downloaded and its rows counted. The market lens
+  gains provider behaviour, with no table-stakes class.
+- **Vetted the user's own beliefs.** Two of them were contradicted with evidence. Each
+  lens now carries a "Your claims" line, and the pack lists every claim, unreached ones as
+  "not checked", so a claim can't drop out quietly.
+- **Read the latest code.** The local checkout was dozens of commits behind; the reality
+  lens now fetches and reads the remote default branch, names the ref read, and opens any
+  subagent `path:line` before it becomes a finding.
+- **Wrote the output in the user's voice.** The user's test: "I understand it as if I
+  wrote it". Their edits to the drafts added honest hedges, moved others' words into
+  blockquotes and cut reasoning they would have had to reconstruct. The pack now loads the
+  `exec_update` register and is judged by that ownership test.
+
+Two decisions on top. The sweep runs once **after** the challenge lens, not before every
+lens, so challenge stays cheap and packet-only; its results join the packet before reality,
+market or the pack, and a second "Also working from:" line names them. Prior statements
+surface only when the evidence contradicts them or they settle a claim; there is no "already said" output. The
+description gains investigation triggers ("investigate how X behaves", "is X possible in our
+product", "can provider Y do Z", "check whether this claim holds before the meeting"), and
+a question of fact skips challenge for reality or market, so the ask gets an answer rather
+than the case against an idea.
+
+Not adopted: parallel tracks on cheaper tiers (already `shared/model-tiers.md`) and
+publishing to a wiki (the pack already publishes via `page`). The one-pagers' impact
+section is covered by each finding's "so what" plus "Decisions for you".
+
+Review fixes before merge: a prior statement of fact is evidence to check, never a
+settlement on its own (a hearsay "can't be done, confirmed" is exactly what was wrong);
+the packet line counts the claims to vet so the vetting can't lapse silently; `voice` is
+deliberately not in Needs, so a spar never detours into calibration, and the pack falls
+back to `voice: uncalibrated`.
+
 ## 2026-11-10 neutral sketch example (1.14.0)
 
 The sketch label example is a fictional air-freight spend tile. No behaviour change.

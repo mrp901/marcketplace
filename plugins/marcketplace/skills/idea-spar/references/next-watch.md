@@ -38,7 +38,7 @@ the rest wait for the next run.
 
 1. `ideas: get issue` (full fields and comments) and build the known packet per `SKILL.md`.
 2. Run all three lenses in order - challenge, reality, market - each against the same
-   output contract. Unattended, nobody is there to reject a finding, so apply the packet
+   output contract, with `SKILL.md`'s prior-statement sweep after challenge, before reality. Unattended, nobody is there to reject a finding, so apply the packet
    drop rule strictly and keep `findings_per_lens` as a ceiling, not a target.
 3. Sketch 2 to 3 options per `sketch.md` when any lens surfaced a layout or flow fork. No
    UI fork, no sketch; say so in one line in the pack.

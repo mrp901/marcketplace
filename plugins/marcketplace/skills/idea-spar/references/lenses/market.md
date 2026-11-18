@@ -2,14 +2,16 @@
 
 What is out there, whether it matters to our positioning, and whether it changes the
 outcome. A list of competitors who also have the feature is not market research; it is
-the starting material. The output is what that means for this decision.
+the starting material. The output is what that means for this decision. The lens also
+settles how a provider or platform the idea depends on actually behaves (what its export,
+API or bill really contains), from that party's own evidence.
 
 ## Inputs
 
 The known packet, `profile.org.product_scope` and `profile.org.modules_context` (our
 positioning, quoted, never paraphrased), then at most `budgets.idea-spar.web_searches`
 targeted `web: search` calls, each a `budgets.models.search`-tier subagent that returns
-vendor, what they ship, how they frame it, and the source URL.
+vendor, what they ship, how they frame it (quoted), and the source URL.
 
 ## The three questions, for every vendor or pattern found
 
@@ -25,7 +27,8 @@ vendor, what they ship, how they frame it, and the source URL.
    - **Trap** - others built it and it didn't land (deprecated, buried, complained about).
    - **No effect** - true but irrelevant to the decision; goes to "Checked, no bearing".
 
-Only table stakes, differentiator and trap become findings.
+Only table stakes, differentiator and trap become findings, plus provider behaviour
+(below), which takes no class.
 
 ## Shape
 
@@ -35,6 +38,14 @@ vendors in our last three lost deals - build it, but don't market it").
 
 Never state a vendor capability the search didn't return. A vendor known from memory but
 not confirmed this session is written as "unconfirmed" or left out.
+
+**Provider behaviour is proved at the source.** Its source is the provider's own docs,
+quoted and linked, never a third party's summary. Re-fetch the one quote the verdict rests
+on yourself rather than trusting a search summary. Where a public dataset exists (a sample
+export, open data, real files in a public repo), download it into an empty folder of its
+own and count the rows that settle the claim by script, never reading rows into context;
+a count beats a docs page. Each re-fetch and download counts against `web_searches`. No
+shell to count with: say "docs only, not counted".
 
 ## Worked example (fictional, against `profiles/example.md`)
 

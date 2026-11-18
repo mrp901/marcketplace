@@ -1,6 +1,6 @@
 ---
 name: idea-spar
-description: "Use when the user is thinking an idea through or prepping a conversation about one and wants it challenged, checked against the codebase, placed in the market, or sketched as layout options - \"spar on this\", \"poke holes\", \"what does the code say\", \"who else does this\", \"sketch it\", \"pack it\". Also when the scheduled routine fires to brief ideas that moved into Next, or when the hub dispatches a ticked idea-decision option."
+description: "Use when the user is thinking an idea through or prepping a conversation about one and wants it challenged, checked against the codebase, placed in the market, or sketched as layout options - \"spar on this\", \"poke holes\", \"what does the code say\", \"who else does this\", \"sketch it\", \"pack it\", \"investigate how X behaves\", \"is X possible in our product\", \"can provider Y do Z\", \"check whether this claim holds before the meeting\". Also when the scheduled routine fires to brief ideas that moved into Next, or when the hub dispatches a ticked idea-decision option."
 ---
 
 # Idea spar
@@ -21,11 +21,14 @@ else.
   `ideas.qualifiers`, `ideas.roadmap_field`, `ideas.next_roadmap_values`, `user.name`,
   `kb.name`, `kb.paths.research`, `kb.paths.screenshots`, `kb.paths.customers` (optional), `kb.link_style`,
   `kb.frontmatter_required`, `codebase.path`, `codebase.access`, `surface.id`,
-  `surface.url`, `budgets.idea-spar`, `budgets.models.search`.
+  `surface.url`, `budgets.idea-spar`, `budgets.models.search`, `kb.paths.voice`,
+  `voice.registers` (the pack).
 - Tool categories: `ideas` (search issues JQL, get issue), `kb` (search, read, write),
   `codebase` (search, read) - degrades to unavailable, never a fast-fail, per
   `tool-capabilities.md`, `web` (search), `page` (publish) - degrades to a kb file,
-  `chat` (read canvas, update canvas; Next watch only).
+  `chat` (search messages; read and update canvas, Next watch only); for the prior-statement
+  sweep, `tracker` (search issues JQL), `email` (search) and `notetaker` (list meetings,
+  transcript), each degrading to "couldn't check".
 - State: `cursors.idea-spar` (`roadmap_checked_at`), `ideas.<key>` (`roadmap_last_seen`,
   `pack_ref`, `pack_pending`), `items` (its own `<key>/d…` lines), briefing's `closed`,
   `runs.idea-spar` (`cursors`, `ideas`, `runs` and its items in its shard; it prunes items
@@ -35,9 +38,9 @@ else.
 ## Budget
 
 Per `profile.budgets.idea-spar` (default `web_searches: 4, code_reads: 8, kb_reads: 3,
-findings_per_lens: 5, sketch_options: 3, next_per_run: 1`). Every web and codebase search
-is a `budgets.models.search`-tier subagent returning a short structured answer, never raw
-pages or files in this context. Caps are per lens, per session or run. Guidelines in
+findings_per_lens: 5, sketch_options: 3, next_per_run: 1`). Every web, codebase and
+prior-statement search is a `budgets.models.search`-tier subagent returning a short
+structured answer, never raw pages or files in this context, bar the market lens's one re-fetched quote and the reality lens's spot-checked ranges. Caps are per lens, per session or run. Guidelines in
 `../../shared/token-discipline.md`.
 
 **Quiet exit (Next watch):** no idea newly in a `next_roadmap_values` slot since
@@ -54,10 +57,26 @@ Before any lens runs, build the **known packet**: the idea's ticket text and com
 user has said in this session. When the idea names a customer, its note is read first, in addition to the `kb_reads`: two
 reads, the customers index then the note (`../../shared/customer-notes.md` "Reading"). The packet is input. It is never output: do not summarise
 it back. Print one line naming what it holds ("Working from: FIG-204 + 3 comments,
-`Research/fig-204-….md`, your framing above") and go straight to the lens.
+`Research/fig-204-….md`, your framing above; 2 claims to vet") and go straight to the lens.
+
+**Prior statements.** Swept once, after the challenge lens if it runs (it works on the packet above
+alone) and before the first of reality, market or the pack, then joined to the packet: what
+has already been said or decided on the topic. One search each of `ideas` and `tracker`
+(text and comments), `chat`, `email` and `notetaker` (at most three transcripts), on the
+idea's own terms over the ticket's life (a prose idea: 30 days), each a
+`budgets.models.search`-tier subagent returning every statement with quote, speaker, date
+and link. One more line names them ("Also working from: FLT-311 comment (Tomasz, 12 Sep), 2
+chat threads; email couldn't check"); an unresolved category reads "couldn't check", never
+"nothing found"; `service: none` goes unmentioned. They surface only when the evidence contradicts them or they settle a claim.
+
+**The user's claims.** Each checkable belief the user states as fact, in this session or
+in a ticket they wrote ("X can't be done", "field Y means Z"), is a claim to vet, not
+context to trust. Preferences and judgement calls are not claims.
 
 A candidate finding the packet already states, or that the user said, is dropped before
-output. Everything the user says during the session joins the packet as they say it.
+output, unless the evidence contradicts it: a prior statement or claim the evidence
+overturns is a finding, sourced to both. Everything the user says during the session
+joins the packet as they say it.
 
 ## Output contract - every lens
 
@@ -68,8 +87,12 @@ A lens's output is, in order, and nothing else:
    Each is exactly three parts on one bullet: the claim (one sentence) · the source (path
    and line, link, or quoted speaker and date) · **so what** (which decision it moves, and
    which way).
-3. **Checked, no bearing** - one line listing what was looked at and changes nothing.
-4. **Would change my mind** - one line: the single fact that would flip the verdict.
+3. **Your claims** - one line per user claim this lens has evidence on: the claim in their
+   words · **supported**, **not supported** or **settled elsewhere** (a recorded decision already
+   answers it; a prior statement of fact is evidence to check, not a settlement) · the source. The drop rule never removes it; omit it only
+   when no claim is in this lens's reach (the pack still lists it as "not checked").
+4. **Checked, no bearing** - one line listing what was looked at and changes nothing.
+5. **Would change my mind** - one line: the single fact that would flip the verdict.
 
 A finding with no source is not a finding; a finding whose so-what is "worth knowing" is
 not a finding. Both go to "Checked, no bearing" or nowhere.
@@ -79,7 +102,8 @@ not a finding. Both go to "Checked, no bearing" or nowhere.
 1. **Load.** The user names an idea key or describes an idea in prose. Build the known
    packet. A prose idea with no key works the same way; the packet is just the user's words.
 2. **Pick the lens.** The lens the user asked for. None named: run **challenge** first
-   (cheapest, needs no external reads), then offer the other two in one line.
+   (cheapest, packet only, no sweep), then offer the other two in one line. A question of fact
+   (how something behaves, whether it's possible) skips challenge: reality for our code, market for a third party.
    - Challenge: `references/lenses/challenge.md`.
    - Reality (codebase): `references/lenses/reality.md`.
    - Market: `references/lenses/market.md`.

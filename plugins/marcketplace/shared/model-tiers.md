@@ -22,7 +22,7 @@ budgets:
 | Skill | Step | Tier | Why |
 |---|---|---|---|
 | jira-story | blind pass, and idea mode's draft audit (a fresh subagent checks a story or ticket draft before it goes to the user) | `critic` | the point of the audit is a sharper, more careful reader than the one that wrote the draft; the source skill deliberately does not let this step inherit the default model |
-| idea-spar | every web and codebase search behind the reality and market lenses, dispatched as a subagent with one narrow job | `search` | code and web lookups are near-free structured lookups; tiering by task (not by step) keeps raw file and page content out of the primary model's context |
+| idea-spar | every web and codebase search behind the reality and market lenses and the prior-statement sweep, dispatched as a subagent with one narrow job | `search` | code and web lookups are near-free structured lookups; tiering by task (not by step) keeps raw file and page content out of the primary model's context |
 | skill-eval | Step 2 synthesis (revises a `SKILL.md` from captured feedback) | `critic` | this is the hard reasoning step - holding the whole original skill, the specific feedback and the discipline not to over-edit all at once |
 | action-list | `build` and `prep` extraction, one subagent per source | `search` | volume reading; every candidate comes back with its evidence and the ranking happens on `worker` |
 | action-list | cold review of the built list | `critic` | an independent reader that did not rank or draft the list |

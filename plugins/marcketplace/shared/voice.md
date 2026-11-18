@@ -4,7 +4,7 @@ A new capability with no single direct source - it generalises a discipline appl
 
 ## Purpose
 
-`reply-draft`, `session-log` (capture mode) and `jira-story` (idea mode) produce prose the user is meant to read as their own - a draft they can send or file with light editing, not one that announces itself as machine-written. Voice matching is not a style guideline layered on afterwards; it is load-bearing for whether the draft is usable at all. Every handler that drafts prose lists `voice` in its `## Needs`.
+`reply-draft`, `session-log` (capture mode), `jira-story` (idea mode) and `idea-spar` (the pack) produce prose the user is meant to read as their own - a draft they can send or file with light editing, not one that announces itself as machine-written. Voice matching is not a style guideline layered on afterwards; it is load-bearing for whether the draft is usable at all. Every handler that drafts prose lists `voice` in its `## Needs`.
 
 ## Structure in the knowledge base
 

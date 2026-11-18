@@ -42,6 +42,18 @@ migration: `settled` gains on-board `sweep:` tags, and older versions read it as
 - **`settled` covers on-board `sweep:` items.** `briefing` closes such a line as
   `done · verified by action-list` (a close, never a deletion), `action-sweep` never re-posts
   it, and `proactive-router` does not dispatch a tick on it.
+- **`idea-spar` vets what the user states as fact and what was already said.** Each lens carries
+  a "Your claims" line where it has evidence on one (supported, not supported or settled elsewhere, with the source),
+  and the pack lists every claim, "not checked" included. After the challenge lens, a one-off
+  prior-statement sweep (ideas and tracker comments, chat, email, notetaker transcripts)
+  feeds the known packet, each source degrading to "couldn't check"; a prior statement the
+  evidence overturns is a finding. The market lens proves provider behaviour from primary
+  sources (the load-bearing quote re-fetched by the main session, public datasets counted),
+  and the reality lens reads the remote default branch after a fetch and spot-checks
+  subagent `path:line` claims. The pack is written in the `exec_update` register and judged
+  by whether the user understands it as if they wrote it. The description gains
+  investigation triggers. `jira-story` is deliberately unchanged. No state migration: no
+  new state keys or profile keys.
 
 ## [1.14.0] - 2026-11-10
 

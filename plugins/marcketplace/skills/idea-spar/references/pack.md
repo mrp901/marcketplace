@@ -12,17 +12,48 @@ read it in two minutes standing up.
    as a per-drift alert or a digest?"). In a session, take it from the user; unattended,
    write it from the challenge lens's verdict.
 3. **Where it stands** - three lines, one per lens that ran: the lens name and its
-   verdict sentence, verbatim.
-4. **Challenge**, **Reality**, **Market** - each lens's findings exactly as the output
-   contract in `SKILL.md` shapes them, minus anything the user rejected in the session.
+   verdict, the same claim at the same confidence, in the voice below.
+4. **Your claims** - every claim from the known packet with its verdict and source, from
+   whichever lens reached it; a claim no lens reached reads "not checked". Never omitted
+   while a claim exists.
+5. **Challenge**, **Reality**, **Market** - each lens's findings in the output contract's three
+   parts (claim · source · **so what**), worded per "Voice" below at the same confidence, without the
+   lens's "Your claims" line (section 4 carries it), minus anything the user rejected in the session.
    A lens that didn't run is omitted, not stubbed.
-5. **Sketch** - the HTML rendering from `sketch.md`, if a sketch was made.
-6. **Decisions for you** - the open forks, each a question with 2 to 4 options.
-7. **Sources** - one line per source actually used, linked. Nothing listed that wasn't read.
+6. **Sketch** - the HTML rendering from `sketch.md`, if a sketch was made.
+7. **Decisions for you** - the open forks, each a question with 2 to 4 options.
+8. **Sources** - one line per source actually used, linked. Nothing listed that wasn't read.
 
 No introduction, no methodology, no "about this document", no summary of the ticket. The
-known packet is never restated; the reader either has it or has the ticket link in the
+known packet is never restated (section 4's claims aside); the reader either has it or has the ticket link in the
 title.
+
+## Voice
+
+The pack goes out as the user's own, so it is written in their voice: load the
+`exec_update` register (or the one the user names) and the avoid-list per
+`../../../shared/voice.md`. The test is ownership: the user reads it and understands it as
+if they wrote it.
+
+- Each line sits at the confidence the evidence supports, hedged the way the user hedges. Hedge where the evidence leaves room
+  ("currently", "if it's possible", "not necessarily"); state it plainly where it doesn't.
+  A hedge that marks real uncertainty is theirs; the avoid-list's filler hedges stay out.
+- Each claim is one they could defend in the room without re-opening a source. Reasoning
+  they would have to reconstruct if asked is cut; the source link carries it.
+- Anyone else's words are visibly theirs: a blockquote with name and date, never folded
+  into the user's sentences.
+
+No calibrated register or no `exec-update` note: write plainly against the avoid-list and
+prefix the pack `voice: uncalibrated`. The two voice reads don't count against `kb_reads`.
+
+```markdown
+Before: In short, drift is computed every 15 minutes so the alert needs no new
+analytics, and Tomasz says the routing team owns the job, which means ...
+
+After:  - Drift is currently computed every 15 minutes · route_variance.py:40-88 ·
+          **so what:** the alert doesn't necessarily need new analytics.
+        > "The routing team owns that job." - Tomasz, 12 Sep
+```
 
 ## Publishing
 
@@ -48,6 +79,10 @@ publisher is connected.
 - Challenge - Build it, but as a digest first: a per-drift alert will be muted inside a week.
 - Reality - Smaller than it looks: drift is already calculated, just never surfaced.
 - Market - Table stakes in mid-market freight visibility; build it plainly.
+
+**Your claims**
+- "Drift only lands in the nightly batch" - not supported: the job runs every 15 minutes.
+- "Dispatchers want a push" - not checked.
 
 ## Decisions for you
 - Channel first: email digest (cheap, exists) / in-app (new service) / both

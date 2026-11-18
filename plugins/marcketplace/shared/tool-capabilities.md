@@ -10,11 +10,11 @@ The starting set below is not exhaustive on its own; it is extended with every v
 |---|---|---|---|
 | `chat: read canvas` | Read the surface's current content and section addressing | `slack_read_canvas` | briefing, proactive-router, idea-spar, kb-dream, action-sweep, skill-health-check, action-list |
 | `chat: update canvas` | Write one batch of operations against a surface addressing snapshot | `slack_update_canvas` | briefing, proactive-router, idea-spar, kb-dream, action-sweep, skill-health-check |
-| `chat: search messages` | Search DMs and channel history; see the search forms below | `slack_search_public_and_private` | briefing, action-sweep, action-list |
+| `chat: search messages` | Search DMs and channel history; see the search forms below | `slack_search_public_and_private` | briefing, action-sweep, action-list, idea-spar (prior-statement sweep) |
 | `chat: read thread` | Fetch one specific thread or message by its permalink, when a reference already names it | `slack_read_thread`, `slack_get_permalink` | reply-draft, session-log (capture), action-sweep, action-list |
 | `chat: search users` | Resolve a name to a user id when not already known | `slack_search_users` | briefing |
 | `chat: send message` | Post directly to a channel - the `chat_message` notify fallback | `slack_send_message` | briefing, kb-dream, notify fallback (any skill) |
-| `tracker: search issues (JQL)` | Query the issue tracker for a candidate set | `searchJiraIssuesUsingJql` | briefing, action-sweep, action-list, jira-story |
+| `tracker: search issues (JQL)` | Query the issue tracker for a candidate set | `searchJiraIssuesUsingJql` | briefing, action-sweep, action-list, jira-story, idea-spar (prior-statement sweep) |
 | `tracker: get issue` | Fetch one issue's full fields, comments, links | `getJiraIssue` | action-sweep, action-list, jira-story |
 | `tracker: create issue` | File a new issue | `createJiraIssue` | action-sweep (push), action-list, jira-story (new mode) |
 | `tracker: edit issue` | Update fields on an existing issue; a description edit replaces the whole text | `editJiraIssue` | jira-story |
@@ -29,14 +29,15 @@ The starting set below is not exhaustive on its own; it is extended with every v
 | `kb: read` | Read one kb file by path or resource id | `read_resource` | idea-spar, kb-dream, session-log, action-list, jira-story |
 | `kb: write` | Create or full-replace a kb file, byte-checked where the connector requires it | `sharepoint_upload_file` | idea-spar, kb-dream, session-log, action-list, jira-story (destination only) |
 | `calendar: list today` | Today's events only, local timezone window | `outlook_calendar_search` | briefing, action-list |
-| `email: search` | Search mail for threads/mentions | mail-search equivalent | reply-draft, action-sweep, action-list |
+| `email: search` | Search mail for threads/mentions | mail-search equivalent | reply-draft, action-sweep, action-list, idea-spar (prior-statement sweep) |
 | `email: sent` | List the user's own sent mail, for voice calibration | mail-sent equivalent | voice calibration |
-| `notetaker: list meetings` | List recent recorded meetings | meetings-list equivalent | action-sweep (fourth source), briefing (prep lines), action-list |
-| `notetaker: transcript` | Fetch one meeting's transcript | transcript-fetch equivalent | action-sweep, action-list |
+| `notetaker: list meetings` | List recent recorded meetings | meetings-list equivalent | action-sweep (fourth source), briefing (prep lines), action-list, idea-spar (prior-statement sweep) |
+| `notetaker: transcript` | Fetch one meeting's transcript | transcript-fetch equivalent | action-sweep, action-list, idea-spar (prior-statement sweep) |
 | `codebase: search` | Search the connected codebase for a term or symbol | device-bridge or filesystem search | idea-spar (reality lens), action-list |
 | `codebase: read` | Read one file from the connected codebase | device-bridge or filesystem read | idea-spar (reality lens), action-list (work) |
 | `codehost: list merged pull requests` | List pull requests merged in a window that involve the user; read only | `gh` local CLI only - see "Local CLI first" | action-list (build) |
 | `web: search` | General web search for market/competitor research | web-search equivalent | idea-spar (market lens), jira-story (idea mode) |
+| `web: fetch` | Fetch one page by URL to re-read a quote | web-fetch equivalent | idea-spar (market lens re-fetch) |
 | `browser: list tabs` | List the user's own signed-in browser tabs, creating one if none exist, and return a tab id | `tabs_context_mcp` (Chrome browser tools) | transcript |
 | `browser: navigate` | Point one tab id at a URL | `navigate` | transcript |
 | `browser: run page script` | Run a JavaScript expression inside a tab and return its value | `javascript_tool` | transcript |

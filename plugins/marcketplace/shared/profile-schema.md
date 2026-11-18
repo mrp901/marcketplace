@@ -215,7 +215,7 @@ budgets:
 | `kb.link_style` | session-log, kb-dream, idea-spar, action-list, jira-story | ask | |
 | `kb.frontmatter_required` | session-log, kb-dream, action-list, jira-story | default | |
 | `kb.tag_hints` | session-log | default | |
-| `kb.paths.*` | session-log, kb-dream, idea-spar, action-sweep, reply-draft (voice), action-list, jira-story, skill-health-check (`sessions`, `utility`) | default (asked only for `inbox`/`sessions` if the org has no convention) | |
+| `kb.paths.*` | session-log, kb-dream, idea-spar (incl. voice), action-sweep, reply-draft (voice), action-list, jira-story, skill-health-check (`sessions`, `utility`) | default (asked only for `inbox`/`sessions` if the org has no convention) | |
 | `kb.paths.customers` | kb-dream (writes), reply-draft, action-list, jira-story, idea-spar (read first) | optional; default `Customers` if that folder exists, else the feature is off | `shared/customer-notes.md` |
 | `kb.log_size_cap_kb` | session-log, kb-dream, idea-spar, action-list | default | |
 | `kb.sweep_queries` | kb-dream | default | |
@@ -234,7 +234,7 @@ budgets:
 | `people_confusions` | kb-dream, session-log, action-list | optional, starts empty | |
 | `known_fact_errors` | kb-dream, session-log | optional, starts empty | |
 | `voice.guide_path` | reply-draft, session-log, jira-story, kb-dream | default | |
-| `voice.registers` | reply-draft, session-log, kb-dream, action-list, jira-story | default | the base four; further registers are discovered from `kb.paths.voice`, per `voice.md` |
+| `voice.registers` | reply-draft, session-log, kb-dream, action-list, jira-story, idea-spar (the pack) | default | the base four; further registers are discovered from `kb.paths.voice`, per `voice.md` |
 | `voice.calibrated_at` | reply-draft, session-log, jira-story, kb-dream | default (empty until first calibration) | never asked, never defaulted to a fake date |
 | `voice.calibration_refs` | jira-story (idea mode) | optional | Tracker keys whose prose is the strongest reference for the `ticket_prose` register. Weighted above general samples during calibration |
 | `voice.sample_counts` | kb-dream | default | |

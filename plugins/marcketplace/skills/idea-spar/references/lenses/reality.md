@@ -10,6 +10,14 @@ The known packet, then `codebase: search` and `codebase: read` against
 `profile.codebase.path`, at most `budgets.idea-spar.code_reads` file reads, each search a
 `budgets.models.search`-tier subagent returning paths, line ranges and a two-line summary.
 
+Read the latest code, not the checkout: fetch, then search and read the remote default
+branch (`origin/main` or its equivalent; `git grep <ref>`, `git show <ref>:<path>`, and tell each
+search subagent the ref), because a local working copy can be weeks behind.
+Fetch only; never pull, check out or reset the user's working copy. Where
+`codebase.access` can't fetch, read what is there and name that ref and its date. Before
+a subagent's `path:line` becomes a finding, open that range yourself (it counts against
+`code_reads`); a range that doesn't say what the summary said is cut.
+
 `profile.codebase.access: none`, or the category unresolved: say "couldn't check the
 code" in the verdict and stop. Never describe how the code probably works.
 
@@ -31,13 +39,15 @@ code" in the verdict and stop. Never describe how the code probably works.
 
 The output contract in `SKILL.md`. Every finding's source is a `path:line` (or a range);
 a claim about the code with no path is cut. The verdict is a cost call in plain words
-("smaller than it looks", "bigger than it looks", "blocked on X") with the reason.
+("smaller than it looks", "bigger than it looks", "blocked on X") with the reason, and
+ends with the ref read.
 
 Do not paste code. One identifier or field name in backticks is fine when it is the point.
 
 ## Worked example (fictional, against `profiles/example.md`)
 
-> **Verdict** - Smaller than it looks: drift is already calculated, just never surfaced.
+> **Verdict** - Smaller than it looks: drift is already calculated, just never surfaced
+> (read at `origin/main`, 14 Sep).
 >
 > - `RouteVarianceJob` computes plan-vs-booked drift per load every 15 minutes and writes it
 >   to `load_variance` · `src/jobs/route_variance.py:40-88` · **so what:** the alert is a
@@ -46,6 +56,8 @@ Do not paste code. One identifier or field name in backticks is fine when it is 
 >   `src/notify/digest.py:12` · **so what:** "both channels" means building in-app
 >   notifications from scratch; email-only is the cheap first cut.
 >
+> **Your claims** - "drift only lands in the nightly batch" (you, this session): **not
+> supported** · `src/jobs/route_variance.py:40-88` runs every 15 minutes.
 > **Checked, no bearing** - `dispatch_ui/plan_view` (read-only, unaffected).
 > **Would change my mind** - if `load_variance` is pruned daily (couldn't tell from the code;
 > ask the job's owner).

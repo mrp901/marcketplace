@@ -6,7 +6,7 @@ its job.
 
 ## Inputs
 
-The known packet only. No web, no codebase. This lens is cheap on purpose so it can run
+The known packet only, before the prior-statement sweep. No web, no codebase. This lens is cheap on purpose so it can run
 first, every time, in seconds.
 
 ## Where to dig, in order
