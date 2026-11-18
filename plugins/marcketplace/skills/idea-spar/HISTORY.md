@@ -42,7 +42,8 @@ Review fixes before merge: a prior statement of fact is evidence to check, never
 settlement on its own (a hearsay "can't be done, confirmed" is exactly what was wrong);
 the packet line counts the claims to vet so the vetting can't lapse silently; `voice` is
 deliberately not in Needs, so a spar never detours into calibration, and the pack falls
-back to `voice: uncalibrated`.
+back to `voice: uncalibrated`. The pack's hedges come from the user's register's hedging trait, not
+example words, so no one user's hedges become the house style.
 
 ## 2026-11-10 neutral sketch example (1.14.0)
 

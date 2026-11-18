@@ -35,8 +35,8 @@ The pack goes out as the user's own, so it is written in their voice: load the
 `../../../shared/voice.md`. The test is ownership: the user reads it and understands it as
 if they wrote it.
 
-- Each line sits at the confidence the evidence supports, hedged the way the user hedges. Hedge where the evidence leaves room
-  ("currently", "if it's possible", "not necessarily"); state it plainly where it doesn't.
+- Each line sits at the confidence the evidence supports. Where it leaves room, hedge the
+  way the register's hedging trait says this user does; where it doesn't, state it plainly.
   A hedge that marks real uncertainty is theirs; the avoid-list's filler hedges stay out.
 - Each claim is one they could defend in the room without re-opening a source. Reasoning
   they would have to reconstruct if asked is cut; the source link carries it.
@@ -50,8 +50,8 @@ prefix the pack `voice: uncalibrated`. The two voice reads don't count against `
 Before: In short, drift is computed every 15 minutes so the alert needs no new
 analytics, and Tomasz says the routing team owns the job, which means ...
 
-After:  - Drift is currently computed every 15 minutes · route_variance.py:40-88 ·
-          **so what:** the alert doesn't necessarily need new analytics.
+After:  - Drift is computed every 15 minutes · route_variance.py:40-88 ·
+          **so what:** the alert needs no new analytics.
         > "The routing team owns that job." - Tomasz, 12 Sep
 ```
 

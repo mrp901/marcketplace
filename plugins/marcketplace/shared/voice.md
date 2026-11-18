@@ -24,15 +24,14 @@ The register set is open-ended. `profile.voice.registers` names the four base re
 
 **Each register note** carries:
 - 3 to 5 verbatim exemplars, each with a source reference (the message, email or note it came from)
-- 8 to 12 observed traits: sentence length, typical openers, sign-offs, punctuation habits, words used and words avoided, list style, hedging level
+- 8 to 12 observed traits: sentence length, typical openers, sign-offs, punctuation habits, words used and words avoided, spelling variant (e.g. British or US), list style, hedging level
 - A register-specific "never" list, distinct from the shared avoid-list below (e.g. a customer-facing register might ban an internal codename the teammate-chat register uses freely)
 
 ## The AI-patterns-to-avoid list
 
-Built by contrasting the user's own samples against typical model output, plus their own explicit standing bans wherever a memory or profile rule states one. Seed it with this concrete starting set - never remove an entry without the user's own instruction, only add to it:
+Built by contrasting the user's own samples against typical model output, plus their own explicit standing bans wherever a memory or profile rule states one. Seed it with this concrete starting set, kept to AI tells any reader would flag (a personal or house preference, such as a spelling variant, belongs in the user's own list or a register's traits, not here) - never remove an entry without the user's own instruction, only add to it:
 
 - **No em dashes, ever.** Use " - ", ";" or a middot separator instead.
-- **Australian English spelling** throughout - behaviour, prioritise, organise, analyse, colour, and so on, never the US variants.
 - **No summarising closers.** Don't restate the point in a final "In summary" / "Overall" sentence - if the piece made its point, it's already made.
 - **No "I hope this helps"**, or any variant sign-off performing helpfulness rather than saying something.
 - **No over-hedging.** "It's worth considering", "this could potentially", "arguably" - if it's worth saying, say it plainly.

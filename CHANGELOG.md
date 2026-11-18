@@ -54,6 +54,11 @@ migration: `settled` gains on-board `sweep:` tags, and older versions read it as
   by whether the user understands it as if they wrote it. The description gains
   investigation triggers. `jira-story` is deliberately unchanged. No state migration: no
   new state keys or profile keys.
+- **The starting AI-patterns avoid-list is neutral.** `shared/voice.md` no longer seeds
+  Australian English spelling: the seed holds only AI tells any reader would flag, and a
+  spelling variant is now a register trait learned from the user's own samples. Existing
+  avoid-lists in a knowledge base are untouched (entries are only ever removed by the user).
+  idea-spar's pack takes its hedges from the user's register rather than example words.
 
 ## [1.14.0] - 2026-11-10
 
