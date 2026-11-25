@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -27,6 +29,15 @@ jobs:
             export SCRUB_DENYLIST="$RUNNER_TEMP/scrub_denylist.txt"
           fi
           python3 plugins/marcketplace/scripts/scrub_check.py . --require-denylist
+
+      # The drift check and the claude.ai sync compare only plugin.json's version, so a
+      # plugin change merged without a bump never reaches the synced copy (#41).
+      - name: Version bump check (plugin changes need a new version)
+        if: github.event_name == 'pull_request'
+        run: python3 plugins/marcketplace/scripts/version_bump_check.py --base "origin/${{ github.base_ref }}"
+
+      - name: Test the version bump check
+        run: python3 -m unittest plugins/marcketplace/scripts/test_version_bump_check.py
 
       - name: Test the SessionStart version check
         run: python3 -m unittest plugins/marcketplace/scripts/test_version_check.py

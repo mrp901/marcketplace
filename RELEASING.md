@@ -46,6 +46,15 @@ runtimes, so CI does not run it; CI runs only its unit test.
 A path that does not exist is an error when you passed it and a warning when it is a default, and a run that scanned no file exits 2, so a clean run cannot mean "looked at nothing". A clean run means no local file names a removed thing. It does not cover the OS scheduler's own
 entries, other machines, or anything that calls a skill by a name built at run time.
 
+### Version bump
+
+Every change under `plugins/marcketplace/` that can change behaviour raises the version in
+`plugin.json` and adds a matching `## [x.y.z]` heading to `CHANGELOG.md`. The SessionStart drift
+check and the claude.ai sync compare only that version, so an unbumped change never reaches the
+synced copy and nothing reports it (1.14.0 sat on top of #41 until 1.15.0 cut it).
+`scripts/version_bump_check.py` enforces this on every pull request; tests, evals and
+`HISTORY.md` are exempt. Patch for fixes, minor for new behaviour or a new optional key.
+
 ### The scrub line
 
 The PR body shows the scrub output line `denylist: <path> (N patterns)` from

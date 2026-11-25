@@ -8,9 +8,9 @@ too because the automation that builds this repo authenticates with a token that
 here is copied into place from your own machine.
 
 The workflow runs the checks the wave gate runs locally: `scrub_check.py plugins/`,
-`line_budget.py --all`, `check_refs.py` and the unit tests for the SessionStart version
+`line_budget.py --all`, `check_refs.py`, `version_bump_check.py` on pull requests (needs the full history, hence `fetch-depth: 0`) and the unit tests for the SessionStart version
 check (`python3 -m unittest plugins/marcketplace/scripts/test_version_check.py`, offline) and
-for `runtime_refs.py` (`test_runtime_refs.py`; the script itself needs a local `~/.claude` and is
+for `version_bump_check.py` (`test_version_bump_check.py`) and for `runtime_refs.py` (`test_runtime_refs.py`; the script itself needs a local `~/.claude` and is
 a pre-merge step, see `RELEASING.md`), then installs a pinned Claude Code release and
 runs `claude plugin validate --strict .` and `claude plugin test plugins/marcketplace`. The
 tests need no credentials. Type-checking the hooks module stays a local step (see

@@ -19,12 +19,13 @@ Answer each with checked (how), not affected (why), or gap (named). See `RELEASI
 
 ## Repo checks run
 
+- [ ] `python3 plugins/marcketplace/scripts/version_bump_check.py` (any plugin change needs a higher `plugin.json` version and a matching CHANGELOG heading; CI enforces it)
 - [ ] `claude plugin validate --strict .`
 - [ ] `claude plugin test plugins/marcketplace`
 - [ ] `python3 plugins/marcketplace/scripts/scrub_check.py . --require-denylist` (0 FAIL; paste the `denylist: <path> (N patterns)` line, a run with none loaded exits 2 and is not a pass)
 - [ ] `python3 plugins/marcketplace/scripts/line_budget.py --all`
 - [ ] `python3 plugins/marcketplace/scripts/check_refs.py`
-- [ ] Unit tests: `test_version_check.py`, `test_kb_health_score.py`, `test_runtime_refs.py`, `test_scrub_check.py`
+- [ ] Unit tests: `test_version_check.py`, `test_kb_health_score.py`, `test_runtime_refs.py`, `test_scrub_check.py`, `test_version_bump_check.py`
 
 ## After merge
 

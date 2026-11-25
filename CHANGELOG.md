@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.15.1] - 2026-11-26
+
+### Added
+- **Plugin changes must bump the version.** `scripts/version_bump_check.py` fails a pull
+  request that changes a file under `plugins/marcketplace/` without raising `plugin.json`'s
+  version and adding a matching CHANGELOG heading (tests, evals and `HISTORY.md` exempt). The
+  drift check and the claude.ai sync compare only that version, so #41 merged at 1.14.0 and
+  never reached the synced copy. CI runs it on pull requests; `RELEASING.md` and the PR
+  template list it. No state change.
+
 ## [1.15.0] - 2026-11-26
 
 `action-list` is now the attended counterpart of `action-sweep`: it builds on sweep's finds
