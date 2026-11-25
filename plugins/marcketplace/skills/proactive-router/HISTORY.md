@@ -1,5 +1,15 @@
 # proactive-router - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-26 one decide per idea per run
+
+On 9 Nov a run dispatched two `idea-spar` `decide` handlers for the same idea in parallel. Both
+created the decision log; the loser overwrote an unrelated note. `idea-spar` now writes by name
+and appends on a create conflict, but two handlers that each read then replace one log can still
+lose a line while both report `done`. Only serialising closes that, so flow step 5 and
+`references/dispatch.md` dispatch at most one `decide` per `item.idea_key` per run. Further
+ticked options for the idea stay ticked and go next run, like the dispatch cap. Cost: a second
+decision on the same idea waits one run.
+
 ## 2026-11-04 tick effects on the lines the hub writes (1.12.0)
 
 The hub writes few lines of its own, and each now ends with its tick effect: the fresh second-tick

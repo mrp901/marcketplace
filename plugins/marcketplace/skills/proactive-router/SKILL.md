@@ -100,8 +100,8 @@ stop before reading a single thread.
    - Anything else, including `calendar`, is unmapped: write
      `  - ↳ router: no handler for <category> yet · mapping proposed in For you · <link>`,
      increment `tally.<category>.unmapped_ticks`, and stage the step 7 proposal.
-   Ticked lines beyond the dispatch cap stay ticked, undispatched; note the queued count
-   so briefing can report it.
+   Ticked lines beyond the dispatch cap, or a second `idea-spar` `decide` for one
+   `idea_key`, stay ticked, undispatched; note the queued count so briefing can report it.
 6. **Deletions.** A tag with `on_board: false` or listed in briefing's `off_board` is
    never a deletion: no suppression, no tally, no `patterns_blocked`. Otherwise add
    `state.suppressions` `{source_id, category, pattern, added_at}` and

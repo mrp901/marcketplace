@@ -61,6 +61,11 @@ migration: `settled` gains on-board `sweep:` tags, and older versions read it as
   idea-spar's pack takes its hedges from the user's register rather than example words.
 
 ### Fixed
+- **The router dispatches one `idea-spar` `decide` per idea per run.** Two ticked options on
+  the same idea (for example FIG-204) used to start two handlers in parallel, each reading and
+  then replacing the one decision log, so one line could be lost while both reported `done`.
+  The oldest tick goes; the others stay ticked and go next run, like lines beyond the dispatch
+  cap. No state change.
 - **`idea-spar` decide mode no longer overwrites the wrong note.** On a full-replace kb
   connector it reads the log by path and writes it back by name (into its folder, replacing
   on conflict), as `kb-dream` already does, so a write can't land on another note; an item
