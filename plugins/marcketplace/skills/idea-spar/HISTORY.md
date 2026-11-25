@@ -1,5 +1,32 @@
 # idea-spar - design rationale (for editors; not loaded at runtime)
 
+## 2026-11-26 decide mode writes safely on a full-replace kb (Unreleased)
+
+A router run dispatched two decide handlers for the same idea at once. Both found no
+decision log and both tried to create it; the second create failed on conflict (the store's
+names are case-insensitive, and it had used an upper-case key). Needing an item id to
+update, its search came back empty, so it listed the research folder and took an id from the
+listing: another idea's discovery note, which the full-replace update then wiped. It reported
+the overwrite honestly as `partial`, which stays the rule. The same run's other new log got no
+folder index row, and came back `partial` because the question text was never stored.
+
+- **Write by name, not by id.** The connector replaces the whole file, so the old
+  "additive and reversible" justification was false. A first draft checked the item id's
+  name before writing, but the connector promises neither a name on a read by id nor an id
+  on a create conflict, so the check could block every decide or be fudged. Writing by name
+  into the log's folder (kb-dream's rule) can't land elsewhere; an id only where that's
+  impossible, and only once it reads back the same text as the path read.
+- **Conflict means append.** A failed create is a sibling handler's log: read and append.
+  Lowercase key pinned.
+- **Index row for a new log.** Per the shared index and log contract.
+- **Question stored by the Next watch.** `items.<tag>.question`, written with the option.
+  No fallback to the pack: the board keeps at most two forks, so `d<n>` doesn't reliably map
+  to the pack's nth question, and a wrong guess would go into a permanent decision log.
+
+Not fixed here: the router dispatching two handlers on one idea concurrently. Two handlers
+that each read then replace can still lose a line; only one dispatch per idea at a time
+closes that.
+
 ## 2026-11-18 prior statements, primary sources, the user's claims (Unreleased)
 
 An ad hoc investigation the user rated more useful than this skill (two questions about how

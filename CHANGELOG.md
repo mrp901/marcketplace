@@ -60,6 +60,22 @@ migration: `settled` gains on-board `sweep:` tags, and older versions read it as
   avoid-lists in a knowledge base are untouched (entries are only ever removed by the user).
   idea-spar's pack takes its hedges from the user's register rather than example words.
 
+### Fixed
+- **`idea-spar` decide mode no longer overwrites the wrong note.** On a full-replace kb
+  connector it reads the log by path and writes it back by name (into its folder, replacing
+  on conflict), as `kb-dream` already does, so a write can't land on another note; an item
+  id is used only where the connector can't write by name, and only once reading it returns
+  the same text, else `blocked`. The log name is pinned to lowercase, a new log is created
+  with its first line in one create that fails on conflict, a conflict (a sibling handler got
+  there first) reads and appends, and a newly created log gets its folder `index.md` row and
+  a `**Creation**` log line. The
+  "a kb write is additive and reversible" claim is gone. Prompted by one handler replacing an
+  unrelated idea's research note with another idea's decision log.
+- **The decision question reaches decide mode.** The Next watch stores each option's
+  question as `items.<tag>.question` (new optional field in `shared/state-schema.md`), and
+  decide mode reads it there. Options written before this keep the existing `partial`
+  ("question not matched"); no backfill.
+
 ## [1.14.0] - 2026-11-10
 
 The scrub check is now enforced: it covers the whole repository including `profiles/`, and it

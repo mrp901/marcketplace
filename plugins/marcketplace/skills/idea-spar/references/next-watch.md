@@ -54,7 +54,8 @@ the rest wait for the next run.
    `cursors.idea-spar.tick_effects_backfilled`. No fork: write nothing to the board; the
    pack still reaches the user through the briefing.
 6. State: `cursors.idea-spar.roadmap_checked_at`, `ideas.<key>`, `items` (each option with
-   `group: <key>/d<n>` and `idea_key`), `runs.idea-spar` with `note: "pack for <key>: <the
+   `group: <key>/d<n>`, `idea_key` and `question`, the group's question line verbatim, without its list marker),
+   `runs.idea-spar` with `note: "pack for <key>: <the
    question>"` and `ref: <pack link>`. Briefing reads `runs.idea-spar` and reports the pack.
    Stamp `runs.idea-spar.last_run_at` and the cursor with the current time in `org.timezone`
    and its offset, read from the clock at write time, never `+00:00`

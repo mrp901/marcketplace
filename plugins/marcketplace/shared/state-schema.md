@@ -210,11 +210,12 @@ settled: {<tag>: <settled_at>}    # shard: action-list - sweep: tags it verified
 voice_verdicts: {<tag>: true | false}   # shard: kb-dream - its edited verdict on another skill's voice_edits entry
 
 items:                        # shard: each writer's own entries, by tag prefix
-  <tag>: {section, written_by, written_at, text, ref, category, group, idea_key,
+  <tag>: {section, written_by, written_at, text, ref, category, group, question, idea_key,
           status: open | blocked, blocked_reason, blocked_on, blocked_at, retried_for,
           on_board: false, off_board_at}
   # text: the line exactly as written, compared verbatim with the board to spot an edit
   # pruned by its owner once briefing lists the tag in closed; group is the question's tag stem on an option line
+  # question: the group's question line verbatim, on an idea-decision option line (idea-spar's Next watch writes it; its decide mode reads it); absent on options written before this field existed or by an older version, where decide mode still records the decision and returns partial (question not matched)
   # status and the blocked_* fields are optional (absent = open); only the hub sets them, on pr: lines
   # on_board: absent = on the board; false = a to-do kept off it for action-list (its owner sets it, with off_board_at)
 
