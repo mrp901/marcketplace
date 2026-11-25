@@ -5,7 +5,7 @@
 On 9 Nov a run dispatched two `idea-spar` `decide` handlers for the same idea in parallel. Both
 created the decision log; the loser overwrote an unrelated note. `idea-spar` now writes by name
 and appends on a create conflict, but two handlers that each read then replace one log can still
-lose a line while both report `done`. Only serialising closes that, so flow step 5 and
+lose a line while both report `done`. Only serialising closes that (within one run; overlapping runs are not covered), so flow step 5 and
 `references/dispatch.md` dispatch at most one `decide` per `item.idea_key` per run. Further
 ticked options for the idea stay ticked and go next run, like the dispatch cap. Cost: a second
 decision on the same idea waits one run.
