@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.15.0] - 2026-11-26
+
 `action-list` is now the attended counterpart of `action-sweep`: it builds on sweep's finds
 instead of gathering the same sources again, and a find is never drafted twice. No state
 migration: `settled` gains on-board `sweep:` tags, and older versions read it as before.
